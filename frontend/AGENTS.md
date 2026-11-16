@@ -33,7 +33,32 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - Mutations (forms, settings, dev portal) use **Server Actions**, validated on the server.
 - Secrets and backend URLs are read only in server code. Only `NEXT_PUBLIC_*` vars reach the client.
 
+### Internationalization
+
+Locales: `en` (default, no URL prefix), `es` (`/es/...`), `pt` (Brazilian Portuguese, `/pt/...`).
+All routes live under `src/app/[lang]/`; `src/proxy.ts` rewrites English URLs to `/en` internally,
+redirects `/en/...` to the unprefixed URL, and applies the saved (`NEXT_LOCALE` cookie) or detected
+language on unprefixed visits.
+
+- **No hard-coded UI text.** Every visible string, `aria-label`, `alt`, and metadata text comes from
+  `src/i18n/messages/<locale>.json`. Brand names (`RecompAchievements`, `GitHub`) may stay literal.
+- **Add every key to all three files** in the same change. `en.json` defines the `Messages` type, so
+  a key missing from `es.json` or `pt.json` fails `npm run build`.
+- In Server Components, read the locale with `getLocale()` and strings with `getMessages()` from
+  `@/i18n/server`. Never pass `lang` down as a prop. Client Components receive translated strings
+  as props from their Server Component parent.
+- Build internal links with `localizePath(locale, "/path")`; never write `/es/...` by hand.
+- Placeholders use `{name}`: `interpolate()` for text, `rich()` for React elements (links, spans).
+  Counts use `plural()`; numbers, percentages, and dates use `formatNumber/formatPercent/formatDate`
+  from `@/i18n/format`, never `toFixed` or manual formatting.
+- Every page's metadata sets `alternates: localeAlternates(locale, "/path")` (canonical + hreflang).
+- Translations are written in the target language's gaming vocabulary (`logros`, `conquistas`);
+  Portuguese is Brazilian.
+
 ### Routes (v0.1)
+
+Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
+`src/app/[lang]/`.
 
 - `/` — game directory
 - `/games/[slug]` — game detail: achievements, points, rarity
@@ -41,23 +66,36 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
 Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
-defaults and title template in the root layout; game and profile pages also provide an
-`opengraph-image` for Discord/social embeds.
+defaults and title template in the root layout and including `localeAlternates`; game and profile
+pages also provide an `opengraph-image` for Discord/social embeds.
+
+Not-found handling: `notFound()` inside a page renders the localized `src/app/[lang]/not-found.tsx`;
+URLs that match no route render the static, trilingual `src/app/global-not-found.tsx`.
 
 ### Structure
 
 ```
 src/
-├── app/            # routes only: page, layout, loading, error, not-found, opengraph-image
+├── app/
+│   ├── [lang]/     # every route: layout, page, loading, error, not-found, opengraph-image
+│   ├── global-not-found.tsx  # 404 for unmatched URLs (outside [lang])
+│   └── fonts.ts    # next/font setup shared by both root files
 ├── components/
-│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo)
+│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher)
 │   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
 │   └── <feature>/  # feature components (game/, profile/, achievement/)
-└── lib/
-    ├── api/        # data access layer (mock now, backend later)
-    ├── types/      # domain types shared across the app
-    ├── cx.ts       # class-name join helper
-    └── site.ts     # site name, URLs, public contact address (never hard-code these)
+├── lib/
+│   ├── api/        # data access layer (mock now, backend later)
+│   ├── types/      # domain types shared across the app
+│   ├── cx.ts       # class-name join helper
+│   └── site.ts     # site name, URLs, public contact address (never hard-code these)
+├── i18n/
+│   ├── config.ts   # locales, localizePath, localeAlternates (safe for proxy, server, client)
+│   ├── server.ts   # getLocale, getMessages, Messages type (server only)
+│   ├── format.ts   # interpolate, plural, number/percent/date formatting
+│   ├── rich.tsx    # rich(): React elements inside translated strings
+│   └── messages/   # en.json (source of truth), es.json, pt.json
+└── proxy.ts        # locale routing: rewrite, redirects, detection, cookie
 ```
 
 ### Styling
@@ -74,6 +112,8 @@ src/
 - Links to other sites open in a new tab: use `ExternalLink` (or `ButtonLink` with `external`),
   never a bare `target="_blank"`. Internal links use `next/link`; `mailto:` links stay in the same tab.
 - `src/app/icon.svg` and `LogoMark` draw the same mark; change both together.
+- Translated text varies in length (Spanish and Portuguese run ~20–30% longer); check all three
+  locales at 360px.
 - Mobile-first; every page must work at 360px width.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
 - Images use `next/image`. Achievement icons and cover art are placeholders or developer-uploaded;

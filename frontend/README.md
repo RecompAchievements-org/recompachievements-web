@@ -11,6 +11,8 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 - **Tailwind CSS v4**, configured in CSS (`src/app/globals.css`); there is no `tailwind.config.js`
 - Fonts self-hosted through `next/font`: **Geist** (body), **Geist Mono** (numbers, code),
   **Chakra Petch** (display headings)
+- Internationalization with Next.js's built-in pattern (`app/[lang]` + `next/root-params` + JSON
+  dictionaries); no i18n library
 
 ## Getting started
 
@@ -32,18 +34,69 @@ npm run dev        # http://localhost:3000
 
 ```
 src/
-├── app/                  # Routes only: page, layout, loading, error, not-found, icons
-│   ├── globals.css       # Tailwind import and design tokens
-│   ├── icon.svg          # Favicon (same mark as LogoMark)
-│   ├── layout.tsx        # Root layout: fonts, metadata, header, footer, skip link
-│   └── page.tsx          # Home (placeholder until the game directory)
+├── app/
+│   ├── [lang]/
+│   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
+│   │   ├── page.tsx          # Home (placeholder until the game directory)
+│   │   └── not-found.tsx     # Localized 404 for notFound() inside pages
+│   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
+│   ├── fonts.ts              # next/font setup shared by both root files
+│   ├── globals.css           # Tailwind import and design tokens
+│   └── icon.svg              # Favicon (same mark as LogoMark)
 ├── components/
-│   ├── layout/           # SiteHeader, SiteFooter, Logo
-│   └── ui/               # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
-└── lib/
-    ├── cx.ts             # Class-name join helper
-    └── site.ts           # Site name, URLs, and public contact address
+│   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
+│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
+├── i18n/
+│   ├── config.ts             # Locales, URL helpers, hreflang alternates
+│   ├── server.ts             # getLocale(), getMessages(), Messages type
+│   ├── format.ts             # interpolate, plural, number/percent/date formatting
+│   ├── rich.tsx              # rich(): elements inside translated strings
+│   └── messages/             # en.json (source of truth), es.json, pt.json
+├── lib/
+│   ├── cx.ts                 # Class-name join helper
+│   └── site.ts               # Site name, URLs, and public contact address
+└── proxy.ts                  # Locale routing and detection
 ```
+
+## Internationalization
+
+| Locale | Language | URL | `<html lang>` |
+|---|---|---|---|
+| `en` (default) | English | `/games/x` (no prefix) | `en` |
+| `es` | Spanish | `/es/games/x` | `es` |
+| `pt` | Portuguese (Brazil) | `/pt/games/x` | `pt-BR` |
+
+**How a request is routed** (`src/proxy.ts`):
+
+- `/es/...` and `/pt/...` are served as-is, so a shared link always opens in its language.
+- `/en/...` redirects (308) to the unprefixed URL.
+- An unprefixed URL is served in English (rewritten internally to `/en/...`), unless:
+  - the `NEXT_LOCALE` cookie holds `es` or `pt` → redirect to that language; or
+  - there is no cookie and the browser's `Accept-Language` prefers Spanish or Portuguese → redirect
+    there once and save the cookie.
+- The header's language switcher keeps the current page and saves the choice in `NEXT_LOCALE`
+  (one year).
+
+Every page is prerendered once per locale and sets `canonical` and `hreflang` alternates.
+
+**Using translations in a Server Component:**
+
+```tsx
+import { getLocale, getMessages } from "@/i18n/server";
+import { localizePath } from "@/i18n/config";
+import { plural } from "@/i18n/format";
+
+const locale = await getLocale();
+const { home, achievement } = await getMessages();
+// home.badge, plural(locale, 25, achievement.points), localizePath(locale, "/games/x")
+```
+
+**Adding a string:** add the key to `en.json`, `es.json`, and `pt.json`. A key missing from any
+file fails `npm run build`.
+
+**Adding a language:** add its code to `locales` in `src/i18n/config.ts` (plus `localeNames`,
+`htmlLang`, `openGraphLocale`), create `messages/<code>.json`, register it in the loaders in
+`src/i18n/server.ts` and in `global-not-found.tsx`.
 
 ## Design system
 

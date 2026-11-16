@@ -63,7 +63,7 @@ routine runs) instead of watching memory addresses.
 
 | Layer | Technology | Why |
 |---|---|---|
-| Frontend | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 | Server rendering for SEO and Discord/OpenGraph embeds |
+| Frontend | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 | Server rendering for SEO and Discord/OpenGraph embeds; English, Spanish, and Portuguese (Brazil) |
 | Backend API | .NET 10 Minimal APIs *or* Node.js (Fastify) — *to be decided* | High-throughput, strongly typed telemetry API with OpenAPI |
 | Database | PostgreSQL 17 | Relational integrity; unique constraints prevent duplicate unlocks |
 | Cache / rate limit | Redis (or Valkey) | Rate limiting, live presence heartbeats, cached rarity |
@@ -103,6 +103,9 @@ a published notice.
 | `/games/[slug]` | Game detail — achievements, points, rarity |
 | `/u/[username]` | Player profile — completion, recent unlocks |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |
+
+The site is available in **English** (unprefixed URLs), **Spanish** (`/es/...`), and **Portuguese,
+Brazil** (`/pt/...`). See [`frontend/README.md`](frontend/README.md#internationalization).
 
 ## Repository structure
 

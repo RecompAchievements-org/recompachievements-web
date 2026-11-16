@@ -40,7 +40,8 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - `/u/[username]` — user profile: completion %, recent unlocks
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
-Every public page exports `generateMetadata`; game and profile pages also provide an
+Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
+defaults and title template in the root layout; game and profile pages also provide an
 `opengraph-image` for Discord/social embeds.
 
 ### Structure
@@ -49,18 +50,30 @@ Every public page exports `generateMetadata`; game and profile pages also provid
 src/
 ├── app/            # routes only: page, layout, loading, error, not-found, opengraph-image
 ├── components/
-│   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar)
+│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo)
+│   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
 │   └── <feature>/  # feature components (game/, profile/, achievement/)
 └── lib/
     ├── api/        # data access layer (mock now, backend later)
-    └── types/      # domain types shared across the app
+    ├── types/      # domain types shared across the app
+    ├── cx.ts       # class-name join helper
+    └── site.ts     # site name, URLs, public contact address (never hard-code these)
 ```
 
 ### Styling
 
-- Tailwind utilities only; no CSS modules or CSS-in-JS.
-- Use theme tokens defined in `@theme` (`bg-surface`, `text-muted`, `text-accent`), not raw hex
-  values or arbitrary colors.
+- Tailwind utilities only; no CSS modules or CSS-in-JS. Inline `style` is only for values known
+  at runtime (e.g. a progress bar's width).
+- Use the theme tokens in `@theme` (`bg-surface`, `text-muted`, `text-accent`, `text-gold`…). The
+  default Tailwind palette is cleared, so raw palette classes (`bg-zinc-900`) and hex values don't
+  exist; add a token in `globals.css` (and the token table in `README.md`) if one is missing.
+- Single dark theme (`color-scheme: dark`). New text colors must pass WCAG AA (4.5:1) on
+  `background`, `surface`, and `surface-raised`.
+- Headings use `font-display`; numbers and code use `font-mono`.
+- Reuse `components/ui` primitives before writing new styled elements.
+- Links to other sites open in a new tab: use `ExternalLink` (or `ButtonLink` with `external`),
+  never a bare `target="_blank"`. Internal links use `next/link`; `mailto:` links stay in the same tab.
+- `src/app/icon.svg` and `LogoMark` draw the same mark; change both together.
 - Mobile-first; every page must work at 360px width.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
 - Images use `next/image`. Achievement icons and cover art are placeholders or developer-uploaded;

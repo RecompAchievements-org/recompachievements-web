@@ -108,7 +108,7 @@ a published notice.
 
 ```
 recompachievements-web/
-├── frontend/            # Next.js 16 website
+├── frontend/            # Next.js 16 website (see frontend/README.md)
 ├── backend/             # REST API (planned)
 ├── docker-compose.yml   # Local PostgreSQL + Redis (planned)
 ├── AGENTS.md            # Rules for AI coding agents

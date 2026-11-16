@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RecompAchievements — Frontend
 
-## Getting Started
+The [recompachievements.org](https://recompachievements.org/) website. For the project overview,
+architecture, and roadmap, see the [root README](../README.md). Coding rules for this app live in
+[`AGENTS.md`](AGENTS.md).
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack, Cache Components, Partial Prefetching)
+- **React 19** and **TypeScript** (strict)
+- **Tailwind CSS v4**, configured in CSS (`src/app/globals.css`); there is no `tailwind.config.js`
+- Fonts self-hosted through `next/font`: **Geist** (body), **Geist Mono** (numbers, code),
+  **Chakra Petch** (display headings)
+
+## Getting started
+
+Requirements: Node.js 20.9+ and npm.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script | Purpose |
+|---|---|
+| `npm run dev` | Development server with hot reload |
+| `npm run lint` | ESLint (must pass) |
+| `npm run build` | Production build (must pass) |
+| `npm run start` | Serve the production build |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                  # Routes only: page, layout, loading, error, not-found, icons
+│   ├── globals.css       # Tailwind import and design tokens
+│   ├── icon.svg          # Favicon (same mark as LogoMark)
+│   ├── layout.tsx        # Root layout: fonts, metadata, header, footer, skip link
+│   └── page.tsx          # Home (placeholder until the game directory)
+├── components/
+│   ├── layout/           # SiteHeader, SiteFooter, Logo
+│   └── ui/               # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
+└── lib/
+    ├── cx.ts             # Class-name join helper
+    └── site.ts           # Site name, URLs, and public contact address
+```
 
-## Learn More
+## Design system
 
-To learn more about Next.js, take a look at the following resources:
+The site has a single dark theme. The default Tailwind color palette is cleared in
+`globals.css`, so **only the tokens below exist**; classes like `bg-zinc-900` won't work. Every text
+color passes WCAG AA (4.5:1) on all three surface levels.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Token | Hex | Use |
+|---|---|---|
+| `background` | `#0a0c14` | Page background |
+| `surface` | `#121624` | Cards, footer |
+| `surface-raised` | `#1a2033` | Elements on cards: badges, inputs, progress tracks |
+| `border` / `border-strong` | `#262d44` / `#3a4360` | Dividers / emphasized outlines |
+| `foreground` | `#e7e9f2` | Primary text |
+| `muted` | `#9aa3ba` | Secondary text |
+| `subtle` | `#808aa6` | Tertiary text, fine print |
+| `accent` / `accent-strong` | `#8b7bff` / `#a397ff` | Brand violet: links, primary buttons, focus ring / hover |
+| `on-accent` | `#0a0c14` | Text on accent backgrounds |
+| `gold` / `on-gold` | `#f5c04a` / `#0a0c14` | Points and achievement highlights |
+| `success` · `danger` · `info` | `#3ddc97` · `#ff6b7a` · `#5cc8ff` | Status |
+| `rarity-common` … `rarity-legendary` | `#a8b0c4` · `#4ade80` · `#60a5fa` · `#c084fc` · `#fbbf24` | Rarity tiers |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Use them as Tailwind utilities (`bg-surface`, `text-muted`, `border-gold/40`, `fill-accent`) and
+the `font-display` / `font-mono` font utilities.
 
-## Deploy on Vercel
+### UI primitives
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Component | Props |
+|---|---|
+| `Button`, `ButtonLink` | `variant`: `primary` · `secondary` · `ghost`; `size`: `sm` · `md`; `ButtonLink` also takes `external` to open in a new tab |
+| `ExternalLink` | Any `a` props; opens in a new tab with `rel="noopener noreferrer"` and a screen-reader hint |
+| `Card` | Any `div` props |
+| `Badge` | `tone`: `neutral` · `accent` · `gold` · `success` · `common` · `uncommon` · `rare` · `epic` · `legendary` |
+| `ProgressBar` | `value` (0–100), `label` (accessible name), `tone`: `accent` · `gold` · `success` |

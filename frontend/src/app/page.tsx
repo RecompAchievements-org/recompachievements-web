@@ -1,69 +1,70 @@
-import Image from "next/image";
+import { Badge } from "@/components/ui/Badge";
+import { ButtonLink } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { siteConfig } from "@/lib/site";
 
-export default function Home() {
+/** Placeholder home page until the game directory lands (frontend roadmap step 5).
+ *  The preview card uses made-up sample values, not real player data.
+**/
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 sm:py-24">
+      <section className="flex max-w-3xl flex-col gap-6">
+        <Badge tone="accent" className="self-start">
+          Early development
+        </Badge>
+        <h1 className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-6xl">
+          Achievements for <span className="text-accent">native recomps</span>.
+        </h1>
+        <p className="text-lg leading-relaxed text-muted">
+          Track your progress in static recompilations and PC ports that run outside emulators.
+          Recomp developers trigger achievements straight from native code; you collect points,
+          chase rare unlocks, and show off your profile.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href={siteConfig.repoUrl} external>
+            Follow on GitHub
+          </ButtonLink>
+          <ButtonLink href={`mailto:${siteConfig.contactEmail}`} variant="secondary">
+            I build a recomp
+          </ButtonLink>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </section>
+
+      <section aria-labelledby="preview-heading" className="flex flex-col gap-4">
+        <h2 id="preview-heading" className="font-display text-xl font-semibold text-muted">
+          What you&apos;ll track
+        </h2>
+
+        <Card className="flex max-w-xl flex-col gap-4">
+          <div className="flex items-start gap-4">
+            <div
+              aria-hidden="true"
+              className="grid size-14 shrink-0 place-items-center rounded-lg border border-gold/40 bg-surface-raised font-display text-2xl text-gold"
+            >
+              ★
+            </div>
+            <div className="flex min-w-0 flex-col gap-1">
+              <p className="font-semibold">First Boss Down</p>
+              <p className="text-sm text-muted">Defeat the first boss without taking damage.</p>
+              <div className="mt-1 flex flex-wrap gap-2">
+                <Badge tone="gold">25 pts</Badge>
+                <Badge tone="epic">Epic · 4.2%</Badge>
+                <Badge tone="success">Unlocked</Badge>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted">Completion</span>
+              <span className="font-mono">18 / 40</span>
+            </div>
+            <ProgressBar value={45} label="Completion" />
+          </div>
+        </Card>
+      </section>
     </div>
   );
 }

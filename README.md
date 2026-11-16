@@ -79,6 +79,10 @@ routine runs) instead of watching memory addresses.
   - `POST /unlock` — verifies `HMAC_SHA256(game_secret, payload)`, rejects timestamps older than
     60 seconds, and applies server-side sanity checks (e.g. minimum playtime).
 
+Both APIs are versioned in the path. Once a version is in use by released recomps or community
+tools, breaking changes go to a new version and the old one stays supported until it is retired with
+a published notice.
+
 ### Data model (MVP)
 
 | Table | Key fields |
@@ -108,6 +112,7 @@ recompachievements-web/
 ├── backend/             # REST API (planned)
 ├── docker-compose.yml   # Local PostgreSQL + Redis (planned)
 ├── AGENTS.md            # Rules for AI coding agents
+├── SECURITY.md          # How to report vulnerabilities
 └── LICENSE              # AGPL-3.0
 ```
 
@@ -145,11 +150,27 @@ use it.
 All trademarks belong to their respective owners. RecompAchievements is not affiliated with any game
 publisher, platform holder, or with RetroAchievements.
 
+If you believe content on the platform infringes your rights, contact
+[contact@recompachievements.org](mailto:contact@recompachievements.org) and we will review it
+promptly.
+
 ## Contributing
 
 The project is in its early stages. Issues and ideas are welcome. Before opening a pull request,
-please open an issue to discuss larger changes. AI-assisted contributions should follow
-[`AGENTS.md`](AGENTS.md).
+please open an issue to discuss larger changes. Write code, comments, docs, and commit messages in
+English, and update any documentation your change affects in the same pull request. AI-assisted
+contributions should follow [`AGENTS.md`](AGENTS.md).
+
+**On AI assistance:** AI tools are used in the development of this project. Every change is
+reviewed and committed by a human maintainer, and only people are credited as contributors.
+
+## Contact
+
+- **General questions, recomp developer partnerships, press:**
+  [contact@recompachievements.org](mailto:contact@recompachievements.org)
+- **Security vulnerabilities:** please **do not** open a public issue — see
+  [`SECURITY.md`](SECURITY.md).
+- **Bugs and feature requests:** [GitHub Issues](https://github.com/RecompAchievements-org/recompachievements-web/issues)
 
 ## License
 

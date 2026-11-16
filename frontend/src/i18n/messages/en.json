@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "description": "Community-driven achievement tracking for native static recompilations and PC ports."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "opensInNewTab": "(opens in a new tab)"
+  },
+  "header": {
+    "homeLabel": "{siteName} home",
+    "mainNav": "Main",
+    "github": "GitHub"
+  },
+  "localeSwitcher": {
+    "label": "Language",
+    "button": "Change language, current: {language}"
+  },
+  "footer": {
+    "nav": "Footer",
+    "sourceCode": "Source code",
+    "security": "Security",
+    "contact": "Contact",
+    "license": "Open source under the {license}.",
+    "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games, ROMs, or copyrighted assets, and is not affiliated with any game publisher, platform holder, or RetroAchievements."
+  },
+  "home": {
+    "metaTitle": "Achievements for native recomps",
+    "badge": "Early development",
+    "title": "Achievements for {highlight}.",
+    "titleHighlight": "native recomps",
+    "intro": "Track your progress in static recompilations and PC ports that run outside emulators. Recomp developers trigger achievements straight from native code; you collect points, chase rare unlocks, and show off your profile.",
+    "followOnGithub": "Follow on GitHub",
+    "iBuildARecomp": "I build a recomp",
+    "previewHeading": "What you'll track",
+    "sampleTitle": "First Boss Down",
+    "sampleDescription": "Defeat the first boss without taking damage.",
+    "unlocked": "Unlocked",
+    "completion": "Completion"
+  },
+  "achievement": {
+    "points": { "one": "{count} pt", "other": "{count} pts" }
+  },
+  "rarity": {
+    "common": "Common",
+    "uncommon": "Uncommon",
+    "rare": "Rare",
+    "epic": "Epic",
+    "legendary": "Legendary"
+  },
+  "notFound": {
+    "metaTitle": "Page not found",
+    "title": "Page not found",
+    "description": "This page doesn't exist or has moved.",
+    "backHome": "Back to home"
+  }
+}

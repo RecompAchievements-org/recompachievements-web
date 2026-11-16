@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "description": "Seguimiento de logros impulsado por la comunidad para recompilaciones estáticas nativas y ports de PC."
+  },
+  "common": {
+    "skipToContent": "Saltar al contenido",
+    "opensInNewTab": "(se abre en una pestaña nueva)"
+  },
+  "header": {
+    "homeLabel": "Inicio de {siteName}",
+    "mainNav": "Principal",
+    "github": "GitHub"
+  },
+  "localeSwitcher": {
+    "label": "Idioma",
+    "button": "Cambiar idioma, actual: {language}"
+  },
+  "footer": {
+    "nav": "Pie de página",
+    "sourceCode": "Código fuente",
+    "security": "Seguridad",
+    "contact": "Contacto",
+    "license": "Código abierto bajo la licencia {license}.",
+    "disclaimer": "RecompAchievements solo registra definiciones de logros y el progreso de los jugadores. No aloja juegos, ROMs ni contenido protegido por derechos de autor, y no está afiliado a ninguna editora de videojuegos, fabricante de plataformas ni a RetroAchievements."
+  },
+  "home": {
+    "metaTitle": "Logros para recomps nativos",
+    "badge": "En desarrollo",
+    "title": "Logros para {highlight}.",
+    "titleHighlight": "recomps nativos",
+    "intro": "Sigue tu progreso en recompilaciones estáticas y ports de PC que funcionan sin emuladores. Los desarrolladores de recomps activan los logros directamente desde el código nativo; tú sumas puntos, persigues los desbloqueos más raros y presumes tu perfil.",
+    "followOnGithub": "Síguenos en GitHub",
+    "iBuildARecomp": "Desarrollo un recomp",
+    "previewHeading": "Lo que podrás seguir",
+    "sampleTitle": "Primer jefe derrotado",
+    "sampleDescription": "Derrota al primer jefe sin recibir daño.",
+    "unlocked": "Desbloqueado",
+    "completion": "Progreso"
+  },
+  "achievement": {
+    "points": { "one": "{count} pt", "other": "{count} pts" }
+  },
+  "rarity": {
+    "common": "Común",
+    "uncommon": "Poco común",
+    "rare": "Raro",
+    "epic": "Épico",
+    "legendary": "Legendario"
+  },
+  "notFound": {
+    "metaTitle": "Página no encontrada",
+    "title": "Página no encontrada",
+    "description": "Esta página no existe o ha cambiado de dirección.",
+    "backHome": "Volver al inicio"
+  }
+}

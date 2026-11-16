@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/** Design tokens for RecompAchievements. The default Tailwind palette is cleared so only these
+ *  colors exist: use bg-surface, text-muted, text-accent, etc., never raw hex values.
+ *  Every text color passes WCAG AA (4.5:1) on background, surface, and surface-raised.
+**/
+@theme {
+  --color-*: initial;
+
+  /* Base */
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Surfaces, from back to front */
+  --color-background: #0a0c14;
+  --color-surface: #121624;
+  --color-surface-raised: #1a2033;
+  --color-border: #262d44;
+  --color-border-strong: #3a4360;
+
+  /* Text */
+  --color-foreground: #e7e9f2;
+  --color-muted: #9aa3ba;
+  --color-subtle: #808aa6;
+
+  /* Brand */
+  --color-accent: #8b7bff;
+  --color-accent-strong: #a397ff;
+  --color-on-accent: #0a0c14;
+
+  /* Achievements and points */
+  --color-gold: #f5c04a;
+  --color-on-gold: #0a0c14;
+
+  /* Status */
+  --color-success: #3ddc97;
+  --color-danger: #ff6b7a;
+  --color-info: #5cc8ff;
+
+  /* Rarity tiers, from most to least common */
+  --color-rarity-common: #a8b0c4;
+  --color-rarity-uncommon: #4ade80;
+  --color-rarity-rare: #60a5fa;
+  --color-rarity-epic: #c084fc;
+  --color-rarity-legendary: #fbbf24;
+
+  /* Typography (variables are set by next/font in the root layout) */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-chakra-petch), var(--font-geist-sans), ui-sans-serif, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+
+  ::selection {
+    @apply bg-accent text-on-accent;
+  }
 }

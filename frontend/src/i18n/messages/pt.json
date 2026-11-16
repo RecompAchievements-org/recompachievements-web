@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "description": "Rastreamento de conquistas feito pela comunidade para recompilações estáticas nativas e ports para PC."
+  },
+  "common": {
+    "skipToContent": "Pular para o conteúdo",
+    "opensInNewTab": "(abre em uma nova aba)"
+  },
+  "header": {
+    "homeLabel": "Página inicial do {siteName}",
+    "mainNav": "Principal",
+    "github": "GitHub"
+  },
+  "localeSwitcher": {
+    "label": "Idioma",
+    "button": "Mudar idioma, atual: {language}"
+  },
+  "footer": {
+    "nav": "Rodapé",
+    "sourceCode": "Código-fonte",
+    "security": "Segurança",
+    "contact": "Contato",
+    "license": "Código aberto sob a licença {license}.",
+    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos, ROMs nem conteúdo protegido por direitos autorais, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements."
+  },
+  "home": {
+    "metaTitle": "Conquistas para recomps nativos",
+    "badge": "Em desenvolvimento",
+    "title": "Conquistas para {highlight}.",
+    "titleHighlight": "recomps nativos",
+    "intro": "Acompanhe seu progresso em recompilações estáticas e ports para PC que rodam sem emuladores. Os desenvolvedores de recomps ativam as conquistas direto do código nativo; você acumula pontos, caça as conquistas mais raras e exibe seu perfil.",
+    "followOnGithub": "Siga no GitHub",
+    "iBuildARecomp": "Desenvolvo um recomp",
+    "previewHeading": "O que você vai acompanhar",
+    "sampleTitle": "Primeiro chefe derrotado",
+    "sampleDescription": "Derrote o primeiro chefe sem levar dano.",
+    "unlocked": "Desbloqueada",
+    "completion": "Progresso"
+  },
+  "achievement": {
+    "points": { "one": "{count} pt", "other": "{count} pts" }
+  },
+  "rarity": {
+    "common": "Comum",
+    "uncommon": "Incomum",
+    "rare": "Rara",
+    "epic": "Épica",
+    "legendary": "Lendária"
+  },
+  "notFound": {
+    "metaTitle": "Página não encontrada",
+    "title": "Página não encontrada",
+    "description": "Esta página não existe ou mudou de endereço.",
+    "backHome": "Voltar para o início"
+  }
+}

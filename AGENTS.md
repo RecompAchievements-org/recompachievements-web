@@ -203,10 +203,10 @@ Spanish (or any other language) still produces English code, comments, and docs.
 another language is pasted in (an error message, a design note), translate it before it goes into
 the project.
 
-If the website is localized later, translations live only in the locale message files; the message
-keys and the default (English) text stay in English. Content that users submit through the platform
-(usernames, achievement text written by recomp developers) is data, not project files, and is not
-covered by this rule.
+The website is localized: translations live only in the locale message files
+(`frontend/src/i18n/messages/`); the message keys and the default (English) text stay in English.
+Content that users submit through the platform (usernames, achievement text written by recomp
+developers) is data, not project files, and is not covered by this rule.
 
 | Correct | Incorrect |
 |---|---|

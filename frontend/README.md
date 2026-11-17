@@ -45,11 +45,14 @@ src/
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
 │   ├── fonts.ts              # next/font setup shared by both root files
 │   ├── globals.css           # Tailwind import and design tokens
-│   ├── icon.svg              # Favicon (same mark as LogoMark)
+│   ├── icon.svg              # Favicon for modern browsers (same mark as LogoMark)
+│   ├── favicon.ico           # 16/32/48 px favicon for search engines and older browsers
+│   ├── apple-icon.png        # 180 px home-screen icon (opaque background)
 │   ├── robots.ts             # /robots.txt: allow all, points to the sitemap
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
+│   ├── seo/                  # JsonLd (schema.org structured data)
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
 ├── i18n/
 │   ├── config.ts             # Locales, URL helpers, hreflang alternates
@@ -69,7 +72,15 @@ src/
 |---|---|---|
 | `/robots.txt` | `src/app/robots.ts` | Allows all crawlers; links the sitemap |
 | `/sitemap.xml` | `src/app/sitemap.ts` | Lists each path in `publicPaths` once per locale, with `hreflang` alternates. **Add every new public page to `publicPaths`.** |
+| `/favicon.ico`, `/icon.svg`, `/apple-icon.png` | `src/app/` | Site icon in search results, browser tabs, and phone home screens |
 | `/<lang>/opengraph-image` | `src/app/[lang]/opengraph-image.tsx` | 1200×630 PNG per locale with the logo, translated title, and description; Next.js adds the `og:image` and `twitter:image` tags to every page in that locale |
+
+The home page also includes a schema.org `WebSite` block (`JsonLd` component) so search engines
+show **RecompAchievements** as the site name.
+
+**Regenerating the icons** after a logo change: render `icon.svg` at 512 px with a transparent
+background, downscale it into a 16/32/48 px `favicon.ico`, and render it at 180 px with ~14%
+padding on the `background` color for `apple-icon.png` (iOS fills transparency with black).
 
 The social image can't read Tailwind tokens, so it repeats the theme colors in a small `colors`
 object; change them together with `globals.css`. The heading font is Chakra Petch Bold

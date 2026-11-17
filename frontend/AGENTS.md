@@ -101,6 +101,7 @@ src/
 │   └── sitemap.ts  # /sitemap.xml; list every public page in publicPaths
 ├── components/
 │   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher)
+│   ├── seo/        # JsonLd for schema.org structured data
 │   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
 │   └── <feature>/  # feature components (game/, profile/, achievement/)
 ├── lib/
@@ -130,7 +131,8 @@ src/
 - Reuse `components/ui` primitives before writing new styled elements.
 - Links to other sites open in a new tab: use `ExternalLink` (or `ButtonLink` with `external`),
   never a bare `target="_blank"`. Internal links use `next/link`; `mailto:` links stay in the same tab.
-- `src/app/icon.svg` and `LogoMark` draw the same mark; change both together.
+- `src/app/icon.svg`, `favicon.ico`, `apple-icon.png`, and `LogoMark` all show the same mark; when
+  the logo changes, update the SVGs and regenerate both raster icons (steps in `README.md`).
 - Translated text varies in length (Spanish and Portuguese run ~20–30% longer); check all three
   locales at 360px.
 - Global base styles in `globals.css` already handle reduced motion (`prefers-reduced-motion`),

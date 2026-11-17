@@ -33,6 +33,7 @@ export function LocaleSwitcher({ current, buttonLabel, menuLabel }: LocaleSwitch
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -41,7 +42,10 @@ export function LocaleSwitcher({ current, buttonLabel, menuLabel }: LocaleSwitch
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
     }
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
     }
 
     document.addEventListener("pointerdown", onPointerDown);
@@ -55,6 +59,7 @@ export function LocaleSwitcher({ current, buttonLabel, menuLabel }: LocaleSwitch
   return (
     <div ref={rootRef} className="relative">
       <button
+        ref={buttonRef}
         type="button"
         aria-label={buttonLabel}
         aria-expanded={open}

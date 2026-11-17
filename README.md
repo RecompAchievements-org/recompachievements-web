@@ -112,7 +112,7 @@ Brazil** (`/pt/...`). See [`frontend/README.md`](frontend/README.md#internationa
 ```
 recompachievements-web/
 ├── .agents/            # Reviewed agent skills and their Python requirements (see .agents/skills/README.md)
-├── .github/workflows/   # CI: backend build/tests and frontend lint/build on every PR
+├── .github/workflows/   # CI (ci.yml): backend and frontend checks on every PR, summarized as "CI result"
 ├── frontend/            # Next.js 16 website (see frontend/README.md)
 ├── backend/             # .NET 10 REST API (see backend/README.md)
 ├── docker-compose.yml   # Local PostgreSQL 17 for development

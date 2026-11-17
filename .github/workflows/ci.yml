@@ -1,0 +1,158 @@
+# CI for the frontend (Next.js) and backend (.NET) on every pull request into develop/main.
+#
+# There is no `push` trigger on purpose: GitHub runs PR checks on the PR's merge commit, so the
+# merged code is already tested; a second run after merging would test the same code twice and
+# spend Actions minutes. To test a branch outside a PR, start the workflow by hand
+# (Actions > CI > Run workflow); manual runs check everything.
+#
+# Jobs run only when their folder changed (the `changes` job decides). The `CI result` job always
+# runs and fails if any job failed or was cancelled: it is the single check to mark as required in
+# branch protection, so pull requests that don't touch code (docs) are never blocked.
+#
+# Actions are pinned to full commit SHAs (supply-chain safety); the comment shows the version.
+# To update one, resolve the new release tag to its commit SHA and replace both together.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same PR cancels the run that is still going.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      backend: ${{ steps.diff.outputs.backend }}
+      frontend: ${{ steps.diff.outputs.frontend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      # Compares the PR's branch with its target; editing this workflow re-runs everything.
+      - name: Detect changed areas
+        id: diff
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" != "pull_request" ]; then
+            echo "Manual run: checking everything."
+            echo "backend=true" >> "$GITHUB_OUTPUT"
+            echo "frontend=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          files="$(git diff --name-only "$BASE_SHA...$HEAD_SHA")"
+          echo "Changed files:"; echo "$files"
+          changed() { grep -qE "$1" <<< "$files" && echo true || echo false; }
+          echo "backend=$(changed '^(backend/|\.github/workflows/ci\.yml$)')" >> "$GITHUB_OUTPUT"
+          echo "frontend=$(changed '^(frontend/|\.github/workflows/ci\.yml$)')" >> "$GITHUB_OUTPUT"
+
+  backend:
+    name: Backend
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      # Printed so a run that fails for lack of disk or memory is obvious from the log.
+      - name: Runner resources
+        working-directory: .
+        run: df -h / && free -h
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: backend/global.json
+
+      - name: Restore
+        run: dotnet restore && dotnet tool restore
+
+      - name: Build (warnings are errors)
+        run: dotnet build -c Release --no-restore
+
+      # Integration tests start a PostgreSQL container with Testcontainers (Docker is on the runner).
+      - name: Test
+        run: dotnet test -c Release --no-build
+
+      - name: Check for model changes without a migration
+        run: dotnet ef migrations has-pending-model-changes --project src/RecompAchievements.Api --no-build --configuration Release
+
+      # The slower image build only runs for PRs into main and manual runs.
+      - name: Build container image
+        if: github.base_ref == 'main' || github.event_name == 'workflow_dispatch'
+        run: docker build -t recompachievements-api .
+
+  frontend:
+    name: Frontend
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Runner resources
+        working-directory: .
+        run: df -h / && free -h
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+  result:
+    name: CI result
+    if: always()
+    needs: [changes, backend, frontend]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Skipped jobs (no changes in their folder) count as passing; failed or cancelled ones don't.
+      - name: Check job results
+        env:
+          CHANGES: ${{ needs.changes.result }}
+          BACKEND: ${{ needs.backend.result }}
+          FRONTEND: ${{ needs.frontend.result }}
+        run: |
+          echo "Detect changes: $CHANGES | Backend: $BACKEND | Frontend: $FRONTEND"
+          for result in "$CHANGES" "$BACKEND" "$FRONTEND"; do
+            case "$result" in
+              success|skipped) ;;
+              *) echo "::error::A CI job ended with '$result'."; exit 1 ;;
+            esac
+          done

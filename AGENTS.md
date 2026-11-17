@@ -17,7 +17,7 @@ This repo contains the public web platform:
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
 | `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active (foundations; not deployed yet) |
 | `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
-| `.github/workflows/` | CI: backend build/tests, frontend lint/build | Active |
+| `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
 Read `README.md` for the full architecture and data model.
 
@@ -50,7 +50,11 @@ Read `README.md` for the full architecture and data model.
 - Don't add new top-level folders or tooling (package managers, linters, CI) without asking.
 - Package managers: **npm** for the frontend; **NuGet with central package management**
   (`backend/Directory.Packages.props`) for the backend.
-- CI must stay green: a PR isn't ready until the `Backend` and `Frontend` workflows pass.
+- CI must stay green: a PR isn't ready until the **`CI result`** check passes. CI runs only on pull
+  requests (and by hand), never on pushes; jobs run only for the folders a PR changes.
+- GitHub Actions are pinned to full commit SHAs with the version in a comment
+  (`uses: actions/checkout@<sha> # v7.0.1`). Update the SHA and comment together; ask before adding
+  any new action, especially third-party ones.
 
 ## Git
 

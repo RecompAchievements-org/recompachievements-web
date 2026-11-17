@@ -45,7 +45,9 @@ language on unprefixed visits.
 - **Add every key to all three files** in the same change. `en.json` defines the `Messages` type, so
   a key missing from `es.json` or `pt.json` fails `npm run build`.
 - In Server Components, read the locale with `getLocale()` and strings with `getMessages()` from
-  `@/i18n/server`. Never pass `lang` down as a prop. Client Components receive translated strings
+  `@/i18n/server`. Route Handlers (including `opengraph-image`) and Server Actions can't use
+  `next/root-params`: they take the locale from `params` and call `loadMessages(locale)`.
+  Never pass `lang` down as a prop. Client Components receive translated strings
   as props from their Server Component parent.
 - Build internal links with `localizePath(locale, "/path")`; never write `/es/...` by hand.
 - Placeholders use `{name}`: `interpolate()` for text, `rich()` for React elements (links, spans).
@@ -71,8 +73,18 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
 Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
-defaults and title template in the root layout and including `localeAlternates`; game and profile
-pages also provide an `opengraph-image` for Discord/social embeds.
+defaults and title template in the root layout and including `localeAlternates`.
+
+SEO files (details in `README.md`):
+
+- **Every new public page is added to `publicPaths` in `src/app/sitemap.ts`** in the same change
+  (RULE-003); pages that shouldn't be indexed (e.g. `/dev`) are left out.
+- `src/app/[lang]/opengraph-image.tsx` is the site-wide social card. Game and profile pages get
+  their own `opengraph-image.tsx` in their segment. Image routes use `next/og`, inline styles, and
+  the `colors` object (they can't read Tailwind tokens); keep those colors in sync with
+  `globals.css`.
+- `src/proxy.ts` must keep passing `/…/opengraph-image` and `/…/twitter-image` through without
+  locale redirects or detection.
 
 Not-found handling: `notFound()` inside a page renders the localized `src/app/[lang]/not-found.tsx`;
 URLs that match no route render the static, trilingual `src/app/global-not-found.tsx`.
@@ -84,7 +96,9 @@ src/
 ├── app/
 │   ├── [lang]/     # every route: layout, page, loading, error, not-found, opengraph-image
 │   ├── global-not-found.tsx  # 404 for unmatched URLs (outside [lang])
-│   └── fonts.ts    # next/font setup shared by both root files
+│   ├── fonts.ts    # next/font setup shared by both root files
+│   ├── robots.ts   # /robots.txt
+│   └── sitemap.ts  # /sitemap.xml; list every public page in publicPaths
 ├── components/
 │   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher)
 │   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
@@ -96,7 +110,7 @@ src/
 │   └── site.ts     # site name, URLs, public contact address (never hard-code these)
 ├── i18n/
 │   ├── config.ts   # locales, localizePath, localeAlternates (safe for proxy, server, client)
-│   ├── server.ts   # getLocale, getMessages, Messages type (server only)
+│   ├── server.ts   # getLocale, getMessages (pages); loadMessages(locale) (route handlers only)
 │   ├── format.ts   # interpolate, plural, number/percent/date formatting
 │   ├── rich.tsx    # rich(): React elements inside translated strings
 │   └── messages/   # en.json (source of truth), es.json, pt.json

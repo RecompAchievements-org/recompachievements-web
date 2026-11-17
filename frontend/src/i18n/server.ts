@@ -23,5 +23,12 @@ export async function getLocale(): Promise<Locale> {
 }
 
 export async function getMessages(): Promise<Messages> {
-  return loaders[await getLocale()]();
+  return loadMessages(await getLocale());
+}
+
+/** Messages for an explicit locale. Use this only where `next/root-params` is unavailable
+ *  (Route Handlers such as opengraph-image, Server Actions); elsewhere use getMessages().
+**/
+export function loadMessages(locale: Locale): Promise<Messages> {
+  return loaders[locale]();
 }

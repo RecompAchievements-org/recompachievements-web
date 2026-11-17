@@ -14,7 +14,7 @@ This repo contains the public web platform:
 
 | Path | Purpose | Status |
 |---|---|---|
-| `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active |
+| `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
 | `backend/` | REST API: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Planned (.NET 10 or Fastify, undecided) |
 | `docker-compose.yml` | Local PostgreSQL 17 + Redis | Planned |
 
@@ -26,6 +26,10 @@ Read `README.md` for the full architecture and data model.
   assets, or official trophy/achievement icons. Use original or generated placeholder art.
 - **No secrets in the repo.** API keys, HMAC secrets, DB credentials, and session keys come from
   environment variables. Commit only `.env.example` files with dummy values.
+- **No infrastructure details.** Docs, code, and comments never include DNS records, IP addresses,
+  registrar or email-provider names, hosting account, team, project, or plan names, or dashboard
+  settings beyond "hosted on Vercel, deploys from `main`". That information is kept outside this
+  public repository.
 - **No personal or account email addresses.** The only public addresses are
   `contact@recompachievements.org` (general, legal, takedowns) and
   `security@recompachievements.org` (vulnerabilities). Use these in docs, the website, and metadata.

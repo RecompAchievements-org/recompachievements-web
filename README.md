@@ -52,8 +52,8 @@ routine runs) instead of watching memory addresses.
  ┌────────────────────┐   HMAC-signed    ┌──────────────────────┐      ┌──────────────┐
  │ Recomp executable  │  /api/sdk/v1/*   │                      │─────▶│ PostgreSQL   │
  │ + librecompachieve │ ───────────────▶ │     Backend API      │      └──────────────┘
- └────────────────────┘                  │ (.NET 10 or Fastify) │      ┌──────────────┐
-                                         │                      │─────▶│ Redis        │
+ └────────────────────┘                  │ (.NET 10, EF Core)   │      ┌──────────────┐
+                                         │                      │─────▶│ Redis (later)│
  ┌────────────────────┐   /api/v1/*      │                      │      └──────────────┘
  │ Next.js frontend   │ ───────────────▶ │                      │      ┌──────────────┐
  │ (SSR, OG embeds)   │                  └──────────────────────┘      │ Cloudflare R2│
@@ -64,9 +64,9 @@ routine runs) instead of watching memory addresses.
 | Layer | Technology | Why |
 |---|---|---|
 | Frontend | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 | Server rendering for SEO and Discord/OpenGraph embeds; English, Spanish, and Portuguese (Brazil) |
-| Backend API | .NET 10 Minimal APIs *or* Node.js (Fastify) — *to be decided* | High-throughput, strongly typed telemetry API with OpenAPI |
+| Backend API | .NET 10 (LTS) · ASP.NET Core Minimal APIs · EF Core | Raw performance for the high-frequency SDK telemetry API; strong typing; built-in OpenAPI |
 | Database | PostgreSQL 17 | Relational integrity; unique constraints prevent duplicate unlocks |
-| Cache / rate limit | Redis (or Valkey) | Rate limiting, live presence heartbeats, cached rarity |
+| Cache / rate limit | Redis (or Valkey), added when needed | Live presence heartbeats, cross-instance rate limits, cached rarity (in-memory rate limiting until then) |
 | Asset storage | Cloudflare R2 (S3-compatible) | Badge icons and cover art with zero egress fees |
 | Hosting (frontend) | Vercel | First-party support for Next.js 16 features (proxy, Cache Components, partial prerendering); preview deploy per PR |
 
@@ -84,17 +84,16 @@ Both APIs are versioned in the path. Once a version is in use by released recomp
 tools, breaking changes go to a new version and the old one stays supported until it is retired with
 a published notice.
 
-### Data model (MVP)
+### Achievements, scoring, and data model
 
-| Table | Key fields |
-|---|---|
-| `users` | `username`, `email`, `password_hash`, `api_key`, `client_token` |
-| `games` | `slug`, `title`, `platform_origin` (N64, PS4…), `repo_url`, `dev_user_id`, `hmac_secret` (encrypted) |
-| `achievements` | `game_id`, `api_key_name`, `title`, `description`, `points`, `icon_url`, `is_secret`, `display_order` |
-| `user_unlocks` | `user_id`, `achievement_id`, `unlocked_at`, `build_hash`, `is_hardcore` — unique on `(user_id, achievement_id)` |
-| `game_sessions` | `user_id`, `game_id`, `started_at`, `last_heartbeat_at`, `build_hash` |
+Achievements belong to **sets** (a core set per game plus DLC, mod, randomizer, and challenge
+subsets). Each has developer-set **points** (1–10) and a fixed **rarity tier**; only **hardcore**
+unlocks (verified build, no assists, allowlisted mods) count toward the **global score**, which adds
+a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
+Gold, and Platinum** badges; subsets award **Beaten** and **Mastered**.
 
-**Rarity** = players who unlocked the achievement ÷ players who started the game × 100.
+The full design, including the data model and the SDK operations, is in
+[`docs/achievement-system.md`](docs/achievement-system.md).
 
 ### Website pages (v0.1)
 
@@ -113,9 +112,11 @@ Brazil** (`/pt/...`). See [`frontend/README.md`](frontend/README.md#internationa
 ```
 recompachievements-web/
 ├── .agents/            # Reviewed agent skills and their Python requirements (see .agents/skills/README.md)
+├── .github/workflows/   # CI (ci.yml): backend and frontend checks on every PR, summarized as "CI result"
 ├── frontend/            # Next.js 16 website (see frontend/README.md)
-├── backend/             # REST API (planned)
-├── docker-compose.yml   # Local PostgreSQL + Redis (planned)
+├── backend/             # .NET 10 REST API (see backend/README.md)
+├── docker-compose.yml   # Local PostgreSQL 17 for development
+├── docs/                # Design docs (achievement-system.md)
 ├── AGENTS.md            # Rules for AI coding agents
 ├── SECURITY.md          # How to report vulnerabilities
 └── LICENSE              # AGPL-3.0
@@ -123,17 +124,22 @@ recompachievements-web/
 
 ## Getting started
 
-Requirements: **Node.js 20.9+** (developed on Node 24) and npm.
+Requirements: **Node.js 20.9+** (developed on Node 24) and npm; **.NET 10 SDK** and **Docker**
+for the backend.
 
 ```bash
+# Website
 cd frontend
 npm install
-npm run dev        # http://localhost:3000
+npm run dev                  # http://localhost:3000
+
+# Database + API (from the repository root)
+docker compose up -d         # PostgreSQL 17 on localhost:5432
+dotnet run --project backend/src/RecompAchievements.Api   # http://localhost:5080
 ```
 
-Other scripts: `npm run lint`, `npm run build`, `npm run start`.
-
-Backend and database setup will be documented here once they land.
+More commands (tests, migrations, Docker image) are in [`frontend/README.md`](frontend/README.md)
+and [`backend/README.md`](backend/README.md).
 
 ## Deployment
 
@@ -150,8 +156,10 @@ Account, DNS, and email configuration are kept outside this repository.
 
 - [x] Project setup and Next.js scaffold
 - [x] Website live on recompachievements.org (Vercel), with robots.txt, sitemap, and social preview images
-- [ ] Frontend v0.1: design system, game, profile, and directory pages on mock data
-- [ ] Backend API, database schema, and migrations
+- [x] Frontend foundations: design system, layout, and English/Spanish/Portuguese translations
+- [x] Backend foundations: .NET 10 API, PostgreSQL, integration tests, container image, and CI
+- [ ] Alpha tester sign-up: the first end-to-end feature, with the API deployed
+- [ ] Game, profile, and directory pages backed by the API
 - [ ] Authentication and developer portal
 - [ ] `librecompachievements` C/C++ SDK
 - [ ] Reference integration with an open-source recomp

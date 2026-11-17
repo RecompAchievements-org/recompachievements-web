@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RecompAchievements.Api/RecompAchievements.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/RecompAchievements.Api.Tests/RecompAchievements.Api.Tests.csproj" />
+  </Folder>
+</Solution>

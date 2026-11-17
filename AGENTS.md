@@ -15,8 +15,9 @@ This repo contains the public web platform:
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | REST API: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Planned (.NET 10 or Fastify, undecided) |
-| `docker-compose.yml` | Local PostgreSQL 17 + Redis | Planned |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active (foundations; not deployed yet) |
+| `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
+| `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
 Read `README.md` for the full architecture and data model.
 
@@ -47,7 +48,13 @@ Read `README.md` for the full architecture and data model.
 - Match the existing style of the file you're editing. Prefer clear names over comments.
 - Keep each project's commands working before calling a task done (see the subfolder `AGENTS.md`).
 - Don't add new top-level folders or tooling (package managers, linters, CI) without asking.
-- Package manager: **npm** for JavaScript/TypeScript projects.
+- Package managers: **npm** for the frontend; **NuGet with central package management**
+  (`backend/Directory.Packages.props`) for the backend.
+- CI must stay green: a PR isn't ready until the **`CI result`** check passes. CI runs only on pull
+  requests (and by hand), never on pushes; jobs run only for the folders a PR changes.
+- GitHub Actions are pinned to full commit SHAs with the version in a comment
+  (`uses: actions/checkout@<sha> # v7.0.1`). Update the SHA and comment together; ask before adding
+  any new action, especially third-party ones.
 
 ## Git
 
@@ -123,7 +130,7 @@ away.
 ### RULE-002: Multi-line comments use paragraph block style
 
 **Applies to:** all source files that use C-style comments: TypeScript, TSX, JavaScript, CSS, and
-C# (if the backend uses .NET).
+C# (backend).
 
 A comment that spans more than one line must use the `/** **/` paragraph block format. Single-line
 `//` comments are only allowed when the comment fits entirely on one line.
@@ -180,8 +187,12 @@ document the change affects is updated on the same branch, so the docs land with
 - Root `AGENTS.md`: project context table, guardrails, Git section, rules (examples that quote
   changed code), domain vocabulary
 - `frontend/README.md` and `frontend/AGENTS.md`: commands, routes, folder structure, rendering and
-  data rules (and the same files in `backend/` once it exists)
+  data rules
+- `backend/README.md` and `backend/AGENTS.md`: commands, configuration and environment variables,
+  endpoints, project structure, database and migration rules
 - `SECURITY.md`: scope, API surfaces, signing and timestamp rules
+- `docs/achievement-system.md`: sets, hardcore rules, scoring and Elo, badges, titles, integrity,
+  data model, and SDK operations
 - `.env.example` files: every new, renamed, or removed environment variable
 - Code comments and JSDoc that describe the changed behaviour
 - An AI agent's own memory notes, when it keeps any
@@ -240,7 +251,7 @@ developers) is data, not project files, and is not covered by this rule.
 | Correct | Incorrect |
 |---|---|
 | `const unlockedCount = unlocks.length;` | `const logrosDesbloqueados = unlocks.length;` |
-| `// Hide secret achievements until unlocked.` | `// Ocultar logros secretos hasta desbloquearlos.` |
+| `// Skip unlocks sent from unverified builds.` | `// Omitir desbloqueos enviados desde builds no verificadas.` |
 | Branch `fix/rarity-rounding`, commit `fix(frontend): round rarity to one decimal` | Branch `fix/redondeo-rareza`, commit `fix(frontend): redondear rareza a un decimal` |
 | A chat request in Spanish answered with English code and docs | Writing the README section in Spanish because the request was in Spanish |
 
@@ -311,7 +322,7 @@ export function getLegacyRarity(gameId: string) { /* … */ } // nothing calls i
 
 | Correct | Incorrect |
 |---|---|
-| Before the backend exists, the `Game` type gains `coverUrl`: update the type, mock data, and pages in place | Adding a `LegacyGame` type and a mapper "for the old shape" |
+| Before launch, games gain a cover image: add `cover_url` to the entity and a new migration, then update the API response and page in place | Adding a `LegacyGame` type and a mapper "for the old shape" |
 | After SDK v1 ships in a released recomp, unlocks need a new signed field: add `/api/sdk/v2/unlock` and keep v1 working until its announced retirement | Changing `/api/sdk/v1/unlock` so every shipped recomp's unlocks start failing |
 | Replacing `AchievementList` with `AchievementTable` and deleting the old component, its styles, and its tests | Leaving `AchievementList` in `components/` "in case we need it" |
 | Renaming `/u/[username]` to `/users/[username]` after launch, with a 308 redirect from the old path | Renaming it after launch and breaking every shared profile link (before launch, just rename it) |
@@ -361,9 +372,19 @@ openly that it uses them without crediting any one of them as an author.
 
 - **Recomp** — a native port produced by static recompilation of a console game.
 - **Game** — a recomp registered on the platform, identified by `slug` (e.g. `bbport-pc`).
-- **Achievement** — defined per game; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
-  SDK sends.
-- **Unlock** — a user earning an achievement; records `build_hash` (SHA-256 of the executable) and
-  `is_hardcore`.
+- **Set** — a group of a game's achievements: one **core set** (the base game) plus **subsets**
+  (`dlc`, `mod`, `randomizer`, `challenge`).
+- **Achievement** — belongs to a set; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
+  SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
+- **Hardcore / softcore** — a session is hardcore only with a verified build, no assist toggles, and
+  allowlisted mods; only hardcore unlocks count toward the ranking.
+- **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be
+  upgraded); records `build_hash` (SHA-256 of the executable).
 - **Session** — a play session started by the SDK; powers live presence and minimum-playtime checks.
-- **Rarity** — `unlocked_players / players_who_started_game × 100`.
+- **Global score** — Σ over hardcore unlocks of `points × rarity multiplier + Elo bonus`.
+- **Elo bonus** — `base value × (1 − share)`, where share = hardcore players with the achievement ÷
+  hardcore players with at least one unlock in its set; recalculated nightly.
+- **Completion badges** — Silver / Gold / Platinum for core sets, Beaten / Mastered for subsets;
+  display only.
+
+The full rules are in `docs/achievement-system.md`; scoring and badge code must follow it.

@@ -1,0 +1,10 @@
+@api = http://localhost:5080
+
+### Liveness: the process is running
+GET {{api}}/health/live
+
+### Readiness: the database is reachable
+GET {{api}}/health/ready
+
+### Unknown route: 404 ProblemDetails
+GET {{api}}/does-not-exist

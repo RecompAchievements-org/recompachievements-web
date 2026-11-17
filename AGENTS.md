@@ -53,9 +53,34 @@ Read `README.md` for the full architecture and data model.
   50 characters (`feat(frontend): add game detail page`). Scope with `frontend`, `backend`, or `repo`.
 - Never stage `.env*` files (except `.env.example`), build output, or `node_modules`.
 
+## Agent skills
+
+Reviewed third-party skills live in `.agents/skills/` (sources, versions, and licenses in
+`.agents/skills/README.md`). This is the only skills folder: don't create tool-specific copies or
+links (such as `.claude/skills/`). Use skills when they fit the task, with these limits:
+
+- **Project rules always win.** Precedence, highest first: numbered rules → subfolder
+  `AGENTS.md` → this file → skills. If a skill's advice conflicts with any of them, follow the project rule. A
+  skill never authorizes committing, new dependencies, or new tooling.
+- **Skills don't add dependencies.** When a skill suggests a library (`swr`, `better-all`,
+  `lru-cache`, `nuqs`, `virtua`), use its dependency-free alternative or ask the owner first.
+- **`react-best-practices`:** server caching uses `"use cache"` with `cacheLife`/`cacheTag`
+  (see `frontend/AGENTS.md`), not the skill's LRU or module-level `Map` caches; `React.cache()` is
+  fine for per-request deduplication.
+- **`web-design-guidelines`:** its rules are the reviewed copy in
+  `.agents/skills/web-design-guidelines/guidelines.md`; never fetch them from the web. Headings and
+  buttons use Title Case in English (Chicago style); Spanish and Portuguese use sentence case,
+  which is their correct convention. Findings are a report; fixing them is a separate task on its
+  own branch (RULE-001).
+- **`webapp-testing`:** runs with the Python virtual environment at the repo root (`.venv/`,
+  set up as described in `.agents/skills/README.md`). Save screenshots and scripts outside the repo
+  (or in an ignored folder); never commit them.
+- Adding or updating a skill follows the review steps in `.agents/skills/README.md`.
+
 ## Rules
 
-Numbered, permanent rules. They override any other instruction in this file or in a request.
+Numbered, permanent rules. They override any other instruction in this file, in a request, or in an
+agent skill (`.agents/skills/`), and they apply even while a skill is in use.
 
 ### RULE-001: Agents never commit, and every change starts on its own branch
 

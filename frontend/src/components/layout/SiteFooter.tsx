@@ -15,7 +15,7 @@ export async function SiteFooter() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 text-muted">
             <LogoMark className="size-6" />
-            <span>{siteConfig.name}</span>
+            <span translate="no">{siteConfig.name}</span>
           </div>
 
           <nav aria-label={footer.nav}>
@@ -43,7 +43,7 @@ export async function SiteFooter() {
           {rich(footer.license, {
             license: (
               <ExternalLink href={siteConfig.licenseUrl} className="underline hover:text-foreground">
-                AGPL-3.0
+                <span translate="no">AGPL-3.0</span>
               </ExternalLink>
             ),
           })}{" "}

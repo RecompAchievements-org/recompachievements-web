@@ -24,14 +24,14 @@
     "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games, ROMs, or copyrighted assets, and is not affiliated with any game publisher, platform holder, or RetroAchievements."
   },
   "home": {
-    "metaTitle": "Achievements for native recomps",
+    "metaTitle": "Achievements for Native Recomps",
     "badge": "Early development",
     "title": "Achievements for {highlight}.",
-    "titleHighlight": "native recomps",
+    "titleHighlight": "Native Recomps",
     "intro": "Track your progress in static recompilations and PC ports that run outside emulators. Recomp developers trigger achievements straight from native code; you collect points, chase rare unlocks, and show off your profile.",
     "followOnGithub": "Follow on GitHub",
-    "iBuildARecomp": "I build a recomp",
-    "previewHeading": "What you'll track",
+    "iBuildARecomp": "I Build a Recomp",
+    "previewHeading": "What You’ll Track",
     "sampleTitle": "First Boss Down",
     "sampleDescription": "Defeat the first boss without taking damage.",
     "unlocked": "Unlocked",
@@ -48,9 +48,9 @@
     "legendary": "Legendary"
   },
   "notFound": {
-    "metaTitle": "Page not found",
-    "title": "Page not found",
-    "description": "This page doesn't exist or has moved.",
-    "backHome": "Back to home"
+    "metaTitle": "Page Not Found",
+    "title": "Page Not Found",
+    "description": "This page doesn’t exist or has moved.",
+    "backHome": "Back to Home"
   }
 }

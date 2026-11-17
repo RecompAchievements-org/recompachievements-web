@@ -1,0 +1,9 @@
+# Python virtual environment for agent skills (see .agents/skills/README.md)
+.venv/
+__pycache__/
+
+# Local screenshots and scratch output from agent checks
+.agents/tmp/
+
+# OS files
+.DS_Store

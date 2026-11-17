@@ -54,6 +54,11 @@ language on unprefixed visits.
 - Every page's metadata sets `alternates: localeAlternates(locale, "/path")` (canonical + hreflang).
 - Translations are written in the target language's gaming vocabulary (`logros`, `conquistas`);
   Portuguese is Brazilian.
+- **Copy style:** English headings and buttons use Title Case (Chicago: "I Build a Recomp",
+  "Back to Home"); Spanish and Portuguese use sentence case. Use typographic characters in every
+  language: `’` and `“ ”`, not `'` and `"`; `…`, not `...` (loading text ends with `…`).
+- Brand names and code tokens (`RecompAchievements`, `GitHub`, `AGPL-3.0`) are wrapped in
+  `translate="no"` so browser auto-translation leaves them intact.
 
 ### Routes (v0.1)
 
@@ -114,6 +119,10 @@ src/
 - `src/app/icon.svg` and `LogoMark` draw the same mark; change both together.
 - Translated text varies in length (Spanish and Portuguese run ~20–30% longer); check all three
   locales at 360px.
+- Global base styles in `globals.css` already handle reduced motion (`prefers-reduced-motion`),
+  sticky-header scroll padding, `touch-action: manipulation`, and balanced heading wrap; don't
+  re-implement them per component.
+- Interactive menus close on Escape and outside click, and Escape returns focus to the toggle.
 - Mobile-first; every page must work at 360px width.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
 - Images use `next/image`. Achievement icons and cover art are placeholders or developer-uploaded;

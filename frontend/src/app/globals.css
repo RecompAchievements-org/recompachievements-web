@@ -55,10 +55,35 @@
 @layer base {
   :root {
     color-scheme: dark;
+    /* Keep focused elements and anchor targets clear of the sticky header (h-16). */
+    scroll-padding-top: 4rem;
+    /* Remove the double-tap zoom delay on touch screens; pinch zoom still works. */
+    touch-action: manipulation;
   }
 
   body {
     @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  /* Avoid single-word last lines in headings, which translations make more likely. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /** Honor the operating system's "reduce motion" setting: transitions and animations finish
+   *  instantly instead of playing.
+  **/
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   :focus-visible {

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { localeAlternates } from "@/i18n/config";
+import { htmlLang, localeAlternates } from "@/i18n/config";
 import { formatNumber, formatPercent, plural } from "@/i18n/format";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
@@ -24,10 +25,22 @@ export async function generateMetadata(): Promise<Metadata> {
 **/
 export default async function HomePage() {
   const locale = await getLocale();
-  const { home, achievement, rarity } = await getMessages();
+  const { home, achievement, rarity, metadata } = await getMessages();
+
+  // Tells search engines the site's name, so results show "RecompAchievements" rather than the URL.
+  const website = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    alternateName: "Recomp Achievements",
+    url: `${siteConfig.url}/`,
+    description: metadata.description,
+    inLanguage: htmlLang[locale],
+  };
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 sm:py-24">
+      <JsonLd data={website} />
       <section className="flex max-w-3xl flex-col gap-6">
         <Badge tone="accent" className="self-start">
           {home.badge}

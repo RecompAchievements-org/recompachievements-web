@@ -17,6 +17,12 @@ import {
 **/
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+
+  // Social images are addressed by explicit locale (/en/opengraph-image); never redirect or detect.
+  if (/\/(opengraph|twitter)-image(\/|$)/.test(pathname)) {
+    return NextResponse.next();
+  }
+
   const { locale: prefix, path } = stripLocale(pathname);
 
   if (prefix === defaultLocale) {

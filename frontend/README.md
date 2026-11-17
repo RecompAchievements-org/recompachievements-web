@@ -33,16 +33,21 @@ npm run dev        # http://localhost:3000
 ## Project structure
 
 ```
+assets/
+└── fonts/                    # ChakraPetch-Bold.ttf + OFL.txt, used by social preview images
 src/
 ├── app/
 │   ├── [lang]/
 │   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
 │   │   ├── page.tsx          # Home (placeholder until the game directory)
-│   │   └── not-found.tsx     # Localized 404 for notFound() inside pages
+│   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
+│   │   └── opengraph-image.tsx  # Social preview card (1200×630), one per locale
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
 │   ├── fonts.ts              # next/font setup shared by both root files
 │   ├── globals.css           # Tailwind import and design tokens
-│   └── icon.svg              # Favicon (same mark as LogoMark)
+│   ├── icon.svg              # Favicon (same mark as LogoMark)
+│   ├── robots.ts             # /robots.txt: allow all, points to the sitemap
+│   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
@@ -57,6 +62,26 @@ src/
 │   └── site.ts               # Site name, URLs, and public contact address
 └── proxy.ts                  # Locale routing and detection
 ```
+
+## SEO and social previews
+
+| URL | Source | Notes |
+|---|---|---|
+| `/robots.txt` | `src/app/robots.ts` | Allows all crawlers; links the sitemap |
+| `/sitemap.xml` | `src/app/sitemap.ts` | Lists each path in `publicPaths` once per locale, with `hreflang` alternates. **Add every new public page to `publicPaths`.** |
+| `/<lang>/opengraph-image` | `src/app/[lang]/opengraph-image.tsx` | 1200×630 PNG per locale with the logo, translated title, and description; Next.js adds the `og:image` and `twitter:image` tags to every page in that locale |
+
+The social image can't read Tailwind tokens, so it repeats the theme colors in a small `colors`
+object; change them together with `globals.css`. The heading font is Chakra Petch Bold
+(SIL Open Font License, `assets/fonts/OFL.txt`), loaded from `assets/fonts/`. `src/proxy.ts`
+lets `/…/opengraph-image` requests through untouched, so a crawler always gets the image of the
+locale in the URL.
+
+## Deployment
+
+Hosted on Vercel, which builds this folder with the default Next.js settings: merges to `main`
+deploy to [recompachievements.org](https://recompachievements.org/), and pull requests get preview
+deployments. See the [root README](../README.md#deployment).
 
 ## Internationalization
 
@@ -96,7 +121,8 @@ file fails `npm run build`.
 
 **Adding a language:** add its code to `locales` in `src/i18n/config.ts` (plus `localeNames`,
 `htmlLang`, `openGraphLocale`), create `messages/<code>.json`, register it in the loaders in
-`src/i18n/server.ts` and in `global-not-found.tsx`.
+`src/i18n/server.ts` and in `global-not-found.tsx`. The sitemap and social images pick up the
+new locale automatically.
 
 ## Design system
 

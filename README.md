@@ -68,6 +68,7 @@ routine runs) instead of watching memory addresses.
 | Database | PostgreSQL 17 | Relational integrity; unique constraints prevent duplicate unlocks |
 | Cache / rate limit | Redis (or Valkey) | Rate limiting, live presence heartbeats, cached rarity |
 | Asset storage | Cloudflare R2 (S3-compatible) | Badge icons and cover art with zero egress fees |
+| Hosting (frontend) | Vercel | First-party support for Next.js 16 features (proxy, Cache Components, partial prerendering); preview deploy per PR |
 
 ### API surfaces
 
@@ -134,9 +135,21 @@ Other scripts: `npm run lint`, `npm run build`, `npm run start`.
 
 Backend and database setup will be documented here once they land.
 
+## Deployment
+
+The website is live at **[recompachievements.org](https://recompachievements.org/)**, hosted on
+Vercel:
+
+- Every merge to `main` deploys to production.
+- Every pull request gets a preview deployment.
+- The Vercel project builds the `frontend/` folder with the default Next.js settings.
+
+Account, DNS, and email configuration are kept outside this repository.
+
 ## Roadmap
 
 - [x] Project setup and Next.js scaffold
+- [x] Website live on recompachievements.org (Vercel), with robots.txt, sitemap, and social preview images
 - [ ] Frontend v0.1: design system, game, profile, and directory pages on mock data
 - [ ] Backend API, database schema, and migrations
 - [ ] Authentication and developer portal

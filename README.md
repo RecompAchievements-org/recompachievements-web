@@ -111,6 +111,7 @@ Brazil** (`/pt/...`). See [`frontend/README.md`](frontend/README.md#internationa
 
 ```
 recompachievements-web/
+├── .agents/            # Reviewed agent skills and their Python requirements (see .agents/skills/README.md)
 ├── frontend/            # Next.js 16 website (see frontend/README.md)
 ├── backend/             # REST API (planned)
 ├── docker-compose.yml   # Local PostgreSQL + Redis (planned)

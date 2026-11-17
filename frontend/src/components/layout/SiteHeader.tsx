@@ -31,7 +31,7 @@ export async function SiteHeader() {
                   href={siteConfig.repoUrl}
                   className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"
                 >
-                  {header.github}
+                  <span translate="no">{header.github}</span>
                 </ExternalLink>
               </li>
             </ul>

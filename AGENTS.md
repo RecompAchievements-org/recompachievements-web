@@ -187,6 +187,8 @@ document the change affects is updated on the same branch, so the docs land with
 - `backend/README.md` and `backend/AGENTS.md`: commands, configuration and environment variables,
   endpoints, project structure, database and migration rules
 - `SECURITY.md`: scope, API surfaces, signing and timestamp rules
+- `docs/achievement-system.md`: sets, hardcore rules, scoring and Elo, badges, titles, integrity,
+  data model, and SDK operations
 - `.env.example` files: every new, renamed, or removed environment variable
 - Code comments and JSDoc that describe the changed behaviour
 - An AI agent's own memory notes, when it keeps any
@@ -245,7 +247,7 @@ developers) is data, not project files, and is not covered by this rule.
 | Correct | Incorrect |
 |---|---|
 | `const unlockedCount = unlocks.length;` | `const logrosDesbloqueados = unlocks.length;` |
-| `// Hide secret achievements until unlocked.` | `// Ocultar logros secretos hasta desbloquearlos.` |
+| `// Skip unlocks sent from unverified builds.` | `// Omitir desbloqueos enviados desde builds no verificadas.` |
 | Branch `fix/rarity-rounding`, commit `fix(frontend): round rarity to one decimal` | Branch `fix/redondeo-rareza`, commit `fix(frontend): redondear rareza a un decimal` |
 | A chat request in Spanish answered with English code and docs | Writing the README section in Spanish because the request was in Spanish |
 
@@ -366,9 +368,19 @@ openly that it uses them without crediting any one of them as an author.
 
 - **Recomp** — a native port produced by static recompilation of a console game.
 - **Game** — a recomp registered on the platform, identified by `slug` (e.g. `bbport-pc`).
-- **Achievement** — defined per game; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
-  SDK sends.
-- **Unlock** — a user earning an achievement; records `build_hash` (SHA-256 of the executable) and
-  `is_hardcore`.
+- **Set** — a group of a game's achievements: one **core set** (the base game) plus **subsets**
+  (`dlc`, `mod`, `randomizer`, `challenge`).
+- **Achievement** — belongs to a set; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
+  SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
+- **Hardcore / softcore** — a session is hardcore only with a verified build, no assist toggles, and
+  allowlisted mods; only hardcore unlocks count toward the ranking.
+- **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be
+  upgraded); records `build_hash` (SHA-256 of the executable).
 - **Session** — a play session started by the SDK; powers live presence and minimum-playtime checks.
-- **Rarity** — `unlocked_players / players_who_started_game × 100`.
+- **Global score** — Σ over hardcore unlocks of `points × rarity multiplier + Elo bonus`.
+- **Elo bonus** — `base value × (1 − share)`, where share = hardcore players with the achievement ÷
+  hardcore players with at least one unlock in its set; recalculated nightly.
+- **Completion badges** — Silver / Gold / Platinum for core sets, Beaten / Mastered for subsets;
+  display only.
+
+The full rules are in `docs/achievement-system.md`; scoring and badge code must follow it.

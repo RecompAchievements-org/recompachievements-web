@@ -84,17 +84,16 @@ Both APIs are versioned in the path. Once a version is in use by released recomp
 tools, breaking changes go to a new version and the old one stays supported until it is retired with
 a published notice.
 
-### Data model (MVP)
+### Achievements, scoring, and data model
 
-| Table | Key fields |
-|---|---|
-| `users` | `username`, `email`, `password_hash`, `api_key`, `client_token` |
-| `games` | `slug`, `title`, `platform_origin` (N64, PS4…), `repo_url`, `dev_user_id`, `hmac_secret` (encrypted) |
-| `achievements` | `game_id`, `api_key_name`, `title`, `description`, `points`, `icon_url`, `is_secret`, `display_order` |
-| `user_unlocks` | `user_id`, `achievement_id`, `unlocked_at`, `build_hash`, `is_hardcore` — unique on `(user_id, achievement_id)` |
-| `game_sessions` | `user_id`, `game_id`, `started_at`, `last_heartbeat_at`, `build_hash` |
+Achievements belong to **sets** (a core set per game plus DLC, mod, randomizer, and challenge
+subsets). Each has developer-set **points** (1–10) and a fixed **rarity tier**; only **hardcore**
+unlocks (verified build, no assists, allowlisted mods) count toward the **global score**, which adds
+a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
+Gold, and Platinum** badges; subsets award **Beaten** and **Mastered**.
 
-**Rarity** = players who unlocked the achievement ÷ players who started the game × 100.
+The full design, including the data model and the SDK operations, is in
+[`docs/achievement-system.md`](docs/achievement-system.md).
 
 ### Website pages (v0.1)
 
@@ -117,6 +116,7 @@ recompachievements-web/
 ├── frontend/            # Next.js 16 website (see frontend/README.md)
 ├── backend/             # .NET 10 REST API (see backend/README.md)
 ├── docker-compose.yml   # Local PostgreSQL 17 for development
+├── docs/                # Design docs (achievement-system.md)
 ├── AGENTS.md            # Rules for AI coding agents
 ├── SECURITY.md          # How to report vulnerabilities
 └── LICENSE              # AGPL-3.0

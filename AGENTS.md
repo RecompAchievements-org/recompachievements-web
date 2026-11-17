@@ -15,8 +15,9 @@ This repo contains the public web platform:
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | REST API: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Planned (.NET 10 or Fastify, undecided) |
-| `docker-compose.yml` | Local PostgreSQL 17 + Redis | Planned |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active (foundations; not deployed yet) |
+| `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
+| `.github/workflows/` | CI: backend build/tests, frontend lint/build | Active |
 
 Read `README.md` for the full architecture and data model.
 
@@ -47,7 +48,9 @@ Read `README.md` for the full architecture and data model.
 - Match the existing style of the file you're editing. Prefer clear names over comments.
 - Keep each project's commands working before calling a task done (see the subfolder `AGENTS.md`).
 - Don't add new top-level folders or tooling (package managers, linters, CI) without asking.
-- Package manager: **npm** for JavaScript/TypeScript projects.
+- Package managers: **npm** for the frontend; **NuGet with central package management**
+  (`backend/Directory.Packages.props`) for the backend.
+- CI must stay green: a PR isn't ready until the `Backend` and `Frontend` workflows pass.
 
 ## Git
 
@@ -123,7 +126,7 @@ away.
 ### RULE-002: Multi-line comments use paragraph block style
 
 **Applies to:** all source files that use C-style comments: TypeScript, TSX, JavaScript, CSS, and
-C# (if the backend uses .NET).
+C# (backend).
 
 A comment that spans more than one line must use the `/** **/` paragraph block format. Single-line
 `//` comments are only allowed when the comment fits entirely on one line.
@@ -180,7 +183,9 @@ document the change affects is updated on the same branch, so the docs land with
 - Root `AGENTS.md`: project context table, guardrails, Git section, rules (examples that quote
   changed code), domain vocabulary
 - `frontend/README.md` and `frontend/AGENTS.md`: commands, routes, folder structure, rendering and
-  data rules (and the same files in `backend/` once it exists)
+  data rules
+- `backend/README.md` and `backend/AGENTS.md`: commands, configuration and environment variables,
+  endpoints, project structure, database and migration rules
 - `SECURITY.md`: scope, API surfaces, signing and timestamp rules
 - `.env.example` files: every new, renamed, or removed environment variable
 - Code comments and JSDoc that describe the changed behaviour
@@ -311,7 +316,7 @@ export function getLegacyRarity(gameId: string) { /* … */ } // nothing calls i
 
 | Correct | Incorrect |
 |---|---|
-| Before the backend exists, the `Game` type gains `coverUrl`: update the type, mock data, and pages in place | Adding a `LegacyGame` type and a mapper "for the old shape" |
+| Before launch, games gain a cover image: add `cover_url` to the entity and a new migration, then update the API response and page in place | Adding a `LegacyGame` type and a mapper "for the old shape" |
 | After SDK v1 ships in a released recomp, unlocks need a new signed field: add `/api/sdk/v2/unlock` and keep v1 working until its announced retirement | Changing `/api/sdk/v1/unlock` so every shipped recomp's unlocks start failing |
 | Replacing `AchievementList` with `AchievementTable` and deleting the old component, its styles, and its tests | Leaving `AchievementList` in `components/` "in case we need it" |
 | Renaming `/u/[username]` to `/users/[username]` after launch, with a 308 redirect from the old path | Renaming it after launch and breaking every shared profile link (before launch, just rename it) |

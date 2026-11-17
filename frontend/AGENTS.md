@@ -24,8 +24,9 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - **Server Components by default.** Add `"use client"` only to leaf components that need state,
   effects, or browser APIs. Never put `"use client"` on a page or layout.
 - **All data access goes through `src/lib/api/`.** Pages and components never call `fetch` on the
-  backend directly. Until the backend exists, this layer returns typed mock data with the same
-  shape as the planned `/api/v1` responses.
+  backend directly. That layer calls the .NET API (`backend/`) from server code only, using a
+  server-only base URL environment variable; the browser never talks to the API. Features are
+  built end to end (database → API → page), so there is no mock-data layer.
 - **Caching uses `"use cache"`** in data functions, always paired with `cacheLife(...)`, and
   `cacheTag(...)` where the data can be invalidated (e.g. `game:${slug}`). Do not use the legacy
   `fetch` `next: { revalidate }` options or `export const revalidate`.
@@ -105,7 +106,7 @@ src/
 │   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
 │   └── <feature>/  # feature components (game/, profile/, achievement/)
 ├── lib/
-│   ├── api/        # data access layer (mock now, backend later)
+│   ├── api/        # data access layer: server-only calls to the .NET API
 │   ├── types/      # domain types shared across the app
 │   ├── cx.ts       # class-name join helper
 │   └── site.ts     # site name, URLs, public contact address (never hard-code these)

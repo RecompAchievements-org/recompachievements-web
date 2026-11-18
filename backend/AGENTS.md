@@ -21,9 +21,10 @@ Testcontainers.
 - Each feature lives in `Features/<Feature>/`: `<Feature>Endpoints.cs` with a
   `Map<Feature>Endpoints(this RouteGroupBuilder group)` method, its request/response records, and its
   EF entity configuration (`IEntityTypeConfiguration<T>`). No controllers, no MVC.
-- Public endpoints are mapped on the `/api/v1` route group in `Program.cs`, which requires the
-  website's internal key (`RequireInternalKey()`); SDK endpoints will use `/api/sdk/v1` (create that
-  group with its first endpoint, not before — RULE-005).
+- Public endpoints are mapped on the `/api/v1` route group in `Program.cs`. The website's internal
+  key is enforced for that whole path by middleware (`app.UseInternalKey("/api/v1")`), so callers
+  without it are rejected before any body is read or validated. SDK endpoints will use
+  `/api/sdk/v1` (create that group with its first endpoint, not before — RULE-005).
 - Resolve the client's address only with `ClientAddress.Resolve(context)`; never read request
   headers for it directly.
 - Endpoints return `TypedResults` (`Results<Ok<T>, NotFound, …>`) so OpenAPI knows every response.

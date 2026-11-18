@@ -26,13 +26,13 @@ app.UseForwardedHeaders();
 app.UseErrorHandling();
 app.UseSecurityHeaders();
 app.UseRateLimiter();
+app.UseInternalKey("/api/v1");
 
 app.MapApiDocumentationInDevelopment();
 app.MapHealthEndpoints();
 
 // Public web API, called only by the website's server code (internal key required).
 app.MapGroup("/api/v1")
-    .RequireInternalKey()
     .MapAlphaSignupEndpoints();
 
 await app.ApplyMigrationsIfEnabledAsync();

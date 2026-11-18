@@ -50,6 +50,18 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-display: var(--font-chakra-petch), var(--font-geist-sans), ui-sans-serif, sans-serif;
+
+  /* Featured slider: the active slide's progress bar; its end advances the slider. */
+  --animate-slide-progress: slide-progress 7s linear forwards;
+
+  @keyframes slide-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 @layer base {

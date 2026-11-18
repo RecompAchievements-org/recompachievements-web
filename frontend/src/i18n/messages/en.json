@@ -10,7 +10,8 @@
   "header": {
     "homeLabel": "{siteName} home",
     "mainNav": "Main",
-    "github": "GitHub"
+    "github": "GitHub",
+    "games": "Games"
   },
   "localeSwitcher": {
     "label": "Language",
@@ -22,8 +23,9 @@
     "security": "Security",
     "contact": "Contact",
     "license": "Open source under the {license}.",
-    "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games, ROMs, or copyrighted assets, and is not affiliated with any game publisher, platform holder, or RetroAchievements.",
-    "privacy": "Privacy"
+    "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games or ROMs, uses game images only with the recomp project’s permission or from its own captures, and is not affiliated with any game publisher, platform holder, or RetroAchievements.",
+    "privacy": "Privacy",
+    "contentPolicy": "Content policy"
   },
   "home": {
     "metaTitle": "Achievements for Native Recomps",
@@ -32,12 +34,10 @@
     "intro": "Track your progress in static recompilations and PC ports that run outside emulators. Recomp developers trigger achievements straight from native code; you collect points, chase rare unlocks, and show off your profile.",
     "followOnGithub": "Follow on GitHub",
     "iBuildARecomp": "I Build a Recomp",
-    "previewHeading": "What You’ll Track",
-    "sampleTitle": "First Boss Down",
-    "sampleDescription": "Defeat the first boss without taking damage.",
-    "unlocked": "Unlocked",
-    "completion": "Completion",
-    "joinAlpha": "Join the Alpha"
+    "joinAlpha": "Join the Alpha",
+    "allGamesHeading": "All Games",
+    "browseAll": "Browse All Games",
+    "gamesUnavailable": "Games couldn’t be loaded right now. Please try again in a moment."
   },
   "achievement": {
     "points": {
@@ -51,6 +51,50 @@
     "rare": "Rare",
     "epic": "Epic",
     "legendary": "Legendary"
+  },
+  "games": {
+    "metaTitle": "Games",
+    "metaDescription": "Recomps and native PC ports on RecompAchievements, with their achievement sets.",
+    "title": "Games",
+    "intro": "Recomps and native PC ports with achievement sets on RecompAchievements. Every set is a preview for now: achievements go live once a recomp integrates the SDK.",
+    "previewBadge": "Preview",
+    "achievementCount": {
+      "one": "{count} achievement",
+      "other": "{count} achievements"
+    },
+    "loading": "Loading games…",
+    "unavailable": "Games couldn’t be loaded right now. Please try again in a moment."
+  },
+  "game": {
+    "metaDescription": "{title}: {count} achievements on RecompAchievements.",
+    "allGames": "All Games",
+    "originalPlatform": "Originally on {console}",
+    "platforms": "Runs on",
+    "sourceCode": "Source Code",
+    "achievementsHeading": "Achievements",
+    "previewTitle": "Preview Set",
+    "previewText": "A community draft that isn’t active yet: these achievements can’t be earned until the recomp integrates the RecompAchievements SDK. Not affiliated with or endorsed by the recomp’s developers.",
+    "kind": {
+      "progression": "Progression",
+      "win_condition": "Win Condition"
+    },
+    "loading": "Loading achievements…",
+    "unavailable": "This game couldn’t be loaded right now. Please try again in a moment.",
+    "version": "Version {version}",
+    "released": "Released {date}"
+  },
+  "slider": {
+    "heading": "Featured Recomps",
+    "carousel": "Featured recomps",
+    "slide": "{current} of {total}",
+    "newRelease": "New Release",
+    "featured": "Featured",
+    "pause": "Pause Slideshow",
+    "play": "Play Slideshow",
+    "previous": "Previous Slide",
+    "next": "Next Slide",
+    "viewAchievements": "View Achievements",
+    "imageCredit": "Image:"
   },
   "notFound": {
     "metaTitle": "Page Not Found",
@@ -154,6 +198,34 @@
       {
         "title": "Your Rights",
         "body": "You can ask to see, correct, or delete your data at any time by writing to {email}."
+      }
+    ]
+  },
+  "contentPolicy": {
+    "metaTitle": "Content Policy",
+    "metaDescription": "What RecompAchievements hosts, where game images come from, and how rights holders can request removal.",
+    "title": "Content Policy",
+    "intro": "RecompAchievements is a community project that tracks achievements for recomps and native PC ports. This page explains what we host and how to ask us to remove something.",
+    "sections": [
+      {
+        "title": "What We Don’t Host",
+        "body": "No games, ROMs, disc images, recompiled executables, or game files of any kind. Every recomp needs your own legally obtained copy of the original game, and downloads come only from each project’s own pages."
+      },
+      {
+        "title": "Achievement Text",
+        "body": "Achievement titles and descriptions are written by us or by recomp developers. We don’t copy official trophy or achievement lists."
+      },
+      {
+        "title": "Images",
+        "body": "We don’t use official box art, key art, game logos, or trophy icons. Game images are either screenshots and banners published by the recomp project and used with its permission, or our own gameplay captures of the recomp. Each one is credited. Games without an approved image get generated artwork."
+      },
+      {
+        "title": "Trademarks",
+        "body": "Game and platform names are trademarks of their owners and are used only to identify the games. RecompAchievements is not affiliated with or endorsed by any game publisher, platform holder, or recomp developer unless stated."
+      },
+      {
+        "title": "Removal Requests",
+        "body": "If you hold rights to something shown on this site and want it removed, email {email} with a link to the page and what you’d like removed. We review every request and remove content within 5 business days when the request is valid."
       }
     ]
   }

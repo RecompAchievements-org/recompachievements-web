@@ -10,7 +10,8 @@
   "header": {
     "homeLabel": "Inicio de {siteName}",
     "mainNav": "Principal",
-    "github": "GitHub"
+    "github": "GitHub",
+    "games": "Juegos"
   },
   "localeSwitcher": {
     "label": "Idioma",
@@ -22,8 +23,9 @@
     "security": "Seguridad",
     "contact": "Contacto",
     "license": "Código abierto bajo la licencia {license}.",
-    "disclaimer": "RecompAchievements solo registra definiciones de logros y el progreso de los jugadores. No aloja juegos, ROMs ni contenido protegido por derechos de autor, y no está afiliado a ninguna editora de videojuegos, fabricante de plataformas ni a RetroAchievements.",
-    "privacy": "Privacidad"
+    "disclaimer": "RecompAchievements solo registra definiciones de logros y el progreso de los jugadores. No aloja juegos ni ROMs, usa imágenes de juegos solo con permiso del proyecto del recomp o de capturas propias, y no está afiliado a ninguna editora de videojuegos, fabricante de plataformas ni a RetroAchievements.",
+    "privacy": "Privacidad",
+    "contentPolicy": "Política de contenido"
   },
   "home": {
     "metaTitle": "Logros para recomps nativos",
@@ -32,12 +34,10 @@
     "intro": "Sigue tu progreso en recompilaciones estáticas y ports de PC que funcionan sin emuladores. Los desarrolladores de recomps activan los logros directamente desde el código nativo; tú sumas puntos, persigues los desbloqueos más raros y presumes tu perfil.",
     "followOnGithub": "Síguenos en GitHub",
     "iBuildARecomp": "Desarrollo un recomp",
-    "previewHeading": "Lo que podrás seguir",
-    "sampleTitle": "Primer jefe derrotado",
-    "sampleDescription": "Derrota al primer jefe sin recibir daño.",
-    "unlocked": "Desbloqueado",
-    "completion": "Progreso",
-    "joinAlpha": "Únete a la alfa"
+    "joinAlpha": "Únete a la alfa",
+    "allGamesHeading": "Todos los juegos",
+    "browseAll": "Ver todos los juegos",
+    "gamesUnavailable": "No se pudieron cargar los juegos. Inténtalo de nuevo en un momento."
   },
   "achievement": {
     "points": {
@@ -51,6 +51,50 @@
     "rare": "Raro",
     "epic": "Épico",
     "legendary": "Legendario"
+  },
+  "games": {
+    "metaTitle": "Juegos",
+    "metaDescription": "Recomps y ports nativos de PC en RecompAchievements, con sus sets de logros.",
+    "title": "Juegos",
+    "intro": "Recomps y ports nativos de PC con sets de logros en RecompAchievements. Por ahora todos los sets son una vista previa: los logros se activan cuando el recomp integra el SDK.",
+    "previewBadge": "Vista previa",
+    "achievementCount": {
+      "one": "{count} logro",
+      "other": "{count} logros"
+    },
+    "loading": "Cargando juegos…",
+    "unavailable": "No se pudieron cargar los juegos. Inténtalo de nuevo en un momento."
+  },
+  "game": {
+    "metaDescription": "{title}: {count} logros en RecompAchievements.",
+    "allGames": "Todos los juegos",
+    "originalPlatform": "Originalmente en {console}",
+    "platforms": "Disponible en",
+    "sourceCode": "Código fuente",
+    "achievementsHeading": "Logros",
+    "previewTitle": "Set en vista previa",
+    "previewText": "Un borrador de la comunidad que aún no está activo: estos logros no se pueden conseguir hasta que el recomp integre el SDK de RecompAchievements. Sin afiliación ni respaldo de los desarrolladores del recomp.",
+    "kind": {
+      "progression": "Progresión",
+      "win_condition": "Condición de victoria"
+    },
+    "loading": "Cargando logros…",
+    "unavailable": "No se pudo cargar este juego. Inténtalo de nuevo en un momento.",
+    "version": "Versión {version}",
+    "released": "Publicada el {date}"
+  },
+  "slider": {
+    "heading": "Recomps destacados",
+    "carousel": "Recomps destacados",
+    "slide": "{current} de {total}",
+    "newRelease": "Nuevo lanzamiento",
+    "featured": "Destacado",
+    "pause": "Pausar presentación",
+    "play": "Reproducir presentación",
+    "previous": "Diapositiva anterior",
+    "next": "Diapositiva siguiente",
+    "viewAchievements": "Ver logros",
+    "imageCredit": "Imagen:"
   },
   "notFound": {
     "metaTitle": "Página no encontrada",
@@ -154,6 +198,34 @@
       {
         "title": "Tus derechos",
         "body": "Puedes pedir ver, corregir o eliminar tus datos en cualquier momento escribiendo a {email}."
+      }
+    ]
+  },
+  "contentPolicy": {
+    "metaTitle": "Política de contenido",
+    "metaDescription": "Qué aloja RecompAchievements, de dónde vienen las imágenes de los juegos y cómo pueden los titulares de derechos pedir su retirada.",
+    "title": "Política de contenido",
+    "intro": "RecompAchievements es un proyecto de la comunidad que registra logros de recomps y ports nativos de PC. Esta página explica qué alojamos y cómo pedirnos que retiremos algo.",
+    "sections": [
+      {
+        "title": "Lo que no alojamos",
+        "body": "Ningún juego, ROM, imagen de disco, ejecutable recompilado ni archivo de juego de ningún tipo. Cada recomp necesita tu propia copia del juego original obtenida legalmente, y las descargas vienen solo de las páginas de cada proyecto."
+      },
+      {
+        "title": "Texto de los logros",
+        "body": "Los títulos y descripciones de los logros los escribimos nosotros o los desarrolladores de los recomps. No copiamos listas oficiales de trofeos ni de logros."
+      },
+      {
+        "title": "Imágenes",
+        "body": "No usamos carátulas oficiales, arte promocional, logotipos de juegos ni iconos de trofeos. Las imágenes de juegos son capturas y banners publicados por el proyecto del recomp y usados con su permiso, o capturas propias del recomp en funcionamiento. Todas llevan su crédito. Los juegos sin una imagen aprobada usan arte generado."
+      },
+      {
+        "title": "Marcas registradas",
+        "body": "Los nombres de juegos y plataformas son marcas de sus propietarios y se usan solo para identificar los juegos. RecompAchievements no está afiliado ni respaldado por ninguna editora, fabricante de plataformas ni desarrollador de recomps, salvo que se indique."
+      },
+      {
+        "title": "Solicitudes de retirada",
+        "body": "Si tienes derechos sobre algo que aparece en este sitio y quieres que lo retiremos, escribe a {email} con el enlace a la página y lo que quieres retirar. Revisamos cada solicitud y retiramos el contenido en un plazo de 5 días hábiles cuando la solicitud es válida."
       }
     ]
   }

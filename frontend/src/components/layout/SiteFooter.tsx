@@ -39,6 +39,11 @@ export async function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link href={localizePath(locale, "/content-policy")} className={linkClasses}>
+                  {footer.contentPolicy}
+                </Link>
+              </li>
+              <li>
                 <a href={`mailto:${siteConfig.contactEmail}`} className={linkClasses}>
                   {footer.contact}
                 </a>

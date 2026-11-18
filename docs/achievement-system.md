@@ -4,8 +4,9 @@ How achievements, scores, completion badges, and titles work on RecompAchievemen
 reference for players, recomp developers, and contributors; the database schema, the API, and the
 `librecompachievements` SDK follow it.
 
-> **Status:** agreed design, not yet implemented. Values marked *initial* can be tuned later
-> without changing the model.
+> **Status:** agreed design. Games, core sets, and achievements are implemented as **preview
+> sets** (see [Preview sets](#preview-sets)); unlocks, scoring, badges, and titles are not yet.
+> Values marked *initial* can be tuned later without changing the model.
 
 ## Principles
 
@@ -47,7 +48,7 @@ Game (e.g. Zelda 64: Recompiled)
 | Field | Meaning |
 |---|---|
 | Identifier | `api_key_name` (e.g. `BOSS_GASCOIGNE`), the name the SDK sends |
-| Title, description, icon | Shown on the site; icons are original or supplied by the developer |
+| Title, description, icon | Shown on the site in English, Spanish, and Portuguese (English is required; missing translations fall back to it); icons are original or supplied by the developer |
 | **Points** | **1–10**, set by the developer: 1 = easiest, 10 = hardest |
 | **Rarity tier** | Set by the developer and fixed: Common, Uncommon, Rare, Epic, Legendary |
 | **Kind** | `progression` (required story milestone), `win_condition` (finishing the game), or `standard` |
@@ -80,6 +81,17 @@ the developer portal:
 
 Every new set, and every change to a published set, is **reviewed by a moderator** before it goes
 live.
+
+### Preview sets
+
+Until a recomp integrates the SDK, its set is shown as a **preview**: a community draft with
+original achievement text, labeled on the site as not active and not endorsed by the recomp's
+developers. Preview sets show points and rarity tiers but accept no unlocks, so they have no
+shares, Elo bonus, or badges.
+
+Until the developer portal exists, games and preview sets come from a curated **catalog** in the
+repository (one file per game, reviewed through pull requests and checked against the rules
+above, including the rarity caps). The portal replaces it.
 
 ## Hardcore and softcore
 
@@ -214,13 +226,14 @@ Profiles show what a player is doing right now, such as "Playing World 3-2, 4 li
 
 ## Data model impact
 
-The schema (to be built with the backend features) follows from this design:
+The schema follows from this design. Tables marked *built* exist today with the fields shown;
+the rest, and fields marked *later*, arrive with their features.
 
 | Table | Key fields |
 |---|---|
-| `games` | `slug`, `title`, `platform_origin`, `repo_url`, `dev_user_id`, `hmac_secret` (encrypted) |
-| `achievement_sets` | `game_id`, `kind` (`core` / `subset`), `subset_type` (`dlc`, `mod`, `randomizer`, `challenge`), `requirements`, `status` (draft, in review, published) |
-| `achievements` | `set_id`, `api_key_name`, `title`, `description`, `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progression_step` (optional), `icon_url`, `display_order` |
+| `games` (*built*) | `slug`, `title`, `original_platform`, `platforms`, `summary` (localized), `repo_url`, `display_order`, `featured`, `latest_version`, `released_at`, `hero_image` (approved image and credit); *later:* `dev_user_id`, `hmac_secret` (encrypted) |
+| `achievement_sets` (*built*) | `game_id`, `kind` (`core` / `subset`), `status` (`preview`; *later:* draft, in review, published); *later:* `subset_type` (`dlc`, `mod`, `randomizer`, `challenge`), `requirements` |
+| `achievements` (*built*) | `set_id`, `api_key_name`, `title` and `description` (localized), `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progression_step` (optional), `display_order`; *later:* `icon_url` |
 | `game_builds` | `game_id`, `platform`, `sha256`, `label` (verified builds) |
 | `game_toggles` | `game_id`, `key`, `classification` (`allowed` / `assist`) |
 | `mod_allowlist` | `game_id`, `mod_id`, `version` |

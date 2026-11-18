@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
 import { AlphaOpenBadge } from "@/components/alpha/AlphaOpenBadge";
-import { Badge } from "@/components/ui/Badge";
+import { FeaturedSlider, FeaturedSliderSkeleton } from "@/components/game/FeaturedSlider";
+import { GameGrid, GameGridSkeleton } from "@/components/game/GameGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { Card } from "@/components/ui/Card";
-import { ProgressBar } from "@/components/ui/ProgressBar";
 import { htmlLang, localeAlternates, localizePath } from "@/i18n/config";
-import { formatNumber, formatPercent, plural } from "@/i18n/format";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
@@ -21,12 +21,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-/** Placeholder home page until the game directory lands (frontend roadmap step 5).
- *  The preview card uses made-up sample values, not real player data.
-**/
+// Home: the alpha call to action, the featured recomps slider, and the game directory.
 export default async function HomePage() {
   const locale = await getLocale();
-  const { home, achievement, rarity, metadata, common } = await getMessages();
+  const { home, metadata, common, games, slider } = await getMessages();
 
   // Tells search engines the site's name, so results show "RecompAchievements" rather than the URL.
   const website = {
@@ -61,42 +59,27 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="preview-heading" className="flex flex-col gap-4">
-        <h2 id="preview-heading" className="font-display text-xl font-semibold text-muted">
-          {home.previewHeading}
+      <section aria-labelledby="slider-heading" className="flex flex-col gap-6">
+        <h2 id="slider-heading" className="font-display text-2xl font-semibold">
+          {slider.heading}
         </h2>
+        <Suspense fallback={<FeaturedSliderSkeleton label={games.loading} />}>
+          <FeaturedSlider />
+        </Suspense>
+      </section>
 
-        <Card className="flex max-w-xl flex-col gap-4">
-          <div className="flex items-start gap-4">
-            <div
-              aria-hidden="true"
-              className="grid size-14 shrink-0 place-items-center rounded-lg border border-gold/40 bg-surface-raised font-display text-2xl text-gold"
-            >
-              ★
-            </div>
-            <div className="flex min-w-0 flex-col gap-1">
-              <p className="font-semibold">{home.sampleTitle}</p>
-              <p className="text-sm text-muted">{home.sampleDescription}</p>
-              <div className="mt-1 flex flex-wrap gap-2">
-                <Badge tone="gold">{plural(locale, 25, achievement.points)}</Badge>
-                <Badge tone="epic">
-                  {rarity.epic} · {formatPercent(locale, 4.2)}
-                </Badge>
-                <Badge tone="success">{home.unlocked}</Badge>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted">{home.completion}</span>
-              <span className="font-mono">
-                {formatNumber(locale, 18)} / {formatNumber(locale, 40)}
-              </span>
-            </div>
-            <ProgressBar value={45} label={home.completion} />
-          </div>
-        </Card>
+      <section aria-labelledby="games-heading" className="flex flex-col gap-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h2 id="games-heading" className="font-display text-2xl font-semibold">
+            {home.allGamesHeading}
+          </h2>
+          <Link href={localizePath(locale, "/games")} className="text-sm text-accent hover:text-accent-strong">
+            {home.browseAll} <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <Suspense fallback={<GameGridSkeleton label={games.loading} />}>
+          <GameGrid limit={6} unavailable={home.gamesUnavailable} />
+        </Suspense>
       </section>
     </div>
   );

@@ -1,0 +1,140 @@
+{
+  "slug": "sonic-unleashed-recompiled",
+  "title": "Unleashed Recompiled",
+  "originalPlatform": "xbox360",
+  "platforms": ["windows", "linux", "steam_deck"],
+  "repoUrl": "https://github.com/hedge-dev/UnleashedRecomp",
+  "displayOrder": 2,
+  "featured": true,
+  "latestVersion": "1.0.3",
+  "releasedAt": "2025-04-03",
+  "summary": {
+    "en": "Native PC port of the Xbox 360 version of Sonic Unleashed, built with XenonRecomp: high frame rates, ultrawide, and modern controls.",
+    "es": "Port nativo para PC de la versión de Xbox 360 de Sonic Unleashed, creado con XenonRecomp: altas tasas de fotogramas, ultrapanorámico y controles modernos.",
+    "pt": "Port nativo para PC da versão de Xbox 360 de Sonic Unleashed, feito com XenonRecomp: altas taxas de quadros, ultrawide e controles modernos."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "FIRST_DAY_STAGE",
+        "title": { "en": "Rough Landing", "es": "Aterrizaje forzoso", "pt": "Pouso forçado" },
+        "description": {
+          "en": "Clear your first daytime stage.",
+          "es": "Supera tu primer nivel de día.",
+          "pt": "Conclua sua primeira fase diurna."
+        },
+        "points": 1, "rarityTier": "common", "kind": "progression", "progressionStep": 1
+      },
+      {
+        "apiKeyName": "FIRST_NIGHT_STAGE",
+        "title": { "en": "Night Shift", "es": "Turno de noche", "pt": "Turno da noite" },
+        "description": {
+          "en": "Clear your first nighttime stage as the Werehog.",
+          "es": "Supera tu primer nivel nocturno como Werehog.",
+          "pt": "Conclua sua primeira fase noturna como Werehog."
+        },
+        "points": 2, "rarityTier": "common", "kind": "progression", "progressionStep": 2
+      },
+      {
+        "apiKeyName": "FIRST_GAIA_GATE",
+        "title": { "en": "Gatekeeper", "es": "Guardián de la puerta", "pt": "Guardião do portão" },
+        "description": {
+          "en": "Open your first Gaia Gate.",
+          "es": "Abre tu primera Puerta Gaia.",
+          "pt": "Abra seu primeiro Portão Gaia."
+        },
+        "points": 2, "rarityTier": "common", "kind": "progression", "progressionStep": 3
+      },
+      {
+        "apiKeyName": "ALL_EMERALDS_RESTORED",
+        "title": { "en": "Seven Lights", "es": "Siete luces", "pt": "Sete luzes" },
+        "description": {
+          "en": "Restore the power of all seven Chaos Emeralds.",
+          "es": "Restaura el poder de las siete Esmeraldas del Caos.",
+          "pt": "Restaure o poder das sete Esmeraldas do Caos."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "progression", "progressionStep": 4
+      },
+      {
+        "apiKeyName": "EGGMANLAND_CLEARED",
+        "title": { "en": "Park Closed", "es": "Parque cerrado", "pt": "Parque fechado" },
+        "description": {
+          "en": "Clear Eggmanland.",
+          "es": "Supera Eggmanland.",
+          "pt": "Conclua Eggmanland."
+        },
+        "points": 7, "rarityTier": "epic", "kind": "progression", "progressionStep": 5
+      },
+      {
+        "apiKeyName": "PLANET_RESTORED",
+        "title": { "en": "Whole Again", "es": "De una pieza", "pt": "Inteiro de novo" },
+        "description": {
+          "en": "Defeat the final boss and put the planet back together.",
+          "es": "Derrota al jefe final y vuelve a unir el planeta.",
+          "pt": "Derrote o chefe final e junte o planeta de novo."
+        },
+        "points": 8, "rarityTier": "epic", "kind": "win_condition", "progressionStep": 6
+      },
+      {
+        "apiKeyName": "ALL_HUBS_VISITED",
+        "title": { "en": "World Traveler", "es": "Trotamundos", "pt": "Viajante do mundo" },
+        "description": {
+          "en": "Visit every city hub.",
+          "es": "Visita todas las ciudades.",
+          "pt": "Visite todas as cidades."
+        },
+        "points": 3, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "DAY_STAGE_S_RANK",
+        "title": { "en": "Top Speed", "es": "Velocidad máxima", "pt": "Velocidade máxima" },
+        "description": {
+          "en": "Earn an S rank on any daytime stage.",
+          "es": "Consigue un rango S en cualquier nivel de día.",
+          "pt": "Consiga um rank S em qualquer fase diurna."
+        },
+        "points": 4, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "NIGHT_STAGE_S_RANK",
+        "title": { "en": "Night Brawler", "es": "Peleador nocturno", "pt": "Lutador noturno" },
+        "description": {
+          "en": "Earn an S rank on any nighttime stage.",
+          "es": "Consigue un rango S en cualquier nivel nocturno.",
+          "pt": "Consiga um rank S em qualquer fase noturna."
+        },
+        "points": 5, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "HUNDRED_MEDALS",
+        "title": { "en": "Medal Hunter", "es": "Cazamedallas", "pt": "Caçador de medalhas" },
+        "description": {
+          "en": "Collect 100 Sun or Moon Medals.",
+          "es": "Consigue 100 medallas del Sol o de la Luna.",
+          "pt": "Colete 100 medalhas do Sol ou da Lua."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOOST_STREAK",
+        "title": { "en": "Afterburner", "es": "Postcombustión", "pt": "Pós-combustão" },
+        "description": {
+          "en": "Boost for 10 seconds without stopping.",
+          "es": "Usa el turbo durante 10 segundos sin parar.",
+          "pt": "Use o boost por 10 segundos sem parar."
+        },
+        "points": 3, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_S_RANKS",
+        "title": { "en": "Gold Standard", "es": "Estándar de oro", "pt": "Padrão ouro" },
+        "description": {
+          "en": "Earn an S rank on every stage.",
+          "es": "Consigue un rango S en todos los niveles.",
+          "pt": "Consiga um rank S em todas as fases."
+        },
+        "points": 10, "rarityTier": "legendary", "kind": "standard"
+      }
+    ]
+  }
+}

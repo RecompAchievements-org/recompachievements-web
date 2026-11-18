@@ -16,8 +16,8 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 
 ## Getting started
 
-Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up) also need
-the backend running locally (see [`../backend/README.md`](../backend/README.md)).
+Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up and the
+games) also need the backend running locally (see [`../backend/README.md`](../backend/README.md)).
 
 ```bash
 npm install
@@ -47,17 +47,21 @@ Without a secret key, sign-ups are rejected rather than accepted unchecked.
 ## Project structure
 
 ```
+public/
+└── games/<slug>/             # Approved game images (project screenshots with permission, own captures)
 assets/
 └── fonts/                    # ChakraPetch-Bold.ttf + OFL.txt, used by social preview images
 src/
 ├── app/
 │   ├── [lang]/
 │   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
-│   │   ├── page.tsx          # Home (placeholder until the game directory)
+│   │   ├── page.tsx          # Home: alpha call to action, featured slider, and games
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
 │   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
 │   │   ├── alpha/            # Alpha sign-up: page, form (client), human check, server action
 │   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
+│   │   ├── games/            # Game directory; [slug]/ game page and its social preview card
+│   │   ├── content-policy/   # What we host, image sources, removal requests
 │   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
 │   ├── fonts.ts              # next/font setup shared by both root files
@@ -69,19 +73,22 @@ src/
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
 │   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
+│   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
+│   │                         # GeneratedArt, ImageCredit, AchievementRow, PreviewNotice
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
 │   ├── seo/                  # JsonLd (schema.org structured data)
-│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
+│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink
 ├── i18n/
 │   ├── config.ts             # Locales, URL helpers, hreflang alternates
 │   ├── server.ts             # getLocale(), getMessages(), Messages type
-│   ├── format.ts             # interpolate, plural, number/percent/date formatting
+│   ├── format.ts             # interpolate, plural, number/date formatting
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
-│   ├── api/                  # Server-only API client (client.ts) and per-feature calls
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached)
 │   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
 │   ├── turnstile.ts          # Server-side verification of the human-verification challenge
+│   ├── socialImage.tsx       # Shared size, colors, font, and logo for social preview images
 │   ├── cx.ts                 # Class-name join helper
 │   └── site.ts               # Site name, URLs, and public contact address
 └── proxy.ts                  # Locale routing and detection
@@ -92,9 +99,10 @@ src/
 | URL | Source | Notes |
 |---|---|---|
 | `/robots.txt` | `src/app/robots.ts` | Allows all crawlers; links the sitemap |
-| `/sitemap.xml` | `src/app/sitemap.ts` | Lists each path in `publicPaths` once per locale, with `hreflang` alternates. **Add every new public page to `publicPaths`.** |
+| `/sitemap.xml` | `src/app/sitemap.ts` | Lists each path in `publicPaths`, plus every game page from the API (built per request; static pages only if the API is down), once per locale with `hreflang` alternates. **Add every new static public page to `publicPaths`.** |
 | `/favicon.ico`, `/icon.svg`, `/apple-icon.png` | `src/app/` | Site icon in search results, browser tabs, and phone home screens |
 | `/<lang>/opengraph-image` | `src/app/[lang]/opengraph-image.tsx` | 1200×630 PNG per locale with the logo, translated title, and description; Next.js adds the `og:image` and `twitter:image` tags to every page in that locale |
+| `/<lang>/games/<slug>/opengraph-image` | `src/app/[lang]/games/[slug]/opengraph-image.tsx` | Per-game card: console, title, achievement count, and points |
 
 The home page also includes a schema.org `WebSite` block (`JsonLd` component) so search engines
 show **RecompAchievements** as the site name.
@@ -103,11 +111,33 @@ show **RecompAchievements** as the site name.
 background, downscale it into a 16/32/48 px `favicon.ico`, and render it at 180 px with ~14%
 padding on the `background` color for `apple-icon.png` (iOS fills transparency with black).
 
-The social image can't read Tailwind tokens, so it repeats the theme colors in a small `colors`
-object; change them together with `globals.css`. The heading font is Chakra Petch Bold
+Social images can't read Tailwind tokens, so `src/lib/socialImage.tsx` repeats the theme colors
+in `socialColors`; change them together with `globals.css`. The heading font is Chakra Petch Bold
 (SIL Open Font License, `assets/fonts/OFL.txt`), loaded from `assets/fonts/`. `src/proxy.ts`
 lets `/…/opengraph-image` requests through untouched, so a crawler always gets the image of the
 locale in the URL.
+
+## Data from the API
+
+Game data comes from `src/lib/api/games.ts` (`getGames`, `getGame`), cached with `"use cache"`
+for hours (`cacheLife("hours")`, tags `games` and `game:<slug>`) and shared by all visitors. The
+build never calls the API: `GameGrid` and the game page load data at request time inside
+`<Suspense>` (with `connection()`), so CI and preview builds work without it. A catalog change
+on the API shows up on the site within the cache lifetime. Game pages are partially prerendered:
+the layout is static and the game content streams in, so an unknown slug renders the not-found
+page with `noindex` (a streamed page can't change its status code).
+
+## Featured slider and game images
+
+The home page's slider (`FeaturedSlider`) shows the catalog's `featured` games, newest release
+first, with a **New Release** badge for releases in the last 30 days. Every slide is rendered on
+the server; `SliderControls` only switches between them (auto-advance every 7 seconds, pause button,
+arrow keys, swipe, and no movement with reduced motion).
+
+Games show generated art (`GeneratedArt`) unless the catalog gives them a `heroImage`. To add one:
+get the recomp project's permission (or take your own gameplay screenshot), save it as WebP in
+`public/games/<slug>/`, and add `heroImage` with its `file`, a `credit`, and optionally a
+`sourceUrl` to the game's catalog file in the backend. The credit is shown wherever the image is.
 
 ## Deployment
 
@@ -188,4 +218,3 @@ the `font-display` / `font-mono` font utilities.
 | `ExternalLink` | Any `a` props; opens in a new tab with `rel="noopener noreferrer"` and a screen-reader hint |
 | `Card` | Any `div` props |
 | `Badge` | `tone`: `neutral` · `accent` · `gold` · `success` · `common` · `uncommon` · `rare` · `epic` · `legendary` |
-| `ProgressBar` | `value` (0–100), `label` (accessible name), `tone`: `accent` · `gold` · `success` |

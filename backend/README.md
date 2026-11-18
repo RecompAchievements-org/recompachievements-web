@@ -5,8 +5,9 @@ The REST API behind [recompachievements.org](https://recompachievements.org/): t
 (`/api/sdk/v1`) used by `librecompachievements`. For the project overview see the
 [root README](../README.md); coding rules for this folder live in [`AGENTS.md`](AGENTS.md).
 
-> **Status:** live in production with health checks and the alpha tester sign-up (with double
-> opt-in email). Game, account, and SDK endpoints come next.
+> **Status:** live in production with health checks, the alpha tester sign-up (with double
+> opt-in email), and the game directory (preview achievement sets from the catalog). Account and
+> SDK endpoints come next.
 
 ## Stack
 
@@ -24,8 +25,8 @@ Requirements: **.NET 10 SDK** (pinned in `global.json`) and **Docker**.
 # From the repository root: start PostgreSQL 17 (local-only credentials)
 docker compose up -d
 
-# Run the API
-dotnet run --project backend/src/RecompAchievements.Api      # http://localhost:5080
+# Run the API; restarts by itself after any code or catalog change
+dotnet watch --no-hot-reload --project backend/src/RecompAchievements.Api   # http://localhost:5080
 ```
 
 Then open `http://localhost:5080/health/ready`, or the API reference at
@@ -63,8 +64,10 @@ backend/
 │   ├── Infrastructure/               # Database, error handling, rate limiting, proxy, security, API docs
 │   ├── Infrastructure/Email/         # IEmailSender: transactional email API (hosted) or console logging (Development)
 │   ├── Data/                         # AppDbContext and Migrations/
+│   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
-│       └── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
+│       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
+│       └── Games/                    # Games, sets, achievements; catalog validation and import
 └── tests/RecompAchievements.Api.Tests/
     ├── ApiFactory.cs                 # In-memory API + throwaway PostgreSQL container
     └── <Area>/…Tests.cs
@@ -82,6 +85,7 @@ environments set these (see `.env.example`):
 | `ASPNETCORE_HTTP_PORTS` | Listening port inside the container (`8080`) |
 | `ForwardedHeaders__TrustAllProxies` | `true` only where the API is reachable solely through the host's proxy |
 | `Database__ApplyMigrationsOnStartup` | `true` to apply pending migrations at startup |
+| `Catalog__ImportOnStartup` | `true` to import the game catalog at startup (after migrations) |
 | `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value) |
 | `Brevo__ApiKey` | Transactional email API key. Required outside Development; without it, Development logs emails to the console instead |
 | `Email__FromAddress`, `Email__FromName` | Sender of outgoing email (`contact@recompachievements.org`, `RecompAchievements`) |
@@ -103,8 +107,11 @@ console, so you can copy the confirmation link from there.
 | `GET /openapi/v1.json`, `GET /scalar` | OpenAPI document and reference UI (Development only) |
 | `POST /api/v1/alpha-signups` | Sign up for the alpha; stores a pending sign-up and emails a confirmation link. Always `202` with the same body, so it can't reveal who signed up. Rate limited |
 | `POST /api/v1/alpha-signups/confirm` | Confirms with the emailed token: `200` (also if already confirmed), `410` expired (links last 7 days), `404` unknown |
+| `GET /api/v1/games?lang=en` | Games in display order, with their core set's status, achievement count, total points, featured flag, latest version, release date, and image |
+| `GET /api/v1/games/{slug}?lang=en` | One game with its core-set achievements in order; `404` if unknown |
 
-Pending sign-ups whose link expired are deleted automatically.
+Pending sign-ups whose link expired are deleted automatically. `lang` is `en`, `es`, or `pt`
+(default `en`); text without a translation falls back to English.
 
 ### Conventions for all endpoints
 
@@ -117,6 +124,32 @@ Pending sign-ups whose link expired are deleted automatically.
 - Request bodies are limited to 1 MB; responses send `X-Content-Type-Options: nosniff` and
   `Referrer-Policy: no-referrer`.
 - Logs are structured JSON outside Development.
+
+## Game catalog
+
+Until the developer portal exists, games come from `src/RecompAchievements.Api/Catalog/Games/`,
+one `<slug>.json` file per game (see an existing file for the format). At startup the API
+validates every file and makes the database match the catalog in one transaction: games and
+achievements are matched by `slug` and `apiKeyName` (ids stay stable), new ones are added, and
+ones removed from the catalog are deleted. An invalid catalog stops startup with a list of every
+problem.
+
+Optional fields per game: `featured` (shown in the homepage slider), `latestVersion` and
+`releasedAt` (the recomp's latest release; the date can't be in the future), and `heroImage`
+(`file`, `credit` in en/es/pt, optional `sourceUrl`) for an approved image.
+
+**Adding or editing a game:**
+
+1. Add or edit `Catalog/Games/<slug>.json`. Write **original** achievement text in English (Spanish
+   and Portuguese optional but expected); never copy official trophy lists or icons.
+2. Follow the rules in [`docs/achievement-system.md`](../docs/achievement-system.md): points 1–10,
+   at least one `win_condition`, rarity caps per set, and `progressionStep` on story milestones.
+3. Run `dotnet test`: `Shipped_catalog_is_valid` checks every file. With the API running under
+   `dotnet watch --no-hot-reload`, saving the file restarts it and re-imports the catalog.
+4. **Images:** only a screenshot or banner the recomp project published and allowed us to use, or
+   our own gameplay screenshot; never box art, key art, or logos. The file goes in the website
+   (`frontend/public/games/<slug>/`), and `heroImage` names it and credits its source.
+5. After the change is deployed, the website shows it within a few hours (its cache lifetime).
 
 ## Performance notes
 

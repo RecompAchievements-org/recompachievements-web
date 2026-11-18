@@ -203,9 +203,9 @@ Profiles show what a player is doing right now, such as "Playing World 3-2, 4 li
 
 | Layer | Rule |
 |---|---|
-| **Signed unlocks** | Every unlock is signed with HMAC-SHA256 using the game's secret, carries a unique ID, and is rejected if older than 60 seconds or already seen |
-| **Sanity checks** | Minimum play time (for example, the final boss can't be reached minutes after the session starts) and progression order (a progression achievement can't precede an earlier one) |
-| **Anomaly flags** | Automatic flags for suspicious patterns, such as many Legendary unlocks in a short time, unlocks from several builds at once, or a new account clearing a set |
+| **Signed requests** | Every SDK request is signed with the game's secret key; unsigned, altered, stale, or repeated requests are rejected |
+| **Integrity checks** | Server-side checks on every unlock that impossible or implausible play is rejected or flagged |
+| **Anomaly flags** | Automatic flags for suspicious activity, reviewed by moderators |
 | **Reports and moderation** | Players can report profiles or unlocks; moderators review flags and reports and can reset unlocks, remove hardcore status, or ban accounts |
 
 ## Data model impact
@@ -248,7 +248,6 @@ SDK.
 | Rarity caps per set | Legendary 10%, Epic 20%, Rare 30% |
 | Elo minimum sample | 25 hardcore players in the set |
 | Elo recalculation | Nightly |
-| Unlock signature window | 60 seconds |
 | Presence heartbeat | Every 30–60 seconds |
 
 ## Open questions

@@ -21,18 +21,28 @@ Testcontainers.
 - Each feature lives in `Features/<Feature>/`: `<Feature>Endpoints.cs` with a
   `Map<Feature>Endpoints(this RouteGroupBuilder group)` method, its request/response records, and its
   EF entity configuration (`IEntityTypeConfiguration<T>`). No controllers, no MVC.
-- Public endpoints are mapped on a `/api/v1` route group; SDK endpoints on `/api/sdk/v1`. Create
-  each group in `Program.cs` when its first endpoint is added, not before (RULE-005).
+- Public endpoints are mapped on the `/api/v1` route group in `Program.cs`, which requires the
+  website's internal key (`RequireInternalKey()`); SDK endpoints will use `/api/sdk/v1` (create that
+  group with its first endpoint, not before — RULE-005).
+- Resolve the client's address only with `ClientAddress.Resolve(context)`; never read request
+  headers for it directly.
 - Endpoints return `TypedResults` (`Results<Ok<T>, NotFound, …>`) so OpenAPI knows every response.
   Errors are ProblemDetails; never return bare strings or anonymous error objects.
 - Requests and responses are `sealed record` types. Never return EF entities from endpoints.
-- Validation uses .NET 10's built-in Minimal API validation (`builder.Services.AddValidation()` +
-  DataAnnotations on request records), registered when the first endpoint with a body is added.
-- Add a `System.Text.Json` source-generated `JsonSerializerContext` (in `Infrastructure/Json.cs`,
-  registered with `ConfigureHttpJsonOptions`) when the first request/response type exists, and list
-  every request/response type in it. No reflection-based serialization on hot paths.
+- Validation uses .NET 10's built-in Minimal API validation (`AddValidation()`): DataAnnotations
+  on request records, plus `IValidatableObject` for rules attributes can't express. Invalid
+  requests get `400` ValidationProblemDetails automatically.
+- Every request and response type is listed in `AppJsonContext` (`Infrastructure/Json.cs`,
+  source-generated, camelCase). No reflection-based serialization on hot paths.
+- Responses must not reveal whether a person exists (e.g. the sign-up endpoint answers `202` with
+  the same body for new, pending, and confirmed emails).
+- Outgoing email goes through `IEmailSender` (`Infrastructure/Email/`): Brevo when `Brevo:ApiKey` is
+  set, console logging in Development. User-facing email text is localized (en, es, pt) and every
+  value inserted into HTML is encoded. Email failures are logged, never shown as API errors.
+- Store secrets as hashes when only comparison is needed (e.g. confirmation tokens: SHA-256).
+- Use the injected `TimeProvider` for "now", never `DateTime.UtcNow` directly.
 - Endpoints with writes or abuse risk get a named rate-limit policy (`RequireRateLimiting`) on top of
-  the global per-IP limit. Health endpoints stay exempt.
+  the global limit (see Security).
 - Use `async` all the way, pass `CancellationToken` to every EF and I/O call, never block on tasks.
 
 ## Database and migrations
@@ -40,8 +50,10 @@ Testcontainers.
 - `AppDbContext` is pooled and uses **no-tracking** queries by default; call `AsTracking()` only
   where an entity is loaded to be modified.
 - Table and column names are snake_case automatically; don't set names by hand unless required.
-- When the first entity is added, add `OnModelCreating` with
-  `modelBuilder.ApplyConfigurationsFromAssembly(...)` and keep each configuration in its feature.
+- Each entity has an `IEntityTypeConfiguration<T>` in its feature folder; `AppDbContext` applies them
+  all with `ApplyConfigurationsFromAssembly` and exposes a `DbSet` per entity.
+- Migrations are applied at startup when `Database:ApplyMigrationsOnStartup` is true (Development,
+  tests, hosted); there is no separate migration step.
 - Change the schema only through `dotnet ef migrations add <PascalCaseName>`; commit the migration
   and the updated snapshot together. Never hand-edit the snapshot.
 - Before launch, migrations may be rewritten (RULE-005). Once production holds real data, applied
@@ -55,8 +67,9 @@ Testcontainers.
 
 - Every endpoint gets integration tests through `ApiFactory` (real PostgreSQL in a container):
   success, validation failure, and error paths. Test names use `Behavior_under_condition`.
-- Tests run in the `Testing` environment; Development-only behaviour (startup migrations, API docs)
-  is off there. When a test needs tables, apply migrations in the factory.
+- Tests run in the `Testing` environment (API docs off). `ApiFactory` applies migrations at
+  startup, captures emails in `CapturingEmailSender`, and `CreateWebsiteClient()` calls like the
+  website does, isolated per test. Use unique emails per test.
 - Don't mock EF Core or the database.
 
 ## Performance
@@ -69,6 +82,12 @@ Testcontainers.
 
 ## Security
 
+- Abuse protection lives in code (`Infrastructure/RateLimiting.cs`, the feature endpoints, and their
+  tests). Read it before changing an endpoint, keep it at least as strict, and give every new
+  endpoint that writes data or sends email protection comparable to the existing ones. Per the root
+  guardrail, never describe limits, thresholds, or detection methods in docs.
+- Only endpoints that touch nothing may use `DisableRateLimiting()`; anything that queries the
+  database stays limited.
 - Configuration and secrets come from environment variables (`ConnectionStrings__Database`, …).
   `appsettings.Development.json` holds local-only credentials matching `docker-compose.yml`; never
   put real credentials anywhere in the repo. Document every new variable in `.env.example` and
@@ -77,8 +96,8 @@ Testcontainers.
   enable it without the owner's agreement.
 - `ForwardedHeaders:TrustAllProxies` is only for hosts where the API is reachable solely through
   their proxy.
-- SDK unlocks follow the root guardrail: HMAC-SHA256 per-game signatures, 60-second timestamp
-  window, server-side sanity checks, idempotent duplicate handling.
+- SDK unlocks follow the root guardrail: signed with a per-game secret, server-side integrity
+  checks, idempotent duplicate handling.
 
 ## Packages
 

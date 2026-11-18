@@ -28,21 +28,18 @@ internal static class Database
         return services;
     }
 
-    // Applies pending migrations at startup in Development only; production runs a migration bundle.
-    public static async Task MigrateDatabaseInDevelopmentAsync(this WebApplication app)
+    /** Applies pending migrations at startup when "Database:ApplyMigrationsOnStartup" is true
+     *  (Development, tests, and the single production instance). EF Core takes a database lock
+     *  while migrating, so concurrent starts can't apply the same migration twice.
+    **/
+    public static async Task ApplyMigrationsIfEnabledAsync(this WebApplication app)
     {
-        if (!app.Environment.IsDevelopment())
+        if (!app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
         {
             return;
         }
 
         await using var scope = app.Services.CreateAsyncScope();
-        var database = scope.ServiceProvider.GetRequiredService<AppDbContext>().Database;
-
-        // With no migrations yet there is nothing to apply (and EF would log a failed history query).
-        if (database.GetMigrations().Any())
-        {
-            await database.MigrateAsync();
-        }
+        await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
     }
 }

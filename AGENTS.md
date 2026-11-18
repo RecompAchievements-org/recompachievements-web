@@ -15,7 +15,7 @@ This repo contains the public web platform:
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active (foundations; not deployed yet) |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks and the alpha sign-up; not deployed yet |
 | `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
 | `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
@@ -34,9 +34,14 @@ Read `README.md` for the full architecture and data model.
 - **No personal or account email addresses.** The only public addresses are
   `contact@recompachievements.org` (general, legal, takedowns) and
   `security@recompachievements.org` (vulnerabilities). Use these in docs, the website, and metadata.
-- **Unlocks must not be forgeable.** SDK unlock requests are verified with HMAC-SHA256 using a
-  per-game secret, reject stale timestamps (> 60 s), and pass server-side sanity checks. Never
-  weaken or bypass this, even for testing — use test fixtures instead.
+- **Unlocks must not be forgeable.** SDK requests are signed with a per-game secret and pass
+  server-side integrity checks (see the code). Never weaken or bypass them, even for testing —
+  use test fixtures instead.
+- **No defense details in docs.** Docs never describe how abuse protection works: no limits,
+  thresholds, time windows, quotas, header names, bot-detection or anti-cheat methods, or anomaly
+  heuristics. Say only that a feature is protected (e.g. "rate limited", "signed"); the details
+  live in code and private notes. Don't weaken existing protections when changing code, and give
+  new endpoints that write data or send email protection comparable to the existing ones.
 - **One unlock per user per achievement.** Enforced by a unique constraint on
   `(user_id, achievement_id)`; code must tolerate duplicate submissions idempotently.
 - **License is AGPL-3.0.** Don't add dependencies with incompatible licenses (e.g. proprietary or
@@ -193,7 +198,9 @@ document the change affects is updated on the same branch, so the docs land with
 - `SECURITY.md`: scope, API surfaces, signing and timestamp rules
 - `docs/achievement-system.md`: sets, hardcore rules, scoring and Elo, badges, titles, integrity,
   data model, and SDK operations
-- `.env.example` files: every new, renamed, or removed environment variable
+- `.env.example` files: every new, renamed, or removed environment variable (except abuse-protection
+  tuning settings, which have safe defaults in code and stay undocumented per the "No defense
+  details in docs" guardrail)
 - Code comments and JSDoc that describe the changed behaviour
 - An AI agent's own memory notes, when it keeps any
 
@@ -215,7 +222,7 @@ catches stale text, not missing text.
 |---|---|
 | Adding `/leaderboards` and, on the same branch, updating the README pages table, the routes in `frontend/AGENTS.md`, and the roadmap | Shipping the page and leaving both route lists without it |
 | Renaming `getGame()` → `getGameBySlug()` and searching every doc for `getGame` | A rule example still quoting a function that no longer exists |
-| Changing the unlock timestamp window from 60 s to 30 s and updating the code, tests, `SECURITY.md`, README, and `AGENTS.md` together | Updating the code and leaving the docs saying 60 seconds |
+| Changing alpha confirmation links from 7 to 3 days and updating the code, tests, email text, privacy notice, and README together | Updating the code and leaving the email and privacy notice saying 7 days |
 | Finishing frontend v0.1 by reading README in full and adding the commands and env vars it never mentioned | Searching README for the new route name, finding nothing, and calling it "not affected" |
 
 **Why:** docs that lag behind the code mislead the next person or agent, who reads them before

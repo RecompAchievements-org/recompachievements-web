@@ -32,8 +32,7 @@ This is a volunteer-run project, so timelines are best effort.
 In scope:
 
 - The website and its APIs (`recompachievements.org`)
-- Forging, replaying, or tampering with achievement unlocks (e.g. bypassing HMAC request signing or
-  timestamp checks)
+- Forging, replaying, or tampering with achievement unlocks (e.g. bypassing request signing)
 - Authentication, session, or API-key weaknesses
 - Exposure of user data or developer secrets
 

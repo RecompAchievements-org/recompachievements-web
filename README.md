@@ -77,8 +77,8 @@ routine runs) instead of watching memory addresses.
 - **Game client / SDK API — `/api/sdk/v1/...`**:
   - `POST /session/start` — authenticates the player's client token, records the executable's
     build hash, returns achievement definitions and unlock state.
-  - `POST /unlock` — verifies `HMAC_SHA256(game_secret, payload)`, rejects timestamps older than
-    60 seconds, and applies server-side sanity checks (e.g. minimum playtime).
+  - `POST /unlock` — accepts only requests signed with the game's secret key, then applies
+    server-side integrity checks before recording the unlock.
 
 Both APIs are versioned in the path. Once a version is in use by released recomps or community
 tools, breaking changes go to a new version and the old one stays supported until it is retired with
@@ -99,7 +99,9 @@ The full design, including the data model and the SDK operations, is in
 
 | Route | Page |
 |---|---|
-| `/` | Game directory |
+| `/` | Home; game directory later |
+| `/alpha` | Alpha tester sign-up (email confirmation required) |
+| `/privacy` | Privacy notice |
 | `/games/[slug]` | Game detail — achievements, points, rarity |
 | `/u/[username]` | Player profile — completion, recent unlocks |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |

@@ -21,7 +21,8 @@
     "security": "Segurança",
     "contact": "Contato",
     "license": "Código aberto sob a licença {license}.",
-    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos, ROMs nem conteúdo protegido por direitos autorais, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements."
+    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos, ROMs nem conteúdo protegido por direitos autorais, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements.",
+    "privacy": "Privacidade"
   },
   "home": {
     "metaTitle": "Conquistas para recomps nativos",
@@ -35,10 +36,14 @@
     "sampleTitle": "Primeiro chefe derrotado",
     "sampleDescription": "Derrote o primeiro chefe sem levar dano.",
     "unlocked": "Desbloqueada",
-    "completion": "Progresso"
+    "completion": "Progresso",
+    "joinAlpha": "Participe do alfa"
   },
   "achievement": {
-    "points": { "one": "{count} pt", "other": "{count} pts" }
+    "points": {
+      "one": "{count} pt",
+      "other": "{count} pts"
+    }
   },
   "rarity": {
     "common": "Comum",
@@ -52,5 +57,99 @@
     "title": "Página não encontrada",
     "description": "Esta página não existe ou mudou de endereço.",
     "backHome": "Voltar para o início"
+  },
+  "alpha": {
+    "metaTitle": "Participe do alfa",
+    "metaDescription": "Inscreva-se para testar o RecompAchievements antes do lançamento: ganhe conquistas em recomps nativos e ajude a moldar a plataforma.",
+    "badge": "Inscrição no alfa",
+    "title": "Participe do alfa",
+    "intro": "Seja um dos primeiros a ganhar conquistas em recomps nativos. Quem testa o alfa experimenta as novidades antes de todo mundo e ajuda a moldar a plataforma.",
+    "testersHeading": "O que os testers fazem",
+    "testers": [
+      "Jogam recomps compatíveis com as conquistas ativadas.",
+      "Relatam bugs e contam o que funciona e o que não funciona.",
+      "Ajudam a decidir quais recomps ganham conquistas primeiro."
+    ],
+    "storeHeading": "O que guardamos",
+    "store": "Seu e-mail, apelido, plataformas e os recomps que você joga, apenas para organizar o alfa. Os detalhes estão no nosso {privacy}.",
+    "privacyLink": "aviso de privacidade",
+    "form": {
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "nickname": "Apelido",
+      "nicknameHint": "De 2 a 32 caracteres.",
+      "platforms": "Plataformas em que você joga",
+      "recomps": "Recomps que você joga",
+      "recompsOptional": "Opcional",
+      "recompsPlaceholder": "ex.: Zelda 64: Recompiled, Ape Escape…",
+      "consent": "Concordo com o {privacy} e em ser contatado sobre o alfa.",
+      "submit": "Participe do alfa",
+      "submitting": "Enviando…",
+      "honeypot": "Deixe este campo vazio"
+    },
+    "errors": {
+      "required": "Este campo é obrigatório.",
+      "email": "Digite um e-mail válido.",
+      "nicknameLength": "Use de 2 a 32 caracteres.",
+      "platforms": "Escolha pelo menos uma plataforma.",
+      "recompsLength": "Use menos de 200 caracteres.",
+      "consent": "Aceite o aviso de privacidade para continuar.",
+      "rateLimited": "Muitas tentativas. Tente de novo em alguns minutos.",
+      "unavailable": "Algo deu errado do nosso lado. Tente de novo mais tarde.",
+      "invalid": "Confira os campos destacados."
+    },
+    "success": {
+      "title": "Confira sua caixa de entrada",
+      "body": "Enviamos um link de confirmação para {email}. Abra-o em até 7 dias para garantir sua vaga.",
+      "spam": "Não encontrou? Confira a pasta de spam ou inscreva-se de novo daqui a 10 minutos para receber um link novo."
+    }
+  },
+  "alphaConfirm": {
+    "metaTitle": "Confirme sua inscrição",
+    "title": "Confirme sua inscrição no alfa",
+    "body": "Clique no botão para confirmar seu e-mail e entrar no alfa.",
+    "button": "Confirmar meu e-mail",
+    "confirming": "Confirmando…",
+    "successTitle": "Você está dentro!",
+    "successBody": "Seu e-mail foi confirmado. Vamos escrever assim que o alfa abrir.",
+    "expiredTitle": "Este link expirou",
+    "expiredBody": "Os links de confirmação valem por 7 dias. Inscreva-se de novo para receber um novo.",
+    "invalidTitle": "Este link não é válido",
+    "invalidBody": "Ele pode estar incompleto ou ter sido substituído por um e-mail mais recente. Inscreva-se de novo para receber um link novo.",
+    "unavailable": "Não conseguimos confirmar seu e-mail agora. Tente de novo em alguns minutos.",
+    "signUpAgain": "Inscrever-me de novo",
+    "backHome": "Voltar para o início"
+  },
+  "privacy": {
+    "metaTitle": "Aviso de privacidade",
+    "title": "Aviso de privacidade",
+    "updated": "Última atualização: {date}",
+    "intro": "O RecompAchievements é um projeto da comunidade. Este aviso explica quais dados coletamos quando você se inscreve no alfa, por quê e como removê-los.",
+    "sections": [
+      {
+        "title": "O que coletamos",
+        "body": "Quando você se inscreve no alfa: seu e-mail, apelido, as plataformas em que joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Não guardamos seu endereço IP."
+      },
+      {
+        "title": "Para quê",
+        "body": "Apenas para organizar o alfa: confirmar seu e-mail, convidar você quando ele abrir e coordenar os testes. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
+      },
+      {
+        "title": "Onde ficam",
+        "body": "No nosso banco de dados, no nosso provedor de hospedagem. Os e-mails de confirmação são enviados pelo nosso provedor de envio de e-mail. Ambos atuam apenas sob nossas instruções."
+      },
+      {
+        "title": "Por quanto tempo",
+        "body": "Inscrições não confirmadas são apagadas automaticamente 7 dias depois do envio do link. As confirmadas ficam guardadas até o fim do alfa e depois são apagadas, a menos que você crie uma conta."
+      },
+      {
+        "title": "Cookies",
+        "body": "Nenhum cookie de rastreamento ou publicidade. Um cookie funcional (NEXT_LOCALE) lembra o idioma que você escolheu."
+      },
+      {
+        "title": "Seus direitos",
+        "body": "Você pode pedir para ver, corrigir ou apagar seus dados a qualquer momento escrevendo para {email}."
+      }
+    ]
   }
 }

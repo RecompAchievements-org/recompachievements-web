@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { htmlLang, localeAlternates } from "@/i18n/config";
+import { htmlLang, localeAlternates, localizePath } from "@/i18n/config";
 import { formatNumber, formatPercent, plural } from "@/i18n/format";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
@@ -52,11 +52,12 @@ export default async function HomePage() {
         </h1>
         <p className="text-lg leading-relaxed text-muted">{home.intro}</p>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={siteConfig.repoUrl} external>
-            {home.followOnGithub}
-          </ButtonLink>
+          <ButtonLink href={localizePath(locale, "/alpha")}>{home.joinAlpha}</ButtonLink>
           <ButtonLink href={`mailto:${siteConfig.contactEmail}`} variant="secondary">
             {home.iBuildARecomp}
+          </ButtonLink>
+          <ButtonLink href={siteConfig.repoUrl} variant="ghost" external>
+            {home.followOnGithub}
           </ButtonLink>
         </div>
       </section>

@@ -16,12 +16,22 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 
 ## Getting started
 
-Requirements: Node.js 20.9+ and npm.
+Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up) also need
+the backend running locally (see [`../backend/README.md`](../backend/README.md)).
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+cp .env.example .env.local   # API address and internal key for local development
+npm run dev                  # http://localhost:3000
 ```
+
+| Variable (server-only) | Purpose |
+|---|---|
+| `API_BASE_URL` | Address of the API (`http://localhost:5080` locally) |
+| `API_INTERNAL_KEY` | Must match the API's `InternalApi__Key` |
+
+Both are read only by server code and never reach the browser. On the hosted site they are set in
+the hosting dashboard.
 
 | Script | Purpose |
 |---|---|
@@ -41,7 +51,10 @@ src/
 │   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
 │   │   ├── page.tsx          # Home (placeholder until the game directory)
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
-│   │   └── opengraph-image.tsx  # Social preview card (1200×630), one per locale
+│   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
+│   │   ├── alpha/            # Alpha sign-up: page, form (client), server action
+│   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
+│   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
 │   ├── fonts.ts              # next/font setup shared by both root files
 │   ├── globals.css           # Tailwind import and design tokens
@@ -61,6 +74,8 @@ src/
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls
+│   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
 │   ├── cx.ts                 # Class-name join helper
 │   └── site.ts               # Site name, URLs, and public contact address
 └── proxy.ts                  # Locale routing and detection

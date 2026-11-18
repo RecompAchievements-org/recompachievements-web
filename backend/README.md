@@ -5,8 +5,8 @@ The REST API behind [recompachievements.org](https://recompachievements.org/): t
 (`/api/sdk/v1`) used by `librecompachievements`. For the project overview see the
 [root README](../README.md); coding rules for this folder live in [`AGENTS.md`](AGENTS.md).
 
-> **Status:** health checks and the alpha tester sign-up (with double opt-in email). Game,
-> account, and SDK endpoints come next.
+> **Status:** live in production with health checks and the alpha tester sign-up (with double
+> opt-in email). Game, account, and SDK endpoints come next.
 
 ## Stack
 

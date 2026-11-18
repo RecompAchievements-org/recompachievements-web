@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
 
 namespace RecompAchievements.Api.Infrastructure;
 
@@ -9,17 +11,48 @@ internal static class RateLimiting
     // Default budget per client IP; endpoints that need stricter limits add their own named policy.
     private const int PermitsPerMinute = 120;
 
-    public static IServiceCollection AddApiRateLimiting(this IServiceCollection services)
+    // Sign-ups per client IP within 10 minutes.
+    public const string SignupsPolicy = "signups";
+    private const int SignupsPerWindow = 5;
+
+    public static IServiceCollection AddApiRateLimiting(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<RateLimitingOptions>(configuration.GetSection("RateLimiting"));
         services.AddRateLimiter(options =>
         {
-            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+            /** Two global limiters run on every request: a budget per client IP, and a site-wide cap
+             *  on sign-ups across all visitors, so a flood from many IPs (each under its own limit)
+             *  still can't create unlimited sign-ups or emails.
+            **/
+            options.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+                PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        ClientAddress.Resolve(context),
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = PermitsPerMinute,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0,
+                        })),
+                PartitionedRateLimiter.Create<HttpContext, string>(context =>
+                    IsSignupEndpoint(context)
+                        ? RateLimitPartition.GetFixedWindowLimiter(
+                            "all-visitors",
+                            _ => new FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = context.RequestServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value.SignupsPerMinute,
+                                Window = TimeSpan.FromMinutes(1),
+                                QueueLimit = 0,
+                            })
+                        : RateLimitPartition.GetNoLimiter("other")));
+
+            options.AddPolicy(SignupsPolicy, context =>
                 RateLimitPartition.GetFixedWindowLimiter(
-                    context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    ClientAddress.Resolve(context),
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = PermitsPerMinute,
-                        Window = TimeSpan.FromMinutes(1),
+                        PermitLimit = SignupsPerWindow,
+                        Window = TimeSpan.FromMinutes(10),
                         QueueLimit = 0,
                     }));
 
@@ -48,4 +81,13 @@ internal static class RateLimiting
 
         return services;
     }
+
+    private static bool IsSignupEndpoint(HttpContext context) =>
+        context.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName == SignupsPolicy;
+}
+
+internal sealed class RateLimitingOptions
+{
+    // Sign-ups per minute across all visitors combined.
+    public int SignupsPerMinute { get; set; } = 30;
 }

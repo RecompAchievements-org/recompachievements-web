@@ -1,12 +1,15 @@
+import Link from "next/link";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
-import { getMessages } from "@/i18n/server";
+import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
 import { LogoMark } from "./Logo";
 
 const linkClasses = "text-muted transition-colors hover:text-foreground";
 
 export async function SiteFooter() {
+  const locale = await getLocale();
   const { footer } = await getMessages();
 
   return (
@@ -29,6 +32,11 @@ export async function SiteFooter() {
                 <ExternalLink href={siteConfig.securityPolicyUrl} className={linkClasses}>
                   {footer.security}
                 </ExternalLink>
+              </li>
+              <li>
+                <Link href={localizePath(locale, "/privacy")} className={linkClasses}>
+                  {footer.privacy}
+                </Link>
               </li>
               <li>
                 <a href={`mailto:${siteConfig.contactEmail}`} className={linkClasses}>

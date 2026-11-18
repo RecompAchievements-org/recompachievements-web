@@ -16,12 +16,26 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 
 ## Getting started
 
-Requirements: Node.js 20.9+ and npm.
+Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up) also need
+the backend running locally (see [`../backend/README.md`](../backend/README.md)).
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+cp .env.example .env.local   # API address and internal key for local development
+npm run dev                  # http://localhost:3000
 ```
+
+| Variable | Purpose |
+|---|---|
+| `API_BASE_URL` | Address of the API (`http://localhost:5080` locally) |
+| `API_INTERNAL_KEY` | Must match the API's `InternalApi__Key` |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the sign-up form |
+| `TURNSTILE_SECRET_KEY` | Secret key used by the server to verify that challenge |
+
+Only `NEXT_PUBLIC_` values reach the browser (and are fixed at build time); the rest are read only
+by server code. `.env.example` contains the provider's official **test** keys, which always pass, for
+local development and preview deployments; production uses real keys set in the hosting dashboard.
+Without a secret key, sign-ups are rejected rather than accepted unchecked.
 
 | Script | Purpose |
 |---|---|
@@ -41,7 +55,10 @@ src/
 │   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
 │   │   ├── page.tsx          # Home (placeholder until the game directory)
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
-│   │   └── opengraph-image.tsx  # Social preview card (1200×630), one per locale
+│   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
+│   │   ├── alpha/            # Alpha sign-up: page, form (client), human check, server action
+│   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
+│   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
 │   ├── fonts.ts              # next/font setup shared by both root files
 │   ├── globals.css           # Tailwind import and design tokens
@@ -51,6 +68,7 @@ src/
 │   ├── robots.ts             # /robots.txt: allow all, points to the sitemap
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
+│   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
 │   ├── seo/                  # JsonLd (schema.org structured data)
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
@@ -61,6 +79,9 @@ src/
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls
+│   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
+│   ├── turnstile.ts          # Server-side verification of the human-verification challenge
 │   ├── cx.ts                 # Class-name join helper
 │   └── site.ts               # Site name, URLs, and public contact address
 └── proxy.ts                  # Locale routing and detection
@@ -124,7 +145,7 @@ import { plural } from "@/i18n/format";
 
 const locale = await getLocale();
 const { home, achievement } = await getMessages();
-// home.badge, plural(locale, 25, achievement.points), localizePath(locale, "/games/x")
+// home.joinAlpha, plural(locale, 25, achievement.points), localizePath(locale, "/games/x")
 ```
 
 **Adding a string:** add the key to `en.json`, `es.json`, and `pt.json`. A key missing from any

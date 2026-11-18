@@ -88,6 +88,9 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/u/[username]` — user profile: completion %, recent unlocks
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
+`/`, `/alpha`, `/alpha/confirm` (linked from sent emails), and `/privacy` are live in production:
+renaming any of them needs a permanent (308) redirect from the old path (RULE-005, exception 2).
+
 Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
 defaults and title template in the root layout and including `localeAlternates`.
 

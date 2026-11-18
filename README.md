@@ -152,6 +152,9 @@ Vercel:
 - Every pull request gets a preview deployment.
 - The Vercel project builds the `frontend/` folder with the default Next.js settings.
 
+The API runs as a container built from `backend/` (its `Dockerfile`), deploys from `main`, and
+applies pending database migrations at startup.
+
 Account, DNS, and email configuration are kept outside this repository.
 
 ## Roadmap
@@ -160,7 +163,7 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Website live on recompachievements.org (Vercel), with robots.txt, sitemap, and social preview images
 - [x] Frontend foundations: design system, layout, and English/Spanish/Portuguese translations
 - [x] Backend foundations: .NET 10 API, PostgreSQL, integration tests, container image, and CI
-- [ ] Alpha tester sign-up: the first end-to-end feature, with the API deployed
+- [x] Alpha tester sign-up: the first end-to-end feature, with the API deployed
 - [ ] Game, profile, and directory pages backed by the API
 - [ ] Authentication and developer portal
 - [ ] `librecompachievements` C/C++ SDK

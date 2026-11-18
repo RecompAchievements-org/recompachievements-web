@@ -1,4 +1,5 @@
 using RecompAchievements.Api.Features.AlphaSignups;
+using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Health;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Email;
@@ -33,7 +34,9 @@ app.MapHealthEndpoints();
 
 // Public web API, called only by the website's server code (internal key required).
 app.MapGroup("/api/v1")
-    .MapAlphaSignupEndpoints();
+    .MapAlphaSignupEndpoints()
+    .MapGameEndpoints();
 
 await app.ApplyMigrationsIfEnabledAsync();
+await app.ImportCatalogIfEnabledAsync();
 await app.RunAsync();

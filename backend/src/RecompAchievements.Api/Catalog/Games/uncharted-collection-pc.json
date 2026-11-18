@@ -1,0 +1,219 @@
+{
+  "slug": "uncharted-collection-pc",
+  "title": "Uncharted PC Port",
+  "originalPlatform": "ps4",
+  "originalGame": "Uncharted: The Nathan Drake Collection",
+  "platforms": [
+    "windows"
+  ],
+  "repoUrl": "https://github.com/bc160201983/Uncharted-The-Nathan-Drake-Collection-PC-port",
+  "displayOrder": 3,
+  "featured": true,
+  "latestVersion": "0.8.6",
+  "releasedAt": "2026-11-14",
+  "summary": {
+    "en": "Native Windows port of Uncharted: The Nathan Drake Collection, with all three games: the game’s own code runs directly on the PC with a Vulkan renderer.",
+    "es": "Port nativo para Windows de Uncharted: The Nathan Drake Collection, con los tres juegos: el código del propio juego se ejecuta directamente en el PC con un renderizador Vulkan.",
+    "pt": "Port nativo para Windows de Uncharted: The Nathan Drake Collection, com os três jogos: o próprio código do jogo roda direto no PC com um renderizador Vulkan."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "DRAKES_FORTUNE_FINISHED",
+        "title": {
+          "en": "Fortune Found",
+          "es": "Fortuna hallada",
+          "pt": "Fortuna encontrada"
+        },
+        "description": {
+          "en": "Finish Uncharted: Drake’s Fortune.",
+          "es": "Termina Uncharted: El tesoro de Drake.",
+          "pt": "Termine Uncharted: Drake’s Fortune."
+        },
+        "points": 5,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 1
+      },
+      {
+        "apiKeyName": "AMONG_THIEVES_FINISHED",
+        "title": {
+          "en": "Honor Among Thieves",
+          "es": "Honor entre ladrones",
+          "pt": "Honra entre ladrões"
+        },
+        "description": {
+          "en": "Finish Uncharted 2: Among Thieves.",
+          "es": "Termina Uncharted 2: El reino de los ladrones.",
+          "pt": "Termine Uncharted 2: Among Thieves."
+        },
+        "points": 6,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 2
+      },
+      {
+        "apiKeyName": "DRAKES_DECEPTION_FINISHED",
+        "title": {
+          "en": "Mirage Lifted",
+          "es": "Espejismo disipado",
+          "pt": "Miragem desfeita"
+        },
+        "description": {
+          "en": "Finish Uncharted 3: Drake’s Deception.",
+          "es": "Termina Uncharted 3: La traición de Drake.",
+          "pt": "Termine Uncharted 3: Drake’s Deception."
+        },
+        "points": 6,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 3
+      },
+      {
+        "apiKeyName": "COLLECTION_FINISHED",
+        "title": {
+          "en": "The Whole Story",
+          "es": "La historia completa",
+          "pt": "A história completa"
+        },
+        "description": {
+          "en": "Finish all three games.",
+          "es": "Termina los tres juegos.",
+          "pt": "Termine os três jogos."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "win_condition",
+        "progressionStep": 4
+      },
+      {
+        "apiKeyName": "FIRST_TREASURE",
+        "title": {
+          "en": "Shiny Thing",
+          "es": "Algo brillante",
+          "pt": "Algo brilhante"
+        },
+        "description": {
+          "en": "Find your first hidden treasure.",
+          "es": "Encuentra tu primer tesoro oculto.",
+          "pt": "Encontre seu primeiro tesouro escondido."
+        },
+        "points": 1,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HUNDRED_HEADSHOTS",
+        "title": {
+          "en": "Sharpshooter",
+          "es": "Tirador experto",
+          "pt": "Atirador de elite"
+        },
+        "description": {
+          "en": "Land 100 headshots across the collection.",
+          "es": "Acierta 100 disparos a la cabeza en la colección.",
+          "pt": "Acerte 100 tiros na cabeça na coleção."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIFTY_MELEE_WINS",
+        "title": {
+          "en": "Bare Knuckles",
+          "es": "A puño limpio",
+          "pt": "Na mão"
+        },
+        "description": {
+          "en": "Win 50 melee fights.",
+          "es": "Gana 50 peleas cuerpo a cuerpo.",
+          "pt": "Vença 50 lutas corpo a corpo."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "DRAKES_FORTUNE_TREASURES",
+        "title": {
+          "en": "Treasure Hunter",
+          "es": "Cazatesoros",
+          "pt": "Caçador de tesouros"
+        },
+        "description": {
+          "en": "Find every treasure in Drake’s Fortune.",
+          "es": "Encuentra todos los tesoros de El tesoro de Drake.",
+          "pt": "Encontre todos os tesouros de Drake’s Fortune."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "AMONG_THIEVES_TREASURES",
+        "title": {
+          "en": "Collector’s Eye",
+          "es": "Ojo de coleccionista",
+          "pt": "Olho de colecionador"
+        },
+        "description": {
+          "en": "Find every treasure in Among Thieves.",
+          "es": "Encuentra todos los tesoros de El reino de los ladrones.",
+          "pt": "Encontre todos os tesouros de Among Thieves."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "DRAKES_DECEPTION_TREASURES",
+        "title": {
+          "en": "Fortune Seeker",
+          "es": "Buscafortunas",
+          "pt": "Caçador de fortunas"
+        },
+        "description": {
+          "en": "Find every treasure in Drake’s Deception.",
+          "es": "Encuentra todos los tesoros de La traición de Drake.",
+          "pt": "Encontre todos os tesouros de Drake’s Deception."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ANY_GAME_BRUTAL",
+        "title": {
+          "en": "Brutal Honesty",
+          "es": "Honestidad brutal",
+          "pt": "Honestidade brutal"
+        },
+        "description": {
+          "en": "Finish any of the three games on Brutal difficulty.",
+          "es": "Termina cualquiera de los tres juegos en dificultad Brutal.",
+          "pt": "Termine qualquer um dos três jogos na dificuldade Brutal."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_GAMES_BRUTAL",
+        "title": {
+          "en": "Legend of Fortune",
+          "es": "Leyenda de la fortuna",
+          "pt": "Lenda da fortuna"
+        },
+        "description": {
+          "en": "Finish all three games on Brutal difficulty.",
+          "es": "Termina los tres juegos en dificultad Brutal.",
+          "pt": "Termine os três jogos na dificuldade Brutal."
+        },
+        "points": 10,
+        "rarityTier": "legendary",
+        "kind": "standard"
+      }
+    ]
+  }
+}

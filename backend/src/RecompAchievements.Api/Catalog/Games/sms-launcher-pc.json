@@ -1,0 +1,221 @@
+{
+  "slug": "sms-launcher-pc",
+  "title": "SMS Launcher: Super Mario Sunshine",
+  "originalPlatform": "gamecube",
+  "originalGame": "Super Mario Sunshine",
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "repoUrl": "https://github.com/chasem-dev/sms-launcher",
+  "license": "MIT",
+  "displayOrder": 7,
+  "latestVersion": "1.1.0",
+  "releasedAt": "2026-11-06",
+  "summary": {
+    "en": "Launcher for the native PC port of Super Mario Sunshine: it guides you through setup, builds the game from your own disc, and gives you one Play button.",
+    "es": "Lanzador del port nativo para PC de Super Mario Sunshine: te guía en la configuración, construye el juego a partir de tu propio disco y te da un solo botón para jugar.",
+    "pt": "Launcher do port nativo para PC de Super Mario Sunshine: guia você na configuração, monta o jogo a partir do seu próprio disco e entrega um único botão de jogar."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "AIRSTRIP_CLEANED",
+        "title": {
+          "en": "Fresh Start",
+          "es": "Un nuevo comienzo",
+          "pt": "Um novo começo"
+        },
+        "description": {
+          "en": "Clean up the airstrip and reach the island’s plaza.",
+          "es": "Limpia la pista de aterrizaje y llega a la plaza de la isla.",
+          "pt": "Limpe a pista de pouso e chegue à praça da ilha."
+        },
+        "points": 1,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 1
+      },
+      {
+        "apiKeyName": "FIRST_SHINE",
+        "title": {
+          "en": "First Shine",
+          "es": "Primer Sol",
+          "pt": "Primeiro Sol"
+        },
+        "description": {
+          "en": "Collect your first Shine Sprite.",
+          "es": "Consigue tu primer Sol.",
+          "pt": "Pegue seu primeiro Sol."
+        },
+        "points": 2,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 2
+      },
+      {
+        "apiKeyName": "FINAL_AREA_OPENED",
+        "title": {
+          "en": "Into the Volcano",
+          "es": "Hacia el volcán",
+          "pt": "Rumo ao vulcão"
+        },
+        "description": {
+          "en": "Open the way to the final area.",
+          "es": "Abre el camino al área final.",
+          "pt": "Abra o caminho para a área final."
+        },
+        "points": 6,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 3
+      },
+      {
+        "apiKeyName": "FINAL_BOSS",
+        "title": {
+          "en": "Vacation Restored",
+          "es": "Vacaciones recuperadas",
+          "pt": "Férias recuperadas"
+        },
+        "description": {
+          "en": "Defeat Bowser and finish the story.",
+          "es": "Derrota a Bowser y termina la historia.",
+          "pt": "Derrote Bowser e termine a história."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "win_condition",
+        "progressionStep": 4
+      },
+      {
+        "apiKeyName": "FIRST_SECRET_COURSE",
+        "title": {
+          "en": "No Water Needed",
+          "es": "Sin agua",
+          "pt": "Sem água"
+        },
+        "description": {
+          "en": "Clear a secret course without your water pack.",
+          "es": "Supera un nivel secreto sin tu mochila de agua.",
+          "pt": "Conclua uma fase secreta sem sua mochila de água."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "RIDE_YOSHI",
+        "title": {
+          "en": "Fruit Lover",
+          "es": "Amante de la fruta",
+          "pt": "Amante de frutas"
+        },
+        "description": {
+          "en": "Ride Yoshi for the first time.",
+          "es": "Monta a Yoshi por primera vez.",
+          "pt": "Monte no Yoshi pela primeira vez."
+        },
+        "points": 2,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HUNDRED_COINS",
+        "title": {
+          "en": "Pocket Change",
+          "es": "Calderilla",
+          "pt": "Trocados"
+        },
+        "description": {
+          "en": "Collect 100 coins in a single course.",
+          "es": "Consigue 100 monedas en un mismo nivel.",
+          "pt": "Pegue 100 moedas em uma mesma fase."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "THIRTY_SHINES",
+        "title": {
+          "en": "Shining Bright",
+          "es": "Brillando",
+          "pt": "Brilhando"
+        },
+        "description": {
+          "en": "Collect 30 Shine Sprites.",
+          "es": "Consigue 30 Soles.",
+          "pt": "Pegue 30 Sóis."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "SEVENTY_SHINES",
+        "title": {
+          "en": "Sunny Disposition",
+          "es": "Buen humor",
+          "pt": "Bom humor"
+        },
+        "description": {
+          "en": "Collect 70 Shine Sprites.",
+          "es": "Consigue 70 Soles.",
+          "pt": "Pegue 70 Sóis."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_BLUE_COINS",
+        "title": {
+          "en": "Feeling Blue",
+          "es": "Todo azul",
+          "pt": "Tudo azul"
+        },
+        "description": {
+          "en": "Collect every blue coin.",
+          "es": "Consigue todas las monedas azules.",
+          "pt": "Pegue todas as moedas azuis."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "CLEAN_PLAZA",
+        "title": {
+          "en": "Spotless",
+          "es": "Impecable",
+          "pt": "Impecável"
+        },
+        "description": {
+          "en": "Clean every patch of goop from the plaza.",
+          "es": "Limpia toda la pintura de la plaza.",
+          "pt": "Limpe toda a gosma da praça."
+        },
+        "points": 5,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_SHINES",
+        "title": {
+          "en": "Island Paradise",
+          "es": "Paraíso isleño",
+          "pt": "Paraíso tropical"
+        },
+        "description": {
+          "en": "Collect all 120 Shine Sprites.",
+          "es": "Consigue los 120 Soles.",
+          "pt": "Pegue todos os 120 Sóis."
+        },
+        "points": 10,
+        "rarityTier": "legendary",
+        "kind": "standard"
+      }
+    ]
+  }
+}

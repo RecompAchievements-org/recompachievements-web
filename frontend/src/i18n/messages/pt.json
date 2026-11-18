@@ -10,7 +10,8 @@
   "header": {
     "homeLabel": "Página inicial do {siteName}",
     "mainNav": "Principal",
-    "github": "GitHub"
+    "github": "GitHub",
+    "games": "Jogos"
   },
   "localeSwitcher": {
     "label": "Idioma",
@@ -22,8 +23,12 @@
     "security": "Segurança",
     "contact": "Contato",
     "license": "Código aberto sob a licença {license}.",
-    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos, ROMs nem conteúdo protegido por direitos autorais, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements.",
-    "privacy": "Privacidade"
+    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos nem ROMs, usa imagens de jogos apenas com permissão do projeto do recomp ou de capturas próprias, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements.",
+    "privacy": "Privacidade",
+    "contentPolicy": "Política de conteúdo",
+    "tagline": "Conquistas para recomps e ports nativos para PC, registradas pela comunidade.",
+    "social": "Siga a gente",
+    "socialLink": "{siteName} no {network}"
   },
   "home": {
     "metaTitle": "Conquistas para recomps nativos",
@@ -32,12 +37,10 @@
     "intro": "Acompanhe seu progresso em recompilações estáticas e ports para PC que rodam sem emuladores. Os desenvolvedores de recomps ativam as conquistas direto do código nativo; você acumula pontos, caça as conquistas mais raras e exibe seu perfil.",
     "followOnGithub": "Siga no GitHub",
     "iBuildARecomp": "Desenvolvo um recomp",
-    "previewHeading": "O que você vai acompanhar",
-    "sampleTitle": "Primeiro chefe derrotado",
-    "sampleDescription": "Derrote o primeiro chefe sem levar dano.",
-    "unlocked": "Desbloqueada",
-    "completion": "Progresso",
-    "joinAlpha": "Participe do alfa"
+    "joinAlpha": "Participe do alfa",
+    "allGamesHeading": "Todos os jogos",
+    "browseAll": "Ver todos os jogos",
+    "gamesUnavailable": "Não foi possível carregar os jogos agora. Tente novamente em instantes."
   },
   "achievement": {
     "points": {
@@ -51,6 +54,74 @@
     "rare": "Rara",
     "epic": "Épica",
     "legendary": "Lendária"
+  },
+  "games": {
+    "metaTitle": "Jogos",
+    "metaDescription": "Recomps e ports nativos para PC no RecompAchievements, com seus conjuntos de conquistas.",
+    "title": "Jogos",
+    "intro": "Recomps e ports nativos para PC com conjuntos de conquistas no RecompAchievements. Por enquanto, todos os conjuntos são uma prévia: as conquistas são ativadas quando o recomp integra o SDK.",
+    "previewBadge": "Prévia",
+    "achievementCount": {
+      "one": "{count} conquista",
+      "other": "{count} conquistas"
+    },
+    "loading": "Carregando jogos…",
+    "unavailable": "Não foi possível carregar os jogos agora. Tente novamente em instantes."
+  },
+  "game": {
+    "metaDescription": "{title}: {count} conquistas no RecompAchievements.",
+    "allGames": "Todos os jogos",
+    "originalPlatform": "Originalmente no {console}",
+    "platforms": "Disponível para",
+    "sourceCode": "Código-fonte",
+    "achievementsHeading": "Conquistas",
+    "previewTitle": "Conjunto em prévia",
+    "previewText": "Um rascunho da comunidade que ainda não está ativo: estas conquistas não podem ser obtidas até que o recomp integre o SDK do RecompAchievements. Sem afiliação nem apoio dos desenvolvedores do recomp.",
+    "kind": {
+      "progression": "Progressão",
+      "win_condition": "Condição de vitória"
+    },
+    "loading": "Carregando conquistas…",
+    "unavailable": "Não foi possível carregar este jogo agora. Tente novamente em instantes.",
+    "version": "Versão {version}",
+    "released": "Lançada em {date}",
+    "recompCard": "Detalhes do recomp",
+    "download": "Baixar a versão mais recente",
+    "allReleases": "Todas as versões",
+    "reportIssue": "Relatar um problema",
+    "youBring": "Você traz:",
+    "youBringText": "sua própria cópia de {game} ({console}). Nenhum arquivo do jogo está incluído.",
+    "latestVersion": "Versão mais recente",
+    "releasedLabel": "Lançada",
+    "license": "Licença",
+    "noLicense": "Não informada",
+    "achievements": "Conquistas"
+  },
+  "comments": {
+    "heading": "Comentários",
+    "intro": "Dicas, bugs e notas de configuração de quem joga este recomp.",
+    "accountsNotice": "Para comentar será preciso uma conta. As contas chegam em breve; até lá, o que você publicar aqui fica só nesta página e não é salvo.",
+    "label": "Seu comentário",
+    "placeholder": "Compartilhe uma dica, um bug ou sua configuração…",
+    "post": "Publicar comentário",
+    "empty": "Ainda não há comentários.",
+    "you": "Você",
+    "justNow": "Agora mesmo",
+    "notSaved": "Não salvo",
+    "count": "{count} / {max}"
+  },
+  "slider": {
+    "heading": "Recomps em destaque",
+    "carousel": "Recomps em destaque",
+    "slide": "{current} de {total}",
+    "newRelease": "Novo lançamento",
+    "featured": "Destaque",
+    "pause": "Pausar apresentação",
+    "play": "Reproduzir apresentação",
+    "previous": "Slide anterior",
+    "next": "Próximo slide",
+    "viewAchievements": "Ver conquistas",
+    "imageCredit": "Imagem:"
   },
   "notFound": {
     "metaTitle": "Página não encontrada",
@@ -154,6 +225,34 @@
       {
         "title": "Seus direitos",
         "body": "Você pode pedir para ver, corrigir ou apagar seus dados a qualquer momento escrevendo para {email}."
+      }
+    ]
+  },
+  "contentPolicy": {
+    "metaTitle": "Política de conteúdo",
+    "metaDescription": "O que o RecompAchievements hospeda, de onde vêm as imagens dos jogos e como titulares de direitos podem pedir a remoção.",
+    "title": "Política de conteúdo",
+    "intro": "O RecompAchievements é um projeto da comunidade que registra conquistas de recomps e ports nativos para PC. Esta página explica o que hospedamos e como nos pedir para remover algo.",
+    "sections": [
+      {
+        "title": "O que não hospedamos",
+        "body": "Nenhum jogo, ROM, imagem de disco, executável recompilado ou arquivo de jogo de qualquer tipo. Cada recomp precisa da sua própria cópia do jogo original obtida legalmente, e os downloads vêm apenas das páginas de cada projeto."
+      },
+      {
+        "title": "Texto das conquistas",
+        "body": "Os títulos e descrições das conquistas são escritos por nós ou pelos desenvolvedores dos recomps. Não copiamos listas oficiais de troféus ou conquistas."
+      },
+      {
+        "title": "Imagens",
+        "body": "Não usamos capas oficiais, artes promocionais, logotipos de jogos nem ícones de troféus. As imagens de jogos são capturas e banners publicados pelo projeto do recomp e usados com permissão, ou capturas próprias do recomp em execução. Todas têm crédito. Jogos sem uma imagem aprovada usam arte gerada."
+      },
+      {
+        "title": "Marcas registradas",
+        "body": "Nomes de jogos e plataformas são marcas de seus donos e são usados apenas para identificar os jogos. O RecompAchievements não tem vínculo nem apoio de nenhuma publicadora, fabricante de plataformas ou desenvolvedor de recomps, salvo indicação."
+      },
+      {
+        "title": "Pedidos de remoção",
+        "body": "Se você tem direitos sobre algo exibido neste site e quer que seja removido, escreva para {email} com o link da página e o que deseja remover. Analisamos cada pedido e removemos o conteúdo em até 5 dias úteis quando o pedido é válido."
       }
     ]
   }

@@ -10,8 +10,8 @@ using Testcontainers.PostgreSql;
 namespace RecompAchievements.Api.Tests;
 
 /** Runs the API in memory against a throwaway PostgreSQL 17 container (requires Docker), with
- *  migrations applied at startup and emails captured instead of sent. The "Testing" environment
- *  keeps Development-only behaviour (API docs) off.
+ *  migrations and the game catalog applied at startup and emails captured instead of sent. The
+ *  "Testing" environment keeps Development-only behaviour (API docs) off.
 **/
 public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
@@ -28,6 +28,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseEnvironment("Testing");
         builder.UseSetting("ConnectionStrings:Database", _database.GetConnectionString());
         builder.UseSetting("Database:ApplyMigrationsOnStartup", "true");
+        builder.UseSetting("Catalog:ImportOnStartup", "true");
         builder.UseSetting("InternalApi:Key", InternalKey);
         builder.UseSetting("Site:BaseUrl", "https://recompachievements.test");
         // High site-wide sign-up limit so ordinary tests never hit it; abuse tests lower it.

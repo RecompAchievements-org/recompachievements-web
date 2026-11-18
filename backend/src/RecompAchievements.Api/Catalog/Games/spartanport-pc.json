@@ -1,0 +1,235 @@
+{
+  "slug": "spartanport-pc",
+  "title": "SpartanPort: God of War III",
+  "originalPlatform": "ps4",
+  "originalGame": "God of War III Remastered",
+  "platforms": [
+    "windows",
+    "linux"
+  ],
+  "repoUrl": "https://github.com/FelipePrado0/SpartanPort",
+  "license": "GPL-2.0",
+  "displayOrder": 2,
+  "featured": true,
+  "latestVersion": "3.2.1",
+  "releasedAt": "2026-11-16",
+  "summary": {
+    "en": "Unofficial native Windows and Linux port of God of War III Remastered: the game’s own code runs directly on the PC with Vulkan graphics, a launcher, and up to 240 FPS.",
+    "es": "Port nativo no oficial para Windows y Linux de God of War III Remastered: el código del propio juego se ejecuta directamente en el PC con gráficos Vulkan, un lanzador y hasta 240 FPS.",
+    "pt": "Port nativo não oficial para Windows e Linux de God of War III Remastered: o próprio código do jogo roda direto no PC com gráficos Vulkan, um launcher e até 240 FPS."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "BOSS_POSEIDON",
+        "title": {
+          "en": "Tidal Wave",
+          "es": "Maremoto",
+          "pt": "Maremoto"
+        },
+        "description": {
+          "en": "Defeat Poseidon.",
+          "es": "Derrota a Poseidón.",
+          "pt": "Derrote Poseidon."
+        },
+        "points": 2,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 1
+      },
+      {
+        "apiKeyName": "BOSS_HADES",
+        "title": {
+          "en": "Underworld Overthrown",
+          "es": "Inframundo derrocado",
+          "pt": "Submundo derrubado"
+        },
+        "description": {
+          "en": "Defeat Hades.",
+          "es": "Derrota a Hades.",
+          "pt": "Derrote Hades."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOSS_HELIOS",
+        "title": {
+          "en": "Eclipse",
+          "es": "Eclipse",
+          "pt": "Eclipse"
+        },
+        "description": {
+          "en": "Defeat Helios.",
+          "es": "Derrota a Helios.",
+          "pt": "Derrote Hélio."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOSS_HERMES",
+        "title": {
+          "en": "Grounded",
+          "es": "Sin alas",
+          "pt": "Sem asas"
+        },
+        "description": {
+          "en": "Defeat Hermes.",
+          "es": "Derrota a Hermes.",
+          "pt": "Derrote Hermes."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOSS_HERCULES",
+        "title": {
+          "en": "Brotherly Rivalry",
+          "es": "Rivalidad fraternal",
+          "pt": "Rivalidade fraterna"
+        },
+        "description": {
+          "en": "Defeat Hercules.",
+          "es": "Derrota a Hércules.",
+          "pt": "Derrote Hércules."
+        },
+        "points": 5,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOSS_CRONOS",
+        "title": {
+          "en": "Titan Fall",
+          "es": "Caída de un titán",
+          "pt": "Queda de um titã"
+        },
+        "description": {
+          "en": "Defeat Cronos.",
+          "es": "Derrota a Cronos.",
+          "pt": "Derrote Cronos."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOSS_ZEUS",
+        "title": {
+          "en": "Fall of Olympus",
+          "es": "La caída del Olimpo",
+          "pt": "A queda do Olimpo"
+        },
+        "description": {
+          "en": "Defeat Zeus and finish the story.",
+          "es": "Derrota a Zeus y termina la historia.",
+          "pt": "Derrote Zeus e termine a história."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "win_condition",
+        "progressionStep": 2
+      },
+      {
+        "apiKeyName": "NEW_WEAPON",
+        "title": {
+          "en": "New Arsenal",
+          "es": "Nuevo arsenal",
+          "pt": "Novo arsenal"
+        },
+        "description": {
+          "en": "Obtain a new weapon.",
+          "es": "Consigue un arma nueva.",
+          "pt": "Obtenha uma nova arma."
+        },
+        "points": 1,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HUNDRED_HIT_COMBO",
+        "title": {
+          "en": "Relentless",
+          "es": "Implacable",
+          "pt": "Implacável"
+        },
+        "description": {
+          "en": "Land a 100-hit combo.",
+          "es": "Encadena un combo de 100 golpes.",
+          "pt": "Acerte um combo de 100 golpes."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_GORGON_EYES",
+        "title": {
+          "en": "All-Seeing",
+          "es": "Lo ves todo",
+          "pt": "Tudo vê"
+        },
+        "description": {
+          "en": "Collect every Gorgon Eye.",
+          "es": "Consigue todos los Ojos de Gorgona.",
+          "pt": "Colete todos os Olhos de Górgona."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_GODLY_POSSESSIONS",
+        "title": {
+          "en": "Spoils of the Gods",
+          "es": "Botín de los dioses",
+          "pt": "Espólios dos deuses"
+        },
+        "description": {
+          "en": "Find every godly possession.",
+          "es": "Encuentra todas las posesiones divinas.",
+          "pt": "Encontre todas as posses divinas."
+        },
+        "points": 7,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_CHALLENGES",
+        "title": {
+          "en": "Trials Complete",
+          "es": "Pruebas superadas",
+          "pt": "Provas concluídas"
+        },
+        "description": {
+          "en": "Complete every Challenge of Olympus.",
+          "es": "Completa todos los Desafíos del Olimpo.",
+          "pt": "Complete todos os Desafios do Olimpo."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HARDEST_DIFFICULTY",
+        "title": {
+          "en": "Godslayer",
+          "es": "Matadioses",
+          "pt": "Matador de deuses"
+        },
+        "description": {
+          "en": "Finish the story on the hardest difficulty.",
+          "es": "Termina la historia en la dificultad más alta.",
+          "pt": "Termine a história na dificuldade mais alta."
+        },
+        "points": 10,
+        "rarityTier": "legendary",
+        "kind": "standard"
+      }
+    ]
+  }
+}

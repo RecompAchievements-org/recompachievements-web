@@ -8,3 +8,11 @@ GET {{api}}/health/ready
 
 ### Unknown route: 404 ProblemDetails
 GET {{api}}/does-not-exist
+
+### Games list (website-only: uses the development internal key)
+GET {{api}}/api/v1/games?lang=es
+X-Internal-Key: local-development-internal-key
+
+### One game with its achievements
+GET {{api}}/api/v1/games/zelda64-recompiled
+X-Internal-Key: local-development-internal-key

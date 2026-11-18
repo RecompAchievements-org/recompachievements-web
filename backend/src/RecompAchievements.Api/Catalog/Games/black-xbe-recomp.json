@@ -1,0 +1,201 @@
+{
+  "slug": "black-xbe-recomp",
+  "title": "BLACK XBE Recomp",
+  "originalPlatform": "xbox",
+  "originalGame": "BLACK",
+  "platforms": [
+    "windows"
+  ],
+  "repoUrl": "https://github.com/TGP482/BLACK-XBERecomp",
+  "displayOrder": 8,
+  "latestVersion": "3",
+  "releasedAt": "2026-10-29",
+  "summary": {
+    "en": "Unofficial native PC port of the original Xbox version of BLACK, made by static recompilation, with modern display options and keyboard and mouse support.",
+    "es": "Port nativo no oficial para PC de la versión de Xbox original de BLACK, hecho por recompilación estática, con opciones de pantalla modernas y soporte para teclado y ratón.",
+    "pt": "Port nativo não oficial para PC da versão do Xbox original de BLACK, feito por recompilação estática, com opções de tela modernas e suporte a teclado e mouse."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "FIRST_MISSION",
+        "title": {
+          "en": "Boots on the Ground",
+          "es": "Botas en el suelo",
+          "pt": "Botas no chão"
+        },
+        "description": {
+          "en": "Complete the first mission.",
+          "es": "Completa la primera misión.",
+          "pt": "Conclua a primeira missão."
+        },
+        "points": 2,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 1
+      },
+      {
+        "apiKeyName": "HALFWAY",
+        "title": {
+          "en": "Deep Behind the Lines",
+          "es": "Tras las líneas enemigas",
+          "pt": "Atrás das linhas inimigas"
+        },
+        "description": {
+          "en": "Complete the fourth mission.",
+          "es": "Completa la cuarta misión.",
+          "pt": "Conclua a quarta missão."
+        },
+        "points": 5,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 2
+      },
+      {
+        "apiKeyName": "FINAL_MISSION",
+        "title": {
+          "en": "Debrief",
+          "es": "Informe final",
+          "pt": "Relatório final"
+        },
+        "description": {
+          "en": "Complete the final mission.",
+          "es": "Completa la última misión.",
+          "pt": "Conclua a missão final."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "win_condition",
+        "progressionStep": 3
+      },
+      {
+        "apiKeyName": "SECONDARY_OBJECTIVES",
+        "title": {
+          "en": "Thorough",
+          "es": "Minucioso",
+          "pt": "Minucioso"
+        },
+        "description": {
+          "en": "Complete every secondary objective in a mission.",
+          "es": "Completa todos los objetivos secundarios de una misión.",
+          "pt": "Conclua todos os objetivos secundários de uma missão."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HUNDRED_HEADSHOTS",
+        "title": {
+          "en": "Steady Aim",
+          "es": "Pulso firme",
+          "pt": "Mira firme"
+        },
+        "description": {
+          "en": "Land 100 headshots.",
+          "es": "Acierta 100 disparos a la cabeza.",
+          "pt": "Acerte 100 tiros na cabeça."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "DEMOLITION",
+        "title": {
+          "en": "Collateral Damage",
+          "es": "Daños colaterales",
+          "pt": "Danos colaterais"
+        },
+        "description": {
+          "en": "Destroy 200 objects with explosives.",
+          "es": "Destruye 200 objetos con explosivos.",
+          "pt": "Destrua 200 objetos com explosivos."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "GRENADE_MULTI",
+        "title": {
+          "en": "Three for One",
+          "es": "Tres por uno",
+          "pt": "Três por um"
+        },
+        "description": {
+          "en": "Take down three enemies with one grenade.",
+          "es": "Abate a tres enemigos con una sola granada.",
+          "pt": "Derrube três inimigos com uma só granada."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "NO_HEALTH_PACKS",
+        "title": {
+          "en": "Tough as Nails",
+          "es": "Duro como el acero",
+          "pt": "Duro na queda"
+        },
+        "description": {
+          "en": "Complete a mission without using a health pack.",
+          "es": "Completa una misión sin usar botiquines.",
+          "pt": "Conclua uma missão sem usar kits médicos."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_MISSIONS_HARD",
+        "title": {
+          "en": "Hardened",
+          "es": "Curtido",
+          "pt": "Calejado"
+        },
+        "description": {
+          "en": "Complete every mission on the second-hardest difficulty.",
+          "es": "Completa todas las misiones en la segunda dificultad más alta.",
+          "pt": "Conclua todas as missões na segunda dificuldade mais alta."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_SECONDARY",
+        "title": {
+          "en": "Mission Accomplished",
+          "es": "Misión cumplida",
+          "pt": "Missão cumprida"
+        },
+        "description": {
+          "en": "Complete every secondary objective in the game.",
+          "es": "Completa todos los objetivos secundarios del juego.",
+          "pt": "Conclua todos os objetivos secundários do jogo."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "HARDEST_DIFFICULTY",
+        "title": {
+          "en": "Black Ops",
+          "es": "Operaciones encubiertas",
+          "pt": "Operações secretas"
+        },
+        "description": {
+          "en": "Finish the game on the hardest difficulty.",
+          "es": "Termina el juego en la dificultad más alta.",
+          "pt": "Termine o jogo na dificuldade mais alta."
+        },
+        "points": 10,
+        "rarityTier": "legendary",
+        "kind": "standard"
+      }
+    ]
+  }
+}

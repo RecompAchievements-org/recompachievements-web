@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using RecompAchievements.Api.Features.AlphaSignups;
+using RecompAchievements.Api.Features.Games;
 
 namespace RecompAchievements.Api.Infrastructure;
 
@@ -9,6 +10,8 @@ namespace RecompAchievements.Api.Infrastructure;
 [JsonSerializable(typeof(ConfirmAlphaSignupRequest))]
 [JsonSerializable(typeof(AlphaSignupAcceptedResponse))]
 [JsonSerializable(typeof(AlphaSignupConfirmedResponse))]
+[JsonSerializable(typeof(GameSummaryResponse[]))]
+[JsonSerializable(typeof(GameDetailResponse))]
 internal sealed partial class AppJsonContext : JsonSerializerContext;
 
 internal static class Json

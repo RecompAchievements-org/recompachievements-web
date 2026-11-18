@@ -1,0 +1,221 @@
+{
+  "slug": "gt3-revisited",
+  "title": "GT3 Revisited",
+  "originalPlatform": "ps2",
+  "originalGame": "Gran Turismo 3: A-Spec",
+  "platforms": [
+    "windows",
+    "linux",
+    "macos"
+  ],
+  "repoUrl": "https://github.com/matt-pulsipher/GT3-revisited",
+  "license": "MIT",
+  "displayOrder": 9,
+  "latestVersion": "0.6.6",
+  "releasedAt": "2026-11-13",
+  "summary": {
+    "en": "Open-source reimplementation of the Gran Turismo 3 A-Spec engine that plays the whole game from your own disc, with online battles, modern displays, and mods.",
+    "es": "Reimplementación de código abierto del motor de Gran Turismo 3 A-Spec que ejecuta el juego completo desde tu propio disco, con carreras en línea, pantallas modernas y mods.",
+    "pt": "Reimplementação de código aberto do motor de Gran Turismo 3 A-Spec que roda o jogo completo a partir do seu próprio disco, com corridas online, telas modernas e mods."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "B_LICENSE",
+        "title": {
+          "en": "Learner’s Permit",
+          "es": "Permiso de aprendiz",
+          "pt": "Permissão de aprendiz"
+        },
+        "description": {
+          "en": "Earn your first license.",
+          "es": "Consigue tu primera licencia.",
+          "pt": "Conquiste sua primeira licença."
+        },
+        "points": 2,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 1
+      },
+      {
+        "apiKeyName": "FIRST_GT_WIN",
+        "title": {
+          "en": "Podium Debut",
+          "es": "Debut en el podio",
+          "pt": "Estreia no pódio"
+        },
+        "description": {
+          "en": "Win your first race in GT Mode.",
+          "es": "Gana tu primera carrera en el modo GT.",
+          "pt": "Vença sua primeira corrida no modo GT."
+        },
+        "points": 3,
+        "rarityTier": "common",
+        "kind": "progression",
+        "progressionStep": 2
+      },
+      {
+        "apiKeyName": "A_LICENSE",
+        "title": {
+          "en": "Moving Up",
+          "es": "Subiendo de nivel",
+          "pt": "Subindo de nível"
+        },
+        "description": {
+          "en": "Earn the second license.",
+          "es": "Consigue la segunda licencia.",
+          "pt": "Conquiste a segunda licença."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "progression",
+        "progressionStep": 3
+      },
+      {
+        "apiKeyName": "GT_MODE_ENDING",
+        "title": {
+          "en": "Checkered Flag",
+          "es": "Bandera a cuadros",
+          "pt": "Bandeira quadriculada"
+        },
+        "description": {
+          "en": "Reach an ending of GT Mode.",
+          "es": "Llega a un final del modo GT.",
+          "pt": "Alcance um final do modo GT."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "win_condition",
+        "progressionStep": 4
+      },
+      {
+        "apiKeyName": "FIRST_CAR",
+        "title": {
+          "en": "New Wheels",
+          "es": "Ruedas nuevas",
+          "pt": "Rodas novas"
+        },
+        "description": {
+          "en": "Buy your first car.",
+          "es": "Compra tu primer coche.",
+          "pt": "Compre seu primeiro carro."
+        },
+        "points": 1,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIRST_TUNE",
+        "title": {
+          "en": "Under the Hood",
+          "es": "Bajo el capó",
+          "pt": "Debaixo do capô"
+        },
+        "description": {
+          "en": "Install your first tuning part.",
+          "es": "Instala tu primera pieza de mejora.",
+          "pt": "Instale sua primeira peça de preparação."
+        },
+        "points": 1,
+        "rarityTier": "common",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIRST_CHAMPIONSHIP",
+        "title": {
+          "en": "Season Champion",
+          "es": "Campeón de la temporada",
+          "pt": "Campeão da temporada"
+        },
+        "description": {
+          "en": "Win a championship in GT Mode.",
+          "es": "Gana un campeonato en el modo GT.",
+          "pt": "Vença um campeonato no modo GT."
+        },
+        "points": 5,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ENDURANCE_RACE",
+        "title": {
+          "en": "Long Haul",
+          "es": "Larga distancia",
+          "pt": "Longa distância"
+        },
+        "description": {
+          "en": "Finish an endurance race.",
+          "es": "Termina una carrera de resistencia.",
+          "pt": "Termine uma corrida de resistência."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ONLINE_WIN",
+        "title": {
+          "en": "Wired Battle",
+          "es": "Batalla en red",
+          "pt": "Batalha em rede"
+        },
+        "description": {
+          "en": "Win an online battle race.",
+          "es": "Gana una carrera en línea.",
+          "pt": "Vença uma corrida online."
+        },
+        "points": 4,
+        "rarityTier": "uncommon",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_LICENSES_GOLD",
+        "title": {
+          "en": "Golden Touch",
+          "es": "Toque de oro",
+          "pt": "Toque de ouro"
+        },
+        "description": {
+          "en": "Earn gold in every license test.",
+          "es": "Consigue oro en todas las pruebas de licencia.",
+          "pt": "Conquiste ouro em todos os testes de licença."
+        },
+        "points": 8,
+        "rarityTier": "epic",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIFTY_CARS",
+        "title": {
+          "en": "Car Collector",
+          "es": "Coleccionista de coches",
+          "pt": "Colecionador de carros"
+        },
+        "description": {
+          "en": "Own 50 cars.",
+          "es": "Ten 50 coches.",
+          "pt": "Tenha 50 carros."
+        },
+        "points": 6,
+        "rarityTier": "rare",
+        "kind": "standard"
+      },
+      {
+        "apiKeyName": "S_LICENSE",
+        "title": {
+          "en": "Top License",
+          "es": "Licencia máxima",
+          "pt": "Licença máxima"
+        },
+        "description": {
+          "en": "Earn the highest license.",
+          "es": "Consigue la licencia más alta.",
+          "pt": "Conquiste a licença mais alta."
+        },
+        "points": 10,
+        "rarityTier": "legendary",
+        "kind": "standard"
+      }
+    ]
+  }
+}

@@ -22,7 +22,7 @@ export function Logo({ className }: { className?: string }) {
   return (
     <span className={cx("flex items-center gap-2", className)}>
       <LogoMark />
-      <span translate="no" className="font-display text-lg font-bold tracking-tight">
+      <span translate="no" className="font-display text-base font-bold tracking-tight min-[400px]:text-lg">
         Recomp<span className="text-accent">Achievements</span>
       </span>
     </span>

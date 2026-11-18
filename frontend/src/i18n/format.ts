@@ -22,14 +22,6 @@ export function formatNumber(locale: Locale, value: number): string {
   return new Intl.NumberFormat(htmlLang[locale]).format(value);
 }
 
-// Format a 0–100 value as a percentage with one decimal ("4.2%", "4,2 %").
-export function formatPercent(locale: Locale, value: number): string {
-  return new Intl.NumberFormat(htmlLang[locale], {
-    style: "percent",
-    maximumFractionDigits: 1,
-  }).format(value / 100);
-}
-
 export function formatDate(
   locale: Locale,
   date: Date,

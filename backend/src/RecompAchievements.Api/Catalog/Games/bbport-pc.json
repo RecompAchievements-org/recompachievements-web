@@ -1,0 +1,162 @@
+{
+  "slug": "bbport-pc",
+  "title": "bbport: Bloodborne",
+  "originalPlatform": "ps4",
+  "originalGame": "Bloodborne",
+  "platforms": ["windows", "linux", "steam_deck"],
+  "repoUrl": "https://github.com/deadinside28/bloodborne_pc",
+  "license": "GPL-2.0",
+  "displayOrder": 1,
+  "featured": true,
+  "latestVersion": "0.7",
+  "releasedAt": "2026-10-28",
+  "summary": {
+    "en": "Native Linux and Windows port of Bloodborne: the game’s own code runs directly on the PC with Vulkan graphics, an unlocked frame rate, modern upscaling, and co-op.",
+    "es": "Port nativo para Linux y Windows de Bloodborne: el código del propio juego se ejecuta directamente en el PC con gráficos Vulkan, tasa de fotogramas libre, reescalado moderno y cooperativo.",
+    "pt": "Port nativo para Linux e Windows de Bloodborne: o próprio código do jogo roda direto no PC com gráficos Vulkan, taxa de quadros destravada, upscaling moderno e cooperativo."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "FIRST_DREAM",
+        "title": { "en": "A Hunter Is Born", "es": "Nace un cazador", "pt": "Nasce um caçador" },
+        "description": {
+          "en": "Wake in the Hunter’s Dream for the first time.",
+          "es": "Despierta por primera vez en el Sueño del Cazador.",
+          "pt": "Desperte pela primeira vez no Sonho do Caçador."
+        },
+        "points": 1, "rarityTier": "common", "kind": "progression", "progressionStep": 1
+      },
+      {
+        "apiKeyName": "BOSS_GASCOIGNE",
+        "title": { "en": "Father Figure", "es": "Figura paterna", "pt": "Figura paterna" },
+        "description": {
+          "en": "Defeat Father Gascoigne.",
+          "es": "Derrota al Padre Gascoigne.",
+          "pt": "Derrote o Padre Gascoigne."
+        },
+        "points": 4, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 2
+      },
+      {
+        "apiKeyName": "BOSS_VICAR_AMELIA",
+        "title": { "en": "Last Rites", "es": "Últimos ritos", "pt": "Últimos ritos" },
+        "description": {
+          "en": "Defeat Vicar Amelia.",
+          "es": "Derrota a la Vicaria Amelia.",
+          "pt": "Derrote a Vigária Amelia."
+        },
+        "points": 5, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 3
+      },
+      {
+        "apiKeyName": "BOSS_SHADOWS_OF_YHARNAM",
+        "title": { "en": "Three Shadows", "es": "Tres sombras", "pt": "Três sombras" },
+        "description": {
+          "en": "Defeat the Shadows of Yharnam.",
+          "es": "Derrota a las Sombras de Yharnam.",
+          "pt": "Derrote as Sombras de Yharnam."
+        },
+        "points": 5, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 4
+      },
+      {
+        "apiKeyName": "BOSS_ROM",
+        "title": { "en": "Lake of Secrets", "es": "Lago de secretos", "pt": "Lago de segredos" },
+        "description": {
+          "en": "Defeat Rom, the Vacuous Spider.",
+          "es": "Derrota a Rom, la Araña Vacua.",
+          "pt": "Derrote Rom, a Aranha Vazia."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "progression", "progressionStep": 5
+      },
+      {
+        "apiKeyName": "BOSS_ONE_REBORN",
+        "title": { "en": "Bells Silenced", "es": "Campanas silenciadas", "pt": "Sinos silenciados" },
+        "description": {
+          "en": "Defeat the One Reborn.",
+          "es": "Derrota al Renacido.",
+          "pt": "Derrote o Renascido."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "progression", "progressionStep": 6
+      },
+      {
+        "apiKeyName": "BOSS_MICOLASH",
+        "title": { "en": "Lesson Learned", "es": "Lección aprendida", "pt": "Lição aprendida" },
+        "description": {
+          "en": "Defeat Micolash, Host of the Nightmare.",
+          "es": "Derrota a Micolash, anfitrión de la Pesadilla.",
+          "pt": "Derrote Micolash, anfitrião do Pesadelo."
+        },
+        "points": 7, "rarityTier": "rare", "kind": "progression", "progressionStep": 7
+      },
+      {
+        "apiKeyName": "BOSS_WET_NURSE",
+        "title": { "en": "Empty Cradle", "es": "Cuna vacía", "pt": "Berço vazio" },
+        "description": {
+          "en": "Defeat Mergo’s Wet Nurse.",
+          "es": "Derrota a la Nodriza de Mergo.",
+          "pt": "Derrote a Ama de Mergo."
+        },
+        "points": 8, "rarityTier": "epic", "kind": "progression", "progressionStep": 8
+      },
+      {
+        "apiKeyName": "HUNT_ENDED",
+        "title": { "en": "Dawn Breaks", "es": "Rompe el alba", "pt": "O amanhecer chega" },
+        "description": {
+          "en": "Reach an ending of the hunt.",
+          "es": "Llega a un final de la cacería.",
+          "pt": "Alcance um final da caçada."
+        },
+        "points": 8, "rarityTier": "epic", "kind": "win_condition", "progressionStep": 9
+      },
+      {
+        "apiKeyName": "BOSS_CLERIC_BEAST",
+        "title": { "en": "Beast on the Bridge", "es": "Bestia en el puente", "pt": "Fera na ponte" },
+        "description": {
+          "en": "Defeat the Cleric Beast.",
+          "es": "Derrota a la Bestia Clérigo.",
+          "pt": "Derrote a Fera Clériga."
+        },
+        "points": 3, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIRST_WEAPON_UPGRADE",
+        "title": { "en": "Sharpened Steel", "es": "Acero afilado", "pt": "Aço afiado" },
+        "description": {
+          "en": "Upgrade a weapon for the first time.",
+          "es": "Mejora un arma por primera vez.",
+          "pt": "Melhore uma arma pela primeira vez."
+        },
+        "points": 1, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIRST_CHALICE_DUNGEON",
+        "title": { "en": "Into the Depths", "es": "Hacia las profundidades", "pt": "Rumo às profundezas" },
+        "description": {
+          "en": "Clear your first Chalice Dungeon.",
+          "es": "Supera tu primera Mazmorra del Cáliz.",
+          "pt": "Conclua sua primeira Masmorra do Cálice."
+        },
+        "points": 4, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "COOP_BOSS",
+        "title": { "en": "Hunting Party", "es": "Partida de caza", "pt": "Grupo de caça" },
+        "description": {
+          "en": "Defeat a boss together with another hunter in co-op.",
+          "es": "Derrota a un jefe junto a otro cazador en cooperativo.",
+          "pt": "Derrote um chefe junto com outro caçador no cooperativo."
+        },
+        "points": 3, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "HIDDEN_ENDING",
+        "title": { "en": "Beyond the Dream", "es": "Más allá del sueño", "pt": "Além do sonho" },
+        "description": {
+          "en": "Reach the hidden ending of the hunt.",
+          "es": "Llega al final oculto de la cacería.",
+          "pt": "Alcance o final oculto da caçada."
+        },
+        "points": 10, "rarityTier": "legendary", "kind": "standard"
+      }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Badge } from "@/components/ui/Badge";
+import { AlphaOpenBadge } from "@/components/alpha/AlphaOpenBadge";
 import { Card } from "@/components/ui/Card";
 import { localeAlternates, localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
@@ -18,15 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AlphaPage() {
   const locale = await getLocale();
-  const { alpha } = await getMessages();
+  const { alpha, common } = await getMessages();
   const privacyHref = localizePath(locale, "/privacy");
 
   return (
     <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_minmax(0,28rem)] lg:py-24">
       <section className="flex flex-col gap-6">
-        <Badge tone="accent" className="self-start">
-          {alpha.badge}
-        </Badge>
+        <AlphaOpenBadge label={common.alphaOpen} />
         <h1 className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-5xl">{alpha.title}</h1>
         <p className="text-lg leading-relaxed text-muted">{alpha.intro}</p>
 

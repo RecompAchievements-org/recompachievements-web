@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AlphaOpenBadge } from "@/components/alpha/AlphaOpenBadge";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -25,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
 **/
 export default async function HomePage() {
   const locale = await getLocale();
-  const { home, achievement, rarity, metadata } = await getMessages();
+  const { home, achievement, rarity, metadata, common } = await getMessages();
 
   // Tells search engines the site's name, so results show "RecompAchievements" rather than the URL.
   const website = {
@@ -42,9 +43,7 @@ export default async function HomePage() {
     <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 sm:py-24">
       <JsonLd data={website} />
       <section className="flex max-w-3xl flex-col gap-6">
-        <Badge tone="accent" className="self-start">
-          {home.badge}
-        </Badge>
+        <AlphaOpenBadge label={common.alphaOpen} href={localizePath(locale, "/alpha")} />
         <h1 className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-6xl">
           {rich(home.title, {
             highlight: <span className="text-accent">{home.titleHighlight}</span>,

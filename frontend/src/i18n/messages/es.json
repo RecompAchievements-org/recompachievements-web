@@ -4,7 +4,8 @@
   },
   "common": {
     "skipToContent": "Saltar al contenido",
-    "opensInNewTab": "(se abre en una pestaña nueva)"
+    "opensInNewTab": "(se abre en una pestaña nueva)",
+    "alphaOpen": "Registro alfa abierto · ¡Cupos limitados!"
   },
   "header": {
     "homeLabel": "Inicio de {siteName}",
@@ -26,7 +27,6 @@
   },
   "home": {
     "metaTitle": "Logros para recomps nativos",
-    "badge": "En desarrollo",
     "title": "Logros para {highlight}.",
     "titleHighlight": "recomps nativos",
     "intro": "Sigue tu progreso en recompilaciones estáticas y ports de PC que funcionan sin emuladores. Los desarrolladores de recomps activan los logros directamente desde el código nativo; tú sumas puntos, persigues los desbloqueos más raros y presumes tu perfil.",
@@ -61,7 +61,6 @@
   "alpha": {
     "metaTitle": "Únete a la alfa",
     "metaDescription": "Apúntate para probar RecompAchievements antes del lanzamiento: consigue logros en recomps nativos y ayuda a dar forma a la plataforma.",
-    "badge": "Registro para la alfa",
     "title": "Únete a la alfa",
     "intro": "Sé de los primeros en conseguir logros en recomps nativos. Quienes prueban la alfa usan las novedades antes que nadie y ayudan a dar forma a la plataforma.",
     "testersHeading": "Qué hacen los testers",
@@ -101,7 +100,8 @@
     },
     "success": {
       "title": "Revisa tu bandeja de entrada",
-      "body": "Hemos enviado un enlace de confirmación a {email}. Ábrelo en los próximos 7 días para asegurar tu plaza.",
+      "sentTo": "Hemos enviado un enlace de confirmación a:",
+      "expiry": "Ábrelo en los próximos 7 días para asegurar tu plaza.",
       "spam": "¿No lo encuentras? Revisa la carpeta de spam o vuelve a registrarte dentro de 10 minutos para recibir un enlace nuevo."
     }
   },

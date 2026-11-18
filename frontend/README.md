@@ -68,6 +68,7 @@ src/
 │   ├── robots.ts             # /robots.txt: allow all, points to the sitemap
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
+│   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
 │   ├── seo/                  # JsonLd (schema.org structured data)
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ProgressBar, ExternalLink
@@ -144,7 +145,7 @@ import { plural } from "@/i18n/format";
 
 const locale = await getLocale();
 const { home, achievement } = await getMessages();
-// home.badge, plural(locale, 25, achievement.points), localizePath(locale, "/games/x")
+// home.joinAlpha, plural(locale, 25, achievement.points), localizePath(locale, "/games/x")
 ```
 
 **Adding a string:** add the key to `en.json`, `es.json`, and `pt.json`. A key missing from any

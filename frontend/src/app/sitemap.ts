@@ -3,7 +3,7 @@ import { defaultLocale, htmlLang, localizePath, locales } from "@/i18n/config";
 import { siteConfig } from "@/lib/site";
 
 // Unprefixed paths of every public page; each is listed once per locale with hreflang links.
-const publicPaths = ["/"];
+const publicPaths = ["/", "/alpha", "/privacy"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return publicPaths.flatMap((path) => {

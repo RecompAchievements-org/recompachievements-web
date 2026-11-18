@@ -27,6 +27,17 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   backend directly. That layer calls the .NET API (`backend/`) from server code only, using a
   server-only base URL environment variable; the browser never talks to the API. Features are
   built end to end (database → API → page), so there is no mock-data layer.
+- `src/lib/api/client.ts` (`apiPost`, typed `ApiResult`, ProblemDetails) is the only place that
+  attaches the website's API credentials and request context. Every file under `src/lib/api/` starts
+  with `import "server-only"`.
+- Forms post to **Server Actions** (`actions.ts` next to the page) and use `useActionState` in a
+  small client component. Actions receive the locale as a hidden field (root params aren't
+  available there), return error **codes** that the client translates, and never return secrets.
+  Validate on the server even when the input has native constraints.
+- Mutations triggered by emailed links happen on a button press (POST), never on page load.
+- The alpha sign-up form includes a human-verification challenge. Its token must be verified on the
+  server (`verifyHumanToken` in `src/lib/turnstile.ts`) before the API is called; never skip or
+  weaken that check, and keep it failing closed when its secret is missing.
 - **Caching uses `"use cache"`** in data functions, always paired with `cacheLife(...)`, and
   `cacheTag(...)` where the data can be invalidated (e.g. `game:${slug}`). Do not use the legacy
   `fetch` `next: { revalidate }` options or `export const revalidate`.
@@ -68,7 +79,11 @@ language on unprefixed visits.
 Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
 `src/app/[lang]/`.
 
-- `/` — game directory
+- `/` — home (game directory later); primary call to action: Join the Alpha
+- `/alpha` — alpha tester sign-up form
+- `/alpha/confirm` — confirms a sign-up with the emailed token (`noindex`, not in the sitemap)
+- `/privacy` — privacy notice; update its `lastUpdated` date and translations whenever data
+  handling changes
 - `/games/[slug]` — game detail: achievements, points, rarity
 - `/u/[username]` — user profile: completion %, recent unlocks
 - `/dev` — developer portal: register a recomp, manage achievements and keys
@@ -107,6 +122,8 @@ src/
 │   └── <feature>/  # feature components (game/, profile/, achievement/)
 ├── lib/
 │   ├── api/        # data access layer: server-only calls to the .NET API
+│   ├── clientIp.ts # visitor IP from proxy headers (server-only)
+│   ├── turnstile.ts # server-side human-verification check (server-only)
 │   ├── types/      # domain types shared across the app
 │   ├── cx.ts       # class-name join helper
 │   └── site.ts     # site name, URLs, public contact address (never hard-code these)

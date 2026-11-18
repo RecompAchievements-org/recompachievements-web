@@ -4,7 +4,8 @@
   },
   "common": {
     "skipToContent": "Skip to content",
-    "opensInNewTab": "(opens in a new tab)"
+    "opensInNewTab": "(opens in a new tab)",
+    "alphaOpen": "Alpha Sign-Up Open · Limited Spots!"
   },
   "header": {
     "homeLabel": "{siteName} home",
@@ -26,7 +27,6 @@
   },
   "home": {
     "metaTitle": "Achievements for Native Recomps",
-    "badge": "Early development",
     "title": "Achievements for {highlight}.",
     "titleHighlight": "Native Recomps",
     "intro": "Track your progress in static recompilations and PC ports that run outside emulators. Recomp developers trigger achievements straight from native code; you collect points, chase rare unlocks, and show off your profile.",
@@ -61,7 +61,6 @@
   "alpha": {
     "metaTitle": "Join the Alpha",
     "metaDescription": "Sign up to test RecompAchievements before launch: earn achievements in native recomps and help shape the platform.",
-    "badge": "Alpha sign-up",
     "title": "Join the Alpha",
     "intro": "Be one of the first players to earn achievements in native recomps. Alpha testers try new features before anyone else and help shape the platform.",
     "testersHeading": "What Testers Do",
@@ -101,7 +100,8 @@
     },
     "success": {
       "title": "Check Your Inbox",
-      "body": "We sent a confirmation link to {email}. Open it within 7 days to secure your spot.",
+      "sentTo": "We sent a confirmation link to:",
+      "expiry": "Open it within 7 days to secure your spot.",
       "spam": "Can’t find it? Check your spam folder, or sign up again in 10 minutes to get a new link."
     }
   },

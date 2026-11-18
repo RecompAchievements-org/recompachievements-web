@@ -53,11 +53,12 @@ export function AlphaSignupForm({ locale, privacyHref, challengeSiteKey, message
     return (
       <Card role="status" className="flex flex-col gap-3 border-success/40">
         <h2 className="font-display text-2xl font-bold">{messages.success.title}</h2>
-        <p>
-          {rich(messages.success.body, {
-            email: <strong className="break-all text-foreground">{state.email}</strong>,
-          })}
-        </p>
+        <div className="flex flex-col gap-1">
+          <p>{messages.success.sentTo}</p>
+          {/** The address gets its own line and only wraps when it can't fit (very long addresses). **/}
+          <p className="font-semibold wrap-anywhere text-foreground">{state.email}</p>
+          <p>{messages.success.expiry}</p>
+        </div>
         <p className="text-sm text-muted">{messages.success.spam}</p>
       </Card>
     );

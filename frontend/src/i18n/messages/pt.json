@@ -4,7 +4,8 @@
   },
   "common": {
     "skipToContent": "Pular para o conteúdo",
-    "opensInNewTab": "(abre em uma nova aba)"
+    "opensInNewTab": "(abre em uma nova aba)",
+    "alphaOpen": "Inscrições do alfa abertas · Vagas limitadas!"
   },
   "header": {
     "homeLabel": "Página inicial do {siteName}",
@@ -26,7 +27,6 @@
   },
   "home": {
     "metaTitle": "Conquistas para recomps nativos",
-    "badge": "Em desenvolvimento",
     "title": "Conquistas para {highlight}.",
     "titleHighlight": "recomps nativos",
     "intro": "Acompanhe seu progresso em recompilações estáticas e ports para PC que rodam sem emuladores. Os desenvolvedores de recomps ativam as conquistas direto do código nativo; você acumula pontos, caça as conquistas mais raras e exibe seu perfil.",
@@ -61,7 +61,6 @@
   "alpha": {
     "metaTitle": "Participe do alfa",
     "metaDescription": "Inscreva-se para testar o RecompAchievements antes do lançamento: ganhe conquistas em recomps nativos e ajude a moldar a plataforma.",
-    "badge": "Inscrição no alfa",
     "title": "Participe do alfa",
     "intro": "Seja um dos primeiros a ganhar conquistas em recomps nativos. Quem testa o alfa experimenta as novidades antes de todo mundo e ajuda a moldar a plataforma.",
     "testersHeading": "O que os testers fazem",
@@ -101,7 +100,8 @@
     },
     "success": {
       "title": "Confira sua caixa de entrada",
-      "body": "Enviamos um link de confirmação para {email}. Abra-o em até 7 dias para garantir sua vaga.",
+      "sentTo": "Enviamos um link de confirmação para:",
+      "expiry": "Abra-o em até 7 dias para garantir sua vaga.",
       "spam": "Não encontrou? Confira a pasta de spam ou inscreva-se de novo daqui a 10 minutos para receber um link novo."
     }
   },

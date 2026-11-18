@@ -45,7 +45,9 @@ export interface GameDetail {
   originalPlatform: string;
   platforms: string[];
   summary: string;
+  originalGame: string;
   repoUrl: string | null;
+  license: string | null;
   latestVersion: string | null;
   releasedAt: string | null;
   heroImage: GameImage | null;

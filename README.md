@@ -6,7 +6,8 @@
 
 RecompAchievements brings RetroAchievements-style progression, leaderboards, and social profiles to
 native PC ports built via **static recompilation** — such as N64, GameCube, PS2, PS3, and PS4
-recomp projects (e.g. *Zelda 64: Recompiled*, *BBPort*) — that run outside traditional emulators.
+recomp projects (e.g. *Zelda 64: Recompiled*, *bbport* for Bloodborne) — that run outside
+traditional emulators.
 
 > 🚧 **Status: alpha (v0.1).** The website and the API are live, with the alpha tester sign-up
 > open and a game directory of preview achievement sets. Accounts and the C/C++ SDK come next.
@@ -37,12 +38,28 @@ routine runs) instead of watching memory addresses.
 5. **Open and trustworthy.** Fully open-source platform; security comes from cryptographic signing,
    not obscurity.
 
+## Launch target: bbport (Bloodborne 🩸)
+
+[bbport](https://github.com/deadinside28/bloodborne_pc), the native Linux and Windows port of
+*Bloodborne*, is the **first recomp the platform will support** and the goal for its public
+launch. It is the SDK's reference integration and the end-to-end test of the whole system: signed
+unlocks, hardcore rules, presence, and scoring all have to work in it first. If needed, the
+integration will be contributed to bbport by this project, in agreement with its maintainers.
+
+What that means for design decisions:
+
+- The SDK must build into a C++ project on Windows, Linux, and the Steam Deck.
+- bbport is licensed under GPL-2.0, so the SDK must stay usable from GPL-2.0 code (its MIT option
+  allows that; Apache-2.0 alone would not).
+- bbport has online co-op, so co-op achievements and sessions with other players are first-class
+  cases, not edge cases.
+
 ## Ecosystem
 
 | Repository | Visibility | Purpose | License |
 |---|---|---|---|
 | **recompachievements-web** (this repo) | Public | Website, REST API, database migrations | AGPL-3.0 |
-| `librecompachievements` | Public (planned) | C/C++ client SDK embedded in recomps | MIT / Apache-2.0 |
+| `librecompachievements` | Public (planned) | C/C++ client SDK embedded in recomps | MIT / Apache-2.0 (MIT keeps it usable from GPL-2.0 recomps such as bbport) |
 | `api-docs` | Public (planned) | OpenAPI specs for bots, overlays, Steam Deck plugins | — |
 | `infra` | Private | Deployment configuration | — |
 
@@ -173,9 +190,14 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Backend foundations: .NET 10 API, PostgreSQL, integration tests, container image, and CI
 - [x] Alpha tester sign-up: the first end-to-end feature, with the API deployed
 - [x] Game directory and game pages backed by the API, with preview achievement sets
-- [ ] Authentication, player profiles, and developer portal
+- [ ] Authentication, player profiles, game comments (the game page has a not-saved preview), and
+  developer portal. The portal **replaces the JSON game catalog**: games and achievements are then
+  edited only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK
-- [ ] Reference integration with an open-source recomp
+- [ ] Launch integration: bbport (Bloodborne), the first supported recomp and the SDK's reference
+  integration (see [Launch target](#launch-target-bbport-bloodborne-)). **Requires the catalog to be
+  replaced first:** its import deletes achievements removed from the files, which would erase
+  players' unlocks once real unlocks exist.
 - [ ] Leaderboards, live presence, and the public API docs
 
 ## Legal & content policy

@@ -10,9 +10,11 @@ public sealed class Game
     public required string Slug { get; init; }
     public required string Title { get; set; }
     public required string OriginalPlatform { get; set; }
+    public required string OriginalGame { get; set; }
     public required string[] Platforms { get; set; }
     public required LocalizedText Summary { get; set; }
     public string? RepoUrl { get; set; }
+    public string? License { get; set; }
     public int DisplayOrder { get; set; }
     public bool Featured { get; set; }
     public string? LatestVersion { get; set; }
@@ -99,6 +101,8 @@ internal sealed class GameConfiguration : IEntityTypeConfiguration<Game>
         builder.Property(game => game.Slug).HasMaxLength(64);
         builder.Property(game => game.Title).HasMaxLength(120);
         builder.Property(game => game.OriginalPlatform).HasMaxLength(16);
+        builder.Property(game => game.OriginalGame).HasMaxLength(120);
+        builder.Property(game => game.License).HasMaxLength(32);
         builder.Property(game => game.RepoUrl).HasMaxLength(300);
         builder.Property(game => game.LatestVersion).HasMaxLength(32);
         builder.ComplexProperty(game => game.Summary, text => text.ToJson());

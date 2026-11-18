@@ -250,6 +250,17 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("character varying(32)")
                         .HasColumnName("latest_version");
 
+                    b.Property<string>("License")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("license");
+
+                    b.Property<string>("OriginalGame")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
+                        .HasColumnName("original_game");
+
                     b.Property<string>("OriginalPlatform")
                         .IsRequired()
                         .HasMaxLength(16)

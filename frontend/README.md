@@ -74,8 +74,9 @@ src/
 ├── components/
 │   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
 │   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
-│   │                         # GeneratedArt, ImageCredit, AchievementRow, PreviewNotice
-│   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher
+│   │                         # GeneratedArt, ImageCredit, GameDetailsCard, ConsolePill, repoLinks,
+│   │                         # AchievementRow, PreviewNotice, CommentsPreview (client, not saved)
+│   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks
 │   ├── seo/                  # JsonLd (schema.org structured data)
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink
 ├── i18n/
@@ -90,7 +91,7 @@ src/
 │   ├── turnstile.ts          # Server-side verification of the human-verification challenge
 │   ├── socialImage.tsx       # Shared size, colors, font, and logo for social preview images
 │   ├── cx.ts                 # Class-name join helper
-│   └── site.ts               # Site name, URLs, and public contact address
+│   └── site.ts               # Site name, URLs, public contact address, and social links
 └── proxy.ts                  # Locale routing and detection
 ```
 
@@ -129,15 +130,20 @@ page with `noindex` (a streamed page can't change its status code).
 
 ## Featured slider and game images
 
-The home page's slider (`FeaturedSlider`) shows the catalog's `featured` games, newest release
-first, with a **New Release** badge for releases in the last 30 days. Every slide is rendered on
+The home page's slider (`FeaturedSlider`) shows the catalog's `featured` games in the catalog's
+display order (curated, so the launch target stays first), with a **New Release**
+badge for releases in the last 30 days. Every slide is rendered on
 the server; `SliderControls` only switches between them (auto-advance every 7 seconds, pause button,
 arrow keys, swipe, and no movement with reduced motion).
 
-Games show generated art (`GeneratedArt`) unless the catalog gives them a `heroImage`. To add one:
-get the recomp project's permission (or take your own gameplay screenshot), save it as WebP in
-`public/games/<slug>/`, and add `heroImage` with its `file`, a `credit`, and optionally a
-`sourceUrl` to the game's catalog file in the backend. The credit is shown wherever the image is.
+Art uses `GeneratedArt` in four shapes: 16:9 on game cards, a **3:4 portrait cover** in the game
+page header, a square thumbnail in the details card, and the slider's wide panel. The only place an
+approved image appears is the slider (a landscape `heroImage`, with its credit); portrait cover
+images would need their own catalog field, added when the first one is approved.
+
+To add a slider image: get the recomp project's permission (or take your own gameplay screenshot),
+save it as landscape WebP in `public/games/<slug>/`, and add `heroImage` with its `file`, a
+`credit`, and optionally a `sourceUrl` to the game's catalog file in the backend.
 
 ## Deployment
 
@@ -206,6 +212,7 @@ color passes WCAG AA (4.5:1) on all three surface levels.
 | `gold` / `on-gold` | `#f5c04a` / `#0a0c14` | Points and achievement highlights |
 | `success` · `danger` · `info` | `#3ddc97` · `#ff6b7a` · `#5cc8ff` | Status |
 | `rarity-common` … `rarity-legendary` | `#a8b0c4` · `#4ade80` · `#60a5fa` · `#c084fc` · `#fbbf24` | Rarity tiers |
+| `console-playstation` · `console-nintendo` · `console-xbox` | `#5b9dff` · `#ff6b78` · `#5fcf5f` | Original console pills on game pages (`ConsolePill`) |
 
 Use them as Tailwind utilities (`bg-surface`, `text-muted`, `border-gold/40`, `fill-accent`) and
 the `font-display` / `font-mono` font utilities.

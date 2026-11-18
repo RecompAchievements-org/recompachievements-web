@@ -46,6 +46,11 @@
   --color-rarity-epic: #c084fc;
   --color-rarity-legendary: #fbbf24;
 
+  /* Console families (original platform pills); text passes AA on a 15% tint of any surface */
+  --color-console-playstation: #5b9dff;
+  --color-console-nintendo: #ff6b78;
+  --color-console-xbox: #5fcf5f;
+
   /* Typography (variables are set by next/font in the root layout) */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;

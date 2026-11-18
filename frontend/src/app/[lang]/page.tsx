@@ -77,6 +77,7 @@ export default async function HomePage() {
             {home.browseAll} <span aria-hidden="true">→</span>
           </Link>
         </div>
+        {/** The home page shows six games; the full list lives on /games, linked above. **/}
         <Suspense fallback={<GameGridSkeleton label={games.loading} />}>
           <GameGrid limit={6} unavailable={home.gamesUnavailable} />
         </Suspense>

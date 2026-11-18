@@ -25,7 +25,10 @@
     "license": "Open source under the {license}.",
     "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games or ROMs, uses game images only with the recomp project’s permission or from its own captures, and is not affiliated with any game publisher, platform holder, or RetroAchievements.",
     "privacy": "Privacy",
-    "contentPolicy": "Content policy"
+    "contentPolicy": "Content policy",
+    "tagline": "Achievements for recomps and native PC ports, tracked by the community.",
+    "social": "Follow us",
+    "socialLink": "{siteName} on {network}"
   },
   "home": {
     "metaTitle": "Achievements for Native Recomps",
@@ -81,7 +84,31 @@
     "loading": "Loading achievements…",
     "unavailable": "This game couldn’t be loaded right now. Please try again in a moment.",
     "version": "Version {version}",
-    "released": "Released {date}"
+    "released": "Released {date}",
+    "recompCard": "Recomp Details",
+    "download": "Download Latest Release",
+    "allReleases": "All Releases",
+    "reportIssue": "Report an Issue",
+    "youBring": "You bring:",
+    "youBringText": "your own copy of {game} ({console}). No game files are included.",
+    "latestVersion": "Latest version",
+    "releasedLabel": "Released",
+    "license": "License",
+    "noLicense": "Not specified",
+    "achievements": "Achievements"
+  },
+  "comments": {
+    "heading": "Comments",
+    "intro": "Tips, bugs, and setup notes from players of this recomp.",
+    "accountsNotice": "Commenting will need an account. Accounts are coming soon; until then, what you post here stays on this page only and isn’t saved.",
+    "label": "Your comment",
+    "placeholder": "Share a tip, a bug, or your setup…",
+    "post": "Post Comment",
+    "empty": "No comments yet.",
+    "you": "You",
+    "justNow": "Just now",
+    "notSaved": "Not saved",
+    "count": "{count} / {max}"
   },
   "slider": {
     "heading": "Featured Recomps",

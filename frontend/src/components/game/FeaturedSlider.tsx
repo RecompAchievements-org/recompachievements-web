@@ -10,14 +10,19 @@ import { ImageCredit } from "./ImageCredit";
 import { consoleName } from "./names";
 import { SliderControls } from "./SliderControls";
 
+// The slider keeps to five recomps; the home grid shows six, and /games lists every game.
 const maxSlides = 5;
 const newReleaseDays = 30;
 
-// Featured games, newest release first; if none are featured, the newest games instead.
+/** Featured games in the catalog's display order (the API already sorts by it), so the order is
+ *  curated: the launch target stays first even when newer games are featured. If none are
+ *  featured, the newest releases fill the slider instead.
+**/
 function pickSlides(games: GameSummary[]) {
-  const byRelease = (a: GameSummary, b: GameSummary) => (b.releasedAt ?? "").localeCompare(a.releasedAt ?? "");
   const featured = games.filter((game) => game.featured);
-  return (featured.length > 0 ? featured : games).toSorted(byRelease).slice(0, maxSlides);
+  if (featured.length > 0) return featured.slice(0, maxSlides);
+  const byRelease = (a: GameSummary, b: GameSummary) => (b.releasedAt ?? "").localeCompare(a.releasedAt ?? "");
+  return games.toSorted(byRelease).slice(0, maxSlides);
 }
 
 const releaseDate = (isoDate: string) => new Date(`${isoDate}T00:00:00Z`);
@@ -77,7 +82,6 @@ export async function FeaturedSlider() {
         <div className="relative order-1 flex flex-col lg:order-2">
           <GameArt
             game={game}
-            variant="wide"
             sizes="(min-width: 1024px) 640px, 100vw"
             priority={index === 0}
             className="min-h-56 flex-1 sm:min-h-72 lg:min-h-96"

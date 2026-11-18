@@ -28,7 +28,7 @@ public sealed class CatalogImportTests : IAsyncLifetime
         new(key, new LocalizedText($"{key} title"), new LocalizedText($"{key} description"), points, tier, kind, null);
 
     private static CatalogGame TestGame(string slug, params CatalogAchievement[] achievements) =>
-        new(slug, $"Game {slug}", "n64", ["windows"], null, 1, new LocalizedText("Summary"),
+        new(slug, $"Game {slug}", "n64", $"Original {slug}", ["windows"], null, 1, new LocalizedText("Summary"),
             new CatalogSet([Achievement("FINISH", kind: "win_condition"), .. achievements]));
 
     private async Task Import(params CatalogGame[] games)
@@ -116,6 +116,8 @@ public sealed class CatalogImportTests : IAsyncLifetime
         {
             ReleasedAt = Today.AddDays(1),
             LatestVersion = "",
+            OriginalGame = " ",
+            License = "",
             HeroImage = new GameImage { File = "Hero Shot.PNG", Credit = new LocalizedText(""), SourceUrl = "http://example.com" },
         };
 
@@ -126,6 +128,8 @@ public sealed class CatalogImportTests : IAsyncLifetime
         Assert.Contains(errors, error => error.Contains("heroImage.file", StringComparison.Ordinal));
         Assert.Contains(errors, error => error.Contains("heroImage.sourceUrl", StringComparison.Ordinal));
         Assert.Contains(errors, error => error.Contains("heroImage.credit needs English", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Contains("originalGame", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Contains("license must be", StringComparison.Ordinal));
     }
 
     [Fact]

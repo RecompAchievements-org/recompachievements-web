@@ -51,6 +51,7 @@ internal static partial class CatalogImporter
                     Slug = entry.Slug,
                     Title = entry.Title,
                     OriginalPlatform = entry.OriginalPlatform,
+                    OriginalGame = entry.OriginalGame,
                     Platforms = entry.Platforms,
                     Summary = entry.Summary,
                     CreatedAt = now,
@@ -60,9 +61,11 @@ internal static partial class CatalogImporter
 
             game.Title = entry.Title;
             game.OriginalPlatform = entry.OriginalPlatform;
+            game.OriginalGame = entry.OriginalGame;
             game.Platforms = [.. entry.Platforms];
             game.Summary = entry.Summary;
             game.RepoUrl = entry.RepoUrl;
+            game.License = entry.License;
             game.DisplayOrder = entry.DisplayOrder;
             game.Featured = entry.Featured;
             game.LatestVersion = entry.LatestVersion;

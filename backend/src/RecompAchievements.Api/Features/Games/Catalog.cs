@@ -12,6 +12,7 @@ public sealed record CatalogGame(
     string Slug,
     string Title,
     string OriginalPlatform,
+    string OriginalGame,
     string[] Platforms,
     string? RepoUrl,
     int DisplayOrder,
@@ -20,7 +21,8 @@ public sealed record CatalogGame(
     bool Featured = false,
     string? LatestVersion = null,
     DateOnly? ReleasedAt = null,
-    GameImage? HeroImage = null);
+    GameImage? HeroImage = null,
+    string? License = null);
 
 public sealed record CatalogSet(CatalogAchievement[] Achievements);
 
@@ -87,6 +89,16 @@ internal static partial class Catalog
             if (string.IsNullOrWhiteSpace(game.Title) || game.Title.Length > 120)
             {
                 errors.Add($"{at}: title is required (max 120 characters).");
+            }
+
+            if (string.IsNullOrWhiteSpace(game.OriginalGame) || game.OriginalGame.Length > 120)
+            {
+                errors.Add($"{at}: originalGame (the game players need their own copy of) is required, max 120 characters.");
+            }
+
+            if (game.License is { Length: 0 or > 32 })
+            {
+                errors.Add($"{at}: license must be an SPDX id of 1–32 characters (leave it out when the project has none).");
             }
 
             if (!GameVocabulary.OriginalPlatforms.Contains(game.OriginalPlatform))

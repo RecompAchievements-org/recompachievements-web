@@ -108,7 +108,7 @@ console, so you can copy the confirmation link from there.
 | `POST /api/v1/alpha-signups` | Sign up for the alpha; stores a pending sign-up and emails a confirmation link. Always `202` with the same body, so it can't reveal who signed up. Rate limited |
 | `POST /api/v1/alpha-signups/confirm` | Confirms with the emailed token: `200` (also if already confirmed), `410` expired (links last 7 days), `404` unknown |
 | `GET /api/v1/games?lang=en` | Games in display order, with their core set's status, achievement count, total points, featured flag, latest version, release date, and image |
-| `GET /api/v1/games/{slug}?lang=en` | One game with its core-set achievements in order; `404` if unknown |
+| `GET /api/v1/games/{slug}?lang=en` | One game (including original game, repository, and license) with its core-set achievements in order; `404` if unknown |
 
 Pending sign-ups whose link expired are deleted automatically. `lang` is `en`, `es`, or `pt`
 (default `en`); text without a translation falls back to English.
@@ -134,9 +134,12 @@ achievements are matched by `slug` and `apiKeyName` (ids stay stable), new ones 
 ones removed from the catalog are deleted. An invalid catalog stops startup with a list of every
 problem.
 
-Optional fields per game: `featured` (shown in the homepage slider), `latestVersion` and
+Every game names its `originalGame` (the game players need their own copy of, shown on its page).
+Optional fields: `license` (the project's SPDX id; leave it out when the repository has none),
+`featured` (shown in the homepage slider), `latestVersion` and
 `releasedAt` (the recomp's latest release; the date can't be in the future), and `heroImage`
-(`file`, `credit` in en/es/pt, optional `sourceUrl`) for an approved image.
+(`file`, `credit` in en/es/pt, optional `sourceUrl`) for an approved landscape image, shown in
+the homepage slider.
 
 **Adding or editing a game:**
 

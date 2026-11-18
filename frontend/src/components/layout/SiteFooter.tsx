@@ -4,7 +4,8 @@ import { localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
-import { LogoMark } from "./Logo";
+import { Logo } from "./Logo";
+import { SocialLinks } from "./SocialLinks";
 
 const linkClasses = "text-muted transition-colors hover:text-foreground";
 
@@ -15,14 +16,17 @@ export async function SiteFooter() {
   return (
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 text-sm sm:px-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2 text-muted">
-            <LogoMark className="size-6" />
-            <span translate="no">{siteConfig.name}</span>
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+          <div className="flex max-w-sm flex-col gap-4">
+            <Link href={localizePath(locale, "/")} className="self-start rounded-md">
+              <Logo />
+            </Link>
+            <p className="leading-relaxed text-muted">{footer.tagline}</p>
+            <SocialLinks label={footer.social} linkLabel={footer.socialLink} />
           </div>
 
           <nav aria-label={footer.nav}>
-            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+            <ul className="flex flex-wrap gap-x-5 gap-y-2 md:pt-2">
               <li>
                 <ExternalLink href={siteConfig.repoUrl} className={linkClasses}>
                   {footer.sourceCode}

@@ -13,7 +13,7 @@ using RecompAchievements.Api.Data;
 namespace RecompAchievements.Api.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261118215522_AddGames")]
+    [Migration("20261118224055_AddGames")]
     partial class AddGames
     {
         /// <inheritdoc />
@@ -252,6 +252,17 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)")
                         .HasColumnName("latest_version");
+
+                    b.Property<string>("License")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("license");
+
+                    b.Property<string>("OriginalGame")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
+                        .HasColumnName("original_game");
 
                     b.Property<string>("OriginalPlatform")
                         .IsRequired()

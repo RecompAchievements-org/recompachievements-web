@@ -92,7 +92,11 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/content-policy` — what the site hosts, image sources, removal requests; keep it in step with the
   image guardrail
 - `/games` — game directory (`GameGrid`)
-- `/games/[slug]` — game detail: achievements, points, rarity, preview notice
+- `/games/[slug]` — game detail: info, preview notice, and achievements on the left; a sticky
+  `GameDetailsCard` on the right (download and repository links, what the player must own,
+  platforms, version, license); on phones the card follows the header. Below both, a Comments
+  section (`CommentsPreview`) that only works in the browser until accounts exist: posted text
+  stays in page state, is labeled "not saved", and must never be sent to the API before then
 - `/u/[username]` — user profile: completion %, recent unlocks
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
@@ -130,7 +134,7 @@ src/
 │   ├── robots.ts   # /robots.txt
 │   └── sitemap.ts  # /sitemap.xml; list every public page in publicPaths
 ├── components/
-│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher)
+│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks)
 │   ├── seo/        # JsonLd for schema.org structured data
 │   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink)
 │   └── <feature>/  # feature components (alpha/, game/; later profile/)
@@ -140,7 +144,7 @@ src/
 │   ├── turnstile.ts # server-side human-verification check (server-only)
 │   ├── socialImage.tsx # shared pieces of the opengraph-image routes
 │   ├── cx.ts       # class-name join helper
-│   └── site.ts     # site name, URLs, public contact address (never hard-code these)
+│   └── site.ts     # site name, URLs, contact address, social links (never hard-code these)
 ├── i18n/
 │   ├── config.ts   # locales, localizePath, localeAlternates (safe for proxy, server, client)
 │   ├── server.ts   # getLocale, getMessages (pages); loadMessages(locale) (route handlers only)
@@ -174,7 +178,8 @@ src/
 - Anything that moves on its own (the featured slider) has a pause button, pauses on hover and
   keyboard focus, and doesn't move at all when the visitor prefers reduced motion (`globals.css`
   shortens every animation then, so never drive timing from an animation in that mode).
-- Mobile-first; every page must work at 360px width.
+- Mobile first, per RULE-007: base styles for a 360px phone, breakpoints add desktop layouts, no
+  horizontal scrolling at any width, and every visual change is checked at 360px and on desktop.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
 - Images use `next/image`. Game images follow the root guardrail: only screenshots or banners a
   recomp project published and allowed us to use, or our own gameplay screenshots, stored in

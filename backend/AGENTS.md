@@ -1,7 +1,7 @@
 # AGENTS.md — backend
 
 Rules for AI agents working in `backend/`. They add to the root [`AGENTS.md`](../AGENTS.md), whose
-numbered rules (RULE-001 to RULE-006) and guardrails always apply. Setup and commands for people
+numbered rules (RULE-001 to RULE-007) and guardrails always apply. Setup and commands for people
 are in [`README.md`](README.md).
 
 Stack: .NET 10 (LTS) · ASP.NET Core Minimal APIs · EF Core 10 · PostgreSQL 17 (Npgsql) · xUnit v3 +
@@ -83,6 +83,8 @@ Testcontainers.
   is safe only while every set is a preview with no unlocks; once unlocks exist, removing an
   achievement needs its own rule (see the spec's open questions).
 - When the developer portal lands, it replaces the catalog and the importer is deleted (RULE-005).
+  That must happen before the first real unlock is accepted (the bbport launch integration), and
+  the catalog and the portal must never both edit games (README roadmap).
 
 ## Tests
 

@@ -25,7 +25,10 @@
     "license": "Código abierto bajo la licencia {license}.",
     "disclaimer": "RecompAchievements solo registra definiciones de logros y el progreso de los jugadores. No aloja juegos ni ROMs, usa imágenes de juegos solo con permiso del proyecto del recomp o de capturas propias, y no está afiliado a ninguna editora de videojuegos, fabricante de plataformas ni a RetroAchievements.",
     "privacy": "Privacidad",
-    "contentPolicy": "Política de contenido"
+    "contentPolicy": "Política de contenido",
+    "tagline": "Logros para recomps y ports nativos de PC, registrados por la comunidad.",
+    "social": "Síguenos",
+    "socialLink": "{siteName} en {network}"
   },
   "home": {
     "metaTitle": "Logros para recomps nativos",
@@ -81,7 +84,31 @@
     "loading": "Cargando logros…",
     "unavailable": "No se pudo cargar este juego. Inténtalo de nuevo en un momento.",
     "version": "Versión {version}",
-    "released": "Publicada el {date}"
+    "released": "Publicada el {date}",
+    "recompCard": "Detalles del recomp",
+    "download": "Descargar la última versión",
+    "allReleases": "Todas las versiones",
+    "reportIssue": "Reportar un problema",
+    "youBring": "Tú aportas:",
+    "youBringText": "tu propia copia de {game} ({console}). No se incluyen archivos del juego.",
+    "latestVersion": "Última versión",
+    "releasedLabel": "Publicada",
+    "license": "Licencia",
+    "noLicense": "No indicada",
+    "achievements": "Logros"
+  },
+  "comments": {
+    "heading": "Comentarios",
+    "intro": "Consejos, errores y notas de configuración de quienes juegan este recomp.",
+    "accountsNotice": "Para comentar hará falta una cuenta. Las cuentas llegarán pronto; mientras tanto, lo que publiques aquí solo queda en esta página y no se guarda.",
+    "label": "Tu comentario",
+    "placeholder": "Comparte un consejo, un error o tu configuración…",
+    "post": "Publicar comentario",
+    "empty": "Todavía no hay comentarios.",
+    "you": "Tú",
+    "justNow": "Ahora mismo",
+    "notSaved": "No guardado",
+    "count": "{count} / {max}"
   },
   "slider": {
     "heading": "Recomps destacados",

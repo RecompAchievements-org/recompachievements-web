@@ -231,7 +231,7 @@ the rest, and fields marked *later*, arrive with their features.
 
 | Table | Key fields |
 |---|---|
-| `games` (*built*) | `slug`, `title`, `original_platform`, `platforms`, `summary` (localized), `repo_url`, `display_order`, `featured`, `latest_version`, `released_at`, `hero_image` (approved image and credit); *later:* `dev_user_id`, `hmac_secret` (encrypted) |
+| `games` (*built*) | `slug`, `title`, `original_platform`, `original_game`, `license`, `platforms`, `summary` (localized), `repo_url`, `display_order`, `featured`, `latest_version`, `released_at`, `hero_image` (approved image and credit); *later:* `dev_user_id`, `hmac_secret` (encrypted) |
 | `achievement_sets` (*built*) | `game_id`, `kind` (`core` / `subset`), `status` (`preview`; *later:* draft, in review, published); *later:* `subset_type` (`dlc`, `mod`, `randomizer`, `challenge`), `requirements` |
 | `achievements` (*built*) | `set_id`, `api_key_name`, `title` and `description` (localized), `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progression_step` (optional), `display_order`; *later:* `icon_url` |
 | `game_builds` | `game_id`, `platform`, `sha256`, `label` (verified builds) |
@@ -247,7 +247,8 @@ the rest, and fields marked *later*, arrive with their features.
 ## SDK contract (summary)
 
 The `librecompachievements` SDK will expose these operations; exact signatures are defined with the
-SDK.
+SDK. Its first integration, and the launch test of this whole design, is **bbport** (Bloodborne),
+which also has online co-op.
 
 | Operation | Purpose |
 |---|---|
@@ -273,5 +274,8 @@ SDK.
   review), are existing unlocks revalued immediately or at the next nightly recalculation?
 - **Moderator resets and badges:** when a reset removes an unlock that a Gold, Platinum, or Mastered
   badge depended on, is the badge revoked or downgraded (for example Gold → Silver)?
+- **Collections:** a recomp that bundles several games (e.g. the Uncharted collection port) is one
+  game with one core set for now, whose win condition is finishing every game. Should each game in
+  a collection get its own set, with its own completion badges?
 - **Removed achievements:** if an achievement is removed from a set, do players keep its points, and
   are completion badges recalculated?

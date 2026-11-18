@@ -17,8 +17,9 @@ function gradientFor(slug: string) {
 
 /** Generated art for games without an approved image: a gradient in the site's colors with the
  *  game's title and original console. Decorative, because the title is always shown as text next
- *  to it. "wide" is the larger version used in the featured slider, where the title is already
- *  shown beside the art, so it shows only the console and the star motif.
+ *  to it. "card" is 16:9 (game cards), "portrait" is a 3:4 cover (game page header), "wide" fills
+ *  the featured slider, and "thumb" is the details card's square. "wide" and "thumb" leave out the
+ *  title, which is already shown beside them.
 **/
 export function GeneratedArt({
   slug,
@@ -30,16 +31,34 @@ export function GeneratedArt({
   slug: string;
   title: string;
   originalPlatform: string;
-  variant?: "card" | "wide";
+  variant?: "card" | "portrait" | "wide" | "thumb";
   className?: string;
 }) {
+  if (variant === "thumb") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cx(
+          "grid aspect-square place-items-center overflow-hidden rounded-lg border border-border bg-linear-to-br font-display text-3xl text-foreground/40",
+          gradientFor(slug),
+          className,
+        )}
+      >
+        ★
+      </div>
+    );
+  }
+
   const wide = variant === "wide";
+  const portrait = variant === "portrait";
   return (
     <div
       aria-hidden="true"
       className={cx(
         "relative flex flex-col justify-between overflow-hidden bg-linear-to-br",
-        wide ? "p-6 sm:p-10" : "aspect-video rounded-lg border border-border p-4",
+        wide && "p-6 sm:p-10",
+        variant === "card" && "aspect-video rounded-lg border border-border p-4",
+        portrait && "aspect-[3/4] rounded-xl border border-border p-4 sm:p-5",
         gradientFor(slug),
         className,
       )}
@@ -48,14 +67,22 @@ export function GeneratedArt({
         {consoleName(originalPlatform)}
       </span>
       {!wide && (
-        <span translate="no" className="relative font-display text-2xl leading-tight font-bold text-balance text-foreground">
+        <span
+          translate="no"
+          className={cx(
+            "relative font-display leading-tight font-bold text-balance text-foreground",
+            portrait ? "text-xl wrap-anywhere sm:text-2xl" : "text-2xl",
+          )}
+        >
           {title}
         </span>
       )}
       <span
         className={cx(
           "pointer-events-none absolute font-display",
-          wide ? "-right-8 -bottom-20 text-[18rem] leading-none text-foreground/10" : "-right-4 -bottom-6 text-8xl text-foreground/5",
+          wide && "-right-8 -bottom-20 text-[18rem] leading-none text-foreground/10",
+          portrait && "-right-10 -bottom-10 text-[12rem] leading-none text-foreground/5",
+          variant === "card" && "-right-4 -bottom-6 text-8xl text-foreground/5",
         )}
       >
         ★

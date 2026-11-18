@@ -40,6 +40,8 @@ public sealed class GameEndpointsTests(ApiFactory factory) : IClassFixture<ApiFa
 
         Assert.NotNull(game);
         Assert.Equal(expected.Title, game.Title);
+        Assert.Equal(expected.OriginalGame, game.OriginalGame);
+        Assert.Equal(expected.License, game.License);
         Assert.Equal(expected.CoreSet.Achievements.Select(a => a.ApiKeyName), game.CoreSet.Achievements.Select(a => a.ApiKeyName));
         Assert.Equal(expected.CoreSet.Achievements[0].Title.En, game.CoreSet.Achievements[0].Title);
     }

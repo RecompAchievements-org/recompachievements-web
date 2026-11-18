@@ -3,14 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AchievementRow } from "@/components/game/AchievementRow";
-import { GameArt } from "@/components/game/GameArt";
-import { ImageCredit } from "@/components/game/ImageCredit";
-import { consoleName, platformName } from "@/components/game/names";
+import { CommentsPreview } from "@/components/game/CommentsPreview";
+import { ConsolePill } from "@/components/game/ConsolePill";
+import { GameDetailsCard } from "@/components/game/GameDetailsCard";
+import { GeneratedArt } from "@/components/game/GeneratedArt";
+import { consoleName } from "@/components/game/names";
 import { PreviewNotice } from "@/components/game/PreviewNotice";
-import { Badge } from "@/components/ui/Badge";
-import { ExternalLink } from "@/components/ui/ExternalLink";
 import { localeAlternates, localizePath } from "@/i18n/config";
-import { formatDate, interpolate, plural } from "@/i18n/format";
+import { interpolate, plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getGame, type GameDetail } from "@/lib/api/games";
 
@@ -56,7 +56,7 @@ export default async function GamePage({ params }: Props) {
 async function GameDetails({ params }: Pick<Props, "params">) {
   const { slug } = await params;
   const locale = await getLocale();
-  const { game: text, games, achievement, slider } = await getMessages();
+  const { game: text, games, achievement, comments } = await getMessages();
   const game = await loadGame(slug);
   if (game === null) notFound();
 
@@ -79,62 +79,58 @@ async function GameDetails({ params }: Pick<Props, "params">) {
   return (
     <>
       {backLink}
-      <header className="grid gap-8 md:grid-cols-[minmax(0,22rem)_1fr] md:items-start">
-        <div className="flex flex-col gap-2">
-          <GameArt game={game} sizes="(min-width: 768px) 352px, 100vw" priority />
-          {game.heroImage && <ImageCredit image={game.heroImage} prefix={slider.imageCredit} />}
+      {/** Desktop: game info and achievements on the left, the details card on the right (sticky).
+       *  Phones: the card comes right after the header, before the long achievement list.
+      **/}
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:grid-rows-[auto_1fr]">
+        <header className="grid gap-6 sm:grid-cols-[12rem_1fr] sm:items-center lg:col-start-1 lg:row-start-1">
+          {/** Portrait cover: generated for now. Approved images are landscape and appear in the
+           *  featured slider; portrait covers would need their own catalog field.
+          **/}
+          <GeneratedArt
+            slug={game.slug}
+            title={game.title}
+            originalPlatform={game.originalPlatform}
+            variant="portrait"
+            className="w-40 sm:w-full"
+          />
+          <div className="flex flex-col gap-4">
+            <ConsolePill
+              originalPlatform={game.originalPlatform}
+              label={interpolate(text.originalPlatform, { console: consoleName(game.originalPlatform) })}
+            />
+            <h1 translate="no" className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-5xl">
+              {game.title}
+            </h1>
+            <p className="text-lg leading-relaxed text-muted">{game.summary}</p>
+            <p className="font-mono text-sm text-subtle">
+              {plural(locale, coreSet.achievementCount, games.achievementCount)} ·{" "}
+              {plural(locale, coreSet.totalPoints, achievement.points)}
+            </p>
+          </div>
+        </header>
+
+        <div className="lg:sticky lg:top-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+          <GameDetailsCard game={game} />
         </div>
-        <div className="flex flex-col gap-4">
-          <h1 translate="no" className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-5xl">
-            {game.title}
-          </h1>
-          <p className="text-lg leading-relaxed text-muted">{game.summary}</p>
-          <p className="text-sm text-muted">
-            {[
-              interpolate(text.originalPlatform, { console: consoleName(game.originalPlatform) }),
-              game.latestVersion && interpolate(text.version, { version: game.latestVersion }),
-              game.releasedAt &&
-                interpolate(text.released, {
-                  date: formatDate(locale, new Date(`${game.releasedAt}T00:00:00Z`), { dateStyle: "long", timeZone: "UTC" }),
-                }),
-            ]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="text-muted">{text.platforms}</span>
-            <ul className="flex flex-wrap gap-2">
-              {game.platforms.map((platform) => (
-                <li key={platform}>
-                  <Badge className="tracking-normal! normal-case!">{platformName(platform)}</Badge>
-                </li>
+
+        <div className="flex min-w-0 flex-col gap-10 lg:col-start-1 lg:row-start-2">
+          {coreSet.status === "preview" && <PreviewNotice title={text.previewTitle} text={text.previewText} />}
+
+          <section aria-labelledby="achievements-heading" className="flex flex-col gap-4">
+            <h2 id="achievements-heading" className="font-display text-2xl font-semibold">
+              {text.achievementsHeading}
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {coreSet.achievements.map((item) => (
+                <AchievementRow key={item.apiKeyName} achievement={item} />
               ))}
             </ul>
-          </div>
-          <p className="font-mono text-sm text-subtle">
-            {plural(locale, coreSet.achievementCount, games.achievementCount)} ·{" "}
-            {plural(locale, coreSet.totalPoints, achievement.points)}
-          </p>
-          {game.repoUrl && (
-            <ExternalLink href={game.repoUrl} className="self-start text-sm text-accent underline hover:text-accent-strong">
-              {text.sourceCode}
-            </ExternalLink>
-          )}
+          </section>
         </div>
-      </header>
+      </div>
 
-      {coreSet.status === "preview" && <PreviewNotice title={text.previewTitle} text={text.previewText} />}
-
-      <section aria-labelledby="achievements-heading" className="flex flex-col gap-4">
-        <h2 id="achievements-heading" className="font-display text-2xl font-semibold">
-          {text.achievementsHeading}
-        </h2>
-        <ul className="flex flex-col gap-3">
-          {coreSet.achievements.map((item) => (
-            <AchievementRow key={item.apiKeyName} achievement={item} />
-          ))}
-        </ul>
-      </section>
+      <CommentsPreview labels={comments} />
     </>
   );
 }

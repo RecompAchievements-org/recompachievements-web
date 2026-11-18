@@ -383,11 +383,13 @@ openly that it uses them without crediting any one of them as an author.
   (`dlc`, `mod`, `randomizer`, `challenge`).
 - **Achievement** — belongs to a set; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
   SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
-- **Hardcore / softcore** — a session is hardcore only with a verified build, no assist toggles, and
-  allowlisted mods; only hardcore unlocks count toward the ranking.
+- **Hardcore / softcore** — an unlock is hardcore only when its session has had a verified build,
+  no assist toggles, and allowlisted mods; only hardcore unlocks count toward the ranking.
 - **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be
   upgraded); records `build_hash` (SHA-256 of the executable).
-- **Session** — a play session started by the SDK; powers live presence and minimum-playtime checks.
+- **Session** — one player playing one game, started by the SDK; records the build, toggles, and
+  mods that decide whether each unlock is hardcore, and powers live presence and minimum-playtime
+  checks.
 - **Global score** — Σ over hardcore unlocks of `points × rarity multiplier + Elo bonus`.
 - **Elo bonus** — `base value × (1 − share)`, where share = hardcore players with the achievement ÷
   hardcore players with at least one unlock in its set; recalculated nightly.

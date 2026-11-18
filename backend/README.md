@@ -61,7 +61,7 @@ backend/
 ├── src/RecompAchievements.Api/
 │   ├── Program.cs                    # Composition root: wires the pieces below
 │   ├── Infrastructure/               # Database, error handling, rate limiting, proxy, security, API docs
-│   ├── Infrastructure/Email/         # IEmailSender: Brevo (hosted) or console logging (Development)
+│   ├── Infrastructure/Email/         # IEmailSender: transactional email API (hosted) or console logging (Development)
 │   ├── Data/                         # AppDbContext and Migrations/
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
 │       └── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup

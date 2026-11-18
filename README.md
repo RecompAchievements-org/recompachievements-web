@@ -8,8 +8,8 @@ RecompAchievements brings RetroAchievements-style progression, leaderboards, and
 native PC ports built via **static recompilation** — such as N64, GameCube, PS2, PS3, and PS4
 recomp projects (e.g. *Zelda 64: Recompiled*, *BBPort*) — that run outside traditional emulators.
 
-> 🚧 **Status: early development (v0.1).** The web frontend is being built first; the backend API
-> and C/C++ SDK will follow.
+> 🚧 **Status: alpha (v0.1).** The website and the API are live, and the alpha tester sign-up is
+> open. Game pages, accounts, and the C/C++ SDK come next.
 
 ---
 
@@ -44,7 +44,7 @@ routine runs) instead of watching memory addresses.
 | **recompachievements-web** (this repo) | Public | Website, REST API, database migrations | AGPL-3.0 |
 | `librecompachievements` | Public (planned) | C/C++ client SDK embedded in recomps | MIT / Apache-2.0 |
 | `api-docs` | Public (planned) | OpenAPI specs for bots, overlays, Steam Deck plugins | — |
-| `infra` | Private | Deployment config, secrets, rate-limit rules | — |
+| `infra` | Private | Deployment configuration | — |
 
 ## Architecture
 
@@ -76,7 +76,7 @@ routine runs) instead of watching memory addresses.
   tools. e.g. `GET /api/v1/games/{slug}`, `GET /api/v1/users/{username}/progress`.
 - **Game client / SDK API — `/api/sdk/v1/...`**:
   - `POST /session/start` — authenticates the player's client token, records the executable's
-    build hash, returns achievement definitions and unlock state.
+    build hash, toggles, and active mods, returns achievement definitions and unlock state.
   - `POST /unlock` — accepts only requests signed with the game's secret key, then applies
     server-side integrity checks before recording the unlock.
 
@@ -133,6 +133,7 @@ for the backend.
 # Website
 cd frontend
 npm install
+cp .env.example .env.local   # local API address, internal key, and test human-check keys
 npm run dev                  # http://localhost:3000
 
 # Database + API (from the repository root)

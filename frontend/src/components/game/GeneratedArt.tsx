@@ -19,7 +19,7 @@ function gradientFor(slug: string) {
  *  game's title and original console. Decorative, because the title is always shown as text next
  *  to it. "card" is 16:9 (game cards), "portrait" is a 3:4 cover (game page header), "wide" fills
  *  the featured slider, and "thumb" is the details card's square. "wide" and "thumb" leave out the
- *  title, which is already shown beside them.
+ *  title, and "portrait" the console, because the page already shows them beside the art.
 **/
 export function GeneratedArt({
   slug,
@@ -55,7 +55,8 @@ export function GeneratedArt({
     <div
       aria-hidden="true"
       className={cx(
-        "relative flex flex-col justify-between overflow-hidden bg-linear-to-br",
+        "relative flex flex-col overflow-hidden bg-linear-to-br",
+        portrait ? "justify-end" : "justify-between",
         wide && "p-6 sm:p-10",
         variant === "card" && "aspect-video rounded-lg border border-border p-4",
         portrait && "aspect-[3/4] rounded-xl border border-border p-4 sm:p-5",
@@ -63,9 +64,11 @@ export function GeneratedArt({
         className,
       )}
     >
-      <span className="self-start rounded-md border border-border-strong bg-background/60 px-2 py-0.5 font-mono text-xs text-muted">
-        {consoleName(originalPlatform)}
-      </span>
+      {!portrait && (
+        <span className="self-start rounded-md border border-border-strong bg-background/60 px-2 py-0.5 font-mono text-xs text-muted">
+          {consoleName(originalPlatform)}
+        </span>
+      )}
       {!wide && (
         <span
           translate="no"

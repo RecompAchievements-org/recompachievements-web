@@ -169,6 +169,27 @@ public sealed partial class AlphaSignupTests(ApiFactory factory) : IClassFixture
     }
 
     [Fact]
+    public async Task Invalid_requests_without_the_internal_key_get_401_not_validation_errors()
+    {
+        using var client = factory.CreateClient();
+
+        using var response = await client.PostAsJsonAsync("/api/v1/alpha-signups", new { email = "x" }, Ct);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        Assert.DoesNotContain("errors", await response.Content.ReadAsStringAsync(Ct), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Confirm_without_the_internal_key_is_rejected()
+    {
+        using var client = factory.CreateClient();
+
+        using var response = await client.PostAsJsonAsync("/api/v1/alpha-signups/confirm", new { token = "x" }, Ct);
+
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
     public async Task Requests_without_the_internal_key_are_rejected()
     {
         using var client = factory.CreateClient();

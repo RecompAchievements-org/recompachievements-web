@@ -31,11 +31,28 @@ internal static class InternalKey
             && CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(provided), Encoding.UTF8.GetBytes(expected));
     }
 
-    public static RouteGroupBuilder RequireInternalKey(this RouteGroupBuilder group)
+    /** Rejects requests under the given path prefix without a valid key, before routing reaches
+     *  the endpoint. Running as middleware (not an endpoint filter) means unauthenticated callers
+     *  are turned away before the request body is read or validated.
+    **/
+    public static WebApplication UseInternalKey(this WebApplication app, PathString pathPrefix)
     {
-        group.AddEndpointFilter(async (context, next) => IsValid(context.HttpContext)
-            ? await next(context)
-            : TypedResults.Problem(statusCode: StatusCodes.Status401Unauthorized, title: "Missing or invalid internal key"));
-        return group;
+        app.Use(async (context, next) =>
+        {
+            if (!context.Request.Path.StartsWithSegments(pathPrefix) || IsValid(context))
+            {
+                await next(context);
+                return;
+            }
+
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.RequestServices.GetRequiredService<IProblemDetailsService>().WriteAsync(new ProblemDetailsContext
+            {
+                HttpContext = context,
+                ProblemDetails = { Status = StatusCodes.Status401Unauthorized, Title = "Missing or invalid internal key" },
+            });
+        });
+
+        return app;
     }
 }

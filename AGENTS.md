@@ -6,16 +6,21 @@ Shared rules for any AI coding agent working in this repository. Subfolders have
 ## Project context
 
 RecompAchievements.org is a community achievement-tracking platform (like RetroAchievements) for
-**native static recompilations and PC ports** (e.g. Zelda 64: Recompiled, BBPort). These run as
+**native static recompilations and PC ports** (e.g. Zelda 64: Recompiled, bbport). These run as
 native executables, not inside emulators, so they integrate through a C/C++ SDK
 (`librecompachievements`, separate repo) that calls this platform's API.
+
+**Launch target: bbport** (Bloodborne, `bbport-pc` in the catalog) is the first recomp the platform
+will support and the SDK's reference integration. Check every SDK, API, and scoring decision
+against it: a C++ project on Windows, Linux, and Steam Deck, licensed GPL-2.0 (the SDK must stay
+usable from it), with online co-op. See README "Launch target".
 
 This repo contains the public web platform:
 
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks and the alpha sign-up; live, deploys from `main` |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks, the alpha sign-up, and the game directory; live, deploys from `main` |
 | `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
 | `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
@@ -24,7 +29,10 @@ Read `README.md` for the full architecture and data model.
 ## Hard guardrails (never break these)
 
 - **No copyrighted game content.** Never add game binaries, ROMs, recompiled executables, ripped
-  assets, or official trophy/achievement icons. Use original or generated placeholder art.
+  assets, official box or key art, game logos, or official trophy/achievement icons. The only game
+  images allowed are screenshots and banners published by a recomp project **with its
+  permission**, and our own gameplay screenshots of a recomp, each with a credit. Everything else
+  uses original or generated art.
 - **No secrets in the repo.** API keys, HMAC secrets, DB credentials, and session keys come from
   environment variables. Commit only `.env.example` files with dummy values.
 - **No infrastructure details.** Docs, code, and comments never include DNS records, IP addresses,
@@ -375,12 +383,47 @@ the README's Contributing section; it names no specific tool or model.
 it, and answer for it. AI tools are instruments, like an editor or a linter, so the project says
 openly that it uses them without crediting any one of them as an author.
 
+### RULE-007: Every page is designed mobile first and works on phones and desktops
+
+**Applies to:** every page, layout, and component of the website (`frontend/`), and any other
+user-facing web page the project adds, made by a person or an AI agent.
+
+Pages are built **mobile first**: the base styles are for a phone, and larger screens are added
+with breakpoints (`sm:`, `md:`, `lg:`). Every page must fit and work from a **360px-wide phone**
+up to a wide desktop.
+
+- **No horizontal scrolling** at any width from 360px up, in English, Spanish, and Portuguese
+  (translations run ~20–30% longer). Long words and titles wrap instead of overflowing.
+- **Layouts adapt, not shrink.** Columns stack on phones and sit side by side on larger screens;
+  important content (calls to action, download links, a game's details card) comes early on phones,
+  not after long lists.
+- **Touch friendly.** Buttons and links are easy to tap, controls don't rely on hover, and anything
+  that swipes or scrolls also works with a keyboard.
+- **Checked before hand-off.** A visual change is checked at 360px and at a desktop width (at
+  least one locale besides English) before the work is handed back.
+
+| Correct | Incorrect |
+|---|---|
+| `grid gap-6 lg:grid-cols-[1fr_20rem]`: one column on phones, two on desktop | `grid grid-cols-[1fr_20rem]` that squeezes a sidebar onto a phone |
+| A long title that wraps (`text-balance`, `wrap-anywhere`) inside its card | A fixed-width title that's cut off or pushes the page sideways at 360px |
+| Checking a new page at 360px in Spanish and at 1280px before handing it back | Only looking at the page on a desktop monitor |
+
+**Why:** many players browse on phones and handhelds such as the Steam Deck, and links to game
+and profile pages are mostly opened from Discord and social media on mobile. Starting from the
+smallest screen keeps every page usable everywhere; adding desktop space later is easy, while
+fixing a desktop-only layout for phones usually means rebuilding it.
+
 ## Domain vocabulary
 
 - **Recomp** — a native port produced by static recompilation of a console game.
 - **Game** — a recomp registered on the platform, identified by `slug` (e.g. `bbport-pc`).
 - **Set** — a group of a game's achievements: one **core set** (the base game) plus **subsets**
-  (`dlc`, `mod`, `randomizer`, `challenge`).
+  (`dlc`, `mod`, `randomizer`, `challenge`). A **preview** set is shown but accepts no unlocks
+  until the recomp integrates the SDK.
+- **Featured** — a catalog flag that puts a game in the homepage slider; "New Release" is shown
+  when its `releasedAt` is within the last 30 days.
+- **Catalog** — the curated JSON files (`backend/.../Catalog/Games/`) that define games and preview
+  sets until the developer portal exists.
 - **Achievement** — belongs to a set; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
   SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
 - **Hardcore / softcore** — an unlock is hardcore only when its session has had a verified build,

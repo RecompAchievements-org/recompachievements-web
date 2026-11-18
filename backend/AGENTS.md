@@ -1,7 +1,7 @@
 # AGENTS.md — backend
 
 Rules for AI agents working in `backend/`. They add to the root [`AGENTS.md`](../AGENTS.md), whose
-numbered rules (RULE-001 to RULE-006) and guardrails always apply. Setup and commands for people
+numbered rules (RULE-001 to RULE-007) and guardrails always apply. Setup and commands for people
 are in [`README.md`](README.md).
 
 Stack: .NET 10 (LTS) · ASP.NET Core Minimal APIs · EF Core 10 · PostgreSQL 17 (Npgsql) · xUnit v3 +
@@ -57,13 +57,34 @@ Testcontainers.
 - Migrations are applied at startup when `Database:ApplyMigrationsOnStartup` is true (Development,
   tests, hosted); there is no separate migration step.
 - Change the schema only through `dotnet ef migrations add <PascalCaseName>`; commit the migration
-  and the updated snapshot together. Never hand-edit the snapshot.
+  and the updated snapshot together. Never hand-edit the snapshot. If an analyzer flags the
+  generated code (e.g. CA1861 on column arrays), add a `#pragma warning disable` with a reason at
+  the top of that migration instead of rewriting it.
 - Production holds real user data (alpha sign-ups), so RULE-005 exception 2 applies: applied
   migrations are never edited or deleted, and every schema change is a new forward migration that
   fills in existing rows. `ApiFactory` applies the full migration chain, so CI tests it.
 - No lazy loading. Select only the columns an endpoint needs (`Select` into a response record).
+- Text shown in several languages is a `LocalizedText` (`en` required, `es`/`pt` optional) mapped
+  as a JSON complex property (`ComplexProperty(...).ToJson()`, a `jsonb` column); endpoints take a
+  `lang` query value and return resolved strings with `LocalizedText.For(lang)`.
 - Uniqueness and integrity live in the database (unique indexes, foreign keys), not only in code:
   e.g. the unique `(user_id, achievement_id)` unlock rule from the root guardrails.
+
+## Game catalog
+
+- Until the developer portal exists, games, core sets, and achievements come only from
+  `Catalog/Games/<slug>.json`, imported at startup (`Catalog:ImportOnStartup`) by
+  `Features/Games/CatalogImporter.cs`. No endpoint writes game data.
+- Catalog text is **original**: never copy official trophy or achievement names, descriptions, or
+  icons. A `heroImage` is only a screenshot or banner the recomp project allowed us to use, or our
+  own gameplay screenshot, and always has a `credit` (root guardrail); never box or key art. Every set follows `docs/achievement-system.md` (points 1–10, a `win_condition`, rarity
+  caps); `Catalog.Validate` enforces it and `Shipped_catalog_is_valid` runs it in CI.
+- The import matches by `slug` and `apiKeyName` and deletes entries removed from the catalog. That
+  is safe only while every set is a preview with no unlocks; once unlocks exist, removing an
+  achievement needs its own rule (see the spec's open questions).
+- When the developer portal lands, it replaces the catalog and the importer is deleted (RULE-005).
+  That must happen before the first real unlock is accepted (the bbport launch integration), and
+  the catalog and the portal must never both edit games (README roadmap).
 
 ## Tests
 

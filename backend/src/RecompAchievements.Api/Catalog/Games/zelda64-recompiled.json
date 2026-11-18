@@ -1,0 +1,142 @@
+{
+  "slug": "zelda64-recompiled",
+  "title": "Zelda 64: Recompiled",
+  "originalPlatform": "n64",
+  "originalGame": "The Legend of Zelda: Majora’s Mask",
+  "platforms": ["windows", "linux", "macos", "steam_deck"],
+  "repoUrl": "https://github.com/Zelda64Recomp/Zelda64Recomp",
+  "license": "GPL-3.0",
+  "displayOrder": 4,
+  "featured": true,
+  "latestVersion": "1.2.2",
+  "releasedAt": "2025-08-27",
+  "summary": {
+    "en": "Native PC port of The Legend of Zelda: Majora’s Mask, built with N64Recomp: high frame rates, widescreen, and mod support.",
+    "es": "Port nativo para PC de The Legend of Zelda: Majora’s Mask, creado con N64Recomp: altas tasas de fotogramas, pantalla panorámica y soporte para mods.",
+    "pt": "Port nativo para PC de The Legend of Zelda: Majora’s Mask, feito com N64Recomp: altas taxas de quadros, tela widescreen e suporte a mods."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "FIRST_RESET",
+        "title": { "en": "Back to the Dawn", "es": "De vuelta al amanecer", "pt": "De volta ao amanhecer" },
+        "description": {
+          "en": "Turn back time to the first day for the first time.",
+          "es": "Retrocede el tiempo al primer día por primera vez.",
+          "pt": "Volte no tempo até o primeiro dia pela primeira vez."
+        },
+        "points": 2, "rarityTier": "common", "kind": "progression", "progressionStep": 1
+      },
+      {
+        "apiKeyName": "WOODFALL_TEMPLE",
+        "title": { "en": "Swamp Cleansed", "es": "Pantano purificado", "pt": "Pântano purificado" },
+        "description": {
+          "en": "Clear Woodfall Temple and free the first giant.",
+          "es": "Supera el Templo de Woodfall y libera al primer gigante.",
+          "pt": "Conclua o Templo de Woodfall e liberte o primeiro gigante."
+        },
+        "points": 4, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 2
+      },
+      {
+        "apiKeyName": "SNOWHEAD_TEMPLE",
+        "title": { "en": "Spring Returns", "es": "Vuelve la primavera", "pt": "A primavera volta" },
+        "description": {
+          "en": "Clear Snowhead Temple and free the second giant.",
+          "es": "Supera el Templo de Snowhead y libera al segundo gigante.",
+          "pt": "Conclua o Templo de Snowhead e liberte o segundo gigante."
+        },
+        "points": 5, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 3
+      },
+      {
+        "apiKeyName": "GREAT_BAY_TEMPLE",
+        "title": { "en": "Tides Turned", "es": "Cambio de marea", "pt": "Virada da maré" },
+        "description": {
+          "en": "Clear Great Bay Temple and free the third giant.",
+          "es": "Supera el Templo de la Gran Bahía y libera al tercer gigante.",
+          "pt": "Conclua o Templo da Grande Baía e liberte o terceiro gigante."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "progression", "progressionStep": 4
+      },
+      {
+        "apiKeyName": "STONE_TOWER_TEMPLE",
+        "title": { "en": "Upside Down", "es": "Al revés", "pt": "De cabeça para baixo" },
+        "description": {
+          "en": "Clear Stone Tower Temple and free the last giant.",
+          "es": "Supera el Templo de la Torre de Piedra y libera al último gigante.",
+          "pt": "Conclua o Templo da Torre de Pedra e liberte o último gigante."
+        },
+        "points": 7, "rarityTier": "rare", "kind": "progression", "progressionStep": 5
+      },
+      {
+        "apiKeyName": "MOON_STOPPED",
+        "title": { "en": "Moonfall Averted", "es": "Luna detenida", "pt": "Lua detida" },
+        "description": {
+          "en": "Defeat the final boss and stop the moon from falling.",
+          "es": "Derrota al jefe final y evita que caiga la luna.",
+          "pt": "Derrote o chefe final e impeça a lua de cair."
+        },
+        "points": 8, "rarityTier": "epic", "kind": "win_condition", "progressionStep": 6
+      },
+      {
+        "apiKeyName": "INVERTED_TIME",
+        "title": { "en": "Slow Motion", "es": "Cámara lenta", "pt": "Câmera lenta" },
+        "description": {
+          "en": "Learn the song that slows the flow of time.",
+          "es": "Aprende la canción que ralentiza el paso del tiempo.",
+          "pt": "Aprenda a música que desacelera a passagem do tempo."
+        },
+        "points": 1, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "RAZOR_SWORD",
+        "title": { "en": "Sharpened Edge", "es": "Filo afilado", "pt": "Lâmina afiada" },
+        "description": {
+          "en": "Have your sword reforged into a sharper blade.",
+          "es": "Haz que vuelvan a forjar tu espada en una hoja más afilada.",
+          "pt": "Mande forjar sua espada novamente em uma lâmina mais afiada."
+        },
+        "points": 2, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "TEN_MASKS",
+        "title": { "en": "Many Faces", "es": "Muchas caras", "pt": "Muitas faces" },
+        "description": {
+          "en": "Collect 10 masks.",
+          "es": "Consigue 10 máscaras.",
+          "pt": "Colete 10 máscaras."
+        },
+        "points": 3, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "TWENTY_HEARTS",
+        "title": { "en": "Full Heart", "es": "Corazón completo", "pt": "Coração completo" },
+        "description": {
+          "en": "Reach 20 hearts of health.",
+          "es": "Llega a 20 corazones de vida.",
+          "pt": "Alcance 20 corações de vida."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIERCE_DEITY",
+        "title": { "en": "Godlike", "es": "A la altura de un dios", "pt": "À altura de um deus" },
+        "description": {
+          "en": "Obtain the mask that holds the power of a fierce deity.",
+          "es": "Obtén la máscara que guarda el poder de una deidad feroz.",
+          "pt": "Obtenha a máscara que guarda o poder de uma divindade feroz."
+        },
+        "points": 9, "rarityTier": "epic", "kind": "standard"
+      },
+      {
+        "apiKeyName": "BOMBERS_NOTEBOOK",
+        "title": { "en": "Every Promise Kept", "es": "Todas las promesas cumplidas", "pt": "Todas as promessas cumpridas" },
+        "description": {
+          "en": "Complete every entry in the Bombers’ Notebook.",
+          "es": "Completa todas las entradas del Cuaderno de los Bombers.",
+          "pt": "Complete todas as entradas do Caderno dos Bombers."
+        },
+        "points": 10, "rarityTier": "legendary", "kind": "standard"
+      }
+    ]
+  }
+}

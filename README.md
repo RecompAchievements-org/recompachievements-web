@@ -6,10 +6,11 @@
 
 RecompAchievements brings RetroAchievements-style progression, leaderboards, and social profiles to
 native PC ports built via **static recompilation** — such as N64, GameCube, PS2, PS3, and PS4
-recomp projects (e.g. *Zelda 64: Recompiled*, *BBPort*) — that run outside traditional emulators.
+recomp projects (e.g. *Zelda 64: Recompiled*, *bbport* for Bloodborne) — that run outside
+traditional emulators.
 
-> 🚧 **Status: alpha (v0.1).** The website and the API are live, and the alpha tester sign-up is
-> open. Game pages, accounts, and the C/C++ SDK come next.
+> 🚧 **Status: alpha (v0.1).** The website and the API are live, with the alpha tester sign-up
+> open and a game directory of preview achievement sets. Accounts and the C/C++ SDK come next.
 
 ---
 
@@ -37,12 +38,28 @@ routine runs) instead of watching memory addresses.
 5. **Open and trustworthy.** Fully open-source platform; security comes from cryptographic signing,
    not obscurity.
 
+## Launch target: bbport (Bloodborne 🩸)
+
+[bbport](https://github.com/deadinside28/bloodborne_pc), the native Linux and Windows port of
+*Bloodborne*, is the **first recomp the platform will support** and the goal for its public
+launch. It is the SDK's reference integration and the end-to-end test of the whole system: signed
+unlocks, hardcore rules, presence, and scoring all have to work in it first. If needed, the
+integration will be contributed to bbport by this project, in agreement with its maintainers.
+
+What that means for design decisions:
+
+- The SDK must build into a C++ project on Windows, Linux, and the Steam Deck.
+- bbport is licensed under GPL-2.0, so the SDK must stay usable from GPL-2.0 code (its MIT option
+  allows that; Apache-2.0 alone would not).
+- bbport has online co-op, so co-op achievements and sessions with other players are first-class
+  cases, not edge cases.
+
 ## Ecosystem
 
 | Repository | Visibility | Purpose | License |
 |---|---|---|---|
 | **recompachievements-web** (this repo) | Public | Website, REST API, database migrations | AGPL-3.0 |
-| `librecompachievements` | Public (planned) | C/C++ client SDK embedded in recomps | MIT / Apache-2.0 |
+| `librecompachievements` | Public (planned) | C/C++ client SDK embedded in recomps | MIT / Apache-2.0 (MIT keeps it usable from GPL-2.0 recomps such as bbport) |
 | `api-docs` | Public (planned) | OpenAPI specs for bots, overlays, Steam Deck plugins | — |
 | `infra` | Private | Deployment configuration | — |
 
@@ -92,6 +109,11 @@ unlocks (verified build, no assists, allowlisted mods) count toward the **global
 a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
 Gold, and Platinum** badges; subsets award **Beaten** and **Mastered**.
 
+Until the developer portal exists, games and their **preview sets** (original achievement text,
+not active until a recomp integrates the SDK) come from a curated catalog in
+`backend/src/RecompAchievements.Api/Catalog/Games/`, one JSON file per game. The catalog also
+marks which games are **featured** on the homepage and their latest version and release date.
+
 The full design, including the data model and the SDK operations, is in
 [`docs/achievement-system.md`](docs/achievement-system.md).
 
@@ -99,9 +121,11 @@ The full design, including the data model and the SDK operations, is in
 
 | Route | Page |
 |---|---|
-| `/` | Home; game directory later |
+| `/` | Home: alpha sign-up, featured recomps slider, and games |
 | `/alpha` | Alpha tester sign-up (email confirmation required) |
 | `/privacy` | Privacy notice |
+| `/content-policy` | What the site hosts, image sources, and removal requests |
+| `/games` | Game directory |
 | `/games/[slug]` | Game detail — achievements, points, rarity |
 | `/u/[username]` | Player profile — completion, recent unlocks |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |
@@ -138,7 +162,7 @@ npm run dev                  # http://localhost:3000
 
 # Database + API (from the repository root)
 docker compose up -d         # PostgreSQL 17 on localhost:5432
-dotnet run --project backend/src/RecompAchievements.Api   # http://localhost:5080
+dotnet watch --no-hot-reload --project backend/src/RecompAchievements.Api   # http://localhost:5080, restarts on changes
 ```
 
 More commands (tests, migrations, Docker image) are in [`frontend/README.md`](frontend/README.md)
@@ -165,25 +189,32 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Frontend foundations: design system, layout, and English/Spanish/Portuguese translations
 - [x] Backend foundations: .NET 10 API, PostgreSQL, integration tests, container image, and CI
 - [x] Alpha tester sign-up: the first end-to-end feature, with the API deployed
-- [ ] Game, profile, and directory pages backed by the API
-- [ ] Authentication and developer portal
+- [x] Game directory and game pages backed by the API, with preview achievement sets
+- [ ] Authentication, player profiles, game comments (the game page has a not-saved preview), and
+  developer portal. The portal **replaces the JSON game catalog**: games and achievements are then
+  edited only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK
-- [ ] Reference integration with an open-source recomp
+- [ ] Launch integration: bbport (Bloodborne), the first supported recomp and the SDK's reference
+  integration (see [Launch target](#launch-target-bbport-bloodborne-)). **Requires the catalog to be
+  replaced first:** its import deletes achievements removed from the files, which would erase
+  players' unlocks once real unlocks exist.
 - [ ] Leaderboards, live presence, and the public API docs
 
 ## Legal & content policy
 
 RecompAchievements tracks **achievement definitions and player progress only**. It does **not**
-host or link to game binaries, ROMs, recompiled executables, or copyrighted assets such as official
-trophy icons. Achievement art is original or supplied by recomp developers who hold the rights to
-use it.
+host or link to game binaries, ROMs, or recompiled executables, and it never uses official box
+art, key art, game logos, or trophy icons. Achievement text is original. Game images are either
+screenshots and banners published by the recomp project and used with its permission, or our own
+gameplay screenshots of the recomp, each credited; games without one get generated artwork.
 
 All trademarks belong to their respective owners. RecompAchievements is not affiliated with any game
 publisher, platform holder, or with RetroAchievements.
 
 If you believe content on the platform infringes your rights, contact
-[contact@recompachievements.org](mailto:contact@recompachievements.org) and we will review it
-promptly.
+[contact@recompachievements.org](mailto:contact@recompachievements.org); valid requests are
+handled within 5 business days. The full policy is on the website's
+[content policy](https://recompachievements.org/content-policy) page.
 
 ## Contributing
 

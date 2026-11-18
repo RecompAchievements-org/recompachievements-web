@@ -18,6 +18,13 @@
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>
 
+  <!-- The curated game catalog ships with the API and is imported at startup. -->
+  <ItemGroup>
+    <Content Update="Catalog/Games/*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <!-- dotnet watch restarts the API when a catalog file changes, so the import runs again. -->
+    <Watch Include="Catalog/Games/*.json" />
+  </ItemGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="RecompAchievements.Api.Tests" />
   </ItemGroup>

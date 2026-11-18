@@ -1,0 +1,142 @@
+{
+  "slug": "jak-and-daxter-opengoal",
+  "title": "OpenGOAL: Jak and Daxter",
+  "originalPlatform": "ps2",
+  "originalGame": "Jak and Daxter: The Precursor Legacy",
+  "platforms": ["windows", "linux", "macos", "steam_deck"],
+  "repoUrl": "https://github.com/open-goal/jak-project",
+  "license": "ISC",
+  "displayOrder": 6,
+  "featured": true,
+  "latestVersion": "0.3.9",
+  "releasedAt": "2026-10-15",
+  "summary": {
+    "en": "Native PC port of Jak and Daxter: The Precursor Legacy, rebuilt from the game’s decompiled code by the OpenGOAL project.",
+    "es": "Port nativo para PC de Jak and Daxter: The Precursor Legacy, reconstruido a partir del código descompilado del juego por el proyecto OpenGOAL.",
+    "pt": "Port nativo para PC de Jak and Daxter: The Precursor Legacy, reconstruído a partir do código descompilado do jogo pelo projeto OpenGOAL."
+  },
+  "coreSet": {
+    "achievements": [
+      {
+        "apiKeyName": "FIRST_POWER_CELL",
+        "title": { "en": "Spark of Hope", "es": "Chispa de esperanza", "pt": "Faísca de esperança" },
+        "description": {
+          "en": "Collect your first Power Cell.",
+          "es": "Consigue tu primera Célula de Energía.",
+          "pt": "Colete sua primeira Célula de Energia."
+        },
+        "points": 1, "rarityTier": "common", "kind": "progression", "progressionStep": 1
+      },
+      {
+        "apiKeyName": "FIRE_CANYON",
+        "title": { "en": "Heat Wave", "es": "Ola de calor", "pt": "Onda de calor" },
+        "description": {
+          "en": "Cross Fire Canyon on the Zoomer.",
+          "es": "Cruza el Cañón de Fuego con el Zoomer.",
+          "pt": "Atravesse o Cânion de Fogo com o Zoomer."
+        },
+        "points": 3, "rarityTier": "common", "kind": "progression", "progressionStep": 2
+      },
+      {
+        "apiKeyName": "KLAWW_DEFEATED",
+        "title": { "en": "Rock Bottom", "es": "Tocar fondo", "pt": "Fundo do poço" },
+        "description": {
+          "en": "Defeat Klaww and open the way to the Mountain Pass.",
+          "es": "Derrota a Klaww y abre el camino al Paso de Montaña.",
+          "pt": "Derrote Klaww e abra o caminho para a Passagem da Montanha."
+        },
+        "points": 4, "rarityTier": "uncommon", "kind": "progression", "progressionStep": 3
+      },
+      {
+        "apiKeyName": "CITADEL_REACHED",
+        "title": { "en": "Into the Citadel", "es": "Hacia la ciudadela", "pt": "Rumo à cidadela" },
+        "description": {
+          "en": "Reach the villains’ citadel.",
+          "es": "Llega a la ciudadela de los villanos.",
+          "pt": "Chegue à cidadela dos vilões."
+        },
+        "points": 6, "rarityTier": "rare", "kind": "progression", "progressionStep": 4
+      },
+      {
+        "apiKeyName": "FINAL_BOSS",
+        "title": { "en": "Legacy Secured", "es": "Legado asegurado", "pt": "Legado garantido" },
+        "description": {
+          "en": "Defeat the final boss.",
+          "es": "Derrota al jefe final.",
+          "pt": "Derrote o chefe final."
+        },
+        "points": 8, "rarityTier": "epic", "kind": "win_condition", "progressionStep": 5
+      },
+      {
+        "apiKeyName": "ALL_ECO_TYPES",
+        "title": { "en": "Eco Friendly", "es": "Ecológico", "pt": "Ecológico" },
+        "description": {
+          "en": "Use blue, yellow, red, and green eco.",
+          "es": "Usa eco azul, amarillo, rojo y verde.",
+          "pt": "Use eco azul, amarelo, vermelho e verde."
+        },
+        "points": 2, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "LEVEL_SCOUT_FLIES",
+        "title": { "en": "Fly Catcher", "es": "Atrapamoscas", "pt": "Pega-moscas" },
+        "description": {
+          "en": "Free all 7 Scout Flies in a single area.",
+          "es": "Libera las 7 moscas exploradoras de una misma zona.",
+          "pt": "Liberte as 7 moscas exploradoras de uma mesma área."
+        },
+        "points": 2, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "THOUSAND_ORBS",
+        "title": { "en": "Orb Collector", "es": "Coleccionista de orbes", "pt": "Colecionador de orbes" },
+        "description": {
+          "en": "Collect 1,000 Precursor Orbs.",
+          "es": "Consigue 1000 orbes precursores.",
+          "pt": "Colete 1.000 orbes precursores."
+        },
+        "points": 3, "rarityTier": "common", "kind": "standard"
+      },
+      {
+        "apiKeyName": "FISHING_WON",
+        "title": { "en": "Catch of the Day", "es": "Pesca del día", "pt": "Pesca do dia" },
+        "description": {
+          "en": "Win the fishing challenge.",
+          "es": "Gana el desafío de pesca.",
+          "pt": "Vença o desafio de pesca."
+        },
+        "points": 3, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "FIFTY_POWER_CELLS",
+        "title": { "en": "Fully Charged", "es": "Carga completa", "pt": "Carga completa" },
+        "description": {
+          "en": "Collect 50 Power Cells.",
+          "es": "Consigue 50 Células de Energía.",
+          "pt": "Colete 50 Células de Energia."
+        },
+        "points": 5, "rarityTier": "uncommon", "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_ORBS",
+        "title": { "en": "Every Last Orb", "es": "Hasta el último orbe", "pt": "Até o último orbe" },
+        "description": {
+          "en": "Collect all 2,000 Precursor Orbs.",
+          "es": "Consigue los 2000 orbes precursores.",
+          "pt": "Colete todos os 2.000 orbes precursores."
+        },
+        "points": 9, "rarityTier": "epic", "kind": "standard"
+      },
+      {
+        "apiKeyName": "ALL_POWER_CELLS",
+        "title": { "en": "Hundred and One", "es": "Ciento uno", "pt": "Cento e um" },
+        "description": {
+          "en": "Collect all 101 Power Cells.",
+          "es": "Consigue las 101 Células de Energía.",
+          "pt": "Colete todas as 101 Células de Energia."
+        },
+        "points": 10, "rarityTier": "legendary", "kind": "standard"
+      }
+    ]
+  }
+}

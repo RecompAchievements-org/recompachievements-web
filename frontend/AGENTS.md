@@ -42,6 +42,10 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   `cacheTag(...)` where the data can be invalidated (e.g. `game:${slug}`). Do not use the legacy
   `fetch` `next: { revalidate }` options or `export const revalidate`.
 - Wrap slow or per-user sections in `<Suspense>` with a skeleton fallback so the shell streams.
+- **The build never needs the API.** Components that render API data call `await connection()`
+  first and sit inside `<Suspense>`; the cached data function makes later requests instant. Pages
+  with params the build doesn't list (`/games/[slug]`) read `params` inside `<Suspense>` too, and
+  anything in the shared layout that reads the URL (`LocaleSwitcher`) has its own boundary.
 - Mutations (forms, settings, dev portal) use **Server Actions**, validated on the server.
 - Secrets and backend URLs are read only in server code. Only `NEXT_PUBLIC_*` vars reach the client.
 
@@ -63,7 +67,7 @@ language on unprefixed visits.
   as props from their Server Component parent.
 - Build internal links with `localizePath(locale, "/path")`; never write `/es/...` by hand.
 - Placeholders use `{name}`: `interpolate()` for text, `rich()` for React elements (links, spans).
-  Counts use `plural()`; numbers, percentages, and dates use `formatNumber/formatPercent/formatDate`
+  Counts use `plural()`; numbers and dates use `formatNumber/formatDate`
   from `@/i18n/format`, never `toFixed` or manual formatting.
 - Every page's metadata sets `alternates: localeAlternates(locale, "/path")` (canonical + hreflang).
 - Translations are written in the target language's gaming vocabulary (`logros`, `conquistas`);
@@ -79,16 +83,25 @@ language on unprefixed visits.
 Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
 `src/app/[lang]/`.
 
-- `/` — home (game directory later); primary call to action: Join the Alpha
+- `/` — home: featured recomps slider (`FeaturedSlider`) and games; primary call to action: Join
+  the Alpha
 - `/alpha` — alpha tester sign-up form
 - `/alpha/confirm` — confirms a sign-up with the emailed token (`noindex`, not in the sitemap)
 - `/privacy` — privacy notice; update its `lastUpdated` date and translations whenever data
   handling changes
-- `/games/[slug]` — game detail: achievements, points, rarity
+- `/content-policy` — what the site hosts, image sources, removal requests; keep it in step with the
+  image guardrail
+- `/games` — game directory (`GameGrid`)
+- `/games/[slug]` — game detail: info, preview notice, and achievements on the left; a sticky
+  `GameDetailsCard` on the right (download and repository links, what the player must own,
+  platforms, version, license); on phones the card follows the header. Below both, a Comments
+  section (`CommentsPreview`) that only works in the browser until accounts exist: posted text
+  stays in page state, is labeled "not saved", and must never be sent to the API before then
 - `/u/[username]` — user profile: completion %, recent unlocks
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
-`/`, `/alpha`, `/alpha/confirm` (linked from sent emails), and `/privacy` are live in production:
+`/`, `/alpha`, `/alpha/confirm` (linked from sent emails), `/privacy`, `/content-policy`, `/games`,
+and `/games/[slug]` are live in production:
 renaming any of them needs a permanent (308) redirect from the old path (RULE-005, exception 2).
 
 Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
@@ -98,10 +111,12 @@ SEO files (details in `README.md`):
 
 - **Every new public page is added to `publicPaths` in `src/app/sitemap.ts`** in the same change
   (RULE-003); pages that shouldn't be indexed (e.g. `/dev`) are left out.
-- `src/app/[lang]/opengraph-image.tsx` is the site-wide social card. Game and profile pages get
-  their own `opengraph-image.tsx` in their segment. Image routes use `next/og`, inline styles, and
-  the `colors` object (they can't read Tailwind tokens); keep those colors in sync with
-  `globals.css`.
+- `src/app/[lang]/opengraph-image.tsx` is the site-wide social card; game pages have their own in
+  `games/[slug]/` (profiles will too). Image routes use `next/og`, inline styles, and the shared
+  `socialColors`, fonts, and logo from `src/lib/socialImage.tsx` (they can't read Tailwind tokens);
+  keep those colors in sync with `globals.css`.
+- Game pages are listed in the sitemap from the API at request time; don't add them to
+  `publicPaths`.
 - `src/proxy.ts` must keep passing `/…/opengraph-image` and `/…/twitter-image` through without
   locale redirects or detection.
 
@@ -119,21 +134,21 @@ src/
 │   ├── robots.ts   # /robots.txt
 │   └── sitemap.ts  # /sitemap.xml; list every public page in publicPaths
 ├── components/
-│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher)
+│   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks)
 │   ├── seo/        # JsonLd for schema.org structured data
-│   ├── ui/         # generic primitives (Button, Card, Badge, ProgressBar, ExternalLink)
-│   └── <feature>/  # feature components (game/, profile/, achievement/)
+│   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink)
+│   └── <feature>/  # feature components (alpha/, game/; later profile/)
 ├── lib/
-│   ├── api/        # data access layer: server-only calls to the .NET API
+│   ├── api/        # data access layer: server-only calls to the .NET API and their response types
 │   ├── clientIp.ts # visitor IP from proxy headers (server-only)
 │   ├── turnstile.ts # server-side human-verification check (server-only)
-│   ├── types/      # domain types shared across the app
+│   ├── socialImage.tsx # shared pieces of the opengraph-image routes
 │   ├── cx.ts       # class-name join helper
-│   └── site.ts     # site name, URLs, public contact address (never hard-code these)
+│   └── site.ts     # site name, URLs, contact address, social links (never hard-code these)
 ├── i18n/
 │   ├── config.ts   # locales, localizePath, localeAlternates (safe for proxy, server, client)
 │   ├── server.ts   # getLocale, getMessages (pages); loadMessages(locale) (route handlers only)
-│   ├── format.ts   # interpolate, plural, number/percent/date formatting
+│   ├── format.ts   # interpolate, plural, number/date formatting
 │   ├── rich.tsx    # rich(): React elements inside translated strings
 │   └── messages/   # en.json (source of truth), es.json, pt.json
 └── proxy.ts        # locale routing: rewrite, redirects, detection, cookie
@@ -160,7 +175,13 @@ src/
   sticky-header scroll padding, `touch-action: manipulation`, and balanced heading wrap; don't
   re-implement them per component.
 - Interactive menus close on Escape and outside click, and Escape returns focus to the toggle.
-- Mobile-first; every page must work at 360px width.
+- Anything that moves on its own (the featured slider) has a pause button, pauses on hover and
+  keyboard focus, and doesn't move at all when the visitor prefers reduced motion (`globals.css`
+  shortens every animation then, so never drive timing from an animation in that mode).
+- Mobile first, per RULE-007: base styles for a 360px phone, breakpoints add desktop layouts, no
+  horizontal scrolling at any width, and every visual change is checked at 360px and on desktop.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
-- Images use `next/image`. Achievement icons and cover art are placeholders or developer-uploaded;
-  never official/ripped assets.
+- Images use `next/image`. Game images follow the root guardrail: only screenshots or banners a
+  recomp project published and allowed us to use, or our own gameplay screenshots, stored in
+  `public/games/<slug>/` and always shown with `ImageCredit`. Never official box or key art, game
+  logos, trophy icons, or ripped assets; without an approved image, use `GeneratedArt`.

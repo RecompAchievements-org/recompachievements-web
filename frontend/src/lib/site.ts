@@ -9,4 +9,10 @@ export const siteConfig = {
   licenseUrl:
     "https://github.com/RecompAchievements-org/recompachievements-web/blob/main/LICENSE",
   contactEmail: "contact@recompachievements.org",
+  // Official channels, shown as icon links in the footer.
+  social: {
+    github: "https://github.com/RecompAchievements-org",
+    reddit: "https://www.reddit.com/user/RecompAchievements/",
+    youtube: "https://www.youtube.com/@RecompAchievements",
+  },
 } as const;

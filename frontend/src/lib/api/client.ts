@@ -1,8 +1,8 @@
 import "server-only";
 
 /** Server-only client for the RecompAchievements API. The base URL and internal key come from
- *  server environment variables and are never sent to the browser; the visitor's IP is forwarded
- *  so the API can rate-limit per visitor instead of per website server.
+ *  server environment variables and are never sent to the browser. Posts forward the visitor's IP
+ *  so the API can rate-limit per visitor instead of per website server; cached reads don't.
 **/
 
 export interface ProblemDetails {
@@ -21,6 +21,18 @@ function requireEnv(name: "API_BASE_URL" | "API_INTERNAL_KEY"): string {
   const value = process.env[name];
   if (!value) throw new Error(`${name} is not configured.`);
   return value;
+}
+
+/** GET without visitor context: the website caches these results and shares them between
+ *  visitors, so they must not depend on who asked.
+**/
+export async function apiGet<T>(path: string): Promise<ApiResult<T>> {
+  const response = await fetch(new URL(path, requireEnv("API_BASE_URL")), {
+    headers: { Accept: "application/json", "X-Internal-Key": requireEnv("API_INTERNAL_KEY") },
+    cache: "no-store",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  return toResult<T>(response);
 }
 
 export async function apiPost<T>(
@@ -43,6 +55,10 @@ export async function apiPost<T>(
     signal: AbortSignal.timeout(timeoutMs),
   });
 
+  return toResult<T>(response);
+}
+
+async function toResult<T>(response: Response): Promise<ApiResult<T>> {
   const payload: unknown = response.headers.get("content-type")?.includes("json")
     ? await response.json()
     : undefined;

@@ -37,9 +37,10 @@ Testcontainers.
   source-generated, camelCase). No reflection-based serialization on hot paths.
 - Responses must not reveal whether a person exists (e.g. the sign-up endpoint answers `202` with
   the same body for new, pending, and confirmed emails).
-- Outgoing email goes through `IEmailSender` (`Infrastructure/Email/`): Brevo when `Brevo:ApiKey` is
-  set, console logging in Development. User-facing email text is localized (en, es, pt) and every
-  value inserted into HTML is encoded. Email failures are logged, never shown as API errors.
+- Outgoing email goes through `IEmailSender` (`Infrastructure/Email/`): the transactional email API
+  when `Brevo:ApiKey` is set, console logging in Development. User-facing email text is localized
+  (en, es, pt) and every value inserted into HTML is encoded. Email failures are logged, never shown
+  as API errors.
 - Store secrets as hashes when only comparison is needed (e.g. confirmation tokens: SHA-256).
 - Use the injected `TimeProvider` for "now", never `DateTime.UtcNow` directly.
 - Endpoints with writes or abuse risk get a named rate-limit policy (`RequireRateLimiting`) on top of

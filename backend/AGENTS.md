@@ -57,9 +57,9 @@ Testcontainers.
   tests, hosted); there is no separate migration step.
 - Change the schema only through `dotnet ef migrations add <PascalCaseName>`; commit the migration
   and the updated snapshot together. Never hand-edit the snapshot.
-- Before launch, migrations may be rewritten (RULE-005). Once production holds real data, applied
-  migrations are never edited or deleted, and every schema change is a forward migration
-  (RULE-005, exception 2).
+- Production holds real user data (alpha sign-ups), so RULE-005 exception 2 applies: applied
+  migrations are never edited or deleted, and every schema change is a new forward migration that
+  fills in existing rows. `ApiFactory` applies the full migration chain, so CI tests it.
 - No lazy loading. Select only the columns an endpoint needs (`Select` into a response record).
 - Uniqueness and integrity live in the database (unique indexes, foreign keys), not only in code:
   e.g. the unique `(user_id, achievement_id)` unlock rule from the root guardrails.

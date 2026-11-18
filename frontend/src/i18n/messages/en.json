@@ -96,7 +96,8 @@
       "consent": "Please accept the privacy notice to continue.",
       "rateLimited": "Too many attempts. Please try again in a few minutes.",
       "unavailable": "Something went wrong on our side. Please try again later.",
-      "invalid": "Please check the highlighted fields."
+      "invalid": "Please check the highlighted fields.",
+      "challenge": "Please complete the human verification above and try again."
     },
     "success": {
       "title": "Check Your Inbox",
@@ -137,6 +138,10 @@
       {
         "title": "Where It’s Kept",
         "body": "In our database at our hosting provider. Confirmation emails are sent through our email delivery provider. Both act only on our instructions."
+      },
+      {
+        "title": "Bot Protection",
+        "body": "Before you sign up, a short check in your browser confirms you’re a person, not an automated script. It’s run by a security service that sees only technical information about your browser and connection, used solely for this check. We don’t receive or store it."
       },
       {
         "title": "How Long",

@@ -96,7 +96,8 @@
       "consent": "Aceite o aviso de privacidade para continuar.",
       "rateLimited": "Muitas tentativas. Tente de novo em alguns minutos.",
       "unavailable": "Algo deu errado do nosso lado. Tente de novo mais tarde.",
-      "invalid": "Confira os campos destacados."
+      "invalid": "Confira os campos destacados.",
+      "challenge": "Conclua a verificação humana acima e tente de novo."
     },
     "success": {
       "title": "Confira sua caixa de entrada",
@@ -137,6 +138,10 @@
       {
         "title": "Onde ficam",
         "body": "No nosso banco de dados, no nosso provedor de hospedagem. Os e-mails de confirmação são enviados pelo nosso provedor de envio de e-mail. Ambos atuam apenas sob nossas instruções."
+      },
+      {
+        "title": "Proteção contra bots",
+        "body": "Antes da inscrição, uma verificação rápida no seu navegador confirma que você é uma pessoa e não um script automatizado. Ela é feita por um serviço de segurança que vê apenas informações técnicas do seu navegador e da sua conexão, usadas somente para essa verificação. Nós não recebemos nem guardamos essas informações."
       },
       {
         "title": "Por quanto tempo",

@@ -3,6 +3,8 @@
 import { isLocale } from "@/i18n/config";
 import { createAlphaSignup, platforms, type Platform } from "@/lib/api/alphaSignups";
 import { getClientIp } from "@/lib/clientIp";
+import { verifyHumanToken } from "@/lib/turnstile";
+import { challengeAction } from "./challenge";
 
 export type SignupField = "email" | "nickname" | "platforms" | "recomps" | "consent";
 export type SignupErrorCode =
@@ -25,7 +27,7 @@ export type SignupState =
   | { status: "idle" }
   | { status: "success"; email: string }
   | { status: "invalid"; fieldErrors: Partial<Record<SignupField, SignupErrorCode>>; values: SignupValues }
-  | { status: "error"; error: "rateLimited" | "unavailable"; values: SignupValues };
+  | { status: "error"; error: "challenge" | "rateLimited" | "unavailable"; values: SignupValues };
 
 // Humans need a few seconds to fill the form; scripts that post instantly are ignored.
 const minimumFillMs = 3000;
@@ -87,6 +89,10 @@ export async function signUpForAlpha(_previous: SignupState, formData: FormData)
     return { status: "invalid", fieldErrors, values };
   }
 
+  const clientIp = await getClientIp();
+  const human = await verifyHumanToken(String(formData.get("turnstileToken") ?? ""), challengeAction, clientIp);
+  if (!human) return { status: "error", error: "challenge", values };
+
   try {
     const result = await createAlphaSignup(
       {
@@ -97,7 +103,7 @@ export async function signUpForAlpha(_previous: SignupState, formData: FormData)
         locale,
         consent: values.consent,
       },
-      await getClientIp(),
+      clientIp,
     );
 
     if (result.ok) return { status: "success", email: values.email };

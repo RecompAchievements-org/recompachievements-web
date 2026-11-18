@@ -57,7 +57,12 @@ export default async function AlphaPage() {
       </section>
 
       <Card className="self-start p-6">
-        <AlphaSignupForm locale={locale} privacyHref={privacyHref} messages={alpha} />
+        <AlphaSignupForm
+          locale={locale}
+          privacyHref={privacyHref}
+          challengeSiteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
+          messages={alpha}
+        />
       </Card>
     </div>
   );

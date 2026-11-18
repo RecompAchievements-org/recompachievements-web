@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Card } from "@/components/ui/Card";
 import type { Locale } from "@/i18n/config";
@@ -8,6 +8,8 @@ import { rich } from "@/i18n/rich";
 import type { Messages } from "@/i18n/server";
 import { cx } from "@/lib/cx";
 import { signUpForAlpha, type SignupField, type SignupState } from "./actions";
+import { challengeAction } from "./challenge";
+import { HumanCheck } from "./HumanCheck";
 
 const platformOptions = [
   { value: "windows", label: "Windows" },
@@ -22,10 +24,11 @@ const inputClasses =
 interface AlphaSignupFormProps {
   locale: Locale;
   privacyHref: string;
+  challengeSiteKey: string;
   messages: Messages["alpha"];
 }
 
-export function AlphaSignupForm({ locale, privacyHref, messages }: AlphaSignupFormProps) {
+export function AlphaSignupForm({ locale, privacyHref, challengeSiteKey, messages }: AlphaSignupFormProps) {
   const [state, formAction] = useActionState(signUpForAlpha, { status: "idle" } satisfies SignupState);
   const openedAt = useRef(0);
   const formRef = useRef<HTMLFormElement>(null);
@@ -211,7 +214,7 @@ export function AlphaSignupForm({ locale, privacyHref, messages }: AlphaSignupFo
         )}
       </div>
 
-      <SubmitButton label={form.submit} pendingLabel={form.submitting} />
+      <HumanCheckField siteKey={challengeSiteKey} locale={locale} pendingLabel={form.submitting} submitLabel={form.submit} />
     </form>
   );
 }
@@ -249,13 +252,37 @@ function Field({
   );
 }
 
-function SubmitButton({ label, pendingLabel }: { label: string; pendingLabel: string }) {
+/** The challenge box plus the submit button. It lives inside the form, so it remounts with the
+ *  form after each attempt and gets a fresh single-use token; the button waits for that token.
+**/
+function HumanCheckField({
+  siteKey,
+  locale,
+  submitLabel,
+  pendingLabel,
+}: {
+  siteKey: string;
+  locale: Locale;
+  submitLabel: string;
+  pendingLabel: string;
+}) {
+  const [token, setToken] = useState<string | null>(null);
+  return (
+    <div className="flex flex-col gap-4">
+      {siteKey && <HumanCheck siteKey={siteKey} action={challengeAction} locale={locale} onToken={setToken} />}
+      <input type="hidden" name="turnstileToken" value={token ?? ""} />
+      <SubmitButton label={submitLabel} pendingLabel={pendingLabel} ready={token !== null} />
+    </div>
+  );
+}
+
+function SubmitButton({ label, pendingLabel, ready }: { label: string; pendingLabel: string; ready: boolean }) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
-      disabled={pending}
-      className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-lg bg-accent px-6 font-semibold text-on-accent transition-colors hover:bg-accent-strong disabled:opacity-70"
+      disabled={pending || !ready}
+      className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-lg bg-accent px-6 font-semibold text-on-accent transition-colors hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-accent"
     >
       {pending && (
         <span aria-hidden="true" className="size-4 animate-spin rounded-full border-2 border-on-accent border-t-transparent" />

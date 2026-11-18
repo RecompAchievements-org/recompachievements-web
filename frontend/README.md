@@ -25,13 +25,17 @@ cp .env.example .env.local   # API address and internal key for local developmen
 npm run dev                  # http://localhost:3000
 ```
 
-| Variable (server-only) | Purpose |
+| Variable | Purpose |
 |---|---|
 | `API_BASE_URL` | Address of the API (`http://localhost:5080` locally) |
 | `API_INTERNAL_KEY` | Must match the API's `InternalApi__Key` |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the sign-up form |
+| `TURNSTILE_SECRET_KEY` | Secret key used by the server to verify that challenge |
 
-Both are read only by server code and never reach the browser. On the hosted site they are set in
-the hosting dashboard.
+Only `NEXT_PUBLIC_` values reach the browser (and are fixed at build time); the rest are read only
+by server code. `.env.example` contains the provider's official **test** keys, which always pass, for
+local development and preview deployments; production uses real keys set in the hosting dashboard.
+Without a secret key, sign-ups are rejected rather than accepted unchecked.
 
 | Script | Purpose |
 |---|---|
@@ -52,7 +56,7 @@ src/
 │   │   ├── page.tsx          # Home (placeholder until the game directory)
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
 │   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
-│   │   ├── alpha/            # Alpha sign-up: page, form (client), server action
+│   │   ├── alpha/            # Alpha sign-up: page, form (client), human check, server action
 │   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
 │   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
@@ -76,6 +80,7 @@ src/
 ├── lib/
 │   ├── api/                  # Server-only API client (client.ts) and per-feature calls
 │   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
+│   ├── turnstile.ts          # Server-side verification of the human-verification challenge
 │   ├── cx.ts                 # Class-name join helper
 │   └── site.ts               # Site name, URLs, and public contact address
 └── proxy.ts                  # Locale routing and detection

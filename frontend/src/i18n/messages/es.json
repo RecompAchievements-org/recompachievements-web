@@ -96,7 +96,8 @@
       "consent": "Acepta el aviso de privacidad para continuar.",
       "rateLimited": "Demasiados intentos. Vuelve a intentarlo en unos minutos.",
       "unavailable": "Algo ha fallado por nuestra parte. Inténtalo de nuevo más tarde.",
-      "invalid": "Revisa los campos marcados."
+      "invalid": "Revisa los campos marcados.",
+      "challenge": "Completa la verificación humana de arriba y vuelve a intentarlo."
     },
     "success": {
       "title": "Revisa tu bandeja de entrada",
@@ -137,6 +138,10 @@
       {
         "title": "Dónde se guardan",
         "body": "En nuestra base de datos, en nuestro proveedor de alojamiento. Los correos de confirmación se envían a través de nuestro proveedor de envío de correo. Ambos actúan solo siguiendo nuestras instrucciones."
+      },
+      {
+        "title": "Protección contra bots",
+        "body": "Antes de registrarte, una breve comprobación en tu navegador confirma que eres una persona y no un script automatizado. La realiza un servicio de seguridad que solo ve información técnica de tu navegador y tu conexión, usada únicamente para esta comprobación. Nosotros no la recibimos ni la guardamos."
       },
       {
         "title": "Durante cuánto tiempo",

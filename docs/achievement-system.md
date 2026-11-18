@@ -39,8 +39,8 @@ Game (e.g. Zelda 64: Recompiled)
 - Each subset has a **type** (`dlc`, `mod`, `randomizer`, `challenge`) and declares the **mods and
   settings it requires** (for example, a specific randomizer mod and version).
 - Sets are tracked separately: each has its own completion and completion badges.
-- A gameplay-changing mod played against the **core** set makes the session softcore; played with
-  **its own subset** (with the declared requirements met), it can be hardcore.
+- A gameplay-changing mod makes **core-set** unlocks softcore; with **its own subset** (and the
+  declared requirements met), that subset's unlocks can be hardcore.
 
 ## Achievements
 
@@ -51,7 +51,7 @@ Game (e.g. Zelda 64: Recompiled)
 | **Points** | **1–10**, set by the developer: 1 = easiest, 10 = hardest |
 | **Rarity tier** | Set by the developer and fixed: Common, Uncommon, Rare, Epic, Legendary |
 | **Kind** | `progression` (required story milestone), `win_condition` (finishing the game), or `standard` |
-| Progress target | Optional, e.g. `50` for "Collect 50 feathers" (display only) |
+| Progression step | Optional position in the story (1, 2, 3…), set by the developer. Used by integrity checks; sequence breaks are legitimate and never block an unlock by themselves |
 
 ### Rarity tiers and multipliers
 
@@ -83,8 +83,10 @@ live.
 
 ## Hardcore and softcore
 
-Every play **session** is hardcore or softcore. A session is **hardcore** only if all of these hold
-for the entire session:
+A **session** covers one player playing one game, from launch until the game closes. It records the
+game's state: the build, the toggles, and the active mods, updated whenever the game reports a
+change. Each **unlock** is judged hardcore or softcore from that state at the moment it happens. An
+unlock is **hardcore** only if all of these have held since the session started:
 
 1. **Verified build:** the executable's SHA-256 hash is one of the game's official builds registered
    by its developer (per platform: Windows, Linux, macOS).
@@ -92,14 +94,16 @@ for the entire session:
    save anywhere, slow motion, level select, cheats) is off. Toggles classified as **allowed**
    (60 fps, widescreen, UI options) don't matter.
 3. **Allowed mods only:** every active mod (identified by mod ID and version) is on the game's
-   **allowlist** of cosmetic and quality-of-life mods, or is required by the subset being played.
+   **allowlist** of cosmetic and quality-of-life mods, or is required by the subset the achievement
+   belongs to.
 
-Otherwise the session is **softcore**. Once a session becomes softcore it **stays softcore** until
-the game restarts; turning an assist off mid-session doesn't restore hardcore.
+Otherwise the unlock is **softcore**. Once a session's state breaks a rule, every later unlock in it
+is softcore until the game restarts; turning an assist off mid-session doesn't restore hardcore.
+Unlocks earned **before** the change stay hardcore.
 
 ### Upgrading unlocks
 
-An achievement unlocked in softcore can be **upgraded** by unlocking it again in a hardcore session.
+An achievement unlocked in softcore can be **upgraded** by unlocking it again in hardcore.
 Upgrades are never retroactive: using no assists later doesn't convert past unlocks.
 
 ## Scoring
@@ -171,11 +175,11 @@ A player holds at most one of Silver or Gold for a set; Platinum implies Gold.
 
 Beaten becomes Mastered once the remaining unlocks are upgraded.
 
-## Progress tracking
+## Progress counters
 
-An achievement with a progress target shows the player's progress ("32 / 50") on their profile and
-the game page. Games report progress through the SDK. Progress is **display only**: reaching the
-target never unlocks the achievement; the game still sends its own signed unlock.
+Counters such as "32 / 50 feathers" are shown **only inside the game**, which tracks them itself.
+The platform never receives or stores progress toward an achievement; it only receives the unlock
+once the game decides it is earned.
 
 ## Rich presence
 
@@ -216,12 +220,13 @@ The schema (to be built with the backend features) follows from this design:
 |---|---|
 | `games` | `slug`, `title`, `platform_origin`, `repo_url`, `dev_user_id`, `hmac_secret` (encrypted) |
 | `achievement_sets` | `game_id`, `kind` (`core` / `subset`), `subset_type` (`dlc`, `mod`, `randomizer`, `challenge`), `requirements`, `status` (draft, in review, published) |
-| `achievements` | `set_id`, `api_key_name`, `title`, `description`, `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progress_target`, `icon_url`, `display_order` |
+| `achievements` | `set_id`, `api_key_name`, `title`, `description`, `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progression_step` (optional), `icon_url`, `display_order` |
 | `game_builds` | `game_id`, `platform`, `sha256`, `label` (verified builds) |
 | `game_toggles` | `game_id`, `key`, `classification` (`allowed` / `assist`) |
 | `mod_allowlist` | `game_id`, `mod_id`, `version` |
-| `game_sessions` | `user_id`, `game_id`, `set_id`, `build_hash`, `is_hardcore`, `downgraded_at`, `started_at`, `last_heartbeat_at` |
+| `game_sessions` | `user_id`, `game_id`, `build_hash`, `state` (JSON snapshot of toggles and active mods), `downgraded_at`, `started_at`, `last_heartbeat_at` |
 | `user_unlocks` | `user_id`, `achievement_id`, `softcore_unlocked_at`, `hardcore_unlocked_at`, `session_id`, `build_hash`; unique on `(user_id, achievement_id)` |
+| `sdk_request_nonces` | `nonce` (primary key), `received_at`; signed requests already accepted, recorded in the same transaction as their effect so none can be replayed; old rows are cleaned up |
 | `achievement_stats` | `achievement_id`, `hardcore_unlockers`, `share`, `elo_bonus`, `calculated_at` (nightly) |
 | `user_set_badges` | `user_id`, `set_id`, `badge` (`silver`, `gold`, `platinum`, `beaten`, `mastered`), `awarded_at` |
 | `titles`, `user_titles` | Title text (per language), source (`event` / `role`); which titles a user holds, and for up to three of them a display position (1–3) |
@@ -233,10 +238,9 @@ SDK.
 
 | Operation | Purpose |
 |---|---|
-| Start session | Sends the build hash, toggle states, and active mods; the server decides hardcore or softcore and returns the set's achievements and the player's unlocks |
-| Report assist / mod change | Downgrades the session to softcore for the rest of the run |
-| Unlock | Signed unlock of one achievement |
-| Update progress | Reports progress toward a target (display only) |
+| Start session | Sends the build hash, toggle states, and active mods; returns the game's achievements and the player's unlocks |
+| Report assist / mod change | Updates the session's state; later unlocks in the run are judged against it |
+| Unlock | Signed unlock of one achievement; the server judges it hardcore or softcore from the session's state |
 | Presence heartbeat | Presence key and values; keeps the session alive |
 
 ## Initial values

@@ -1,7 +1,7 @@
 import { connection } from "next/server";
 import { getLocale } from "@/i18n/server";
 import { getGames } from "@/lib/api/games";
-import { GameCard } from "./GameCard";
+import { GameCard, GameCardSkeleton } from "./GameCard";
 
 const gridClasses = "grid gap-4 sm:grid-cols-2 lg:grid-cols-3";
 
@@ -31,14 +31,13 @@ export async function GameGrid({ limit, unavailable }: { limit?: number; unavail
   );
 }
 
-export function GameGridSkeleton({ count = 3, label }: { count?: number; label: string }) {
+// Placeholder grid with the real grid's columns; count matches how many cards the page shows.
+export function GameGridSkeleton({ count, label }: { count: number; label: string }) {
   return (
     <div role="status" aria-label={label} className={gridClasses}>
       {Array.from({ length: count }, (_, index) => (
-        <div key={index} className="flex animate-pulse flex-col gap-4 rounded-xl border border-border bg-surface p-4">
-          <div className="aspect-video rounded-lg bg-surface-raised" />
-          <div className="h-5 w-2/3 rounded bg-surface-raised" />
-          <div className="h-4 w-full rounded bg-surface-raised" />
+        <div key={index} className="flex">
+          <GameCardSkeleton />
         </div>
       ))}
     </div>

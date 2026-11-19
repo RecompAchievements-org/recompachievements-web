@@ -42,6 +42,11 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   `cacheTag(...)` where the data can be invalidated (e.g. `game:${slug}`). Do not use the legacy
   `fetch` `next: { revalidate }` options or `export const revalidate`.
 - Wrap slow or per-user sections in `<Suspense>` with a skeleton fallback so the shell streams.
+  Every skeleton **matches the real layout**: same grid, padding, aspect ratios, and line heights,
+  built from `ui/Skeleton` (`Skeleton` blocks, `SkeletonText` lines that take the real text's
+  classes), so nothing shifts when the content arrives. Keep a component's skeleton next to it
+  (`GameCardSkeleton` in `GameCard.tsx`) and update both together. Approved images sit on a
+  `Skeleton` that they cover once loaded (`GameArt`).
 - **The build never needs the API.** Components that render API data call `await connection()`
   first and sit inside `<Suspense>`; the cached data function makes later requests instant. Pages
   with params the build doesn't list (`/games/[slug]`) read `params` inside `<Suspense>` too, and
@@ -136,7 +141,7 @@ src/
 ├── components/
 │   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks)
 │   ├── seo/        # JsonLd for schema.org structured data
-│   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink)
+│   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink, Skeleton)
 │   └── <feature>/  # feature components (alpha/, game/; later profile/)
 ├── lib/
 │   ├── api/        # data access layer: server-only calls to the .NET API and their response types

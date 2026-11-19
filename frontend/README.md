@@ -60,7 +60,7 @@ src/
 │   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
 │   │   ├── alpha/            # Alpha sign-up: page, form (client), human check, server action
 │   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
-│   │   ├── games/            # Game directory; [slug]/ game page and its social preview card
+│   │   ├── games/            # Game directory; [slug]/ game page, its loading skeleton, and social card
 │   │   ├── content-policy/   # What we host, image sources, removal requests
 │   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
@@ -78,7 +78,7 @@ src/
 │   │                         # AchievementRow, PreviewNotice, CommentsPreview (client, not saved)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks
 │   ├── seo/                  # JsonLd (schema.org structured data)
-│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink
+│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink, Skeleton
 ├── i18n/
 │   ├── config.ts             # Locales, URL helpers, hreflang alternates
 │   ├── server.ts             # getLocale(), getMessages(), Messages type
@@ -224,4 +224,5 @@ the `font-display` / `font-mono` font utilities.
 | `Button`, `ButtonLink` | `variant`: `primary` · `secondary` · `ghost`; `size`: `sm` · `md`; `ButtonLink` also takes `external` to open in a new tab |
 | `ExternalLink` | Any `a` props; opens in a new tab with `rel="noopener noreferrer"` and a screen-reader hint |
 | `Card` | Any `div` props |
+| `Skeleton`, `SkeletonText` | `className` (size and shape; for `SkeletonText`, the real text's font and line height), `widths` (one per line; add `sm:hidden` for lines that only wrap on phones) |
 | `Badge` | `tone`: `neutral` · `accent` · `gold` · `success` · `common` · `uncommon` · `rare` · `epic` · `legendary` |

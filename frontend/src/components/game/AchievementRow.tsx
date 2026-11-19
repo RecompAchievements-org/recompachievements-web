@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import type { Achievement } from "@/lib/api/games";
@@ -31,6 +32,23 @@ export async function AchievementRow({ achievement: item }: { achievement: Achie
           <Badge tone="gold">{plural(locale, item.points, achievement.points)}</Badge>
           <Badge tone={item.rarityTier}>{rarity[item.rarityTier]}</Badge>
           {item.kind !== "standard" && <Badge>{game.kind[item.kind]}</Badge>}
+        </div>
+      </div>
+    </li>
+  );
+}
+
+// Same layout and sizes as AchievementRow.
+export function AchievementRowSkeleton() {
+  return (
+    <li className="flex items-start gap-4 rounded-xl border border-border bg-surface p-4">
+      <Skeleton className="size-12 shrink-0 rounded-lg" />
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <SkeletonText widths={["w-1/3"]} className="font-semibold" />
+        <SkeletonText widths={["w-full sm:w-2/3", "w-1/2 sm:hidden"]} className="text-sm" />
+        <div className="mt-1 flex gap-2">
+          <Skeleton className="h-[22px] w-14" />
+          <Skeleton className="h-[22px] w-20" />
         </div>
       </div>
     </li>

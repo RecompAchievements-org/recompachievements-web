@@ -23,7 +23,7 @@ export default async function GamesPage() {
         <h1 className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-5xl">{games.title}</h1>
         <p className="text-lg leading-relaxed text-muted">{games.intro}</p>
       </header>
-      <Suspense fallback={<GameGridSkeleton label={games.loading} />}>
+      <Suspense fallback={<GameGridSkeleton count={6} label={games.loading} />}>
         <GameGrid unavailable={games.unavailable} />
       </Suspense>
     </div>

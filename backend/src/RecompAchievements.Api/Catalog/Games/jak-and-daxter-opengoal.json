@@ -10,6 +10,11 @@
   "featured": true,
   "latestVersion": "0.3.9",
   "releasedAt": "2026-10-15",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/a86c4aec1bcf14eb30646ed8df2d2401.jpg", "sourceUrl": "https://www.steamgriddb.com/grid/41005", "author": "Gums" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/11aa2fb7a9ca266b6705bd2a2c41818f.png", "sourceUrl": "https://www.steamgriddb.com/hero/186334", "author": "ElPerroGutierrez" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/7a20fd764fa23d34b52bd85bf5cb49a6.png", "sourceUrl": "https://www.steamgriddb.com/icon/10559", "author": "Dornecat22" }
+  },
   "summary": {
     "en": "Native PC port of Jak and Daxter: The Precursor Legacy, rebuilt from the game’s decompiled code by the OpenGOAL project.",
     "es": "Port nativo para PC de Jak and Daxter: The Precursor Legacy, reconstruido a partir del código descompilado del juego por el proyecto OpenGOAL.",

@@ -10,6 +10,11 @@
   "displayOrder": 8,
   "latestVersion": "3",
   "releasedAt": "2026-10-29",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/e83bab0eff11d84c5e7d4199d9fa45a4.png", "sourceUrl": "https://www.steamgriddb.com/grid/81105", "author": "Pabro" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/1153d9785350153067dd74232310f949.png", "sourceUrl": "https://www.steamgriddb.com/hero/151184", "author": "Mikachuuu_" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/23af4b45f1e166141a790d1a3126e77a.png", "sourceUrl": "https://www.steamgriddb.com/icon/2353", "author": "thatRdude" }
+  },
   "summary": {
     "en": "Unofficial native PC port of the original Xbox version of BLACK, made by static recompilation, with modern display options and keyboard and mouse support.",
     "es": "Port nativo no oficial para PC de la versión de Xbox original de BLACK, hecho por recompilación estática, con opciones de pantalla modernas y soporte para teclado y ratón.",

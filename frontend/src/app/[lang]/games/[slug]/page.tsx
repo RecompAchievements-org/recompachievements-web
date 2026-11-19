@@ -6,7 +6,9 @@ import { AchievementRow } from "@/components/game/AchievementRow";
 import { CommentsPreview } from "@/components/game/CommentsPreview";
 import { ConsolePill } from "@/components/game/ConsolePill";
 import { GameDetailsCard } from "@/components/game/GameDetailsCard";
-import { GeneratedArt } from "@/components/game/GeneratedArt";
+import { GameArt } from "@/components/game/GameArt";
+import { GameArtCredits } from "@/components/game/GameArtCredits";
+import { GameBackdrop } from "@/components/game/GameBackdrop";
 import { consoleName } from "@/components/game/names";
 import { PreviewNotice } from "@/components/game/PreviewNotice";
 import { localeAlternates, localizePath } from "@/i18n/config";
@@ -79,20 +81,19 @@ async function GameDetails({ params }: Pick<Props, "params">) {
   const { coreSet } = game;
   return (
     <>
+      {game.art?.hero && <GameBackdrop images={[game.art.hero.url]} eager />}
       {backLink}
       {/** Desktop: game info and achievements on the left, the details card on the right (sticky).
        *  Phones: the card comes right after the header, before the long achievement list.
       **/}
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:grid-rows-[auto_1fr]">
         <header className="grid gap-6 sm:grid-cols-[12rem_1fr] sm:items-center lg:col-start-1 lg:row-start-1">
-          {/** Portrait cover: generated for now. Approved images are landscape and appear in the
-           *  featured slider; portrait covers would need their own catalog field.
-          **/}
-          <GeneratedArt
-            slug={game.slug}
-            title={game.title}
-            originalPlatform={game.originalPlatform}
+          <GameArt
+            image={game.art?.cover}
+            game={game}
             variant="portrait"
+            sizes="(min-width: 640px) 192px, 160px"
+            loading="eager"
             className="w-40 sm:w-full"
           />
           <div className="flex flex-col gap-4">
@@ -132,6 +133,8 @@ async function GameDetails({ params }: Pick<Props, "params">) {
       </div>
 
       <CommentsPreview labels={comments} />
+
+      {game.art && <GameArtCredits art={game.art} />}
     </>
   );
 }

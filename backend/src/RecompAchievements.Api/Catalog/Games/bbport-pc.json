@@ -10,6 +10,11 @@
   "featured": true,
   "latestVersion": "0.7",
   "releasedAt": "2026-10-28",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/021399af062379408df9c358a1a83cdb.png", "sourceUrl": "https://www.steamgriddb.com/grid/82619", "author": "Morente" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/f20fd1e8deb34b1bc57a3146f2511eb2.png", "sourceUrl": "https://www.steamgriddb.com/hero/35452", "author": "CluckenDip" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/b0b14130d4056e057f7234fc60a8bd58.png", "sourceUrl": "https://www.steamgriddb.com/icon/36789", "author": "superrrrrrrrrrr" }
+  },
   "summary": {
     "en": "Native Linux and Windows port of Bloodborne: the game’s own code runs directly on the PC with Vulkan graphics, an unlocked frame rate, modern upscaling, and co-op.",
     "es": "Port nativo para Linux y Windows de Bloodborne: el código del propio juego se ejecuta directamente en el PC con gráficos Vulkan, tasa de fotogramas libre, reescalado moderno y cooperativo.",

@@ -21,7 +21,8 @@ public sealed record CatalogGame(
     bool Featured = false,
     string? LatestVersion = null,
     DateOnly? ReleasedAt = null,
-    GameImage? HeroImage = null,
+    GameArt? Art = null,
+    int? SteamGridDbId = null,
     string? License = null);
 
 public sealed record CatalogSet(CatalogAchievement[] Achievements);
@@ -118,6 +119,7 @@ internal static partial class Catalog
 
             ValidateText(errors, at, "summary", game.Summary, 300);
             ValidateRelease(errors, at, game, today);
+            ValidateArt(errors, at, game.Art, game.SteamGridDbId);
             ValidateSet(errors, at, game.CoreSet);
         }
 
@@ -135,22 +137,61 @@ internal static partial class Catalog
         {
             errors.Add($"{at}: releasedAt can't be in the future.");
         }
+    }
 
-        if (game.HeroImage is { } image)
+    /** Art must come from SteamGridDB: images on its CDN, each with its SteamGridDB page and the
+     *  artist's name for the credits shown on the game page.
+    **/
+    private static void ValidateArt(List<string> errors, string at, GameArt? art, int? steamGridDbId)
+    {
+        if (steamGridDbId is < 1)
         {
-            if (image.File is null || !ImageFilePattern().IsMatch(image.File))
+            errors.Add($"{at}: steamGridDbId must be a positive SteamGridDB game id.");
+        }
+
+        if (art is null)
+        {
+            return;
+        }
+
+        if (art.AutoPicked)
+        {
+            errors.Add($"{at}: art.autoPicked is set by the API, not in the catalog.");
+        }
+
+        foreach (var (kind, image) in new[] { ("cover", art.Cover), ("hero", art.Hero), ("icon", art.Icon) })
+        {
+            if (image is null)
             {
-                errors.Add($"{at}: heroImage.file must be a lowercase name ending in .webp, .jpg, or .png.");
+                continue;
             }
 
-            if (image.SourceUrl is not null && (!Uri.TryCreate(image.SourceUrl, UriKind.Absolute, out var source) || source.Scheme != Uri.UriSchemeHttps))
+            if (!IsHttpsOn(image.Url, ArtImageHosts))
             {
-                errors.Add($"{at}: heroImage.sourceUrl must be an https URL.");
+                errors.Add($"{at}: art.{kind}.url must be an https link on {string.Join(" or ", ArtImageHosts)}.");
             }
 
-            ValidateText(errors, at, "heroImage.credit", image.Credit, 120);
+            if (!IsHttpsOn(image.SourceUrl, [ArtSourceHost]))
+            {
+                errors.Add($"{at}: art.{kind}.sourceUrl must be the image's https page on {ArtSourceHost}.");
+            }
+
+            if (string.IsNullOrWhiteSpace(image.Author) || image.Author.Length > 64)
+            {
+                errors.Add($"{at}: art.{kind}.author (the artist to credit) is required, max 64 characters.");
+            }
         }
     }
+
+    private static readonly string[] ArtImageHosts = ["cdn2.steamgriddb.com"];
+    private const string ArtSourceHost = "www.steamgriddb.com";
+
+    // Same rule for art the API picks: only SteamGridDB's CDN and pages (the website allows only that host).
+    public static bool IsAllowedArtImage(ArtImage image) =>
+        IsHttpsOn(image.Url, ArtImageHosts) && IsHttpsOn(image.SourceUrl, [ArtSourceHost]) && !string.IsNullOrWhiteSpace(image.Author);
+
+    private static bool IsHttpsOn(string? value, string[] hosts) =>
+        Uri.TryCreate(value, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps && hosts.Contains(uri.Host);
 
     private static void ValidateSet(List<string> errors, string at, CatalogSet? set)
     {
@@ -234,7 +275,4 @@ internal static partial class Catalog
 
     [GeneratedRegex("^[A-Z0-9]+(_[A-Z0-9]+)*$")]
     private static partial Regex ApiKeyNamePattern();
-
-    [GeneratedRegex("^[a-z0-9]+(-[a-z0-9]+)*\\.(webp|jpg|png)$")]
-    private static partial Regex ImageFilePattern();
 }

@@ -287,6 +287,10 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("character varying(64)")
                         .HasColumnName("slug");
 
+                    b.Property<int?>("SteamGridDbId")
+                        .HasColumnType("integer")
+                        .HasColumnName("steam_grid_db_id");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -297,27 +301,48 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.ComplexProperty(typeof(Dictionary<string, object>), "HeroImage", "RecompAchievements.Api.Features.Games.Game.HeroImage#GameImage", b1 =>
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Art", "RecompAchievements.Api.Features.Games.Game.Art#GameArt", b1 =>
                         {
-                            b1.Property<string>("File")
-                                .IsRequired();
+                            b1.Property<bool>("AutoPicked");
 
-                            b1.Property<string>("SourceUrl");
-
-                            b1.ComplexProperty(typeof(Dictionary<string, object>), "Credit", "RecompAchievements.Api.Features.Games.Game.HeroImage#GameImage.Credit#LocalizedText", b2 =>
+                            b1.ComplexProperty(typeof(Dictionary<string, object>), "Cover", "RecompAchievements.Api.Features.Games.Game.Art#GameArt.Cover#ArtImage", b2 =>
                                 {
-                                    b2.IsRequired();
-
-                                    b2.Property<string>("En")
+                                    b2.Property<string>("Author")
                                         .IsRequired();
 
-                                    b2.Property<string>("Es");
+                                    b2.Property<string>("SourceUrl")
+                                        .IsRequired();
 
-                                    b2.Property<string>("Pt");
+                                    b2.Property<string>("Url")
+                                        .IsRequired();
+                                });
+
+                            b1.ComplexProperty(typeof(Dictionary<string, object>), "Hero", "RecompAchievements.Api.Features.Games.Game.Art#GameArt.Hero#ArtImage", b2 =>
+                                {
+                                    b2.Property<string>("Author")
+                                        .IsRequired();
+
+                                    b2.Property<string>("SourceUrl")
+                                        .IsRequired();
+
+                                    b2.Property<string>("Url")
+                                        .IsRequired();
+                                });
+
+                            b1.ComplexProperty(typeof(Dictionary<string, object>), "Icon", "RecompAchievements.Api.Features.Games.Game.Art#GameArt.Icon#ArtImage", b2 =>
+                                {
+                                    b2.Property<string>("Author")
+                                        .IsRequired();
+
+                                    b2.Property<string>("SourceUrl")
+                                        .IsRequired();
+
+                                    b2.Property<string>("Url")
+                                        .IsRequired();
                                 });
 
                             b1
-                                .ToJson("hero_image")
+                                .ToJson("art")
                                 .HasColumnType("jsonb");
                         });
 

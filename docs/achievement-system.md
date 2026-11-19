@@ -231,7 +231,7 @@ the rest, and fields marked *later*, arrive with their features.
 
 | Table | Key fields |
 |---|---|
-| `games` (*built*) | `slug`, `title`, `original_platform`, `original_game`, `license`, `platforms`, `summary` (localized), `repo_url`, `display_order`, `featured`, `latest_version`, `released_at`, `hero_image` (approved image and credit); *later:* `dev_user_id`, `hmac_secret` (encrypted) |
+| `games` (*built*) | `slug`, `title`, `original_platform`, `original_game`, `license`, `platforms`, `summary` (localized), `repo_url`, `display_order`, `featured`, `latest_version`, `released_at`, `art` (SteamGridDB cover, hero, and icon links with their pages and artists; curated or picked automatically), `steam_grid_db_id`; *later:* `dev_user_id`, `hmac_secret` (encrypted) |
 | `achievement_sets` (*built*) | `game_id`, `kind` (`core` / `subset`), `status` (`preview`; *later:* draft, in review, published); *later:* `subset_type` (`dlc`, `mod`, `randomizer`, `challenge`), `requirements` |
 | `achievements` (*built*) | `set_id`, `api_key_name`, `title` and `description` (localized), `points` (1–10), `rarity_tier`, `kind` (`progression`, `win_condition`, `standard`), `progression_step` (optional), `display_order`; *later:* `icon_url` |
 | `game_builds` | `game_id`, `platform`, `sha256`, `label` (verified builds) |

@@ -34,7 +34,7 @@ internal static class GameEndpoints
                 game.Featured,
                 game.LatestVersion,
                 game.ReleasedAt,
-                game.HeroImage,
+                game.Art,
                 CoreSet = game.Sets
                     .Where(set => set.Kind == AchievementSetKind.Core)
                     .Select(set => new { set.Status, Count = set.Achievements.Count, Points = set.Achievements.Sum(a => a.Points) })
@@ -54,7 +54,7 @@ internal static class GameEndpoints
             game.Featured,
             game.LatestVersion,
             game.ReleasedAt,
-            GameImageResponse.From(game.Slug, game.HeroImage, lang))).ToArray());
+            GameArtResponse.From(game.Art))).ToArray());
     }
 
     private static async Task<Results<Ok<GameDetailResponse>, ProblemHttpResult>> GetAsync(
@@ -77,7 +77,7 @@ internal static class GameEndpoints
                 game.License,
                 game.LatestVersion,
                 game.ReleasedAt,
-                game.HeroImage,
+                game.Art,
                 CoreSet = game.Sets
                     .Where(set => set.Kind == AchievementSetKind.Core)
                     .Select(set => new
@@ -129,7 +129,7 @@ internal static class GameEndpoints
             game.License,
             game.LatestVersion,
             game.ReleasedAt,
-            GameImageResponse.From(game.Slug, game.HeroImage, lang),
+            GameArtResponse.From(game.Art),
             new AchievementSetResponse(game.CoreSet.Status, achievements.Length, achievements.Sum(achievement => achievement.Points), achievements)));
     }
 }

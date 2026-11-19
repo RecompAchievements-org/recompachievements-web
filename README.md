@@ -203,10 +203,11 @@ Account, DNS, and email configuration are kept outside this repository.
 ## Legal & content policy
 
 RecompAchievements tracks **achievement definitions and player progress only**. It does **not**
-host or link to game binaries, ROMs, or recompiled executables, and it never uses official box
-art, key art, game logos, or trophy icons. Achievement text is original. Game images are either
-screenshots and banners published by the recomp project and used with its permission, or our own
-gameplay screenshots of the recomp, each credited; games without one get generated artwork.
+host or link to game binaries, ROMs, or recompiled executables, and it never uses game logos or
+official trophy icons. Achievement text is original. Game art (covers, backgrounds, icons) comes
+from [SteamGridDB](https://www.steamgriddb.com/), chosen by hand or picked from its top-rated
+images through its official API, loaded from its servers rather than stored here, and credited on each game page with the artist and a link; it is used only to
+identify the game. Games without art get generated artwork.
 
 All trademarks belong to their respective owners. RecompAchievements is not affiliated with any game
 publisher, platform holder, or with RetroAchievements.

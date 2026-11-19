@@ -13,6 +13,11 @@
   "displayOrder": 9,
   "latestVersion": "0.6.6",
   "releasedAt": "2026-11-13",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/490d3a9dd72716b3101890d0d8241c51.png", "sourceUrl": "https://www.steamgriddb.com/grid/43815", "author": "telanus" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/85e870b7384545c252ce2f7072ebb42d.png", "sourceUrl": "https://www.steamgriddb.com/hero/140412", "author": "GodModeFear" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/8a2e1f3e5b3dc11ef455af6a71dcc05a.png", "sourceUrl": "https://www.steamgriddb.com/icon/52487", "author": "Over." }
+  },
   "summary": {
     "en": "Open-source reimplementation of the Gran Turismo 3 A-Spec engine that plays the whole game from your own disc, with online battles, modern displays, and mods.",
     "es": "Reimplementación de código abierto del motor de Gran Turismo 3 A-Spec que ejecuta el juego completo desde tu propio disco, con carreras en línea, pantallas modernas y mods.",

@@ -14,7 +14,7 @@ export function GamePageSkeleton({ label }: { label: string }) {
       <SkeletonText widths={["w-24"]} className="text-sm" />
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:grid-rows-[auto_1fr]">
         <div className="grid gap-6 sm:grid-cols-[12rem_1fr] sm:items-center lg:col-start-1 lg:row-start-1">
-          <Skeleton className="aspect-[3/4] w-40 rounded-xl sm:w-full" />
+          <Skeleton className="aspect-[2/3] w-40 rounded-xl sm:w-full" />
           <div className="flex flex-col gap-4">
             <Skeleton className="h-[30px] w-32 rounded-full" />
             <SkeletonText widths={["w-3/4", "w-1/2 sm:hidden"]} className="font-display text-4xl leading-tight sm:text-5xl" />

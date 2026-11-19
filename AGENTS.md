@@ -28,11 +28,13 @@ Read `README.md` for the full architecture and data model.
 
 ## Hard guardrails (never break these)
 
-- **No copyrighted game content.** Never add game binaries, ROMs, recompiled executables, ripped
-  assets, official box or key art, game logos, or official trophy/achievement icons. The only game
-  images allowed are screenshots and banners published by a recomp project **with its
-  permission**, and our own gameplay screenshots of a recomp, each with a credit. Everything else
-  uses original or generated art.
+- **No copyrighted game content in the repo.** Never add game binaries, ROMs, recompiled
+  executables, ripped assets, game logos, or official trophy/achievement icons. Game art (covers,
+  backgrounds, icons) comes **only from SteamGridDB**: curated in the catalog or picked through its
+  official API (never by crawling its website), referenced by link on its CDN (never downloaded or
+  committed), shown only to identify the game, and credited
+  per image (artist + SteamGridDB page) in the game page's credits. Images are removed within 5
+  business days of a valid request. Everything else uses original or generated art.
 - **No secrets in the repo.** API keys, HMAC secrets, DB credentials, and session keys come from
   environment variables. Commit only `.env.example` files with dummy values.
 - **No infrastructure details.** Docs, code, and comments never include DNS records, IP addresses,

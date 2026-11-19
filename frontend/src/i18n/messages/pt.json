@@ -23,7 +23,7 @@
     "security": "Segurança",
     "contact": "Contato",
     "license": "Código aberto sob a licença {license}.",
-    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos nem ROMs, usa imagens de jogos apenas com permissão do projeto do recomp ou de capturas próprias, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas ou com o RetroAchievements.",
+    "disclaimer": "O RecompAchievements registra apenas definições de conquistas e o progresso dos jogadores. Não hospeda jogos nem ROMs, exibe arte de jogos do SteamGridDB apenas para identificá-los, e não tem vínculo com nenhuma publicadora de jogos, fabricante de plataformas, SteamGridDB ou com o RetroAchievements.",
     "privacy": "Privacidade",
     "contentPolicy": "Política de conteúdo",
     "tagline": "Conquistas para recomps e ports nativos para PC, registradas pela comunidade.",
@@ -40,7 +40,8 @@
     "joinAlpha": "Participe do alfa",
     "allGamesHeading": "Todos os jogos",
     "browseAll": "Ver todos os jogos",
-    "gamesUnavailable": "Não foi possível carregar os jogos agora. Tente novamente em instantes."
+    "gamesUnavailable": "Não foi possível carregar os jogos agora. Tente novamente em instantes.",
+    "artSource": "Arte dos jogos do {source}"
   },
   "achievement": {
     "points": {
@@ -110,6 +111,16 @@
     "notSaved": "Não salvo",
     "count": "{count} / {max}"
   },
+  "artCredits": {
+    "heading": "Créditos das imagens",
+    "cover": "Capa",
+    "hero": "Fundo",
+    "icon": "Ícone",
+    "by": "por {author}",
+    "source": "Imagens do SteamGridDB, escolhidas à mão ou entre as mais bem avaliadas, e com links para suas páginas.",
+    "disclaimer": "A arte e as marcas dos jogos pertencem aos seus donos e são usadas apenas para identificar o jogo. O RecompAchievements não tem vínculo nem apoio deles nem do SteamGridDB. Titulares de direitos podem pedir a remoção de uma imagem; veja nossa {policy}.",
+    "policyLink": "política de conteúdo"
+  },
   "slider": {
     "heading": "Recomps em destaque",
     "carousel": "Recomps em destaque",
@@ -121,7 +132,7 @@
     "previous": "Slide anterior",
     "next": "Próximo slide",
     "viewAchievements": "Ver conquistas",
-    "imageCredit": "Imagem:"
+    "artCredit": "Arte de {author} · SteamGridDB"
   },
   "notFound": {
     "metaTitle": "Página não encontrada",
@@ -244,7 +255,7 @@
       },
       {
         "title": "Imagens",
-        "body": "Não usamos capas oficiais, artes promocionais, logotipos de jogos nem ícones de troféus. As imagens de jogos são capturas e banners publicados pelo projeto do recomp e usados com permissão, ou capturas próprias do recomp em execução. Todas têm crédito. Jogos sem uma imagem aprovada usam arte gerada."
+        "body": "Nunca usamos logotipos de jogos nem ícones oficiais de troféus, e não guardamos arte de jogos nos nossos servidores. Capas, fundos e ícones vêm do SteamGridDB, escolhidos à mão ou entre suas imagens mais bem avaliadas, e carregados dos servidores dele, e são exibidos apenas para identificar cada jogo. Cada imagem tem crédito na página do jogo, com o artista e um link para a página dela no SteamGridDB. Jogos sem arte usam arte gerada."
       },
       {
         "title": "Marcas registradas",

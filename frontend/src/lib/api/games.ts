@@ -7,11 +7,18 @@ export type RarityTier = "common" | "uncommon" | "rare" | "epic" | "legendary";
 export type AchievementKind = "progression" | "win_condition" | "standard";
 export type SetStatus = "preview";
 
-// An approved screenshot or banner; url is a path on this site, credit is already translated.
-export interface GameImage {
+// One SteamGridDB image: its CDN link, its SteamGridDB page, and the artist to credit.
+export interface ArtImage {
   url: string;
-  credit: string;
-  sourceUrl: string | null;
+  sourceUrl: string;
+  author: string;
+}
+
+// A game's curated art; any image can be missing (generated art is shown instead).
+export interface GameArt {
+  cover: ArtImage | null;
+  hero: ArtImage | null;
+  icon: ArtImage | null;
 }
 
 export interface GameSummary {
@@ -26,7 +33,7 @@ export interface GameSummary {
   featured: boolean;
   latestVersion: string | null;
   releasedAt: string | null;
-  heroImage: GameImage | null;
+  art: GameArt | null;
 }
 
 export interface Achievement {
@@ -50,7 +57,7 @@ export interface GameDetail {
   license: string | null;
   latestVersion: string | null;
   releasedAt: string | null;
-  heroImage: GameImage | null;
+  art: GameArt | null;
   coreSet: {
     status: SetStatus;
     achievementCount: number;

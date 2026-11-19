@@ -110,7 +110,7 @@ public sealed class CatalogImportTests : IAsyncLifetime
     }
 
     [Fact]
-    public void Release_info_and_image_are_checked()
+    public void Release_info_and_art_are_checked()
     {
         var game = TestGame("bad-release") with
         {
@@ -118,25 +118,33 @@ public sealed class CatalogImportTests : IAsyncLifetime
             LatestVersion = "",
             OriginalGame = " ",
             License = "",
-            HeroImage = new GameImage { File = "Hero Shot.PNG", Credit = new LocalizedText(""), SourceUrl = "http://example.com" },
+            Art = new GameArt
+            {
+                Cover = new ArtImage { Url = "https://example.com/cover.png", SourceUrl = "http://www.steamgriddb.com/grid/1", Author = " " },
+            },
         };
 
         var errors = Catalog.Validate([game], Today);
 
         Assert.Contains(errors, error => error.Contains("releasedAt can't be in the future", StringComparison.Ordinal));
         Assert.Contains(errors, error => error.Contains("latestVersion must be", StringComparison.Ordinal));
-        Assert.Contains(errors, error => error.Contains("heroImage.file", StringComparison.Ordinal));
-        Assert.Contains(errors, error => error.Contains("heroImage.sourceUrl", StringComparison.Ordinal));
-        Assert.Contains(errors, error => error.Contains("heroImage.credit needs English", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Contains("art.cover.url must be", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Contains("art.cover.sourceUrl must be", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Contains("art.cover.author", StringComparison.Ordinal));
         Assert.Contains(errors, error => error.Contains("originalGame", StringComparison.Ordinal));
         Assert.Contains(errors, error => error.Contains("license must be", StringComparison.Ordinal));
     }
 
     [Fact]
-    public async Task Release_info_and_image_are_imported()
+    public async Task Release_info_and_art_are_imported()
     {
-        var image = new GameImage { File = "hero.webp", Credit = new LocalizedText("Screenshot by the project", Es: "Captura del proyecto"), SourceUrl = "https://example.com/shot" };
-        await Import(TestGame("released-game") with { Featured = true, LatestVersion = "1.0.0", ReleasedAt = new DateOnly(2026, 1, 2), HeroImage = image });
+        // Placeholder links that pass validation; no image is fetched.
+        var art = new GameArt
+        {
+            Cover = new ArtImage { Url = "https://cdn2.steamgriddb.com/grid/test-cover.png", SourceUrl = "https://www.steamgriddb.com/grid/1", Author = "Cover Artist" },
+            Hero = new ArtImage { Url = "https://cdn2.steamgriddb.com/hero/test-hero.png", SourceUrl = "https://www.steamgriddb.com/hero/2", Author = "Hero Artist" },
+        };
+        await Import(TestGame("released-game") with { Featured = true, LatestVersion = "1.0.0", ReleasedAt = new DateOnly(2026, 1, 2), Art = art });
 
         await using var scope = _factory.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -144,6 +152,8 @@ public sealed class CatalogImportTests : IAsyncLifetime
         Assert.True(game.Featured);
         Assert.Equal("1.0.0", game.LatestVersion);
         Assert.Equal(new DateOnly(2026, 1, 2), game.ReleasedAt);
-        Assert.Equal(image, game.HeroImage);
+        Assert.Equal(art.Cover, game.Art?.Cover);
+        Assert.Equal(art.Hero, game.Art?.Hero);
+        Assert.Null(game.Art?.Icon);
     }
 }

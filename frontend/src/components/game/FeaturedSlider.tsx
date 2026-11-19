@@ -1,13 +1,13 @@
 import { connection } from "next/server";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { localizePath } from "@/i18n/config";
 import { formatDate, interpolate, plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getGames, type GameSummary } from "@/lib/api/games";
 import { GameArt } from "./GameArt";
-import { ImageCredit } from "./ImageCredit";
 import { consoleName } from "./names";
 import { SliderControls } from "./SliderControls";
 
@@ -82,17 +82,21 @@ export async function FeaturedSlider() {
         </div>
         <div className="relative order-1 flex flex-col lg:order-2">
           <GameArt
+            image={game.art?.hero}
             game={game}
+            variant="wide"
             sizes="(min-width: 1024px) 640px, 100vw"
-            priority={index === 0}
+            loading={index === 0 ? "eager" : undefined}
+            fetchPriority={index === 0 ? "high" : undefined}
             className="min-h-56 flex-1 sm:min-h-72 lg:min-h-96"
           />
-          {game.heroImage && (
-            <ImageCredit
-              image={game.heroImage}
-              prefix={slider.imageCredit}
-              className="absolute right-3 bottom-2 rounded bg-background/70 px-2 py-0.5"
-            />
+          {game.art?.hero && (
+            <ExternalLink
+              href={game.art.hero.sourceUrl}
+              className="absolute right-3 bottom-2 rounded bg-background/75 px-2 py-0.5 text-xs text-muted hover:text-foreground"
+            >
+              {interpolate(slider.artCredit, { author: game.art.hero.author })}
+            </ExternalLink>
           )}
         </div>
       </div>
@@ -102,6 +106,7 @@ export async function FeaturedSlider() {
   return (
     <SliderControls
       slides={slides}
+      backdrops={games.map((game) => game.art?.hero?.url ?? null)}
       rail={games.map((game, index) => ({
         title: game.title,
         subtitle: consoleName(game.originalPlatform),

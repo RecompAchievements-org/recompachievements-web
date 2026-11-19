@@ -82,6 +82,12 @@
     @apply bg-background font-sans text-foreground antialiased;
   }
 
+  /* Tailwind v4 leaves buttons with the arrow cursor; enabled ones show the pointer again. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
   /* Avoid single-word last lines in headings, which translations make more likely. */
   h1,
   h2,

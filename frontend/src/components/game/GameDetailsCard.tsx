@@ -5,7 +5,7 @@ import { ExternalLink } from "@/components/ui/ExternalLink";
 import { formatDate, interpolate, plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import type { GameDetail } from "@/lib/api/games";
-import { GeneratedArt } from "./GeneratedArt";
+import { GameArt } from "./GameArt";
 import { consoleName, platformName } from "./names";
 import { repoLinks } from "./repoLinks";
 
@@ -42,13 +42,7 @@ export async function GameDetailsCard({ game }: { game: GameDetail }) {
   return (
     <aside aria-label={text.recompCard} className="flex flex-col gap-5 rounded-2xl border border-border bg-surface p-5">
       <div className="flex items-center gap-4">
-        <GeneratedArt
-          slug={game.slug}
-          title={game.title}
-          originalPlatform={game.originalPlatform}
-          variant="thumb"
-          className="size-20 shrink-0"
-        />
+        <GameArt image={game.art?.icon ?? game.art?.cover} game={game} variant="thumb" sizes="80px" className="size-20 shrink-0" />
         <div className="flex min-w-0 flex-col gap-1">
           <p translate="no" className="font-display text-lg leading-snug font-semibold">{game.title}</p>
           <p className="text-sm text-muted">{consoleLabel}</p>

@@ -17,7 +17,7 @@ function gradientFor(slug: string) {
 
 /** Generated art for games without an approved image: a gradient in the site's colors with the
  *  game's title and original console. Decorative, because the title is always shown as text next
- *  to it. "card" is 16:9 (game cards), "portrait" is a 3:4 cover (game page header), "wide" fills
+ *  to it. "card" is 16:9 (game cards), "portrait" is a 2:3 cover (game page header), "wide" fills
  *  the featured slider, and "thumb" is the details card's square. "wide" and "thumb" leave out the
  *  title, and "portrait" the console, because the page already shows them beside the art.
 **/
@@ -59,7 +59,7 @@ export function GeneratedArt({
         portrait ? "justify-end" : "justify-between",
         wide && "p-6 sm:p-10",
         variant === "card" && "aspect-video rounded-lg border border-border p-4",
-        portrait && "aspect-[3/4] rounded-xl border border-border p-4 sm:p-5",
+        portrait && "aspect-[2/3] rounded-xl border border-border p-4 sm:p-5",
         gradientFor(slug),
         className,
       )}

@@ -47,8 +47,6 @@ Without a secret key, sign-ups are rejected rather than accepted unchecked.
 ## Project structure
 
 ```
-public/
-└── games/<slug>/             # Approved game images (project screenshots with permission, own captures)
 assets/
 └── fonts/                    # ChakraPetch-Bold.ttf + OFL.txt, used by social preview images
 src/
@@ -74,8 +72,10 @@ src/
 ├── components/
 │   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
 │   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
-│   │                         # GeneratedArt, ImageCredit, GameDetailsCard, ConsolePill, repoLinks,
-│   │                         # AchievementRow, PreviewNotice, CommentsPreview (client, not saved)
+│   │                         # GeneratedArt, FadeInImage (client), GameBackdrop, GameArtCredits,
+│   │                         # GameDetailsCard,
+│   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
+│   │                         # CommentsPreview (client, not saved)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks
 │   ├── seo/                  # JsonLd (schema.org structured data)
 │   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink, Skeleton
@@ -136,14 +136,23 @@ badge for releases in the last 30 days. Every slide is rendered on
 the server; `SliderControls` only switches between them (auto-advance every 7 seconds, pause button,
 arrow keys, swipe, and no movement with reduced motion).
 
-Art uses `GeneratedArt` in four shapes: 16:9 on game cards, a **3:4 portrait cover** in the game
-page header, a square thumbnail in the details card, and the slider's wide panel. The only place an
-approved image appears is the slider (a landscape `heroImage`, with its credit); portrait cover
-images would need their own catalog field, added when the first one is approved.
+Game art comes from SteamGridDB through the catalog's `art` (see the backend README) and is
+shown by `GameArt`, which falls back to `GeneratedArt`:
 
-To add a slider image: get the recomp project's permission (or take your own gameplay screenshot),
-save it as landscape WebP in `public/games/<slug>/`, and add `heroImage` with its `file`, a
-`credit`, and optionally a `sourceUrl` to the game's catalog file in the backend.
+| Place | Image | Shape |
+|---|---|---|
+| Game page header | `cover` | 2:3 portrait |
+| Game page backdrop (`GameBackdrop`) | `hero`, blurred and dimmed, fading into the page; scrolls away with it | full width, top of the page |
+| Home page backdrop | the visible slide's `hero` (same `GameBackdrop`), crossfading whenever the slide changes; loaded the first time a slide shows | full width, top of the page |
+| Game cards (`/games`, home) | `hero`, cropped | 16:9 |
+| Featured slider | `hero`, with an "Art by …" credit overlay | wide panel |
+| Details card thumbnail | `icon`, else `cover` | square |
+
+Images load from SteamGridDB's CDN through `next/image` (allowed in `next.config.ts`, optimized
+copies cached for 30 days; the site never calls SteamGridDB's API), fading in over a `Skeleton`
+once loaded (`FadeInImage`), and the game page lists every image's artist and SteamGridDB page in
+its credits legend (`GameArtCredits`, below the comments). The home page notes the source under
+its games grid ("Game art from SteamGridDB").
 
 ## Deployment
 

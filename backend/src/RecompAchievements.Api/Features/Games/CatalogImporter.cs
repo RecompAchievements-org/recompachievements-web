@@ -70,7 +70,7 @@ internal static partial class CatalogImporter
             game.Featured = entry.Featured;
             game.LatestVersion = entry.LatestVersion;
             game.ReleasedAt = entry.ReleasedAt;
-            game.HeroImage = entry.HeroImage;
+            UpdateArt(game, entry);
             game.UpdatedAt = now;
 
             var coreSet = game.Sets.SingleOrDefault(set => set.Kind == AchievementSetKind.Core);
@@ -88,6 +88,17 @@ internal static partial class CatalogImporter
 
         await db.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
+    }
+
+    /** Catalog art (curated, or an empty object to opt out) always wins. Without art in the catalog,
+     *  art the API picked earlier is kept, unless the game's SteamGridDB id changed; otherwise the
+     *  game waits with no art for GameArtFiller.
+    **/
+    private static void UpdateArt(Game game, CatalogGame entry)
+    {
+        var keepAutoPicked = entry.Art is null && game.Art is { AutoPicked: true } && game.SteamGridDbId == entry.SteamGridDbId;
+        game.Art = entry.Art ?? (keepAutoPicked ? game.Art : null);
+        game.SteamGridDbId = entry.SteamGridDbId;
     }
 
     private static void SyncAchievements(AchievementSet set, CatalogAchievement[] entries)

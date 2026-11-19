@@ -2,6 +2,7 @@
 
 import { useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { cx } from "@/lib/cx";
+import { GameBackdrop } from "./GameBackdrop";
 
 export interface SliderLabels {
   carousel: string;
@@ -28,18 +29,24 @@ function subscribeToReducedMotion(onChange: () => void) {
 /** Interactive part of the featured slider. Every slide arrives server-rendered; this only picks
  *  which one is visible. Auto-advance follows the active progress bar's animation, pauses on hover
  *  and keyboard focus, has a pause button (WCAG 2.2.2), and is off when the visitor prefers
- *  reduced motion. Arrow keys and horizontal swipes change slides.
+ *  reduced motion. Arrow keys and horizontal swipes change slides. The visible slide's background
+ *  art sets the page backdrop (GameBackdrop), crossfading on every change; a slide's backdrop is
+ *  only loaded the first time that slide shows.
 **/
 export function SliderControls({
   slides,
   rail,
   labels,
+  backdrops,
 }: {
   slides: ReactNode[];
   rail: SlideRailItem[];
   labels: SliderLabels;
+  // Each slide's background art URL (null when it has none), for the page backdrop.
+  backdrops: (string | null)[];
 }) {
   const [index, setIndex] = useState(0);
+  const [shown, setShown] = useState<ReadonlySet<number>>(() => new Set([0]));
   const [playing, setPlaying] = useState(true);
   const [held, setHeld] = useState(false);
   const swipeStart = useRef<number | null>(null);
@@ -52,7 +59,11 @@ export function SliderControls({
   const count = slides.length;
   const canAutoPlay = count > 1 && !reducedMotion;
   const autoPlaying = canAutoPlay && playing;
-  const go = (next: number) => setIndex((next + count) % count);
+  const go = (next: number) => {
+    const target = (next + count) % count;
+    setIndex(target);
+    setShown((seen) => (seen.has(target) ? seen : new Set(seen).add(target)));
+  };
 
   return (
     <section
@@ -70,6 +81,11 @@ export function SliderControls({
         if (event.key === "ArrowLeft") go(index - 1);
       }}
     >
+      <GameBackdrop
+        images={backdrops.map((url, slide) => (shown.has(slide) ? url : null))}
+        active={index}
+        className="h-[34rem] sm:h-[46rem]"
+      />
       <div
         aria-live={autoPlaying ? "off" : "polite"}
         className="relative grid overflow-hidden rounded-2xl border border-border bg-surface"

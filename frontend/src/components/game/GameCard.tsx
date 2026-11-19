@@ -5,7 +5,7 @@ import { localizePath } from "@/i18n/config";
 import { plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import type { GameSummary } from "@/lib/api/games";
-import { GeneratedArt } from "./GeneratedArt";
+import { GameArt } from "./GameArt";
 
 export async function GameCard({ game }: { game: GameSummary }) {
   const locale = await getLocale();
@@ -17,7 +17,7 @@ export async function GameCard({ game }: { game: GameSummary }) {
       prefetch
       className="group flex w-full flex-col gap-4 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-accent"
     >
-      <GeneratedArt slug={game.slug} title={game.title} originalPlatform={game.originalPlatform} />
+      <GameArt image={game.art?.hero} game={game} variant="card" sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw" />
       <div className="flex flex-col gap-2">
         <div className="flex items-start justify-between gap-3">
           <h3 translate="no" className="font-display text-lg leading-snug font-semibold group-hover:text-accent">

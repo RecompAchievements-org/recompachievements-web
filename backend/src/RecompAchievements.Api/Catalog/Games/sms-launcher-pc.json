@@ -13,6 +13,11 @@
   "displayOrder": 7,
   "latestVersion": "1.1.0",
   "releasedAt": "2026-11-06",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/f5e97c0193978d636807084bf658fc1c.png", "sourceUrl": "https://www.steamgriddb.com/grid/147554", "author": "sleepbelts" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/c83ba39f025671619b34fa8f0af9f33f.png", "sourceUrl": "https://www.steamgriddb.com/hero/128669", "author": "Grillsoße" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/460b491b917d4185ed1f5be97229721a.png", "sourceUrl": "https://www.steamgriddb.com/icon/3728", "author": "MrWheyne" }
+  },
   "summary": {
     "en": "Launcher for the native PC port of Super Mario Sunshine: it guides you through setup, builds the game from your own disc, and gives you one Play button.",
     "es": "Lanzador del port nativo para PC de Super Mario Sunshine: te guía en la configuración, construye el juego a partir de tu propio disco y te da un solo botón para jugar.",

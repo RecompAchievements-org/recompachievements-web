@@ -76,8 +76,11 @@ Testcontainers.
   `Catalog/Games/<slug>.json`, imported at startup (`Catalog:ImportOnStartup`) by
   `Features/Games/CatalogImporter.cs`. No endpoint writes game data.
 - Catalog text is **original**: never copy official trophy or achievement names, descriptions, or
-  icons. A `heroImage` is only a screenshot or banner the recomp project allowed us to use, or our
-  own gameplay screenshot, and always has a `credit` (root guardrail); never box or key art. Every set follows `docs/achievement-system.md` (points 1–10, a `win_condition`, rarity
+  icons. Game `art` comes only from SteamGridDB, referenced by link with its page and artist
+  (root guardrail); `Catalog.Validate` allows only its CDN and pages. Art for games without
+  catalog art is picked once by `GameArtFiller` through `SteamGridDbClient` (official API only,
+  never crawling the website); catalog art and `{}` opt-outs always win. Every set follows
+  `docs/achievement-system.md` (points 1–10, a `win_condition`, rarity
   caps); `Catalog.Validate` enforces it and `Shipped_catalog_is_valid` runs it in CI.
 - The import matches by `slug` and `apiKeyName` and deletes entries removed from the catalog. That
   is safe only while every set is a preview with no unlocks; once unlocks exist, removing an

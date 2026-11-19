@@ -23,7 +23,7 @@
     "security": "Security",
     "contact": "Contact",
     "license": "Open source under the {license}.",
-    "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games or ROMs, uses game images only with the recomp project’s permission or from its own captures, and is not affiliated with any game publisher, platform holder, or RetroAchievements.",
+    "disclaimer": "RecompAchievements tracks achievement definitions and player progress only. It does not host games or ROMs, shows game art from SteamGridDB only to identify games, and is not affiliated with any game publisher, platform holder, SteamGridDB, or RetroAchievements.",
     "privacy": "Privacy",
     "contentPolicy": "Content policy",
     "tagline": "Achievements for recomps and native PC ports, tracked by the community.",
@@ -40,7 +40,8 @@
     "joinAlpha": "Join the Alpha",
     "allGamesHeading": "All Games",
     "browseAll": "Browse All Games",
-    "gamesUnavailable": "Games couldn’t be loaded right now. Please try again in a moment."
+    "gamesUnavailable": "Games couldn’t be loaded right now. Please try again in a moment.",
+    "artSource": "Game art from {source}"
   },
   "achievement": {
     "points": {
@@ -110,6 +111,16 @@
     "notSaved": "Not saved",
     "count": "{count} / {max}"
   },
+  "artCredits": {
+    "heading": "Image Credits",
+    "cover": "Cover",
+    "hero": "Background",
+    "icon": "Icon",
+    "by": "by {author}",
+    "source": "Images from SteamGridDB, chosen by hand or picked from its top-rated images, and linked to their pages.",
+    "disclaimer": "Game art and trademarks belong to their owners and are used only to identify the game. RecompAchievements is not affiliated with or endorsed by them or by SteamGridDB. Rights holders can ask us to remove an image; see our {policy}.",
+    "policyLink": "content policy"
+  },
   "slider": {
     "heading": "Featured Recomps",
     "carousel": "Featured recomps",
@@ -121,7 +132,7 @@
     "previous": "Previous Slide",
     "next": "Next Slide",
     "viewAchievements": "View Achievements",
-    "imageCredit": "Image:"
+    "artCredit": "Art by {author} · SteamGridDB"
   },
   "notFound": {
     "metaTitle": "Page Not Found",
@@ -244,7 +255,7 @@
       },
       {
         "title": "Images",
-        "body": "We don’t use official box art, key art, game logos, or trophy icons. Game images are either screenshots and banners published by the recomp project and used with its permission, or our own gameplay captures of the recomp. Each one is credited. Games without an approved image get generated artwork."
+        "body": "We never use game logos or official trophy icons, and we don’t store game art on our servers. Covers, backgrounds, and icons come from SteamGridDB, chosen by hand or picked from its top-rated images, and loaded from its servers, and are shown only to identify each game. Every image is credited on its game page with the artist and a link to its SteamGridDB page. Games without art get generated artwork."
       },
       {
         "title": "Trademarks",

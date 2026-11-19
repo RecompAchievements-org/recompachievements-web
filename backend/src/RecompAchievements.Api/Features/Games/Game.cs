@@ -19,7 +19,8 @@ public sealed class Game
     public bool Featured { get; set; }
     public string? LatestVersion { get; set; }
     public DateOnly? ReleasedAt { get; set; }
-    public GameImage? HeroImage { get; set; }
+    public GameArt? Art { get; set; }
+    public int? SteamGridDbId { get; set; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset UpdatedAt { get; set; }
     public List<AchievementSet> Sets { get; init; } = [];
@@ -62,15 +63,25 @@ public sealed record LocalizedText(string En, string? Es = null, string? Pt = nu
     };
 }
 
-/** An image shown for a game: a screenshot or banner published by the recomp project with its
- *  permission, or our own gameplay screenshot. Never official box art, key art, or logos. The file
- *  lives in the website (public/games/<slug>/<file>); the credit is shown next to it.
+/** A game's art from SteamGridDB: a 2:3 cover, a wide hero background, and a square icon, each
+ *  optional. Images are referenced on SteamGridDB's CDN, never copied into this repository, and
+ *  every one is credited on the game page. Game logos are never used. AutoPicked marks art the API
+ *  chose (GameArtFiller); art from the catalog is curated, and an empty catalog object opts out.
 **/
-public sealed record GameImage
+public sealed record GameArt
 {
-    public required string File { get; init; }
-    public required LocalizedText Credit { get; init; }
-    public string? SourceUrl { get; init; }
+    public ArtImage? Cover { get; init; }
+    public ArtImage? Hero { get; init; }
+    public ArtImage? Icon { get; init; }
+    public bool AutoPicked { get; init; }
+}
+
+// One image: where it's served from, its page on SteamGridDB, and the artist who uploaded it.
+public sealed record ArtImage
+{
+    public required string Url { get; init; }
+    public required string SourceUrl { get; init; }
+    public required string Author { get; init; }
 }
 
 internal static class AchievementSetKind
@@ -106,7 +117,7 @@ internal sealed class GameConfiguration : IEntityTypeConfiguration<Game>
         builder.Property(game => game.RepoUrl).HasMaxLength(300);
         builder.Property(game => game.LatestVersion).HasMaxLength(32);
         builder.ComplexProperty(game => game.Summary, text => text.ToJson());
-        builder.ComplexProperty(game => game.HeroImage, image => image.ToJson());
+        builder.ComplexProperty(game => game.Art, art => art.ToJson());
         builder.HasMany(game => game.Sets).WithOne().HasForeignKey(set => set.GameId).OnDelete(DeleteBehavior.Cascade);
     }
 }

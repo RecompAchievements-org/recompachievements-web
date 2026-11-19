@@ -5,6 +5,7 @@ import { AlphaOpenBadge } from "@/components/alpha/AlphaOpenBadge";
 import { FeaturedSlider, FeaturedSliderSkeleton } from "@/components/game/FeaturedSlider";
 import { GameGrid, GameGridSkeleton } from "@/components/game/GameGrid";
 import { ButtonLink } from "@/components/ui/Button";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { htmlLang, localeAlternates, localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
@@ -81,6 +82,16 @@ export default async function HomePage() {
         <Suspense fallback={<GameGridSkeleton count={6} label={games.loading} />}>
           <GameGrid limit={6} unavailable={home.gamesUnavailable} />
         </Suspense>
+        {/** Short credit for the art in the grid and slider; each game page lists every artist. **/}
+        <p className="text-sm text-muted">
+          {rich(home.artSource, {
+            source: (
+              <ExternalLink href="https://www.steamgriddb.com/" className="text-foreground underline hover:text-accent">
+                <span translate="no">SteamGridDB</span>
+              </ExternalLink>
+            ),
+          })}
+        </p>
       </section>
     </div>
   );

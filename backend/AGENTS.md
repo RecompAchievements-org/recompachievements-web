@@ -52,6 +52,9 @@ Testcontainers.
 - `AppDbContext` is pooled and uses **no-tracking** queries by default; call `AsTracking()` only
   where an entity is loaded to be modified.
 - Table and column names are snake_case automatically; don't set names by hand unless required.
+- `AddDatabase` turns off Npgsql's GSS (Kerberos) encryption: our databases don't use it, and the
+  chiseled image lacks the library it needs (which made every new container log "Cannot load
+  library libgssapi_krb5"). Keep it off unless a database ever requires Kerberos.
 - Each entity has an `IEntityTypeConfiguration<T>` in its feature folder; `AppDbContext` applies them
   all with `ApplyConfigurationsFromAssembly` and exposes a `DbSet` per entity.
 - Migrations are applied at startup when `Database:ApplyMigrationsOnStartup` is true (Development,

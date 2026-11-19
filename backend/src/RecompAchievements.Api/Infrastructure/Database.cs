@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using RecompAchievements.Api.Data;
 
 namespace RecompAchievements.Api.Infrastructure;
@@ -19,8 +20,14 @@ internal static class Database
                 ?? throw new InvalidOperationException(
                     $"Connection string '{ConnectionStringName}' is missing. Set ConnectionStrings__{ConnectionStringName}.");
 
+            /** GSS (Kerberos) encryption is never used by our databases. Turning it off skips a useless
+             *  negotiation step on every new connection and the "Cannot load library libgssapi_krb5"
+             *  message the chiseled container prints, since it doesn't include that library.
+            **/
+            var builder = new NpgsqlConnectionStringBuilder(connectionString) { GssEncryptionMode = GssEncryptionMode.Disable };
+
             options
-                .UseNpgsql(connectionString)
+                .UseNpgsql(builder.ConnectionString)
                 .UseSnakeCaseNamingConvention()
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });

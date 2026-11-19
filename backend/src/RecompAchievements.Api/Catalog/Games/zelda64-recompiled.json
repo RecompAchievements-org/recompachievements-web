@@ -10,6 +10,11 @@
   "featured": true,
   "latestVersion": "1.2.2",
   "releasedAt": "2025-08-27",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/958c6e525626a72dc5722a63f638a80b.png", "sourceUrl": "https://www.steamgriddb.com/grid/71081", "author": "Lazermutt4" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/08d98638c6fcd194a4b1e6992063e944.png", "sourceUrl": "https://www.steamgriddb.com/hero/682", "author": "MrSandman7337" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/4e0928de075538c593fbdabb0c5ef2c3.png", "sourceUrl": "https://www.steamgriddb.com/icon/774", "author": "ALGAE" }
+  },
   "summary": {
     "en": "Native PC port of The Legend of Zelda: Majora’s Mask, built with N64Recomp: high frame rates, widescreen, and mod support.",
     "es": "Port nativo para PC de The Legend of Zelda: Majora’s Mask, creado con N64Recomp: altas tasas de fotogramas, pantalla panorámica y soporte para mods.",

@@ -10,6 +10,11 @@
   "featured": true,
   "latestVersion": "1.0.3",
   "releasedAt": "2025-04-03",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/b80c0932cb6f7be27c8d37b4c847a8bd.png", "sourceUrl": "https://www.steamgriddb.com/grid/70537", "author": "Lazermutt4" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/c7ca2560d00603640b9d448885cefaf7.png", "sourceUrl": "https://www.steamgriddb.com/hero/125918", "author": "StarDontMiss" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/2f60d946251d2dfd719925f3fa1fed01.png", "sourceUrl": "https://www.steamgriddb.com/icon/33835", "author": "Cotton_Candy_2C" }
+  },
   "summary": {
     "en": "Native PC port of the Xbox 360 version of Sonic Unleashed, built with XenonRecomp: high frame rates, ultrawide, and modern controls.",
     "es": "Port nativo para PC de la versión de Xbox 360 de Sonic Unleashed, creado con XenonRecomp: altas tasas de fotogramas, ultrapanorámico y controles modernos.",

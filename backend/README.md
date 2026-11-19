@@ -67,7 +67,7 @@ backend/
 │   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
 │       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
-│       └── Games/                    # Games, sets, achievements; catalog validation and import
+│       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
     ├── ApiFactory.cs                 # In-memory API + throwaway PostgreSQL container
     └── <Area>/…Tests.cs
@@ -89,6 +89,7 @@ environments set these (see `.env.example`):
 | `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value) |
 | `Brevo__ApiKey` | Transactional email API key. Required outside Development; without it, Development logs emails to the console instead |
 | `Email__FromAddress`, `Email__FromName` | Sender of outgoing email (`contact@recompachievements.org`, `RecompAchievements`) |
+| `SteamGridDb__ApiKey` | Optional. SteamGridDB API key: games whose catalog file has no `art` get art picked once after startup. Empty: nothing is fetched |
 | `Site__BaseUrl` | Website address used in email links (`https://recompachievements.org`; `http://localhost:3000` locally) |
 
 `appsettings.Development.json` holds local-only values (database credentials matching
@@ -137,9 +138,18 @@ problem.
 Every game names its `originalGame` (the game players need their own copy of, shown on its page).
 Optional fields: `license` (the project's SPDX id; leave it out when the repository has none),
 `featured` (shown in the homepage slider), `latestVersion` and
-`releasedAt` (the recomp's latest release; the date can't be in the future), and `heroImage`
-(`file`, `credit` in en/es/pt, optional `sourceUrl`) for an approved landscape image, shown in
-the homepage slider.
+`releasedAt` (the recomp's latest release; the date can't be in the future), `art` with an
+optional `cover` (2:3 grid), `hero` (wide background), and `icon` from SteamGridDB, each as
+`{ url, sourceUrl, author }`, and `steamGridDbId` (the game's SteamGridDB id, when searching by
+`originalGame` would find the wrong game).
+
+**Where a game's art comes from:**
+
+| `art` in the catalog file | Result |
+|---|---|
+| With images | Curated: used as is, never fetched |
+| `{}` (empty) | Opted out: generated art, never fetched (use it for takedowns or wrong matches) |
+| Missing | Picked automatically once after startup through SteamGridDB's API (needs `SteamGridDb__ApiKey`): the best-rated static, safe-for-work cover, hero (3840×1240 when available, since the slider enlarges it), and icon; kept across restarts, picked again only if `steamGridDbId` changes. Lookups that fail are retried on the next start |
 
 **Adding or editing a game:**
 
@@ -149,9 +159,11 @@ the homepage slider.
    at least one `win_condition`, rarity caps per set, and `progressionStep` on story milestones.
 3. Run `dotnet test`: `Shipped_catalog_is_valid` checks every file. With the API running under
    `dotnet watch --no-hot-reload`, saving the file restarts it and re-imports the catalog.
-4. **Images:** only a screenshot or banner the recomp project published and allowed us to use, or
-   our own gameplay screenshot; never box art, key art, or logos. The file goes in the website
-   (`frontend/public/games/<slug>/`), and `heroImage` names it and credits its source.
+4. **Art:** leave `art` out to have it picked automatically, or curate it: on SteamGridDB, open
+   the game and pick a 600×900 grid (`cover`), a hero (`hero`), and optionally an icon. For each, copy the image link (on `cdn2.steamgriddb.com`) as `url`, the
+   asset's page (`https://www.steamgriddb.com/grid/…`, `/hero/…`, `/icon/…`) as `sourceUrl`, and
+   the uploader's name as `author`. Never download the files into the repository, and never use
+   logos.
 5. After the change is deployed, the website shows it within a few hours (its cache lifetime).
 
 ## Performance notes

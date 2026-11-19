@@ -11,6 +11,11 @@
   "featured": true,
   "latestVersion": "0.8.6",
   "releasedAt": "2026-11-14",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/6374abaaafb1a4c0832a34ffa29b15b0.png", "sourceUrl": "https://www.steamgriddb.com/grid/120332", "author": "Julgamesh" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/44b373e42746faebeda3cc70e96de4cf.png", "sourceUrl": "https://www.steamgriddb.com/hero/187463", "author": "apfelspeier" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/6798acf8da0458e3299ad2a1f4e7c2bf.png", "sourceUrl": "https://www.steamgriddb.com/icon/41564", "author": "CluckenDip" }
+  },
   "summary": {
     "en": "Native Windows port of Uncharted: The Nathan Drake Collection, with all three games: the game’s own code runs directly on the PC with a Vulkan renderer.",
     "es": "Port nativo para Windows de Uncharted: The Nathan Drake Collection, con los tres juegos: el código del propio juego se ejecuta directamente en el PC con un renderizador Vulkan.",

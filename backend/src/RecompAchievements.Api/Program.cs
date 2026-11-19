@@ -15,6 +15,7 @@ builder.Services
     .AddProxySupport(builder.Configuration)
     .AddInternalKey(builder.Configuration)
     .AddEmailSending(builder.Configuration, builder.Environment)
+    .AddGameArt(builder.Configuration)
     .AddHealth()
     .AddOpenApi()
     .AddValidation()

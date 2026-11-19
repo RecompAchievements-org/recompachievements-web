@@ -13,6 +13,11 @@
   "featured": true,
   "latestVersion": "3.2.1",
   "releasedAt": "2026-11-16",
+  "art": {
+    "cover": { "url": "https://cdn2.steamgriddb.com/grid/bc6a17604012da6895c1bacd28cdb9fa.png", "sourceUrl": "https://www.steamgriddb.com/grid/115241", "author": "Julgamesh" },
+    "hero": { "url": "https://cdn2.steamgriddb.com/hero/27908be590d3ec381df976ecbf65df81.png", "sourceUrl": "https://www.steamgriddb.com/hero/85182", "author": "Mikachuuu_" },
+    "icon": { "url": "https://cdn2.steamgriddb.com/icon/2ead807305f1256d739e30b5c14e12c0.png", "sourceUrl": "https://www.steamgriddb.com/icon/9558", "author": "Varimarthas" }
+  },
   "summary": {
     "en": "Unofficial native Windows and Linux port of God of War III Remastered: the game’s own code runs directly on the PC with Vulkan graphics, a launcher, and up to 240 FPS.",
     "es": "Port nativo no oficial para Windows y Linux de God of War III Remastered: el código del propio juego se ejecuta directamente en el PC con gráficos Vulkan, un lanzador y hasta 240 FPS.",

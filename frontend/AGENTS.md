@@ -45,8 +45,8 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   Every skeleton **matches the real layout**: same grid, padding, aspect ratios, and line heights,
   built from `ui/Skeleton` (`Skeleton` blocks, `SkeletonText` lines that take the real text's
   classes), so nothing shifts when the content arrives. Keep a component's skeleton next to it
-  (`GameCardSkeleton` in `GameCard.tsx`) and update both together. Approved images sit on a
-  `Skeleton` that they cover once loaded (`GameArt`).
+  (`GameCardSkeleton` in `GameCard.tsx`) and update both together. Images fade in over a
+  `Skeleton` once loaded (`FadeInImage`, used by `GameArt` and `GameBackdrop`), so they never pop in.
 - **The build never needs the API.** Components that render API data call `await connection()`
   first and sit inside `<Suspense>`; the cached data function makes later requests instant. Pages
   with params the build doesn't list (`/games/[slug]`) read `params` inside `<Suspense>` too, and
@@ -177,8 +177,8 @@ src/
 - Translated text varies in length (Spanish and Portuguese run ~20–30% longer); check all three
   locales at 360px.
 - Global base styles in `globals.css` already handle reduced motion (`prefers-reduced-motion`),
-  sticky-header scroll padding, `touch-action: manipulation`, and balanced heading wrap; don't
-  re-implement them per component.
+  sticky-header scroll padding, `touch-action: manipulation`, balanced heading wrap, and the pointer
+  cursor on enabled buttons (Tailwind v4 dropped it); don't re-implement them per component.
 - Interactive menus close on Escape and outside click, and Escape returns focus to the toggle.
 - Anything that moves on its own (the featured slider) has a pause button, pauses on hover and
   keyboard focus, and doesn't move at all when the visitor prefers reduced motion (`globals.css`
@@ -186,7 +186,11 @@ src/
 - Mobile first, per RULE-007: base styles for a 360px phone, breakpoints add desktop layouts, no
   horizontal scrolling at any width, and every visual change is checked at 360px and on desktop.
 - Accessible by default: semantic HTML, labelled controls, visible focus, sufficient contrast.
-- Images use `next/image`. Game images follow the root guardrail: only screenshots or banners a
-  recomp project published and allowed us to use, or our own gameplay screenshots, stored in
-  `public/games/<slug>/` and always shown with `ImageCredit`. Never official box or key art, game
-  logos, trophy icons, or ripped assets; without an approved image, use `GeneratedArt`.
+- Images use `next/image`. Game art follows the root guardrail: SteamGridDB images referenced on
+  its CDN (the only allowed remote host in `next.config.ts`), shown through `GameArt` (generated
+  art when missing), and credited: the slider's overlay and the game page's `GameArtCredits`
+  legend. Never commit game images, logos, trophy icons, or ripped assets.
+- Above-the-fold images use `loading="eager"`, and the page's main image (its Largest Contentful
+  Paint) also `fetchPriority="high"`; never the deprecated `priority` prop. Everything else stays
+  lazy. The development-only LCP warning can name a lazy copy of an image that's also shown
+  eagerly higher up (same source); that's expected.

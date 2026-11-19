@@ -27,20 +27,38 @@ export default async function HomePage() {
   const locale = await getLocale();
   const { home, metadata, common, games, slider } = await getMessages();
 
-  // Tells search engines the site's name, so results show "RecompAchievements" rather than the URL.
-  const website = {
+  /** Tells search engines who we are: the site's name (so results show "RecompAchievements" rather
+   *  than the URL) and the organization behind it, with its logo and official profiles, so it isn't
+   *  confused with similarly named projects.
+  **/
+  const organizationId = `${siteConfig.url}/#organization`;
+  const structuredData = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    alternateName: "Recomp Achievements",
-    url: `${siteConfig.url}/`,
-    description: metadata.description,
-    inLanguage: htmlLang[locale],
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: siteConfig.name,
+        url: `${siteConfig.url}/`,
+        logo: `${siteConfig.url}/apple-icon.png`,
+        email: siteConfig.contactEmail,
+        sameAs: [siteConfig.social.github, siteConfig.social.reddit, siteConfig.social.youtube],
+      },
+      {
+        "@type": "WebSite",
+        name: siteConfig.name,
+        alternateName: "Recomp Achievements",
+        url: `${siteConfig.url}/`,
+        description: metadata.description,
+        inLanguage: htmlLang[locale],
+        publisher: { "@id": organizationId },
+      },
+    ],
   };
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-16 sm:px-6 sm:py-24">
-      <JsonLd data={website} />
+      <JsonLd data={structuredData} />
       <section className="flex max-w-3xl flex-col gap-6">
         <AlphaOpenBadge label={common.alphaOpen} href={localizePath(locale, "/alpha")} />
         <h1 className="font-display text-4xl leading-tight font-bold tracking-tight sm:text-6xl">

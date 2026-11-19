@@ -105,8 +105,11 @@ src/
 | `/<lang>/opengraph-image` | `src/app/[lang]/opengraph-image.tsx` | 1200×630 PNG per locale with the logo, translated title, and description; Next.js adds the `og:image` and `twitter:image` tags to every page in that locale |
 | `/<lang>/games/<slug>/opengraph-image` | `src/app/[lang]/games/[slug]/opengraph-image.tsx` | Per-game card: console, title, achievement count, and points |
 
-The home page also includes a schema.org `WebSite` block (`JsonLd` component) so search engines
-show **RecompAchievements** as the site name.
+The home page also includes schema.org structured data (`JsonLd` component): a `WebSite` block, so
+search engines show **RecompAchievements** as the site name, and an `Organization` block with the
+logo (`apple-icon.png`), the public contact address, and the official GitHub, Reddit, and YouTube
+profiles (`siteConfig.social`), so the project isn't confused with similarly named ones. Add new
+official profiles to `siteConfig.social` and they appear in both the footer and this block.
 
 **Regenerating the icons** after a logo change: render `icon.svg` at 512 px with a transparent
 background, downscale it into a 16/32/48 px `favicon.ico`, and render it at 180 px with ~14%

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { localizePath } from "@/i18n/config";
 import { plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
@@ -31,5 +32,22 @@ export async function GameCard({ game }: { game: GameSummary }) {
         </p>
       </div>
     </Link>
+  );
+}
+
+// Same layout and sizes as GameCard, so the grid doesn't shift when the real cards arrive.
+export function GameCardSkeleton() {
+  return (
+    <div className="flex w-full flex-col gap-4 rounded-xl border border-border bg-surface p-4">
+      <Skeleton className="aspect-video rounded-lg" />
+      <div className="flex flex-col gap-2">
+        <div className="flex items-start justify-between gap-3">
+          <SkeletonText widths={["w-3/4"]} className="flex-1 font-display text-lg leading-snug" />
+          <Skeleton className="h-[22px] w-16" />
+        </div>
+        <SkeletonText widths={["w-full", "w-full", "w-1/2"]} className="text-sm leading-relaxed" />
+        <SkeletonText widths={["w-1/2"]} className="font-mono text-sm" />
+      </div>
+    </div>
   );
 }

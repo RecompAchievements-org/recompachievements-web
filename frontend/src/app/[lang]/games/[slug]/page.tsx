@@ -13,6 +13,7 @@ import { localeAlternates, localizePath } from "@/i18n/config";
 import { interpolate, plural } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getGame, type GameDetail } from "@/lib/api/games";
+import { GamePageSkeleton } from "./GamePageSkeleton";
 
 type Props = PageProps<"/[lang]/games/[slug]">;
 
@@ -46,7 +47,7 @@ export default async function GamePage({ params }: Props) {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 sm:py-16">
-      <Suspense fallback={<p role="status" className="text-muted">{game.loading}</p>}>
+      <Suspense fallback={<GamePageSkeleton label={game.loading} />}>
         <GameDetails params={params} />
       </Suspense>
     </div>

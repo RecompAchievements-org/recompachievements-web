@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { cx } from "@/lib/cx";
 import type { GameImage } from "@/lib/api/games";
 import { GeneratedArt } from "./GeneratedArt";
@@ -23,6 +24,8 @@ export function GameArt({
 
   return (
     <div className={cx("relative overflow-hidden", className)}>
+      {/** The pulsing placeholder sits behind the image, which covers it as soon as it has loaded. **/}
+      <Skeleton className="absolute inset-0 rounded-none" />
       <Image src={game.heroImage.url} alt="" fill sizes={sizes} priority={priority} className="object-cover" />
     </div>
   );

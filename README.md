@@ -10,7 +10,9 @@ recomp projects (e.g. *Zelda 64: Recompiled*, *bbport* for Bloodborne) — that 
 traditional emulators.
 
 > 🚧 **Status: alpha (v0.1).** The website and the API are live, with the alpha tester sign-up
-> open and a game directory of preview achievement sets. Accounts and the C/C++ SDK come next.
+> open, a game directory of preview achievement sets, and player accounts (email and password,
+> Discord, or GitHub) with public profiles and comment walls. The developer portal and the C/C++
+> SDK come next.
 
 ---
 
@@ -84,13 +86,15 @@ What that means for design decisions:
 | Backend API | .NET 10 (LTS) · ASP.NET Core Minimal APIs · EF Core | Raw performance for the high-frequency SDK telemetry API; strong typing; built-in OpenAPI |
 | Database | PostgreSQL 17 | Relational integrity; unique constraints prevent duplicate unlocks |
 | Cache / rate limit | Redis (or Valkey), added when needed | Live presence heartbeats, cross-instance rate limits, cached rarity (in-memory rate limiting until then) |
-| Asset storage | Cloudflare R2 (S3-compatible) | Badge icons and cover art with zero egress fees |
+| Asset storage | Cloudflare R2 (S3-compatible) | Achievement icons and cover art with zero egress fees |
 | Hosting (frontend) | Vercel | First-party support for Next.js 16 features (proxy, Cache Components, partial prerendering); preview deploy per PR |
 
 ### API surfaces
 
-- **Public & web API — `/api/v1/...`**: cookie/JWT auth for the website, API keys for community
-  tools. e.g. `GET /api/v1/games/{slug}`, `GET /api/v1/users/{username}/progress`.
+- **Public & web API — `/api/v1/...`**: called by the website's server with its internal key;
+  signed-in visitors are identified by an opaque session token that the website keeps in an
+  HttpOnly cookie (the browser never calls the API). API keys for community tools come later.
+  e.g. `GET /api/v1/games/{slug}`, `POST /api/v1/auth/sign-in`, `GET /api/v1/auth/me`.
 - **Game client / SDK API — `/api/sdk/v1/...`**:
   - `POST /session/start` — authenticates the player's client token, records the executable's
     build hash, toggles, and active mods, returns achievement definitions and unlock state.
@@ -107,7 +111,11 @@ Achievements belong to **sets** (a core set per game plus DLC, mod, randomizer, 
 subsets). Each has developer-set **points** (1–10) and a fixed **rarity tier**; only **hardcore**
 unlocks (verified build, no assists, allowlisted mods) count toward the **global score**, which adds
 a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
-Gold, and Platinum** badges; subsets award **Beaten** and **Mastered**.
+Gold, and Platinum** medals; subsets award **Beaten** and **Mastered**. Medals can be upgraded but
+never downgraded by gameplay, even when playing later with in-game hacks. If achievements weren't
+legitimately earned (forged unlocks, or earned with a hidden hack), a moderator can remove them,
+which also removes their points and lowers or removes the medal. Removed achievements can be earned
+again legitimately; repeat or serious cheaters have their accounts disabled.
 
 Until the developer portal exists, games and their **preview sets** (original achievement text,
 not active until a recomp integrates the SDK) come from a curated catalog in
@@ -117,17 +125,53 @@ marks which games are **featured** on the homepage and their latest version and 
 The full design, including the data model and the SDK operations, is in
 [`docs/achievement-system.md`](docs/achievement-system.md).
 
+### Accounts
+
+A player account can be identified by up to three things, each unique: an **email**, a **Discord
+ID**, and a **GitHub ID**. People sign up with email and password (confirmed by email) or with
+Discord or GitHub; the other methods can be connected later from Settings.
+
+- **Only accounts with a confirmed email can collect achievements.** A Discord/GitHub sign-up uses
+  the platform's verified email when it gives one (and no other account has it); otherwise the
+  account starts without an email, and the player adds and confirms one through our own email.
+- Only the platform's ID finds an account; emails never link or merge accounts. Connecting a
+  platform never changes the account email.
+- Signing in with email needs a confirmed email and a password. Accounts created through Discord or
+  GitHub get their first password through the emailed "set or reset your password" link.
+- Alpha testers are recognized when their confirmed account email matches a confirmed alpha
+  sign-up; nothing extra is stored.
+- Every player has a **public profile** at `/account/<username>` with a comment **wall**. Anyone
+  can read it; accounts with a confirmed email can post; a comment's author or the wall's owner can
+  delete it. Profiles show only the username, join date, last active day, and score fields, and
+  stay out of search engines for now. Email and sign-in details live in private Settings.
+- An account can be **disabled** without deleting it: it can't sign in or use its sessions or
+  emailed links, and its email and platform IDs stay reserved.
+
+Data: `users` (username, email, confirmation, Discord and GitHub IDs, password hash, enabled flag,
+created, edited, and last activity dates), `user_sessions`
+(hashed session tokens), `user_tokens` (hashed single-use email links), and `wall_comments`
+(plain-text comments on public profiles). Endpoints are listed in
+[`backend/README.md`](backend/README.md#endpoints).
+
 ### Website pages (v0.1)
 
 | Route | Page |
 |---|---|
 | `/` | Home: alpha sign-up, featured recomps slider, and games |
 | `/alpha` | Alpha tester sign-up (email confirmation required) |
+| `/sign-up`, `/sign-in` | Create an account or sign in: email and password, Discord, or GitHub |
+| `/confirm-email` | Confirms an account email with the emailed link |
+| `/forgot-password`, `/reset-password` | Set or reset a password through an emailed link |
+| `/welcome` | After a Discord/GitHub sign-up: shows the account email (or that there is none yet) and picks the username |
+| `/account` | Sends signed-in players to their own profile |
+| `/account/[username]` | Public player profile: a compact badges card (one to six featured, with the total earned; up to three also shown on the photo's bottom edge), Platinum, Gold, and Silver medal counters (up to three featured Platinum games, one each for Gold and Silver), last achievements earned, subsets earned (Mastered and Beaten), completion, and last game played (labeled sample data for now) beside a card with the username on top, photo placeholder, points, Elo, ranking, last activity, member since, and the progress and settings buttons at the bottom; full-width comment wall below |
+| `/account/settings` | Private settings: email, connected platforms, password, sign out |
+| `/account/messages` | Placeholder for messages between players (future feature) |
+| `/progress/[username]` | Public completion progress of a player; shows labeled sample data until real unlocks exist |
 | `/privacy` | Privacy notice |
 | `/content-policy` | What the site hosts, image sources, and removal requests |
 | `/games` | Game directory |
 | `/games/[slug]` | Game detail — achievements, points, rarity |
-| `/u/[username]` | Player profile — completion, recent unlocks |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |
 
 The site is available in **English** (unprefixed URLs), **Spanish** (`/es/...`), and **Portuguese,
@@ -190,14 +234,18 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Backend foundations: .NET 10 API, PostgreSQL, integration tests, container image, and CI
 - [x] Alpha tester sign-up: the first end-to-end feature, with the API deployed
 - [x] Game directory and game pages backed by the API, with preview achievement sets
-- [ ] Authentication, player profiles, game comments (the game page has a not-saved preview), and
-  developer portal. The portal **replaces the JSON game catalog**: games and achievements are then
-  edited only through it and stored only in PostgreSQL, and the catalog importer is deleted.
+- [x] Accounts and sign-in: email and password, Discord, and GitHub, with the confirmed email
+  required to collect achievements
+- [x] Public player profiles with comment walls (scores are placeholders until real unlocks exist)
+- [ ] Saved game comments (the game page has a not-saved preview) and developer portal. The portal **replaces the JSON game catalog**: games and achievements are then edited
+  only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK
 - [ ] Launch integration: bbport (Bloodborne), the first supported recomp and the SDK's reference
   integration (see [Launch target](#launch-target-bbport-bloodborne-)). **Requires the catalog to be
   replaced first:** its import deletes achievements removed from the files, which would erase
   players' unlocks once real unlocks exist.
+- [ ] Moderation tools for reviewing reports and removing achievements not legitimately earned,
+  later assisted by an automated bot
 - [ ] Leaderboards, live presence, and the public API docs
 
 ## Legal & content policy

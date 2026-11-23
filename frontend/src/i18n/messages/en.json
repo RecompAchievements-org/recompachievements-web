@@ -11,7 +11,16 @@
     "homeLabel": "{siteName} home",
     "mainNav": "Main",
     "github": "GitHub",
-    "games": "Games"
+    "games": "Games",
+    "signIn": "Sign In",
+    "account": "Your account: {username}",
+    "accountMenu": {
+      "label": "Account",
+      "profile": "Profile",
+      "progress": "Completion Progress",
+      "messages": "Messages",
+      "settings": "Settings"
+    }
   },
   "localeSwitcher": {
     "label": "Language",
@@ -101,7 +110,7 @@
   "comments": {
     "heading": "Comments",
     "intro": "Tips, bugs, and setup notes from players of this recomp.",
-    "accountsNotice": "Commenting will need an account. Accounts are coming soon; until then, what you post here stays on this page only and isn’t saved.",
+    "accountsNotice": "Commenting will need an account. Saved comments are coming soon; until then, what you post here stays on this page only and isn’t saved.",
     "label": "Your comment",
     "placeholder": "Share a tip, a bug, or your setup…",
     "post": "Post Comment",
@@ -109,7 +118,16 @@
     "you": "You",
     "justNow": "Just now",
     "notSaved": "Not saved",
-    "count": "{count} / {max}"
+    "count": "{count} / {max}",
+    "author": {
+      "joined": "Joined {date}",
+      "open": "Open {username}’s profile",
+      "view": "View Profile",
+      "loading": "Loading…",
+      "unavailable": "We couldn’t load this profile.",
+      "memberSince": "Member Since",
+      "lastActivity": "Last Activity"
+    }
   },
   "artCredits": {
     "heading": "Image Credits",
@@ -207,35 +225,39 @@
     "metaTitle": "Privacy Notice",
     "title": "Privacy Notice",
     "updated": "Last updated: {date}",
-    "intro": "RecompAchievements is a community project. This notice explains what we collect when you sign up for the alpha, why, and how to remove it.",
+    "intro": "RecompAchievements is a community project. This notice explains what we collect when you sign up for the alpha or create an account, why, and how to remove it.",
     "sections": [
       {
         "title": "What We Collect",
-        "body": "When you sign up for the alpha: your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. We don’t store your IP address."
+        "body": "Alpha sign-up: your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
+      },
+      {
+        "title": "Profile Walls",
+        "body": "Comments you post on a player’s wall are public and stored until you delete them, the wall’s owner deletes them, your account is deleted, or we remove them."
       },
       {
         "title": "Why",
-        "body": "Only to run the alpha: to confirm your email, invite you when the alpha opens, and organize testing. We don’t sell or share your data, and we don’t send marketing emails."
+        "body": "To run the alpha and your account: confirm your email, sign you in, keep your account secure, send account emails you ask for (confirmation and password links) or that protect you (a password change or a newly connected platform), and, later, track your achievements. We don’t sell or share your data, and we don’t send marketing emails."
       },
       {
         "title": "Where It’s Kept",
-        "body": "In our database at our hosting provider. Confirmation emails are sent through our email delivery provider. Both act only on our instructions."
+        "body": "In our database at our hosting provider. Emails are sent through our email delivery provider. Both act only on our instructions. If you choose Discord or GitHub, they tell us who you are when you sign in; we never receive your password there."
       },
       {
         "title": "Bot Protection",
-        "body": "Before you sign up, a short check in your browser confirms you’re a person, not an automated script. It’s run by a security service that sees only technical information about your browser and connection, used solely for this check. We don’t receive or store it."
+        "body": "Before you sign up or ask for a password link, a short check in your browser confirms you’re a person, not an automated script. It’s run by a security service that sees only technical information about your browser and connection, used solely for this check. We don’t receive or store it."
       },
       {
         "title": "How Long",
-        "body": "Unconfirmed sign-ups are deleted automatically 7 days after the link is sent. Confirmed sign-ups are kept until the alpha ends, then deleted unless you create an account."
+        "body": "Unconfirmed alpha sign-ups are deleted automatically 7 days after the link is sent; confirmed ones are kept until the alpha ends, then deleted unless you create an account. Accounts are kept until you ask us to delete them. Registrations never confirmed are deleted once their link expires (24 hours), and sign-in sessions end after 30 days without use."
       },
       {
         "title": "Cookies",
-        "body": "No tracking or advertising cookies. One functional cookie (NEXT_LOCALE) remembers the language you chose."
+        "body": "No tracking or advertising cookies. Functional cookies only: NEXT_LOCALE remembers the language you chose; when you sign in, one cookie keeps you signed in; and short-lived ones (15 minutes) hold a Discord or GitHub sign-in while it’s in progress."
       },
       {
         "title": "Your Rights",
-        "body": "You can ask to see, correct, or delete your data at any time by writing to {email}."
+        "body": "You can ask to see, correct, or delete your data or your account at any time by writing to {email}."
       }
     ]
   },
@@ -262,9 +284,311 @@
         "body": "Game and platform names are trademarks of their owners and are used only to identify the games. RecompAchievements is not affiliated with or endorsed by any game publisher, platform holder, or recomp developer unless stated."
       },
       {
+        "title": "Player Comments",
+        "body": "Players are responsible for the comments they post on profile walls. A comment’s author and the wall’s owner can delete it. To report abusive or infringing comments, write to {email}."
+      },
+      {
         "title": "Removal Requests",
         "body": "If you hold rights to something shown on this site and want it removed, email {email} with a link to the page and what you’d like removed. We review every request and remove content within 5 business days when the request is valid."
       }
     ]
+  },
+  "auth": {
+    "privacyLink": "privacy notice",
+    "agreement": "By creating an account you agree to our {privacy}.",
+    "platformButton": "Continue with {platform}",
+    "or": "or",
+    "emailRequiredBanner": "Add and verify an email to start collecting achievements.",
+    "emailRequiredAction": "Add Email",
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "confirmNewPassword": "Confirm new password",
+      "passwordHint": "At least 8 characters.",
+      "username": "Username",
+      "usernameHint": "3–24 letters, numbers, - or _. Shown on your profile."
+    },
+    "errors": {
+      "invalid": "Please fix the highlighted fields.",
+      "required": "This field is required.",
+      "email": "Enter a valid email address.",
+      "usernameFormat": "Use 3–24 letters, numbers, - or _.",
+      "passwordLength": "Use 8 to 128 characters.",
+      "passwordMismatch": "Passwords don’t match.",
+      "username_taken": "That username is taken. Try another one.",
+      "invalid_credentials": "Email or password is incorrect. If you just signed up, confirm your email first.",
+      "email_in_use": "That email is used by another account. Sign in to that account and connect this platform from its Settings.",
+      "email_already_set": "This account already has an email.",
+      "account_disabled": "This account is disabled. If you think that’s a mistake, write to contact@recompachievements.org.",
+      "email_required": "Add and verify an email in Settings to do this.",
+      "signup_expired": "This sign-up took too long. Sign in with the platform again.",
+      "platform_refused": "The platform didn’t accept the sign-in. Please try again.",
+      "platform_unavailable": "We couldn’t reach the platform. Please try again in a few minutes.",
+      "platform_linked_elsewhere": "That platform account is already connected to another RecompAchievements account.",
+      "platform_already_connected": "This account is connected to another account on that platform. Disconnect it first.",
+      "last_sign_in_method": "Set a password or connect the other platform first, so you can still sign in.",
+      "flow": "The sign-in didn’t match. Please start again.",
+      "not_signed_in": "Your session ended. Please sign in again.",
+      "challenge": "We couldn’t verify you’re human. Please try again.",
+      "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "unavailable": "Something went wrong on our side. Please try again in a few minutes."
+    },
+    "signIn": {
+      "metaTitle": "Sign In",
+      "title": "Sign In",
+      "intro": "Sign in to track your achievements across recomps.",
+      "submit": "Sign In",
+      "submitting": "Signing in…",
+      "forgot": "Forgot password?",
+      "noAccount": "New here? {signUp}",
+      "signUpLink": "Create an account"
+    },
+    "signUp": {
+      "metaTitle": "Create an Account",
+      "title": "Create an Account",
+      "intro": "One account for every supported recomp. You can also connect Discord or GitHub later.",
+      "submit": "Create Account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account? {signIn}",
+      "signInLink": "Sign in",
+      "successTitle": "Check Your Email",
+      "successSentTo": "If this address can be used, we sent a confirmation link to:",
+      "successExpiry": "The link expires in 24 hours. Confirm it to sign in.",
+      "successSpam": "Nothing after a few minutes? Check your spam folder."
+    },
+    "confirmEmail": {
+      "metaTitle": "Confirm Your Email",
+      "title": "Confirm Your Email",
+      "body": "Press the button to confirm your email address.",
+      "button": "Confirm My Email",
+      "confirming": "Confirming…",
+      "successTitle": "Email Confirmed",
+      "successBody": "Your account can now collect achievements.",
+      "expiredTitle": "This Link Has Expired",
+      "expiredBody": "Confirmation links last 24 hours. Sign up again, or add the email again from Settings.",
+      "invalidTitle": "This Link Isn’t Valid",
+      "invalidBody": "It may be incomplete, already used, or replaced by a newer email.",
+      "inUseTitle": "This Email Is Already Used",
+      "inUseBody": "Another account confirmed this email first. Sign in to that account instead.",
+      "continue": "Continue"
+    },
+    "forgotPassword": {
+      "metaTitle": "Set or Reset Your Password",
+      "title": "Set or Reset Your Password",
+      "intro": "Enter your account email and we’ll send you a link to choose a new password. Accounts created with Discord or GitHub set their first password this way too.",
+      "submit": "Send Link",
+      "submitting": "Sending…",
+      "successTitle": "Check Your Email",
+      "successBody": "If an account with a confirmed email matches, we sent it a link. It expires in 1 hour and works once.",
+      "backToSignIn": "Back to Sign In"
+    },
+    "resetPassword": {
+      "metaTitle": "Choose a Password",
+      "title": "Choose a Password",
+      "intro": "Choose a new password for your account. Every device will be signed out.",
+      "submit": "Save Password",
+      "submitting": "Saving…",
+      "successTitle": "Password Saved",
+      "successBody": "Sign in with your email and your new password.",
+      "expiredTitle": "This Link Has Expired",
+      "expiredBody": "Password links last 1 hour. Ask for a new one.",
+      "invalidTitle": "This Link Isn’t Valid",
+      "invalidBody": "It may be incomplete or already used. Ask for a new one.",
+      "requestNew": "Send a New Link",
+      "signIn": "Sign In"
+    },
+    "welcome": {
+      "metaTitle": "Welcome",
+      "title": "Welcome to RecompAchievements",
+      "intro": "One last step: choose your username.",
+      "emailHeading": "Your Account Email",
+      "withEmail": "Your account will be created with {email}, verified by {platform}.",
+      "noEmail": "This account has no email yet. You’ll need to add and verify one before achievements can be tracked.",
+      "submit": "Create Account",
+      "submitting": "Creating account…",
+      "expiredTitle": "This Sign-Up Expired",
+      "expiredBody": "It took too long. Sign in with the platform again to continue.",
+      "startAgain": "Start Again"
+    },
+    "account": {
+      "metaTitle": "Your Account",
+      "title": "Your Account",
+      "loading": "Loading your account…",
+      "profileHeading": "Profile",
+      "usernameLabel": "Username",
+      "alphaTester": "Alpha tester",
+      "emailHeading": "Email",
+      "emailConfirmed": "Confirmed. Your account can collect achievements.",
+      "noEmailBody": "Add and verify an email to start collecting achievements. We’ll send a confirmation link.",
+      "addEmail": "Send Confirmation Link",
+      "addingEmail": "Sending…",
+      "emailSent": "We sent a confirmation link to {email}. Follow it to finish.",
+      "offerTitle": "Use This Email?",
+      "offerBody": "{platform} says {email} is yours. Use it as your account email? We’ll still send our own confirmation link.",
+      "offerAccept": "Use This Email",
+      "offerDismiss": "No, Thanks",
+      "platformsHeading": "Connected Platforms",
+      "platformsIntro": "Sign in with any connected platform. Connecting one never changes your account email.",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "signOut": "Sign Out",
+      "signingOut": "Signing out…"
+    },
+    "profileCard": {
+      "label": "Player summary",
+      "photoAlt": "Default profile photo",
+      "totalPoints": "Total Points",
+      "eloPoints": "Elo Points",
+      "ranking": "Ranking",
+      "unranked": "Unranked",
+      "lastActivity": "Last Activity",
+      "memberSince": "Member Since"
+    },
+    "settings": {
+      "metaTitle": "Settings",
+      "title": "Settings",
+      "loading": "Loading your settings…",
+      "changePasswordHeading": "Change Password",
+      "changePasswordBody": "Your account already has a password. To change it, we’ll email you a secure link.",
+      "changePasswordButton": "Send Password Change Link",
+      "setPasswordHeading": "Set a Password",
+      "setPasswordBody": "Your account doesn’t have a password yet. Set one to also sign in with your email and password. We’ll email you a secure link.",
+      "setPasswordButton": "Send Link to Set Password",
+      "passwordNeedsEmail": "Add and verify an email first, so we can send you the link.",
+      "sendingPasswordLink": "Sending…",
+      "passwordLinkSent": "We sent a link to your email. It expires in 1 hour."
+    },
+    "messages": {
+      "metaTitle": "Messages",
+      "title": "Messages",
+      "loading": "Loading messages…",
+      "comingSoonTitle": "Coming Soon",
+      "comingSoonBody": "You’ll be able to send messages to other players here."
+    }
+  },
+  "progress": {
+    "metaTitle": "Completion Progress",
+    "title": "{username}’s Completion Progress",
+    "loading": "Loading completion progress…",
+    "unavailable": "We couldn’t load this progress right now. Please try again in a few minutes.",
+    "photoAlt": "Default profile photo",
+    "sampleTitle": "Sample Data",
+    "sampleText": "This page is a preview. These numbers are examples, not this player’s real progress. Real progress will appear once recomps can unlock achievements.",
+    "averageCompletion": "Average Completion",
+    "achievementsUnlocked": "Achievements Unlocked",
+    "pointsEarned": "Points Earned",
+    "gamesHeading": "Games",
+    "gameLine": "{unlocked} of {total} achievements · {points}"
+  },
+  "profile": {
+    "metaTitle": "Player Profile",
+    "loading": "Loading profile…",
+    "unavailable": "We couldn’t load this profile right now. Please try again in a few minutes.",
+    "progressLink": "Completion Progress",
+    "settingsLink": "Account Settings",
+    "sampleText": "Badges, medals, subsets, achievements, completion, and last game on this page are examples, not this player’s real progress. Real data will appear once recomps can unlock achievements.",
+    "sectionsUnavailable": "We couldn’t load this section right now. Please try again in a few minutes.",
+    "medalsHeading": "Medals Earned",
+    "medalTiers": {
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver"
+    },
+    "noMedal": "No medal earned",
+    "noAchievements": "No achievements earned",
+    "medalTotal": "Total",
+    "subsetsHeading": "Subsets Earned",
+    "subsetCounters": {
+      "mastered": "Mastered",
+      "beaten": "Beaten"
+    },
+    "subsetStatus": {
+      "mastered": "Mastered",
+      "beaten": "Beaten"
+    },
+    "subsetTypes": {
+      "dlc": "DLC",
+      "mod": "Mod",
+      "randomizer": "Randomizer",
+      "challenge": "Challenge"
+    },
+    "noSubsets": "No subsets earned",
+    "achievementsHeading": "Last Achievements Earned",
+    "medalsCount": {
+      "one": "{count} earned",
+      "other": "{count} earned"
+    },
+    "achievementsCount": {
+      "one": "{count} earned",
+      "other": "{count} earned"
+    },
+    "completionHeading": "Completion",
+    "viewAll": "View All",
+    "lastGameHeading": "Last Game Played",
+    "viewGame": "View Game",
+    "badges": {
+      "heading": "Badges",
+      "displayed": "Displayed badges",
+      "none": "No badges earned",
+      "count": {
+        "one": "{count} earned",
+        "other": "{count} earned"
+      },
+      "kinds": {
+        "award": "Award",
+        "recognition": "Recognition",
+        "role": "Site Role",
+        "event": "Event",
+        "contribution": "Contribution"
+      },
+      "items": {
+        "recompPioneer": "Recomp Pioneer",
+        "sdkContributor": "SDK Contributor",
+        "alphaMarathon": "Alpha Marathon",
+        "communityTranslator": "Community Translator",
+        "bugHunter": "Bug Hunter",
+        "communityMember": "Community Member",
+        "weeklyChallenge": "Achievement of the Week",
+        "firstComment": "First Comment"
+      },
+      "descriptions": {
+        "recompPioneer": "Helped launch RecompAchievements in its earliest days.",
+        "sdkContributor": "Made a significant contribution to the achievement SDK.",
+        "alphaMarathon": "Took part in the community marathon during the alpha.",
+        "communityTranslator": "Helps translate the site for the community.",
+        "bugHunter": "Reported bugs that were confirmed and fixed.",
+        "communityMember": "Joined the RecompAchievements community.",
+        "weeklyChallenge": "Earned the highlighted achievement of the week in hardcore.",
+        "firstComment": "Posted a first comment on a profile wall."
+      },
+      "unlocked": "Unlocked {date}"
+    },
+    "wall": {
+      "heading": "{username} Wall",
+      "intro": "Comments from the community for {username}.",
+      "label": "Your comment",
+      "placeholder": "Write something on this wall…",
+      "post": "Post Comment",
+      "posting": "Posting…",
+      "count": "{count} / {max}",
+      "empty": "No comments yet.",
+      "signInToComment": "Sign In to Comment",
+      "emailToComment": "Add and verify an email to comment.",
+      "addEmail": "Add Email",
+      "delete": "Delete",
+      "deleteLabel": "Delete comment by {username}",
+      "confirmDelete": "Confirm Delete",
+      "deleting": "Deleting…",
+      "cancel": "Cancel",
+      "loadMore": "Load More",
+      "loadingMore": "Loading…",
+      "invalid": "Write a comment using visible text, up to 1,000 characters.",
+      "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes."
+    }
   }
 }

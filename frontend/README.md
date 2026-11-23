@@ -16,8 +16,8 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 
 ## Getting started
 
-Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up and the
-games) also need the backend running locally (see [`../backend/README.md`](../backend/README.md)).
+Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up, the games,
+and accounts) also need the backend running locally (see [`../backend/README.md`](../backend/README.md)).
 
 ```bash
 npm install
@@ -29,13 +29,13 @@ npm run dev                  # http://localhost:3000
 |---|---|
 | `API_BASE_URL` | Address of the API (`http://localhost:5080` locally) |
 | `API_INTERNAL_KEY` | Must match the API's `InternalApi__Key` |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the sign-up form |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the alpha sign-up, account sign-up, and forgot-password forms |
 | `TURNSTILE_SECRET_KEY` | Secret key used by the server to verify that challenge |
 
 Only `NEXT_PUBLIC_` values reach the browser (and are fixed at build time); the rest are read only
 by server code. `.env.example` contains the provider's official **test** keys, which always pass, for
 local development and preview deployments; production uses real keys set in the hosting dashboard.
-Without a secret key, sign-ups are rejected rather than accepted unchecked.
+Without a secret key, those forms are rejected rather than accepted unchecked.
 
 | Script | Purpose |
 |---|---|
@@ -56,8 +56,16 @@ src/
 │   │   ├── page.tsx          # Home: alpha call to action, featured slider, and games
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
 │   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
-│   │   ├── alpha/            # Alpha sign-up: page, form (client), human check, server action
+│   │   ├── alpha/            # Alpha sign-up: page, form (client), server action
 │   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
+│   │   ├── sign-up/, sign-in/  # Account forms (client) with their server actions
+│   │   ├── confirm-email/    # Confirms an account email (button POST)
+│   │   ├── forgot-password/, reset-password/  # Set or reset a password through an emailed link
+│   │   ├── welcome/          # After a Discord/GitHub sign-up: shows the account email, picks the username
+│   │   ├── account/          # Redirect to own profile; [username]/ public profile and wall;
+│   │   │                     # settings/ (email, platforms, password, sign out); messages/ (placeholder)
+│   │   ├── progress/         # [username]/: public completion progress (labeled sample data for now)
+│   │   ├── auth/             # startPlatform action; callback/[provider]/route.ts receives Discord/GitHub
 │   │   ├── games/            # Game directory; [slug]/ game page, its loading skeleton, and social card
 │   │   ├── content-policy/   # What we host, image sources, removal requests
 │   │   └── privacy/          # Privacy notice
@@ -71,14 +79,22 @@ src/
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
 │   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
+│   ├── auth/                 # AuthShell, PlatformButtons, FormParts (client: fields, submit, human check)
 │   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
 │   │                         # GeneratedArt, FadeInImage (client), GameBackdrop, GameArtCredits,
 │   │                         # GameDetailsCard,
 │   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
-│   │                         # CommentsPreview (client, not saved)
-│   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks
+│   │                         # GameComments, CommentsPreview (client, not saved)
+│   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, LocaleFlag, SocialLinks, AccountLink,
+│   │                         # AccountMenu (client), EmailRequiredBanner
+│   ├── comments/             # CommentThread and CommentAuthor (client): every comment section
+│   ├── profile/              # ProfilePhoto (placeholder), ProfileCard, ProfileBadges, BadgeIcon,
+│   │                         # BadgeDetails and PlayerPreview (client popovers), sampleBadges,
+│   │                         # ProfileSampleSections
+│   ├── progress/             # ProgressRow; sampleProgress: mock data until real unlocks exist
 │   ├── seo/                  # JsonLd (schema.org structured data)
-│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink, Skeleton
+│   └── ui/                   # Primitives: Button/ButtonLink, Card, Badge, ExternalLink, Skeleton,
+│                             # HumanCheck (client, human-verification widget)
 ├── i18n/
 │   ├── config.ts             # Locales, URL helpers, hreflang alternates
 │   ├── server.ts             # getLocale(), getMessages(), Messages type
@@ -86,7 +102,8 @@ src/
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
-│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached)
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached; accounts.ts)
+│   ├── auth/                 # session.ts: the only code touching account cookies; forms.ts: shared form rules and error codes
 │   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
 │   ├── turnstile.ts          # Server-side verification of the human-verification challenge
 │   ├── socialImage.tsx       # Shared size, colors, font, and logo for social preview images
@@ -130,6 +147,45 @@ build never calls the API: `GameGrid` and the game page load data at request tim
 on the API shows up on the site within the cache lifetime. Game pages are partially prerendered:
 the layout is static and the game content streams in, so an unknown slug renders the not-found
 page with `noindex` (a streamed page can't change its status code).
+
+## Accounts
+
+Sign-up, sign-in, and Settings talk to the API's `/api/v1/auth` endpoints through
+`src/lib/api/accounts.ts`; the browser never calls the API. After signing in, the API's session
+token is kept in an **HttpOnly, Secure, SameSite=Lax** cookie (`__Host-session` in production)
+that only `src/lib/auth/session.ts` reads or writes. Pages read it (`getCurrentAccount()`, one API
+call per request, shared by the header, the banner, and the page) inside `<Suspense>`, so every
+page's static shell stays prerendered; cookies are only set in Server Actions and the callback
+Route Handler.
+
+**Discord and GitHub** (authorization code with PKCE): the `startPlatform` Server Action asks the
+API for the platform's authorize URL, saves the `state` and PKCE verifier in a short-lived HttpOnly
+cookie, and redirects. The platform sends the visitor back to `/auth/callback/<platform>` (always
+the unprefixed path, registered with each platform), which checks the `state` and passes the code
+to the API. Then:
+
+- a known platform ID signs in, and the visitor lands on their profile;
+- an unknown one becomes a **pending sign-up** (short-lived cookie) and goes to `/welcome`, which
+  shows the email the account will be created with (or that it will have none yet) before the
+  username is chosen and the account is created;
+- connecting from Settings links the platform; if the account has no confirmed email and the
+  platform has a verified one, Settings offers to use it (still confirmed by our email).
+
+The header shows signed-in players their photo and a menu with Profile, Completion Progress
+(`/progress/<username>`, public), Messages (placeholder), Settings, and Sign Out. A mouse opens it
+on hover and a click goes to the profile; on touch screens the first tap opens it.
+
+Signed-in accounts without a confirmed email see a banner under the header
+(`EmailRequiredBanner`): they can't collect achievements until they add and confirm one. All
+account pages are `noindex` and left out of the sitemap.
+
+**Public profiles:** `/account/<username>` can be opened by anyone and shows only public data
+(`getPublicPlayer`), labeled sample sections (badges, medals, last achievements earned, subsets earned, completion, last game played), and a
+full-width comment wall (`WallComments`, built on the shared `CommentThread`). Every comment
+section shows each author’s photo, username, and join date (`CommentAuthor`); `PlayerPreview`
+previews their profile and links to it.
+Signed-out visitors can read; accounts with a confirmed email can post; a comment's author and
+the wall's owner can delete it. Reads and writes are per visitor and never cached.
 
 ## Featured slider and game images
 
@@ -179,8 +235,8 @@ deployments. See the [root README](../README.md#deployment).
   - the `NEXT_LOCALE` cookie holds `es` or `pt` → redirect to that language; or
   - there is no cookie and the browser's `Accept-Language` prefers Spanish or Portuguese → redirect
     there once and save the cookie.
-- The header's language switcher keeps the current page and saves the choice in `NEXT_LOCALE`
-  (one year).
+- The header's language switcher shows each language with a country flag, keeps the current page,
+  and saves the choice in `NEXT_LOCALE` (one year).
 
 Every page is prerendered once per locale and sets `canonical` and `hreflang` alternates.
 
@@ -222,6 +278,7 @@ color passes WCAG AA (4.5:1) on all three surface levels.
 | `accent` / `accent-strong` | `#8b7bff` / `#a397ff` | Brand violet: links, primary buttons, focus ring / hover |
 | `on-accent` | `#0a0c14` | Text on accent backgrounds |
 | `gold` / `on-gold` | `#f5c04a` / `#0a0c14` | Points and achievement highlights |
+| `medal-platinum` · `medal-gold` · `medal-silver` | `#bfe8f5` · `#f5c04a` · `#c4ccd8` | Completion medals on profiles |
 | `success` · `danger` · `info` | `#3ddc97` · `#ff6b7a` · `#5cc8ff` | Status |
 | `rarity-common` … `rarity-legendary` | `#a8b0c4` · `#4ade80` · `#60a5fa` · `#c084fc` · `#fbbf24` | Rarity tiers |
 | `console-playstation` · `console-nintendo` · `console-xbox` | `#5b9dff` · `#ff6b78` · `#5fcf5f` | Original console pills on game pages (`ConsolePill`) |

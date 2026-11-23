@@ -19,7 +19,7 @@ internal static partial class AlphaSignupEndpoints
         var group = api.MapGroup("/alpha-signups").WithTags("Alpha sign-ups");
 
         group.MapPost("/", CreateAsync)
-            .RequireRateLimiting(RateLimiting.SignupsPolicy)
+            .RequireRateLimiting(RateLimiting.EmailSendingPolicy)
             .WithSummary("Sign up for the alpha (sends a confirmation email)");
         group.MapPost("/confirm", ConfirmAsync)
             .WithSummary("Confirm an alpha sign-up with the token from the email");
@@ -52,7 +52,7 @@ internal static partial class AlphaSignupEndpoints
             return accepted;
         }
 
-        var (token, hash) = ConfirmationToken.Create();
+        var (token, hash) = SecureToken.Create();
         if (signup is null)
         {
             signup = new AlphaSignup
@@ -126,7 +126,7 @@ internal static partial class AlphaSignupEndpoints
         TimeProvider time,
         CancellationToken cancellationToken)
     {
-        var hash = ConfirmationToken.TryHash(request.Token);
+        var hash = SecureToken.TryHash(request.Token);
         var signup = hash is null
             ? null
             : await db.AlphaSignups.AsTracking().FirstOrDefaultAsync(s => s.ConfirmationTokenHash == hash, cancellationToken);

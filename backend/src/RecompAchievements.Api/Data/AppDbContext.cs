@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Games;
+using RecompAchievements.Api.Features.Walls;
 
 namespace RecompAchievements.Api.Data;
 
@@ -13,6 +15,10 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Game> Games => Set<Game>();
     public DbSet<AchievementSet> AchievementSets => Set<AchievementSet>();
     public DbSet<Achievement> Achievements => Set<Achievement>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<UserSession> UserSessions => Set<UserSession>();
+    public DbSet<UserToken> UserTokens => Set<UserToken>();
+    public DbSet<WallComment> WallComments => Set<WallComment>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

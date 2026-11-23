@@ -3,7 +3,7 @@ import { cx } from "@/lib/cx";
 // The hexagon-and-star mark; keep in sync with src/app/icon.svg.
 export function LogoMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className={cx("size-8 shrink-0", className)}>
+    <svg viewBox="0 0 32 32" aria-hidden="true" className={cx("size-7 shrink-0 min-[400px]:size-8", className)}>
       <path
         d="M16 2 28 9v14l-12 7-12-7V9z"
         className="fill-surface-raised stroke-accent"
@@ -20,9 +20,9 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <span className={cx("flex items-center gap-2", className)}>
+    <span className={cx("flex items-center gap-1.5 min-[400px]:gap-2", className)}>
       <LogoMark />
-      <span translate="no" className="font-display text-base font-bold tracking-tight min-[400px]:text-lg">
+      <span translate="no" className="font-display text-[0.9375rem] font-bold tracking-tight min-[400px]:text-lg">
         Recomp<span className="text-accent">Achievements</span>
       </span>
     </span>

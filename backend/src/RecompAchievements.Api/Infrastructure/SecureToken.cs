@@ -1,10 +1,12 @@
 using System.Buffers.Text;
 using System.Security.Cryptography;
 
-namespace RecompAchievements.Api.Features.AlphaSignups;
+namespace RecompAchievements.Api.Infrastructure;
 
-// Random confirmation tokens; only their SHA-256 hash is stored.
-internal static class ConfirmationToken
+/** Random secrets handed to people or the website (confirmation links, password reset links,
+ *  session tokens). Only their SHA-256 hash is stored, so a database leak reveals no usable token.
+**/
+internal static class SecureToken
 {
     private const int TokenBytes = 32;
 

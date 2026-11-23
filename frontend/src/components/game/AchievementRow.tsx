@@ -5,7 +5,7 @@ import { getLocale, getMessages } from "@/i18n/server";
 import type { Achievement } from "@/lib/api/games";
 
 // Icon frame colors per rarity tier; placeholder icons until developers upload their own.
-const iconClasses = {
+export const achievementIconClasses = {
   common: "border-rarity-common/40 text-rarity-common",
   uncommon: "border-rarity-uncommon/40 text-rarity-uncommon",
   rare: "border-rarity-rare/40 text-rarity-rare",
@@ -21,7 +21,7 @@ export async function AchievementRow({ achievement: item }: { achievement: Achie
     <li className="flex items-start gap-4 rounded-xl border border-border bg-surface p-4">
       <div
         aria-hidden="true"
-        className={`grid size-12 shrink-0 place-items-center rounded-lg border bg-surface-raised font-display text-xl ${iconClasses[item.rarityTier]}`}
+        className={`grid size-12 shrink-0 place-items-center rounded-lg border bg-surface-raised font-display text-xl ${achievementIconClasses[item.rarityTier]}`}
       >
         ★
       </div>

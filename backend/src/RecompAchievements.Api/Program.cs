@@ -1,6 +1,8 @@
+using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Health;
+using RecompAchievements.Api.Features.Walls;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Email;
 
@@ -16,6 +18,7 @@ builder.Services
     .AddInternalKey(builder.Configuration)
     .AddEmailSending(builder.Configuration, builder.Environment)
     .AddGameArt(builder.Configuration)
+    .AddAccounts(builder.Configuration)
     .AddHealth()
     .AddOpenApi()
     .AddValidation()
@@ -36,7 +39,11 @@ app.MapHealthEndpoints();
 // Public web API, called only by the website's server code (internal key required).
 app.MapGroup("/api/v1")
     .MapAlphaSignupEndpoints()
-    .MapGameEndpoints();
+    .MapGameEndpoints()
+    .MapAccountEndpoints()
+    .MapPlayerEndpoints()
+    .MapWallEndpoints()
+    .MapOAuthEndpoints();
 
 await app.ApplyMigrationsIfEnabledAsync();
 await app.ImportCatalogIfEnabledAsync();

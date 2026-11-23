@@ -6,7 +6,7 @@ import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
 
 // Update when the notice's content changes.
-const lastUpdated = new Date("2026-11-17T00:00:00Z");
+const lastUpdated = new Date("2026-11-23T00:00:00Z");
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();

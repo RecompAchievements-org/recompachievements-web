@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { AchievementRow } from "@/components/game/AchievementRow";
 import { CommentsPreview } from "@/components/game/CommentsPreview";
 import { ConsolePill } from "@/components/game/ConsolePill";
+import { GameComments } from "@/components/game/GameComments";
 import { GameDetailsCard } from "@/components/game/GameDetailsCard";
 import { GameArt } from "@/components/game/GameArt";
 import { GameArtCredits } from "@/components/game/GameArtCredits";
@@ -132,7 +133,10 @@ async function GameDetails({ params }: Pick<Props, "params">) {
         </div>
       </div>
 
-      <CommentsPreview labels={comments} />
+      {/** The signed-out form has the same layout, so nothing shifts when the visitor is known. **/}
+      <Suspense fallback={<CommentsPreview labels={comments} locale={locale} viewer={null} />}>
+        <GameComments />
+      </Suspense>
 
       {game.art && <GameArtCredits art={game.art} />}
     </>

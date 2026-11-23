@@ -9,7 +9,7 @@ import type { Messages } from "@/i18n/server";
 import { cx } from "@/lib/cx";
 import { signUpForAlpha, type SignupField, type SignupState } from "./actions";
 import { challengeAction } from "./challenge";
-import { HumanCheck } from "./HumanCheck";
+import { HumanCheck } from "@/components/ui/HumanCheck";
 
 const platformOptions = [
   { value: "windows", label: "Windows" },

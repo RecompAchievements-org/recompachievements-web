@@ -5,6 +5,8 @@ import { localeNames, localizePath } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
+import { AccountLink, SignInLink } from "./AccountLink";
+import { LocaleFlag } from "./LocaleFlag";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
 
@@ -29,7 +31,7 @@ export async function SiteHeader() {
               <li>
                 <Link
                   href={localizePath(locale, "/games")}
-                  className="rounded-md px-2 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
                 >
                   {header.games}
                 </Link>
@@ -45,12 +47,18 @@ export async function SiteHeader() {
               </li>
             </ul>
           </nav>
+          {/** The account link reads the session cookie, known only per request; "Sign In" shows until then. **/}
+          <Suspense fallback={<SignInLink />}>
+            <AccountLink />
+          </Suspense>
           {/** The switcher reads the current URL, which pages with unlisted params (games) only
-           *  know at request time; the fallback shows the language until it streams in.
+           *  know at request time; the fallback shows the flag until it streams in.
           **/}
           <Suspense
             fallback={
-              <span className="flex h-9 items-center px-2 pr-6 font-mono text-sm text-muted uppercase">{locale}</span>
+              <span className="flex h-9 items-center px-1 pr-4.5 sm:px-2 sm:pr-6">
+                <LocaleFlag locale={locale} />
+              </span>
             }
           >
             <LocaleSwitcher

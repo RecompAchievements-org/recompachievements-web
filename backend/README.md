@@ -6,8 +6,8 @@ The REST API behind [recompachievements.org](https://recompachievements.org/): t
 [root README](../README.md); coding rules for this folder live in [`AGENTS.md`](AGENTS.md).
 
 > **Status:** live in production with health checks, the alpha tester sign-up (with double
-> opt-in email), and the game directory (preview achievement sets from the catalog). Account and
-> SDK endpoints come next.
+> opt-in email), the game directory (preview achievement sets from the catalog), and player
+> accounts (email and password, Discord, GitHub). SDK endpoints come next.
 
 ## Stack
 
@@ -66,6 +66,8 @@ backend/
 │   ├── Data/                         # AppDbContext and Migrations/
 │   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
+│       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, account emails, cleanup
+│       ├── Walls/                    # Comments on public player profiles
 │       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
@@ -86,9 +88,11 @@ environments set these (see `.env.example`):
 | `ForwardedHeaders__TrustAllProxies` | `true` only where the API is reachable solely through the host's proxy |
 | `Database__ApplyMigrationsOnStartup` | `true` to apply pending migrations at startup |
 | `Catalog__ImportOnStartup` | `true` to import the game catalog at startup (after migrations) |
-| `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value) |
+| `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value). Also the base of the key that signs pending Discord/GitHub sign-ups, so changing it cancels sign-ups in progress |
 | `Brevo__ApiKey` | Transactional email API key. Required outside Development; without it, Development logs emails to the console instead |
 | `Email__FromAddress`, `Email__FromName` | Sender of outgoing email (`contact@recompachievements.org`, `RecompAchievements`) |
+| `Discord__ClientId`, `Discord__ClientSecret` | Optional. The Discord application used for "Continue with Discord"; without both, Discord isn't offered |
+| `GitHub__ClientId`, `GitHub__ClientSecret` | Optional. The GitHub OAuth app used for "Continue with GitHub"; without both, GitHub isn't offered |
 | `SteamGridDb__ApiKey` | Optional. SteamGridDB API key: games whose catalog file has no `art` get art picked once after startup. Empty: nothing is fetched |
 | `Site__BaseUrl` | Website address used in email links (`https://recompachievements.org`; `http://localhost:3000` locally) |
 
@@ -96,8 +100,14 @@ environments set these (see `.env.example`):
 `docker-compose.yml`, a development internal key); real secrets never go in the repository.
 Abuse-protection settings have safe defaults in code and are intentionally not listed here.
 
-**Emails in development:** with no `Brevo__ApiKey`, confirmation emails are written to the API's
-console, so you can copy the confirmation link from there.
+**Emails in development:** with no `Brevo__ApiKey`, every email (alpha and account confirmations,
+password links, notices) is written to the API's console, so you can copy links from there.
+
+**Discord and GitHub sign-in:** each platform's app must list the website's callback as its
+redirect URL: `{Site__BaseUrl}/auth/callback/discord` and `{Site__BaseUrl}/auth/callback/github`
+(for local testing, `http://localhost:3000/auth/callback/…`). The Discord app needs the `identify`
+and `email` scopes; the GitHub app asks for `user:email`. Both use the authorization code flow
+with PKCE; client secrets stay on the API.
 
 ## Endpoints
 
@@ -111,7 +121,48 @@ console, so you can copy the confirmation link from there.
 | `GET /api/v1/games?lang=en` | Games in display order, with their core set's status, achievement count, total points, featured flag, latest version, release date, and image |
 | `GET /api/v1/games/{slug}?lang=en` | One game (including original game, repository, and license) with its core-set achievements in order; `404` if unknown |
 
-Pending sign-ups whose link expired are deleted automatically. `lang` is `en`, `es`, or `pt`
+**Accounts** (`/api/v1/auth`). Signed-in requests send the session token as
+`Authorization: Bearer <token>`; errors carry a machine-readable `code` (e.g. `username_taken`)
+next to the ProblemDetails fields.
+
+| Route | Purpose |
+|---|---|
+| `POST /register` | Email + password account; emails a confirmation link. Always `202` (the owner of an already registered email gets an email instead), `409 username_taken`. Rate limited |
+| `POST /confirm-email` | Confirms an email with the emailed token (after registering or `email/add`): `200`, `404` unknown or used, `410` expired (links last 24 hours), `409 email_in_use` |
+| `POST /resend-confirmation` | Sends the confirmation link again for an unconfirmed registration. Always `202` |
+| `POST /sign-in` | Email and password; returns `{ token, expiresAt }`. Every failure is the same `401 invalid_credentials` (unknown email, wrong password, no password set, unconfirmed email). Rate limited |
+| `POST /sign-out` | Ends the current session (`204`) |
+| `GET /me` | The signed-in account: username, email and whether it's confirmed, password set, connected platforms, `canCollectAchievements`, `isAlphaTester`, `createdAt`, and `lastActivityAt` |
+| `POST /forgot-password` | Emails a single-use link (1 hour) to set or reset the password, only to a confirmed email. Always `202`. This is also how platform-created accounts set their first password |
+| `POST /reset-password` | Sets the password with that link; signs out every session and sends a notice. `404`, `410` |
+| `GET /usernames/available?username=` | Whether a username can be chosen |
+| `POST /email/add` | Signed in, no confirmed email yet: emails a confirmation link for this address. `409 email_in_use`, `409 email_already_set` |
+| `GET /providers` | Platforms configured for sign-in (`discord`, `github`) |
+| `POST /oauth/{provider}/start` | The platform's authorize URL, `state`, and PKCE `codeVerifier` (the website keeps the last two) |
+| `POST /oauth/{provider}/complete` | Exchanges the code: `403 account_disabled` if the platform ID's account is disabled; `signed-in` with a session when it has an account, else `pending` with a short-lived signed `pendingToken`, the email the new account will use (or `null`), and a suggested username |
+| `POST /oauth/complete-signup` | Creates the pending account with the chosen username; returns a session. `409 username_taken`, `400 signup_expired` |
+| `POST /oauth/{provider}/connect` | Signed in: connects the platform if its ID isn't on another account (`409 platform_linked_elsewhere`); returns an `emailOffer` (the platform's verified email) only for accounts without a confirmed email |
+| `DELETE /connections/{provider}` | Signed in: disconnects a platform, only if a confirmed email with a password or the other platform remains (`409 last_sign_in_method`) |
+
+A **disabled** account (`users.is_enabled = false`) keeps its data, and its email and platform IDs
+stay reserved, but it can't use anything: its sessions stop working on the next request, email
+sign-in gets the usual `401 invalid_credentials`, platform sign-in gets `403 account_disabled`, and
+no emailed link is sent or accepted. `users.edited_at` is null until the account's data first
+changes. `users.last_activity_at` starts at creation and moves forward on sign-in and session use;
+it survives sign-out and session cleanup and doesn't count as an edit.
+
+**Players and walls** (`/api/v1/users/{username}`, matched ignoring case; `404` for unknown names,
+disabled accounts, and unconfirmed registrations). Names of pages under `/account` are reserved.
+
+| Route | Purpose |
+|---|---|
+| `GET /` | Public information only: `username`, `createdAt`, and `lastActiveOn` (a UTC date, never a time) |
+| `GET /wall?before=<id>` | A page of comments, newest first, with each author’s username and join date, `canDelete` for the signed-in viewer, and a `nextCursor`. Comments by disabled accounts are hidden |
+| `POST /wall` | Signed in with a confirmed email (`403 email_required`): posts plain text, up to 1000 characters. Rate limited |
+| `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |
+
+Pending alpha sign-ups whose link expired are deleted automatically, and so are expired sessions
+and email links, and email + password registrations never confirmed before their link expired. `lang` is `en`, `es`, or `pt`
 (default `en`); text without a translation falls back to English.
 
 ### Conventions for all endpoints

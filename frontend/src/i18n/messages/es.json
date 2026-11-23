@@ -11,7 +11,16 @@
     "homeLabel": "Inicio de {siteName}",
     "mainNav": "Principal",
     "github": "GitHub",
-    "games": "Juegos"
+    "games": "Juegos",
+    "signIn": "Iniciar sesión",
+    "account": "Tu cuenta: {username}",
+    "accountMenu": {
+      "label": "Cuenta",
+      "profile": "Perfil",
+      "progress": "Progreso de compleción",
+      "messages": "Mensajes",
+      "settings": "Ajustes"
+    }
   },
   "localeSwitcher": {
     "label": "Idioma",
@@ -101,7 +110,7 @@
   "comments": {
     "heading": "Comentarios",
     "intro": "Consejos, errores y notas de configuración de quienes juegan este recomp.",
-    "accountsNotice": "Para comentar hará falta una cuenta. Las cuentas llegarán pronto; mientras tanto, lo que publiques aquí solo queda en esta página y no se guarda.",
+    "accountsNotice": "Para comentar hará falta una cuenta. Los comentarios guardados llegarán pronto; mientras tanto, lo que publiques aquí solo queda en esta página y no se guarda.",
     "label": "Tu comentario",
     "placeholder": "Comparte un consejo, un error o tu configuración…",
     "post": "Publicar comentario",
@@ -109,7 +118,16 @@
     "you": "Tú",
     "justNow": "Ahora mismo",
     "notSaved": "No guardado",
-    "count": "{count} / {max}"
+    "count": "{count} / {max}",
+    "author": {
+      "joined": "Se unió el {date}",
+      "open": "Abrir el perfil de {username}",
+      "view": "Ver perfil",
+      "loading": "Cargando…",
+      "unavailable": "No pudimos cargar este perfil.",
+      "memberSince": "Miembro desde",
+      "lastActivity": "Última actividad"
+    }
   },
   "artCredits": {
     "heading": "Créditos de imágenes",
@@ -207,35 +225,39 @@
     "metaTitle": "Aviso de privacidad",
     "title": "Aviso de privacidad",
     "updated": "Última actualización: {date}",
-    "intro": "RecompAchievements es un proyecto comunitario. Este aviso explica qué datos recogemos cuando te apuntas a la alfa, para qué y cómo eliminarlos.",
+    "intro": "RecompAchievements es un proyecto comunitario. Este aviso explica qué datos recogemos cuando te apuntas a la alfa o creas una cuenta, para qué y cómo eliminarlos.",
     "sections": [
       {
         "title": "Qué recogemos",
-        "body": "Cuando te apuntas a la alfa: tu correo electrónico, apodo, las plataformas en las que juegas, los recomps que mencionas, el idioma del sitio que usaste y cuándo aceptaste este aviso y confirmaste tu correo. No guardamos tu dirección IP."
+        "body": "Registro en la alfa: tu correo electrónico, apodo, las plataformas en las que juegas, los recomps que mencionas, el idioma del sitio que usaste y cuándo aceptaste este aviso y confirmaste tu correo. Cuenta: tu nombre de usuario, tu correo (cuando lo confirmas), una contraseña cifrada de forma segura si creas una, el idioma del sitio y, si inicias sesión con Discord o GitHub, el ID de tu cuenta en esa plataforma (y su correo, solo cuando la plataforma indica que está verificado y lo usas para tu cuenta). También registramos cuándo se creó y se modificó por última vez tu cuenta, tu última actividad y si está activada. Tu perfil público muestra tu nombre de usuario, cuándo te uniste, el día de tu última actividad (nunca la hora) y los comentarios de tu muro; tu progreso de logros también será público. Tu correo y tus plataformas conectadas nunca se muestran. No guardamos tu dirección IP."
+      },
+      {
+        "title": "Muros de perfil",
+        "body": "Los comentarios que publicas en el muro de un jugador son públicos y se guardan hasta que los elimines tú, los elimine el dueño del muro, se elimine tu cuenta o los retiremos nosotros."
       },
       {
         "title": "Para qué",
-        "body": "Solo para organizar la alfa: confirmar tu correo, invitarte cuando abra y coordinar las pruebas. No vendemos ni compartimos tus datos, y no enviamos correos publicitarios."
+        "body": "Para organizar la alfa y gestionar tu cuenta: confirmar tu correo, iniciar tu sesión, mantener tu cuenta segura, enviarte los correos de cuenta que pidas (enlaces de confirmación y de contraseña) o que te protegen (un cambio de contraseña o una plataforma recién conectada) y, más adelante, registrar tus logros. No vendemos ni compartimos tus datos, y no enviamos correos publicitarios."
       },
       {
         "title": "Dónde se guardan",
-        "body": "En nuestra base de datos, en nuestro proveedor de alojamiento. Los correos de confirmación se envían a través de nuestro proveedor de envío de correo. Ambos actúan solo siguiendo nuestras instrucciones."
+        "body": "En nuestra base de datos, en nuestro proveedor de alojamiento. Los correos se envían a través de nuestro proveedor de envío de correo. Ambos actúan solo siguiendo nuestras instrucciones. Si eliges Discord o GitHub, nos indican quién eres al iniciar sesión; nunca recibimos tu contraseña de esas plataformas."
       },
       {
         "title": "Protección contra bots",
-        "body": "Antes de registrarte, una breve comprobación en tu navegador confirma que eres una persona y no un script automatizado. La realiza un servicio de seguridad que solo ve información técnica de tu navegador y tu conexión, usada únicamente para esta comprobación. Nosotros no la recibimos ni la guardamos."
+        "body": "Antes de registrarte o de pedir un enlace de contraseña, una breve comprobación en tu navegador confirma que eres una persona y no un script automatizado. La realiza un servicio de seguridad que solo ve información técnica de tu navegador y tu conexión, usada únicamente para esta comprobación. Nosotros no la recibimos ni la guardamos."
       },
       {
         "title": "Durante cuánto tiempo",
-        "body": "Los registros sin confirmar se eliminan automáticamente 7 días después de enviar el enlace. Los confirmados se conservan hasta que termine la alfa y después se eliminan, salvo que crees una cuenta."
+        "body": "Los registros en la alfa sin confirmar se eliminan automáticamente 7 días después de enviar el enlace; los confirmados se conservan hasta que termine la alfa y después se eliminan, salvo que crees una cuenta. Las cuentas se conservan hasta que nos pidas eliminarlas. Los registros que nunca se confirman se eliminan cuando caduca su enlace (24 horas), y las sesiones terminan tras 30 días sin uso."
       },
       {
         "title": "Cookies",
-        "body": "Sin cookies de seguimiento ni de publicidad. Una cookie funcional (NEXT_LOCALE) recuerda el idioma que elegiste."
+        "body": "Sin cookies de seguimiento ni de publicidad. Solo cookies funcionales: NEXT_LOCALE recuerda el idioma que elegiste; al iniciar sesión, una cookie mantiene tu sesión; y otras de corta duración (15 minutos) guardan un inicio de sesión con Discord o GitHub mientras está en curso."
       },
       {
         "title": "Tus derechos",
-        "body": "Puedes pedir ver, corregir o eliminar tus datos en cualquier momento escribiendo a {email}."
+        "body": "Puedes pedir ver, corregir o eliminar tus datos o tu cuenta en cualquier momento escribiendo a {email}."
       }
     ]
   },
@@ -262,9 +284,311 @@
         "body": "Los nombres de juegos y plataformas son marcas de sus propietarios y se usan solo para identificar los juegos. RecompAchievements no está afiliado ni respaldado por ninguna editora, fabricante de plataformas ni desarrollador de recomps, salvo que se indique."
       },
       {
+        "title": "Comentarios de los jugadores",
+        "body": "Cada jugador es responsable de los comentarios que publica en los muros de perfil. Pueden eliminarlos su autor y el dueño del muro. Para denunciar comentarios abusivos o que infrinjan derechos, escribe a {email}."
+      },
+      {
         "title": "Solicitudes de retirada",
         "body": "Si tienes derechos sobre algo que aparece en este sitio y quieres que lo retiremos, escribe a {email} con el enlace a la página y lo que quieres retirar. Revisamos cada solicitud y retiramos el contenido en un plazo de 5 días hábiles cuando la solicitud es válida."
       }
     ]
+  },
+  "auth": {
+    "privacyLink": "aviso de privacidad",
+    "agreement": "Al crear una cuenta aceptas nuestro {privacy}.",
+    "platformButton": "Continuar con {platform}",
+    "or": "o",
+    "emailRequiredBanner": "Añade y verifica un correo para empezar a conseguir logros.",
+    "emailRequiredAction": "Añadir correo",
+    "fields": {
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "password": "Contraseña",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "confirmNewPassword": "Confirmar nueva contraseña",
+      "passwordHint": "Al menos 8 caracteres.",
+      "username": "Nombre de usuario",
+      "usernameHint": "De 3 a 24 letras, números, - o _. Se muestra en tu perfil."
+    },
+    "errors": {
+      "invalid": "Corrige los campos marcados.",
+      "required": "Este campo es obligatorio.",
+      "email": "Escribe un correo electrónico válido.",
+      "usernameFormat": "Usa de 3 a 24 letras, números, - o _.",
+      "passwordLength": "Usa entre 8 y 128 caracteres.",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "username_taken": "Ese nombre de usuario ya está en uso. Prueba con otro.",
+      "invalid_credentials": "El correo o la contraseña no son correctos. Si acabas de registrarte, confirma antes tu correo.",
+      "email_in_use": "Ese correo lo usa otra cuenta. Inicia sesión en esa cuenta y conecta esta plataforma desde sus ajustes.",
+      "email_already_set": "Esta cuenta ya tiene un correo.",
+      "account_disabled": "Esta cuenta está desactivada. Si crees que es un error, escribe a contact@recompachievements.org.",
+      "email_required": "Añade y verifica un correo en Ajustes para hacer esto.",
+      "signup_expired": "El registro tardó demasiado. Vuelve a iniciar sesión con la plataforma.",
+      "platform_refused": "La plataforma no aceptó el inicio de sesión. Inténtalo de nuevo.",
+      "platform_unavailable": "No pudimos conectar con la plataforma. Inténtalo de nuevo en unos minutos.",
+      "platform_linked_elsewhere": "Esa cuenta de la plataforma ya está conectada a otra cuenta de RecompAchievements.",
+      "platform_already_connected": "Esta cuenta está conectada a otra cuenta de esa plataforma. Desconéctala primero.",
+      "last_sign_in_method": "Primero crea una contraseña o conecta la otra plataforma, para poder seguir iniciando sesión.",
+      "flow": "El inicio de sesión no coincide. Empieza de nuevo.",
+      "not_signed_in": "Tu sesión terminó. Vuelve a iniciar sesión.",
+      "challenge": "No pudimos verificar que eres una persona. Inténtalo de nuevo.",
+      "rateLimited": "Demasiados intentos. Espera unos minutos y vuelve a intentarlo.",
+      "unavailable": "Algo falló por nuestra parte. Inténtalo de nuevo en unos minutos."
+    },
+    "signIn": {
+      "metaTitle": "Iniciar sesión",
+      "title": "Iniciar sesión",
+      "intro": "Inicia sesión para seguir tus logros en todos los recomps.",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión…",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿Eres nuevo? {signUp}",
+      "signUpLink": "Crea una cuenta"
+    },
+    "signUp": {
+      "metaTitle": "Crear una cuenta",
+      "title": "Crear una cuenta",
+      "intro": "Una sola cuenta para todos los recomps compatibles. También puedes conectar Discord o GitHub más tarde.",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta…",
+      "haveAccount": "¿Ya tienes cuenta? {signIn}",
+      "signInLink": "Inicia sesión",
+      "successTitle": "Revisa tu correo",
+      "successSentTo": "Si se puede usar esta dirección, enviamos un enlace de confirmación a:",
+      "successExpiry": "El enlace caduca en 24 horas. Confírmalo para iniciar sesión.",
+      "successSpam": "¿No llega nada en unos minutos? Revisa la carpeta de spam."
+    },
+    "confirmEmail": {
+      "metaTitle": "Confirma tu correo",
+      "title": "Confirma tu correo",
+      "body": "Pulsa el botón para confirmar tu dirección de correo.",
+      "button": "Confirmar mi correo",
+      "confirming": "Confirmando…",
+      "successTitle": "Correo confirmado",
+      "successBody": "Tu cuenta ya puede conseguir logros.",
+      "expiredTitle": "Este enlace ha caducado",
+      "expiredBody": "Los enlaces de confirmación duran 24 horas. Regístrate de nuevo o vuelve a añadir el correo desde Ajustes.",
+      "invalidTitle": "Este enlace no es válido",
+      "invalidBody": "Puede estar incompleto, haberse usado ya o haber sido reemplazado por un correo más reciente.",
+      "inUseTitle": "Este correo ya está en uso",
+      "inUseBody": "Otra cuenta confirmó este correo antes. Inicia sesión en esa cuenta.",
+      "continue": "Continuar"
+    },
+    "forgotPassword": {
+      "metaTitle": "Crear o restablecer tu contraseña",
+      "title": "Crear o restablecer tu contraseña",
+      "intro": "Escribe el correo de tu cuenta y te enviaremos un enlace para elegir una contraseña nueva. Las cuentas creadas con Discord o GitHub también crean así su primera contraseña.",
+      "submit": "Enviar enlace",
+      "submitting": "Enviando…",
+      "successTitle": "Revisa tu correo",
+      "successBody": "Si coincide una cuenta con un correo confirmado, le enviamos un enlace. Caduca en 1 hora y solo funciona una vez.",
+      "backToSignIn": "Volver a iniciar sesión"
+    },
+    "resetPassword": {
+      "metaTitle": "Elige una contraseña",
+      "title": "Elige una contraseña",
+      "intro": "Elige una contraseña nueva para tu cuenta. Se cerrará la sesión en todos los dispositivos.",
+      "submit": "Guardar contraseña",
+      "submitting": "Guardando…",
+      "successTitle": "Contraseña guardada",
+      "successBody": "Inicia sesión con tu correo y tu contraseña nueva.",
+      "expiredTitle": "Este enlace ha caducado",
+      "expiredBody": "Los enlaces de contraseña duran 1 hora. Pide uno nuevo.",
+      "invalidTitle": "Este enlace no es válido",
+      "invalidBody": "Puede estar incompleto o haberse usado ya. Pide uno nuevo.",
+      "requestNew": "Enviar un enlace nuevo",
+      "signIn": "Iniciar sesión"
+    },
+    "welcome": {
+      "metaTitle": "Bienvenida",
+      "title": "Bienvenido a RecompAchievements",
+      "intro": "Un último paso: elige tu nombre de usuario.",
+      "emailHeading": "El correo de tu cuenta",
+      "withEmail": "Tu cuenta se creará con {email}, verificado por {platform}.",
+      "noEmail": "Esta cuenta aún no tiene correo. Tendrás que añadir y verificar uno antes de que se registren tus logros.",
+      "submit": "Crear cuenta",
+      "submitting": "Creando cuenta…",
+      "expiredTitle": "Este registro ha caducado",
+      "expiredBody": "Tardó demasiado. Vuelve a iniciar sesión con la plataforma para continuar.",
+      "startAgain": "Empezar de nuevo"
+    },
+    "account": {
+      "metaTitle": "Tu cuenta",
+      "title": "Tu cuenta",
+      "loading": "Cargando tu cuenta…",
+      "profileHeading": "Perfil",
+      "usernameLabel": "Nombre de usuario",
+      "alphaTester": "Probador de la alfa",
+      "emailHeading": "Correo",
+      "emailConfirmed": "Confirmado. Tu cuenta puede conseguir logros.",
+      "noEmailBody": "Añade y verifica un correo para empezar a conseguir logros. Te enviaremos un enlace de confirmación.",
+      "addEmail": "Enviar enlace de confirmación",
+      "addingEmail": "Enviando…",
+      "emailSent": "Enviamos un enlace de confirmación a {email}. Síguelo para terminar.",
+      "offerTitle": "¿Usar este correo?",
+      "offerBody": "{platform} indica que {email} es tuyo. ¿Quieres usarlo como correo de tu cuenta? Igualmente te enviaremos nuestro propio enlace de confirmación.",
+      "offerAccept": "Usar este correo",
+      "offerDismiss": "No, gracias",
+      "platformsHeading": "Plataformas conectadas",
+      "platformsIntro": "Inicia sesión con cualquier plataforma conectada. Conectar una nunca cambia el correo de tu cuenta.",
+      "connected": "Conectada",
+      "notConnected": "Sin conectar",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "signOut": "Cerrar sesión",
+      "signingOut": "Cerrando sesión…"
+    },
+    "profileCard": {
+      "label": "Resumen del jugador",
+      "photoAlt": "Foto de perfil predeterminada",
+      "totalPoints": "Puntos totales",
+      "eloPoints": "Puntos Elo",
+      "ranking": "Clasificación",
+      "unranked": "Sin clasificar",
+      "lastActivity": "Última actividad",
+      "memberSince": "Miembro desde"
+    },
+    "settings": {
+      "metaTitle": "Ajustes",
+      "title": "Ajustes",
+      "loading": "Cargando tus ajustes…",
+      "changePasswordHeading": "Cambiar contraseña",
+      "changePasswordBody": "Tu cuenta ya tiene contraseña. Para cambiarla, te enviaremos un enlace seguro por correo.",
+      "changePasswordButton": "Enviar enlace para cambiarla",
+      "setPasswordHeading": "Crear una contraseña",
+      "setPasswordBody": "Tu cuenta aún no tiene contraseña. Crea una para poder iniciar sesión también con tu correo y contraseña. Te enviaremos un enlace seguro por correo.",
+      "setPasswordButton": "Enviar enlace para crearla",
+      "passwordNeedsEmail": "Primero añade y verifica un correo para que podamos enviarte el enlace.",
+      "sendingPasswordLink": "Enviando…",
+      "passwordLinkSent": "Enviamos un enlace a tu correo. Caduca en 1 hora."
+    },
+    "messages": {
+      "metaTitle": "Mensajes",
+      "title": "Mensajes",
+      "loading": "Cargando mensajes…",
+      "comingSoonTitle": "Próximamente",
+      "comingSoonBody": "Aquí podrás enviar mensajes a otros jugadores."
+    }
+  },
+  "progress": {
+    "metaTitle": "Progreso de compleción",
+    "title": "Progreso de compleción de {username}",
+    "loading": "Cargando el progreso de compleción…",
+    "unavailable": "No pudimos cargar este progreso. Inténtalo de nuevo en unos minutos.",
+    "photoAlt": "Foto de perfil predeterminada",
+    "sampleTitle": "Datos de ejemplo",
+    "sampleText": "Esta página es una vista previa. Estos números son ejemplos, no el progreso real de esta persona. El progreso real aparecerá cuando los recomps puedan desbloquear logros.",
+    "averageCompletion": "Compleción media",
+    "achievementsUnlocked": "Logros desbloqueados",
+    "pointsEarned": "Puntos obtenidos",
+    "gamesHeading": "Juegos",
+    "gameLine": "{unlocked} de {total} logros · {points}"
+  },
+  "profile": {
+    "metaTitle": "Perfil de jugador",
+    "loading": "Cargando el perfil…",
+    "unavailable": "No pudimos cargar este perfil. Inténtalo de nuevo en unos minutos.",
+    "progressLink": "Progreso de compleción",
+    "settingsLink": "Ajustes de la cuenta",
+    "sampleText": "Las insignias, medallas, subsets, logros, la compleción y el último juego de esta página son ejemplos, no el progreso real de esta persona. Los datos reales aparecerán cuando los recomps puedan desbloquear logros.",
+    "sectionsUnavailable": "No pudimos cargar esta sección. Inténtalo de nuevo en unos minutos.",
+    "medalsHeading": "Medallas obtenidas",
+    "medalTiers": {
+      "platinum": "Platino",
+      "gold": "Oro",
+      "silver": "Plata"
+    },
+    "noMedal": "Ninguna medalla obtenida",
+    "noAchievements": "Ningún logro obtenido",
+    "medalTotal": "Total",
+    "subsetsHeading": "Subsets obtenidos",
+    "subsetCounters": {
+      "mastered": "Dominados",
+      "beaten": "Superados"
+    },
+    "subsetStatus": {
+      "mastered": "Dominado",
+      "beaten": "Superado"
+    },
+    "subsetTypes": {
+      "dlc": "DLC",
+      "mod": "Mod",
+      "randomizer": "Randomizer",
+      "challenge": "Desafío"
+    },
+    "noSubsets": "Ningún subset obtenido",
+    "achievementsHeading": "Últimos logros obtenidos",
+    "medalsCount": {
+      "one": "{count} obtenida",
+      "other": "{count} obtenidas"
+    },
+    "achievementsCount": {
+      "one": "{count} obtenido",
+      "other": "{count} obtenidos"
+    },
+    "completionHeading": "Compleción",
+    "viewAll": "Ver todo",
+    "lastGameHeading": "Último juego",
+    "viewGame": "Ver juego",
+    "badges": {
+      "heading": "Insignias",
+      "displayed": "Insignias destacadas",
+      "none": "Ninguna insignia obtenida",
+      "count": {
+        "one": "{count} obtenida",
+        "other": "{count} obtenidas"
+      },
+      "kinds": {
+        "award": "Premio",
+        "recognition": "Reconocimiento",
+        "role": "Rol del sitio",
+        "event": "Evento",
+        "contribution": "Contribución"
+      },
+      "items": {
+        "recompPioneer": "Espíritu pionero",
+        "sdkContributor": "Colaboración en el SDK",
+        "alphaMarathon": "Maratón de la alfa",
+        "communityTranslator": "Traducción comunitaria",
+        "bugHunter": "Caza de bugs",
+        "communityMember": "Miembro de la comunidad",
+        "weeklyChallenge": "Logro de la semana",
+        "firstComment": "Primer comentario"
+      },
+      "descriptions": {
+        "recompPioneer": "Ayudó a lanzar RecompAchievements en sus primeros días.",
+        "sdkContributor": "Hizo una contribución importante al SDK de logros.",
+        "alphaMarathon": "Participó en la maratón de la comunidad durante la alfa.",
+        "communityTranslator": "Ayuda a traducir el sitio para la comunidad.",
+        "bugHunter": "Reportó errores que se confirmaron y corrigieron.",
+        "communityMember": "Se unió a la comunidad de RecompAchievements.",
+        "weeklyChallenge": "Consiguió el logro destacado de la semana en hardcore.",
+        "firstComment": "Publicó su primer comentario en un muro de perfil."
+      },
+      "unlocked": "Desbloqueada el {date}"
+    },
+    "wall": {
+      "heading": "Muro de {username}",
+      "intro": "Comentarios de la comunidad para {username}.",
+      "label": "Tu comentario",
+      "placeholder": "Escribe algo en este muro…",
+      "post": "Publicar comentario",
+      "posting": "Publicando…",
+      "count": "{count} / {max}",
+      "empty": "Aún no hay comentarios.",
+      "signInToComment": "Inicia sesión para comentar",
+      "emailToComment": "Añade y verifica un correo para comentar.",
+      "addEmail": "Añadir correo",
+      "delete": "Eliminar",
+      "deleteLabel": "Eliminar el comentario de {username}",
+      "confirmDelete": "Confirmar",
+      "deleting": "Eliminando…",
+      "cancel": "Cancelar",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando…",
+      "invalid": "Escribe un comentario con texto visible, de hasta 1000 caracteres.",
+      "unavailable": "No pudimos cargar estos comentarios. Inténtalo de nuevo en unos minutos."
+    }
   }
 }

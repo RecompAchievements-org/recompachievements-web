@@ -71,9 +71,14 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - `/auth/callback/[provider]` must keep checking the returned `state` against the saved flow
   before sending the code to the API, and each flow is used once (`takeOAuthFlow`).
 - The welcome step reads the pending sign-up from its cookie, never from the form.
-- Forms that create or replace a password (sign-up, reset) ask for it twice and compare on the
-  server (`checkPasswordConfirmation`); the repeated value is never sent to the API. Sign-in asks
-  once.
+- Forms that create or replace a password (sign-up, reset) use `NewPasswordFields`: it asks twice
+  and shows live whether the two match, and the server still compares them
+  (`checkPasswordConfirmation`); the repeated value is never sent to the API. Sign-in asks once.
+- Account forms use `EmailField` and `UsernameField` (`components/auth/LiveFields.tsx`) for live
+  feedback: format as you type (problems shown after leaving the field, or at once for characters
+  that are never allowed) and, for usernames, availability checked after a short pause. Feedback
+  lines use the shared `FieldStatus`, which takes no space until it has something to say. The
+  server always validates again on submit.
 - Account error codes come from the API's `code` field; the list is `AuthError` in
   `src/lib/auth/forms.ts`, translated from `auth.errors`. Add new codes in both places.
 - Account pages are `noindex` and stay out of `publicPaths`, including public profiles for now.
@@ -131,8 +136,8 @@ language on unprefixed visits.
 Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
 `src/app/[lang]/`.
 
-- `/` — home: featured recomps slider (`FeaturedSlider`) and games; primary call to action: Join
-  the Alpha
+- `/` — home: featured recomps slider (`FeaturedSlider`), games, and the news `CategoryCard`
+  (Latest News) at full width at the bottom; primary call to action: Join the Alpha
 - `/alpha` — alpha tester sign-up form
 - `/alpha/confirm` — confirms a sign-up with the emailed token (`noindex`, not in the sitemap)
 - `/privacy` — privacy notice; update its `lastUpdated` date and translations whenever data
@@ -172,6 +177,8 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   (`?page=`), and admins also see drafts and New Post; `/forum/[category]/[slug]` shows a post;
   `/forum/[category]/new` and `/forum/[category]/[slug]/edit` are the admin editor (`requireAdmin`,
   `noindex`). Published reads are cached with the `forum` tag; editor actions call `updateTag`
+  (`CategoryCard` is shared with the home page's Latest News). The header's `ReleaseBadge` opens
+  `siteConfig.releasePost`; point it at the new announcement with each release
 - `/moderation` — staff report queue; `/moderation/reports/[id]`, `/moderation/users/[username]`, and
   `/moderation/log` review a report, an account, and the audit log
 - `/account/messages` — placeholder for messages between players; nothing is sent or stored

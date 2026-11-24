@@ -173,7 +173,7 @@ infringers are disabled. The public rules are at `/rules`.
 
 | Route | Page |
 |---|---|
-| `/` | Home: alpha sign-up, featured recomps slider, and games |
+| `/` | Home: alpha call to action, featured recomps slider, games, and Latest News at the bottom (the news category's pinned and five most recent posts). From desktop widths, the header shows a release badge beside the logo that opens the current release announcement |
 | `/alpha` | Alpha tester sign-up (email confirmation required) |
 | `/sign-up`, `/sign-in` | Create an account or sign in: email and password, Discord, or GitHub |
 | `/confirm-email` | Confirms an account email with the emailed link |

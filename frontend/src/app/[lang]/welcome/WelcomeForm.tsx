@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { Field, FormMessage, inputClasses, ResultCard, SubmitButton } from "@/components/auth/FormParts";
+import { FormMessage, ResultCard, SubmitButton } from "@/components/auth/FormParts";
+import { UsernameField } from "@/components/auth/LiveFields";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/server";
-import { cx } from "@/lib/cx";
 import { createPlatformAccount, type WelcomeState } from "./actions";
 
 interface WelcomeFormProps {
@@ -39,24 +39,7 @@ export function WelcomeForm({ locale, suggestedUsername, signInHref, messages }:
     <form key={JSON.stringify(state)} action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="locale" value={locale} />
       <FormMessage message={state.status === "error" && !fieldError ? errors[state.error] : null} />
-      <Field id="username" label={fields.username} hint={fields.usernameHint} error={fieldError ? errors[fieldError] : null}>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          required
-          minLength={3}
-          maxLength={24}
-          pattern="[A-Za-z0-9_\-]{3,24}"
-          autoComplete="username"
-          autoCapitalize="none"
-          spellCheck={false}
-          defaultValue={state.status === "error" ? state.username : suggestedUsername}
-          aria-invalid={Boolean(fieldError)}
-          aria-describedby={cx("username-hint", fieldError && "username-error")}
-          className={inputClasses}
-        />
-      </Field>
+      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken }} defaultValue={state.status === "error" ? state.username : suggestedUsername} serverError={fieldError ? errors[fieldError] : null} />
       <SubmitButton label={copy.submit} pendingLabel={copy.submitting} className="w-full sm:w-auto sm:self-start" />
     </form>
   );

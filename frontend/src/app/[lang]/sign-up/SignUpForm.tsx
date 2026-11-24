@@ -1,10 +1,11 @@
 "use client";
 
 import { useActionState } from "react";
-import { Field, FormMessage, HumanCheckSubmit, inputClasses, ResultCard } from "@/components/auth/FormParts";
+import { FormMessage, HumanCheckSubmit, ResultCard } from "@/components/auth/FormParts";
+import { EmailField, UsernameField } from "@/components/auth/LiveFields";
+import { NewPasswordFields } from "@/components/auth/NewPasswordFields";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/server";
-import { cx } from "@/lib/cx";
 import { challengeActions } from "@/lib/auth/forms";
 import { signUp, type SignUpState } from "./actions";
 
@@ -44,70 +45,15 @@ export function SignUpForm({ locale, challengeSiteKey, agreement, messages }: Si
       <input type="hidden" name="locale" value={locale} />
       <FormMessage message={state.status === "error" ? errors[state.error] : null} />
 
-      <Field id="email" label={fields.email} error={errorFor("email")}>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          maxLength={254}
-          autoComplete="email"
-          spellCheck={false}
-          placeholder={fields.emailPlaceholder}
-          defaultValue={values?.email}
-          aria-invalid={Boolean(fieldErrors.email)}
-          aria-describedby={fieldErrors.email ? "email-error" : undefined}
-          className={inputClasses}
-        />
-      </Field>
+      <EmailField labels={{ label: fields.email, placeholder: fields.emailPlaceholder, valid: fields.emailValid, invalid: errors.email }} defaultValue={values?.email} serverError={errorFor("email")} />
 
-      <Field id="username" label={fields.username} hint={fields.usernameHint} error={errorFor("username")}>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          required
-          minLength={3}
-          maxLength={24}
-          pattern="[A-Za-z0-9_\-]{3,24}"
-          autoComplete="username"
-          autoCapitalize="none"
-          spellCheck={false}
-          defaultValue={values?.username}
-          aria-invalid={Boolean(fieldErrors.username)}
-          aria-describedby={cx("username-hint", fieldErrors.username && "username-error")}
-          className={inputClasses}
-        />
-      </Field>
+      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken }} defaultValue={values?.username} serverError={errorFor("username")} />
 
-      <Field id="password" label={fields.password} hint={fields.passwordHint} error={errorFor("password")}>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          maxLength={128}
-          autoComplete="new-password"
-          aria-invalid={Boolean(fieldErrors.password)}
-          aria-describedby={cx("password-hint", fieldErrors.password && "password-error")}
-          className={inputClasses}
-        />
-      </Field>
-
-      <Field id="confirmPassword" label={fields.confirmPassword} error={errorFor("confirmPassword")}>
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          required
-          maxLength={128}
-          autoComplete="new-password"
-          aria-invalid={Boolean(fieldErrors.confirmPassword)}
-          aria-describedby={fieldErrors.confirmPassword ? "confirmPassword-error" : undefined}
-          className={inputClasses}
-        />
-      </Field>
+      <NewPasswordFields
+        labels={{ password: fields.password, confirm: fields.confirmPassword, hint: fields.passwordHint, match: fields.passwordsMatch, mismatch: errors.passwordMismatch }}
+        passwordError={errorFor("password")}
+        confirmError={errorFor("confirmPassword")}
+      />
 
       <p className="text-sm text-muted">{agreement}</p>
 

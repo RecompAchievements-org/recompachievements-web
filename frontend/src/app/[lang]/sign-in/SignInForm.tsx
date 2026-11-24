@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { Field, FormMessage, inputClasses, SubmitButton } from "@/components/auth/FormParts";
+import { EmailField } from "@/components/auth/LiveFields";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/server";
 import { signInWithEmail, type SignInState } from "./actions";
@@ -24,22 +25,7 @@ export function SignInForm({ locale, forgotHref, messages }: SignInFormProps) {
       <input type="hidden" name="locale" value={locale} />
       <FormMessage message={message} />
 
-      <Field id="email" label={fields.email} error={fieldErrors.email ? errors[fieldErrors.email] : null}>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          maxLength={254}
-          autoComplete="email"
-          spellCheck={false}
-          placeholder={fields.emailPlaceholder}
-          defaultValue={state.status === "error" ? state.email : undefined}
-          aria-invalid={Boolean(fieldErrors.email)}
-          aria-describedby={fieldErrors.email ? "email-error" : undefined}
-          className={inputClasses}
-        />
-      </Field>
+      <EmailField labels={{ label: fields.email, placeholder: fields.emailPlaceholder, valid: fields.emailValid, invalid: errors.email }} defaultValue={state.status === "error" ? state.email : undefined} serverError={fieldErrors.email ? errors[fieldErrors.email] : null} />
 
       <Field id="password" label={fields.password} error={fieldErrors.password ? errors[fieldErrors.password] : null}>
         <input

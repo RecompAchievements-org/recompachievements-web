@@ -44,7 +44,7 @@ public sealed class ForumTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var post = await client.GetFromJsonAsync<JsonElement>($"{Public}/alpha-v1-0-is-live?lang=pt", Ct);
 
         var news = Assert.Single(categories.EnumerateArray(), c => c.GetProperty("key").GetString() == "news");
-        Assert.Equal("Noticias", news.GetProperty("name").GetString());
+        Assert.Equal("Últimas noticias", news.GetProperty("name").GetString());
         Assert.True(news.GetProperty("adminOnly").GetBoolean());
         Assert.False(news.GetProperty("commentsEnabled").GetBoolean());
         Assert.Contains(news.GetProperty("pinnedPosts").EnumerateArray(), p => p.GetProperty("slug").GetString() == "alpha-v1-0-is-live");

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { Field, FormMessage, HumanCheckSubmit, inputClasses, ResultCard } from "@/components/auth/FormParts";
+import { FormMessage, HumanCheckSubmit, ResultCard } from "@/components/auth/FormParts";
+import { EmailField } from "@/components/auth/LiveFields";
 import type { Locale } from "@/i18n/config";
 import type { Messages } from "@/i18n/server";
 import { challengeActions } from "@/lib/auth/forms";
@@ -39,22 +40,7 @@ export function ForgotPasswordForm({ locale, challengeSiteKey, signInHref, messa
     <form key={JSON.stringify(state)} action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="locale" value={locale} />
       <FormMessage message={state.status === "error" ? errors[state.error] : null} />
-      <Field id="email" label={fields.email} error={fieldError ? errors[fieldError] : null}>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          maxLength={254}
-          autoComplete="email"
-          spellCheck={false}
-          placeholder={fields.emailPlaceholder}
-          defaultValue={state.status === "error" ? state.email : undefined}
-          aria-invalid={Boolean(fieldError)}
-          aria-describedby={fieldError ? "email-error" : undefined}
-          className={inputClasses}
-        />
-      </Field>
+      <EmailField labels={{ label: fields.email, placeholder: fields.emailPlaceholder, valid: fields.emailValid, invalid: errors.email }} defaultValue={state.status === "error" ? state.email : undefined} serverError={fieldError ? errors[fieldError] : null} />
       <HumanCheckSubmit
         siteKey={challengeSiteKey}
         action={challengeActions.forgotPassword}

@@ -13,6 +13,7 @@
     "github": "GitHub",
     "games": "Games",
     "forum": "Forum",
+    "release": "Alpha v1.0 Live",
     "signIn": "Sign In",
     "account": "Your account: {username}",
     "accountMenu": {
@@ -341,8 +342,12 @@
       "confirmPassword": "Confirm password",
       "confirmNewPassword": "Confirm new password",
       "passwordHint": "At least 8 characters.",
+      "passwordsMatch": "Passwords match.",
       "username": "Username",
-      "usernameHint": "3–24 letters, numbers, - or _. Shown on your profile."
+      "usernameHint": "3–24 letters, numbers, - or _. Shown on your profile.",
+      "emailValid": "Valid email address.",
+      "usernameChecking": "Checking availability…",
+      "usernameAvailable": "This username is available."
     },
     "errors": {
       "invalid": "Please fix the highlighted fields.",

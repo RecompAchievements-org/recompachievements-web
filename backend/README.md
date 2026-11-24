@@ -189,7 +189,7 @@ the role from the database on every request, and are rate limited.
 | `GET /api/v1/forum-admin/{category}/posts`, `GET …/{slug}` | Admin: every post including drafts, and a post's source in each language |
 | `POST /api/v1/forum-admin/{category}/posts`, `PUT …/{slug}`, `DELETE …/{slug}` | Admin: create, update (publish or unpublish), or delete. `409 slug_taken`; `409 slug_locked` when a published post's address would change |
 
-The `AddAccountsAndCommunity` migration creates the **News** category (admins only, comments off) and publishes the
+The `AddAccountsAndCommunity` migration creates the **news** category, titled "Latest News" (admins only, comments off), and publishes the
 Alpha v1.0 announcement, shown as written by the RecompAchievements Team.
 
 **Moderation.** `POST /api/v1/reports` lets a signed-in player report a `profile`, `photo`, or

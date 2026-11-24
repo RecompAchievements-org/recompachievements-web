@@ -9,6 +9,7 @@ import { AccountLink, SignInLink } from "./AccountLink";
 import { LocaleFlag } from "./LocaleFlag";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
+import { ReleaseBadge } from "./ReleaseBadge";
 
 export async function SiteHeader() {
   const locale = await getLocale();
@@ -17,13 +18,16 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
-        <Link
-          href={localizePath(locale, "/")}
-          aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
-          className="min-w-0 rounded-md"
-        >
-          <Logo compact />
-        </Link>
+        <div className="flex min-w-0 items-center gap-3">
+          <Link
+            href={localizePath(locale, "/")}
+            aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
+            className="min-w-0 rounded-md"
+          >
+            <Logo compact />
+          </Link>
+          <ReleaseBadge href={localizePath(locale, siteConfig.releasePost)} label={header.release} />
+        </div>
 
         <div className="flex shrink-0 items-center sm:gap-1">
           <nav aria-label={header.mainNav}>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { localizePath } from "@/i18n/config";
 import { getLocale, getMessages } from "@/i18n/server";
+import { getCurrentAccount } from "@/lib/auth/session";
 import { ConfirmEmail } from "./ConfirmEmail";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,11 +29,15 @@ async function ConfirmPanel({ searchParams }: Pick<PageProps<"/[lang]/confirm-em
   const locale = await getLocale();
   const { auth } = await getMessages();
   const { token } = await searchParams;
+  /** Continue goes straight to the profile or to sign-in, never through /account: the browser keeps
+   *  a client-side visit's redirect, and would replay "go to sign-in" after a later sign-in.
+  **/
+  const account = await getCurrentAccount();
 
   return (
     <ConfirmEmail
       token={typeof token === "string" ? token : ""}
-      continueHref={localizePath(locale, "/account")}
+      continueHref={localizePath(locale, account ? `/account/${account.username}` : "/sign-in")}
       messages={auth}
     />
   );

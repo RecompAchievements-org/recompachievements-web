@@ -348,7 +348,7 @@ namespace RecompAchievements.Api.Data.Migrations
             migrationBuilder.Sql(@"
                 INSERT INTO forum_categories (id, key, name, description, admin_only, comments_enabled, display_order)
                 VALUES ('019ab7a0-0000-7000-8000-000000000001', 'news',
-                        jsonb_build_object('En', 'News', 'Es', 'Noticias', 'Pt', 'Notícias'),
+                        jsonb_build_object('En', 'Latest News', 'Es', 'Últimas noticias', 'Pt', 'Últimas notícias'),
                         jsonb_build_object('En', 'Official announcements about RecompAchievements: releases, features, and project news.',
                                            'Es', 'Anuncios oficiales de RecompAchievements: versiones, funciones y noticias del proyecto.',
                                            'Pt', 'Anúncios oficiais do RecompAchievements: versões, recursos e notícias do projeto.'),

@@ -89,10 +89,11 @@ src/
 │   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
 │   │                         # GameCommentsSection (saved comments, per visitor)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, LocaleFlag, SocialLinks, AccountLink,
-│   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner
+│   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner, ReleaseBadge
 │   ├── comments/             # CommentThread, CommentAuthor, SavedComments (client), CommentsSkeleton,
 │   │                         # actions.ts: every comment section
-│   ├── forum/                # Markdown (safe subset renderer), PostEditor (client), ForumParts
+│   ├── forum/                # Markdown (safe subset renderer), PostEditor (client), ForumParts,
+│   │                         # CategoryCard (forum home and home page news)
 │   ├── moderation/           # ReportButton, ModerationControls (client), ModerationShell, UserSearch
 │   ├── profile/              # ProfilePhoto, ProfileCard, ProfileBadges, BadgeIcon,
 │   │                         # BadgeDetails and PlayerPreview (client popovers), sampleBadges,

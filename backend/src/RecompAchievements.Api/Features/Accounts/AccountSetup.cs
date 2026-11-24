@@ -14,6 +14,7 @@ internal static class AccountSetup
         services.AddScoped<Sessions>();
         services.AddScoped<AccountLinks>();
         services.AddSingleton<PendingSignupTokens>();
+        services.Configure<AlphaPhaseOptions>(configuration.GetSection("AlphaPhase"));
         services.AddOAuthProviders(configuration);
         services.AddHostedService<AccountCleanup>();
         return services;

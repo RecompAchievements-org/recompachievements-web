@@ -4,8 +4,7 @@
   },
   "common": {
     "skipToContent": "Saltar al contenido",
-    "opensInNewTab": "(se abre en una pestaña nueva)",
-    "alphaOpen": "Registro alfa abierto · ¡Cupos limitados!"
+    "opensInNewTab": "(se abre en una pestaña nueva)"
   },
   "header": {
     "homeLabel": "Inicio de {siteName}",
@@ -183,78 +182,15 @@
     "description": "Esta página no existe o ha cambiado de dirección.",
     "backHome": "Volver al inicio"
   },
-  "alpha": {
-    "metaTitle": "Únete a la alfa",
-    "metaDescription": "Apúntate para probar RecompAchievements antes del lanzamiento: consigue logros en recomps nativos y ayuda a dar forma a la plataforma.",
-    "title": "Únete a la alfa",
-    "intro": "Sé de los primeros en conseguir logros en recomps nativos. Quienes prueban la alfa usan las novedades antes que nadie y ayudan a dar forma a la plataforma.",
-    "testersHeading": "Qué hacen los testers",
-    "testers": [
-      "Jugar a recomps compatibles con los logros activados.",
-      "Informar de errores y contarnos qué funciona y qué no.",
-      "Ayudar a decidir qué recomps tienen logros primero."
-    ],
-    "storeHeading": "Qué guardamos",
-    "store": "Tu correo, apodo, plataformas y los recomps que juegas, solo para organizar la alfa. Los detalles están en nuestro {privacy}.",
-    "privacyLink": "aviso de privacidad",
-    "form": {
-      "email": "Correo electrónico",
-      "emailPlaceholder": "tu@ejemplo.com",
-      "nickname": "Apodo",
-      "nicknameHint": "De 2 a 32 caracteres.",
-      "platforms": "Plataformas en las que juegas",
-      "recomps": "Recomps que juegas",
-      "recompsOptional": "Opcional",
-      "recompsPlaceholder": "p. ej., Zelda 64: Recompiled, Ape Escape…",
-      "consent": "Acepto el {privacy} y que me contacten sobre la alfa.",
-      "submit": "Únete a la alfa",
-      "submitting": "Enviando…",
-      "honeypot": "Deja este campo vacío"
-    },
-    "errors": {
-      "required": "Este campo es obligatorio.",
-      "email": "Introduce un correo electrónico válido.",
-      "nicknameLength": "Usa de 2 a 32 caracteres.",
-      "platforms": "Elige al menos una plataforma.",
-      "recompsLength": "Usa menos de 200 caracteres.",
-      "consent": "Acepta el aviso de privacidad para continuar.",
-      "rateLimited": "Demasiados intentos. Vuelve a intentarlo en unos minutos.",
-      "unavailable": "Algo ha fallado por nuestra parte. Inténtalo de nuevo más tarde.",
-      "invalid": "Revisa los campos marcados.",
-      "challenge": "Completa la verificación humana de arriba y vuelve a intentarlo."
-    },
-    "success": {
-      "title": "Revisa tu bandeja de entrada",
-      "sentTo": "Hemos enviado un enlace de confirmación a:",
-      "expiry": "Ábrelo en los próximos 7 días para asegurar tu plaza.",
-      "spam": "¿No lo encuentras? Revisa la carpeta de spam o vuelve a registrarte dentro de 10 minutos para recibir un enlace nuevo."
-    }
-  },
-  "alphaConfirm": {
-    "metaTitle": "Confirma tu registro",
-    "title": "Confirma tu registro en la alfa",
-    "body": "Pulsa el botón para confirmar tu correo y unirte a la alfa.",
-    "button": "Confirmar mi correo",
-    "confirming": "Confirmando…",
-    "successTitle": "¡Ya estás dentro!",
-    "successBody": "Tu correo está confirmado. Te escribiremos en cuanto abra la alfa.",
-    "expiredTitle": "Este enlace ha caducado",
-    "expiredBody": "Los enlaces de confirmación duran 7 días. Regístrate de nuevo para recibir uno nuevo.",
-    "invalidTitle": "Este enlace no es válido",
-    "invalidBody": "Puede que esté incompleto o que lo haya sustituido un correo más reciente. Regístrate de nuevo para recibir un enlace nuevo.",
-    "unavailable": "No hemos podido confirmar tu correo ahora mismo. Inténtalo de nuevo en unos minutos.",
-    "signUpAgain": "Registrarme de nuevo",
-    "backHome": "Volver al inicio"
-  },
   "privacy": {
     "metaTitle": "Aviso de privacidad",
     "title": "Aviso de privacidad",
     "updated": "Última actualización: {date}",
-    "intro": "RecompAchievements es un proyecto comunitario. Este aviso explica qué datos recogemos cuando te apuntas a la alfa o creas una cuenta, para qué y cómo eliminarlos.",
+    "intro": "RecompAchievements es un proyecto comunitario. Este aviso explica qué datos recogemos cuando creas una cuenta o cuando te apuntaste a nuestra lista anterior de registro en la alfa, para qué y cómo eliminarlos.",
     "sections": [
       {
         "title": "Qué recogemos",
-        "body": "Registro en la alfa: tu correo electrónico, apodo, las plataformas en las que juegas, los recomps que mencionas, el idioma del sitio que usaste y cuándo aceptaste este aviso y confirmaste tu correo. Cuenta: tu nombre de usuario, tu correo (cuando lo confirmas), una contraseña cifrada de forma segura si creas una, el idioma del sitio y, si inicias sesión con Discord o GitHub, el ID de tu cuenta en esa plataforma (y su correo, solo cuando la plataforma indica que está verificado y lo usas para tu cuenta). También registramos cuándo se creó y se modificó por última vez tu cuenta, tu última actividad y si está activada. Tu perfil público muestra tu nombre de usuario, cuándo te uniste, el día de tu última actividad (nunca la hora) y los comentarios de tu muro; tu progreso de logros también será público. Tu correo y tus plataformas conectadas nunca se muestran. No guardamos tu dirección IP."
+        "body": "Lista anterior de registro en la alfa (ya cerrada): tu correo electrónico, apodo, las plataformas en las que juegas, los recomps que mencionas, el idioma del sitio que usaste y cuándo aceptaste este aviso y confirmaste tu correo. Cuenta: tu nombre de usuario, tu correo (cuando lo confirmas), una contraseña cifrada de forma segura si creas una, el idioma del sitio y, si inicias sesión con Discord o GitHub, el ID de tu cuenta en esa plataforma (y su correo, solo cuando la plataforma indica que está verificado y lo usas para tu cuenta). También registramos cuándo se creó y se modificó por última vez tu cuenta, tu última actividad y si está activada. Tu perfil público muestra tu nombre de usuario, cuándo te uniste, el día de tu última actividad (nunca la hora) y los comentarios de tu muro; tu progreso de logros también será público. Tu correo y tus plataformas conectadas nunca se muestran. No guardamos tu dirección IP."
       },
       {
         "title": "Comentarios",
@@ -266,7 +202,7 @@
       },
       {
         "title": "Para qué",
-        "body": "Para organizar la alfa y gestionar tu cuenta: confirmar tu correo, iniciar tu sesión, mantener tu cuenta segura, enviarte los correos de cuenta que pidas (enlaces de confirmación y de contraseña) o que te protegen (un cambio de contraseña o una plataforma recién conectada) y, más adelante, registrar tus logros. No vendemos ni compartimos tus datos, y no enviamos correos publicitarios."
+        "body": "Para gestionar tu cuenta y la lista anterior de registro en la alfa: confirmar tu correo, iniciar tu sesión, mantener tu cuenta segura, enviarte los correos de cuenta que pidas (enlaces de confirmación y de contraseña) o que te protegen (un cambio de contraseña o una plataforma recién conectada) y, más adelante, registrar tus logros. No vendemos ni compartimos tus datos, y no enviamos correos publicitarios."
       },
       {
         "title": "Dónde se guardan",
@@ -278,7 +214,7 @@
       },
       {
         "title": "Durante cuánto tiempo",
-        "body": "Los registros en la alfa sin confirmar se eliminan automáticamente 7 días después de enviar el enlace; los confirmados se conservan hasta que termine la alfa y después se eliminan, salvo que crees una cuenta. Las cuentas se conservan hasta que nos pidas eliminarlas. Los registros que nunca se confirman se eliminan cuando caduca su enlace (24 horas), y las sesiones terminan tras 30 días sin uso."
+        "body": "Los registros sin confirmar de la lista anterior de la alfa se eliminan automáticamente 7 días después de enviar el enlace. Los confirmados se migran a cuentas de jugador: creamos una cuenta con el correo de tu registro y te enviamos por correo tu nombre de usuario y un enlace para crear tu contraseña. Las cuentas se conservan hasta que nos pidas eliminarlas. Los registros que nunca se confirman se eliminan cuando caduca su enlace (24 horas), y las sesiones terminan tras 30 días sin uso."
       },
       {
         "title": "Cookies",

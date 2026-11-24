@@ -38,7 +38,7 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   available there), return error **codes** that the client translates, and never return secrets.
   Validate on the server even when the input has native constraints.
 - Mutations triggered by emailed links happen on a button press (POST), never on page load.
-- Forms that send email to a typed address (alpha sign-up, account sign-up, forgot-password)
+- Forms that send email to a typed address (account sign-up, forgot-password)
   include a human-verification challenge (`HumanCheck`, or `HumanCheckSubmit` in account forms).
   Its token must be verified on the server (`verifyHumanToken` in `src/lib/turnstile.ts`) with
   that form's action name before the API is called; never skip or weaken that check, and keep it
@@ -137,9 +137,8 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 `src/app/[lang]/`.
 
 - `/` — home: featured recomps slider (`FeaturedSlider`), games, and the news `CategoryCard`
-  (Latest News) at full width at the bottom; primary call to action: Join the Alpha
-- `/alpha` — alpha tester sign-up form
-- `/alpha/confirm` — confirms a sign-up with the emailed token (`noindex`, not in the sitemap)
+  (Latest News) at full width at the bottom; primary call to action: Join the Alpha, which opens
+  `/sign-up`
 - `/privacy` — privacy notice; update its `lastUpdated` date and translations whenever data
   handling changes
 - `/content-policy` — what the site hosts, image sources, removal requests; keep it in step with the
@@ -188,7 +187,7 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   registered with each platform)
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
-`/`, `/alpha`, `/alpha/confirm` (linked from sent emails), `/privacy`, `/content-policy`, `/games`,
+`/`, `/privacy`, `/content-policy`, `/games`,
 and `/games/[slug]` are live in production:
 renaming any of them needs a permanent (308) redirect from the old path (RULE-005, exception 2).
 Once accounts deploy, the same applies to `/confirm-email` and `/reset-password` (linked from sent

@@ -1,8 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using RecompAchievements.Api.Features.AlphaSignups;
 using static RecompAchievements.Api.Tests.Accounts.AccountTestKit;
 
 namespace RecompAchievements.Api.Tests.Accounts;
@@ -24,7 +24,8 @@ public sealed class EmailAccountTests(ApiFactory factory) : IClassFixture<ApiFac
         Assert.True(me.GetProperty("emailConfirmed").GetBoolean());
         Assert.True(me.GetProperty("hasPassword").GetBoolean());
         Assert.True(me.GetProperty("canCollectAchievements").GetBoolean());
-        Assert.False(me.GetProperty("isAlphaTester").GetBoolean());
+        // The alpha phase has no end date in tests, so every new account is an alpha tester.
+        Assert.True(me.GetProperty("isAlphaTester").GetBoolean());
         var memberSince = me.GetProperty("createdAt").GetDateTimeOffset();
         Assert.True(me.GetProperty("lastActivityAt").GetDateTimeOffset() >= memberSince);
     }
@@ -343,27 +344,17 @@ public sealed class EmailAccountTests(ApiFactory factory) : IClassFixture<ApiFac
     }
 
     [Fact]
-    public async Task Alpha_tester_is_recognized_by_a_confirmed_matching_email()
+    public async Task Accounts_created_after_the_alpha_phase_are_not_alpha_testers()
     {
         using var client = factory.CreateWebsiteClient();
-        var email = NewEmail();
-        await WithDb(factory, async db =>
-        {
-            db.AlphaSignups.Add(new AlphaSignup
-            {
-                Email = email,
-                Nickname = "Tester",
-                Platforms = ["windows"],
-                Locale = "en",
-                Status = "confirmed",
-                ConfirmationTokenHash = Guid.NewGuid().ToByteArray(),
-                CreatedAt = DateTimeOffset.UtcNow,
-            });
-            await db.SaveChangesAsync(Ct);
-        });
+        var session = await CreateConfirmedAccount(factory, client, NewEmail());
 
-        var session = await CreateConfirmedAccount(factory, client, email);
+        using var ended = factory.WithWebHostBuilder(builder => builder.UseSetting("AlphaPhase:EndsAt", "2000-01-01T00:00:00Z"));
+        using var endedClient = ended.CreateWebsiteClient();
+        using var later = factory.WithWebHostBuilder(builder => builder.UseSetting("AlphaPhase:EndsAt", "2999-01-01T00:00:00Z"));
+        using var laterClient = later.CreateWebsiteClient();
 
-        Assert.True((await Me(client, session)).GetProperty("isAlphaTester").GetBoolean());
+        Assert.False((await Me(endedClient, session)).GetProperty("isAlphaTester").GetBoolean());
+        Assert.True((await Me(laterClient, session)).GetProperty("isAlphaTester").GetBoolean());
     }
 }

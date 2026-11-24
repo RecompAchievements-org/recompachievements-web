@@ -9,8 +9,7 @@ native PC ports built via **static recompilation** — such as N64, GameCube, PS
 recomp projects (e.g. *Zelda 64: Recompiled*, *bbport* for Bloodborne) — that run outside
 traditional emulators.
 
-> 🚧 **Status: alpha (v1.0).** The website and the API are live, with the alpha tester sign-up
-> open, a game directory of preview achievement sets, player accounts (email and password,
+> 🚧 **Status: alpha (v1.0).** The website and the API are live, with a game directory of preview achievement sets, player accounts (email and password,
 > Discord, or GitHub) with public profiles, profile photos, and comments, community moderation,
 > and a forum for project news. Badges, medals, scores, and progress are previews with sample data
 > for now. The developer portal and the C/C++ SDK come next.
@@ -139,8 +138,12 @@ Discord or GitHub; the other methods can be connected later from Settings.
   platform never changes the account email.
 - Signing in with email needs a confirmed email and a password. Accounts created through Discord or
   GitHub get their first password through the emailed "set or reset your password" link.
-- Alpha testers are recognized when their confirmed account email matches a confirmed alpha
-  sign-up; nothing extra is stored.
+- Every account created during the alpha phase is an alpha tester (including the accounts
+  migrated from the earlier alpha list); nothing extra is stored.
+- Confirmed sign-ups from the earlier alpha list are **migrated** to accounts by a one-time job
+  that is switched on for the release: each gets an account with its sign-up email (already
+  confirmed) and a username from its nickname, and a welcome email in its sign-up language with the
+  username and a 7-day link to set a password. Emails that already have an account are skipped.
 - Every player has a **public profile** at `/account/<username>` with a comment **wall**. Anyone
   can read it; accounts with a confirmed email can post; a comment's author or the wall's owner can
   delete it. Profiles show only the username, join date, last active day, and score fields, and
@@ -154,7 +157,8 @@ Data: `users` (username, email, confirmation, Discord and GitHub IDs, password h
 role, mute end, profile photo, created, edited, and last activity dates), `user_sessions`
 (hashed session tokens), `user_tokens` (hashed single-use email links), `comments`
 (plain-text comments on profile walls and game pages), `moderation_reports`, and the append-only
-`moderation_actions` audit log. The forum uses `forum_categories` (each decides who may post and
+`moderation_actions` audit log. `alpha_signups` (the earlier alpha list) records each sign-up's
+migration: when it was handled, the account created for it, and when its welcome was sent. The forum uses `forum_categories` (each decides who may post and
 whether posts take comments) and `forum_posts` (Markdown text in English with optional Spanish and
 Portuguese). Endpoints are listed in
 [`backend/README.md`](backend/README.md#endpoints).
@@ -174,7 +178,6 @@ infringers are disabled. The public rules are at `/rules`.
 | Route | Page |
 |---|---|
 | `/` | Home: alpha call to action, featured recomps slider, games, and Latest News at the bottom (the news category's pinned and five most recent posts). From desktop widths, the header shows a release badge beside the logo that opens the current release announcement |
-| `/alpha` | Alpha tester sign-up (email confirmation required) |
 | `/sign-up`, `/sign-in` | Create an account or sign in: email and password, Discord, or GitHub |
 | `/confirm-email` | Confirms an account email with the emailed link |
 | `/forgot-password`, `/reset-password` | Set or reset a password through an emailed link |

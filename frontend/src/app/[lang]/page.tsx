@@ -69,7 +69,7 @@ export default async function HomePage() {
         </h1>
         <p className="text-lg leading-relaxed text-muted">{home.intro}</p>
         <div className="flex flex-wrap gap-3">
-          <ButtonLink href={localizePath(locale, "/alpha")}>{home.joinAlpha}</ButtonLink>
+          <ButtonLink href={localizePath(locale, "/sign-up")}>{home.joinAlpha}</ButtonLink>
           <ButtonLink href={`mailto:${siteConfig.contactEmail}`} variant="secondary">
             {home.iBuildARecomp}
           </ButtonLink>

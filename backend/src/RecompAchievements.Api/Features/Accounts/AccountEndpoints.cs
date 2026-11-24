@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using RecompAchievements.Api.Data;
-using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Media;
 
@@ -285,6 +285,7 @@ internal static class AccountEndpoints
         Sessions sessions,
         IMediaStore media,
         TimeProvider time,
+        IOptions<AlphaPhaseOptions> alphaPhase,
         CancellationToken cancellationToken)
     {
         if (await sessions.ResolveAsync(context, cancellationToken) is not { } session)
@@ -294,9 +295,8 @@ internal static class AccountEndpoints
 
         var user = await db.Users.SingleAsync(u => u.Id == session.UserId, cancellationToken);
 
-        // Alpha testers aren't stored on the account: a confirmed email matching a confirmed alpha sign-up.
-        var isAlphaTester = user.CanCollectAchievements && await db.AlphaSignups.AnyAsync(
-            s => s.Email == user.Email && s.Status == AlphaSignupStatus.Confirmed, cancellationToken);
+        // Alpha testers aren't stored on the account: every account created during the alpha phase is one.
+        var isAlphaTester = alphaPhase.Value.Includes(user.CreatedAt);
 
         return TypedResults.Ok(new MeResponse(
             user.Id,

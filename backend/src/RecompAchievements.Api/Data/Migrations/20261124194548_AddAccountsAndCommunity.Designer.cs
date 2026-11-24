@@ -275,11 +275,23 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("character varying(254)")
                         .HasColumnName("email");
 
+                    b.Property<DateTimeOffset?>("InviteSentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("invite_sent_at");
+
                     b.Property<string>("Locale")
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("character varying(5)")
                         .HasColumnName("locale");
+
+                    b.Property<DateTimeOffset?>("MigratedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("migrated_at");
+
+                    b.Property<Guid?>("MigratedUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("migrated_user_id");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
@@ -316,6 +328,9 @@ namespace RecompAchievements.Api.Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasDatabaseName("ix_alpha_signups_email");
+
+                    b.HasIndex("MigratedUserId")
+                        .HasDatabaseName("ix_alpha_signups_migrated_user_id");
 
                     b.ToTable("alpha_signups", (string)null);
                 });
@@ -955,6 +970,15 @@ namespace RecompAchievements.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_user_tokens_users_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.AlphaSignups.AlphaSignup", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("MigratedUserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_alpha_signups_users_migrated_user_id");
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Comments.Comment", b =>

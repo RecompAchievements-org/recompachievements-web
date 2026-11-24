@@ -4,8 +4,7 @@
   },
   "common": {
     "skipToContent": "Skip to content",
-    "opensInNewTab": "(opens in a new tab)",
-    "alphaOpen": "Alpha Sign-Up Open · Limited Spots!"
+    "opensInNewTab": "(opens in a new tab)"
   },
   "header": {
     "homeLabel": "{siteName} home",
@@ -183,78 +182,15 @@
     "description": "This page doesn’t exist or has moved.",
     "backHome": "Back to Home"
   },
-  "alpha": {
-    "metaTitle": "Join the Alpha",
-    "metaDescription": "Sign up to test RecompAchievements before launch: earn achievements in native recomps and help shape the platform.",
-    "title": "Join the Alpha",
-    "intro": "Be one of the first players to earn achievements in native recomps. Alpha testers try new features before anyone else and help shape the platform.",
-    "testersHeading": "What Testers Do",
-    "testers": [
-      "Play supported recomps with achievements switched on.",
-      "Report bugs and share what feels good or bad.",
-      "Help decide which recomps get achievements first."
-    ],
-    "storeHeading": "What We Store",
-    "store": "Your email, nickname, platforms, and the recomps you play, only to run the alpha. Details are in our {privacy}.",
-    "privacyLink": "privacy notice",
-    "form": {
-      "email": "Email",
-      "emailPlaceholder": "you@example.com",
-      "nickname": "Nickname",
-      "nicknameHint": "2 to 32 characters.",
-      "platforms": "Platforms You Play On",
-      "recomps": "Recomps You Play",
-      "recompsOptional": "Optional",
-      "recompsPlaceholder": "e.g. Zelda 64: Recompiled, Ape Escape…",
-      "consent": "I agree to the {privacy} and to being contacted about the alpha.",
-      "submit": "Join the Alpha",
-      "submitting": "Sending…",
-      "honeypot": "Leave this field empty"
-    },
-    "errors": {
-      "required": "This field is required.",
-      "email": "Enter a valid email address.",
-      "nicknameLength": "Use 2 to 32 characters.",
-      "platforms": "Choose at least one platform.",
-      "recompsLength": "Keep it under 200 characters.",
-      "consent": "Please accept the privacy notice to continue.",
-      "rateLimited": "Too many attempts. Please try again in a few minutes.",
-      "unavailable": "Something went wrong on our side. Please try again later.",
-      "invalid": "Please check the highlighted fields.",
-      "challenge": "Please complete the human verification above and try again."
-    },
-    "success": {
-      "title": "Check Your Inbox",
-      "sentTo": "We sent a confirmation link to:",
-      "expiry": "Open it within 7 days to secure your spot.",
-      "spam": "Can’t find it? Check your spam folder, or sign up again in 10 minutes to get a new link."
-    }
-  },
-  "alphaConfirm": {
-    "metaTitle": "Confirm Your Sign-Up",
-    "title": "Confirm Your Alpha Sign-Up",
-    "body": "Press the button to confirm your email address and join the alpha.",
-    "button": "Confirm My Email",
-    "confirming": "Confirming…",
-    "successTitle": "You’re In!",
-    "successBody": "Your email is confirmed. We’ll write to you as soon as the alpha opens.",
-    "expiredTitle": "This Link Has Expired",
-    "expiredBody": "Confirmation links last 7 days. Sign up again to get a new one.",
-    "invalidTitle": "This Link Isn’t Valid",
-    "invalidBody": "It may be incomplete, or a newer email replaced it. Sign up again to get a new link.",
-    "unavailable": "We couldn’t confirm your email right now. Please try again in a few minutes.",
-    "signUpAgain": "Sign Up Again",
-    "backHome": "Back to Home"
-  },
   "privacy": {
     "metaTitle": "Privacy Notice",
     "title": "Privacy Notice",
     "updated": "Last updated: {date}",
-    "intro": "RecompAchievements is a community project. This notice explains what we collect when you sign up for the alpha or create an account, why, and how to remove it.",
+    "intro": "RecompAchievements is a community project. This notice explains what we collect when you create an account or joined our earlier alpha sign-up list, why, and how to remove it.",
     "sections": [
       {
         "title": "What We Collect",
-        "body": "Alpha sign-up: your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
+        "body": "Earlier alpha sign-up list (now closed): your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
       },
       {
         "title": "Comments",
@@ -266,7 +202,7 @@
       },
       {
         "title": "Why",
-        "body": "To run the alpha and your account: confirm your email, sign you in, keep your account secure, send account emails you ask for (confirmation and password links) or that protect you (a password change or a newly connected platform), and, later, track your achievements. We don’t sell or share your data, and we don’t send marketing emails."
+        "body": "To run your account and the earlier alpha sign-up list: confirm your email, sign you in, keep your account secure, send account emails you ask for (confirmation and password links) or that protect you (a password change or a newly connected platform), and, later, track your achievements. We don’t sell or share your data, and we don’t send marketing emails."
       },
       {
         "title": "Where It’s Kept",
@@ -278,7 +214,7 @@
       },
       {
         "title": "How Long",
-        "body": "Unconfirmed alpha sign-ups are deleted automatically 7 days after the link is sent; confirmed ones are kept until the alpha ends, then deleted unless you create an account. Accounts are kept until you ask us to delete them. Registrations never confirmed are deleted once their link expires (24 hours), and sign-in sessions end after 30 days without use."
+        "body": "Unconfirmed sign-ups from the earlier alpha list are deleted automatically 7 days after the link is sent. Confirmed ones are migrated to player accounts: we create an account with your sign-up email and email you your username and a link to set your password. Accounts are kept until you ask us to delete them. Registrations never confirmed are deleted once their link expires (24 hours), and sign-in sessions end after 30 days without use."
       },
       {
         "title": "Cookies",

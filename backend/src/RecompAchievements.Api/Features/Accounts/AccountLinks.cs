@@ -21,6 +21,7 @@ internal sealed partial class AccountLinks(
 {
     public static readonly TimeSpan ConfirmEmailLifetime = TimeSpan.FromHours(24);
     public static readonly TimeSpan SetPasswordLifetime = TimeSpan.FromHours(1);
+    public static readonly TimeSpan AlphaWelcomeLifetime = TimeSpan.FromDays(7);
     private static readonly TimeSpan ResendInterval = TimeSpan.FromMinutes(2);
     private static readonly TimeSpan EmailCapWindow = TimeSpan.FromHours(24);
 
@@ -34,6 +35,10 @@ internal sealed partial class AccountLinks(
     public Task SendSetPasswordAsync(User user, AccountEmailKind kind, CancellationToken cancellationToken) =>
         IssueAsync(user, UserTokenPurpose.SetPassword, null, SetPasswordLifetime, kind, "/reset-password", cancellationToken);
 
+    // Welcomes an account migrated from the alpha list with its username and a longer-lived set-password link; true when sent.
+    public Task<bool> SendAlphaWelcomeAsync(User user, CancellationToken cancellationToken) =>
+        IssueAsync(user, UserTokenPurpose.SetPassword, null, AlphaWelcomeLifetime, AccountEmailKind.AlphaWelcome, "/reset-password", cancellationToken);
+
     // A notice without a link (password changed, platform connected), sent only to a confirmed email.
     public Task SendNoticeAsync(User user, AccountEmailKind kind, string? detail, CancellationToken cancellationToken) =>
         user.CanCollectAchievements
@@ -46,7 +51,8 @@ internal sealed partial class AccountLinks(
             ? TrySendAsync(AccountEmails.Build(kind, user.Email, user.Username, user.Locale, detail: reason, until: until), user.Id, cancellationToken)
             : Task.CompletedTask;
 
-    private async Task IssueAsync(
+    // True when the email was handed to the sender; false when skipped (throttled, capped, no address) or it failed.
+    private async Task<bool> IssueAsync(
         User user,
         string purpose,
         string? address,
@@ -58,7 +64,7 @@ internal sealed partial class AccountLinks(
         var to = address ?? user.Email;
         if (to is null)
         {
-            return;
+            return false;
         }
 
         var now = time.GetUtcNow();
@@ -66,7 +72,7 @@ internal sealed partial class AccountLinks(
             t => t.UserId == user.Id && t.Purpose == purpose && t.CreatedAt > now - ResendInterval, cancellationToken);
         if (recentlySent)
         {
-            return;
+            return false;
         }
 
         var since = now - EmailCapWindow;
@@ -74,7 +80,7 @@ internal sealed partial class AccountLinks(
         if (sentToday >= emailOptions.Value.DailyAccountEmailLimit)
         {
             LogEmailCapReached(logger, emailOptions.Value.DailyAccountEmailLimit);
-            return;
+            return false;
         }
 
         await db.UserTokens.Where(t => t.UserId == user.Id && t.Purpose == purpose).ExecuteDeleteAsync(cancellationToken);
@@ -92,18 +98,20 @@ internal sealed partial class AccountLinks(
         await db.SaveChangesAsync(cancellationToken);
 
         var link = AccountEmails.PageLink(SiteBaseUrl, user.Locale, path, token);
-        await TrySendAsync(AccountEmails.Build(kind, to, user.Username, user.Locale, link), user.Id, cancellationToken);
+        return await TrySendAsync(AccountEmails.Build(kind, to, user.Username, user.Locale, link), user.Id, cancellationToken);
     }
 
-    private async Task TrySendAsync(EmailMessage message, Guid userId, CancellationToken cancellationToken)
+    private async Task<bool> TrySendAsync(EmailMessage message, Guid userId, CancellationToken cancellationToken)
     {
         try
         {
             await emailSender.SendAsync(message, cancellationToken);
+            return true;
         }
         catch (HttpRequestException exception)
         {
             LogEmailFailed(logger, exception, userId);
+            return false;
         }
     }
 

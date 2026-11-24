@@ -73,7 +73,8 @@ backend/
 │       ├── Comments/                 # Comments on profile walls and game pages (one shared table)
 │       ├── Moderation/               # Reports, staff actions, and the audit log
 │       ├── Forum/                    # Forum categories and posts (admin-managed News)
-│       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
+│       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup,
+│       │                             # AlphaSignupMigration (alpha list to accounts)
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
     ├── ApiFactory.cs                 # In-memory API + throwaway PostgreSQL container
@@ -102,6 +103,9 @@ environments set these (see `.env.example`):
 | `MediaStorage__BucketName`, `__ServiceUrl`, `__AccessKey`, `__SecretKey`, `__PublicBaseUrl` | S3-compatible bucket for profile photos and its public CDN address. Without a bucket, Development uses an ignored `.local-media/` folder and other environments turn uploads off |
 | `MediaStorage__PurgeUrl`, `MediaStorage__PurgeToken` | CDN purge endpoint and token; required with a bucket outside Development, so removed images leave the CDN |
 | `MediaStorage__EvidenceBucketName` | Optional private bucket for evidence kept under a legal hold |
+| `AlphaPhase__EndsAt` | Optional. When the alpha phase ends (ISO 8601). Empty while the alpha runs; accounts created before it are alpha testers (`isAlphaTester`) |
+| `AlphaMigration__Enabled` | `true` for the release that migrates the earlier alpha list: confirmed sign-ups become accounts and get a welcome email with a set-password link. Runs at startup and then hourly until everyone is migrated; safe to leave on |
+| `AlphaMigration__DryRun` | With `Enabled`, only logs what a run would do (accounts to create, existing accounts, adjusted usernames, welcomes waiting) |
 | `Site__BaseUrl` | Website address used in email links (`https://recompachievements.org`; `http://localhost:3000` locally) |
 
 `appsettings.Development.json` holds local-only values (database credentials matching
@@ -211,7 +215,8 @@ entry, and answer `403 moderation_forbidden` when the target isn't allowed.
 | `PUT /users/{username}/role` | Admin only: changes a role |
 | `POST /users/{username}/photo/legal-hold` | Admin only, for serious illegal content: preserves a private copy, unpublishes the image, and disables the account without emailing its owner |
 
-Pending alpha sign-ups whose link expired are deleted automatically, and so are expired sessions
+Pending alpha sign-ups whose link expired are deleted automatically (confirmed ones are migrated
+to accounts when `AlphaMigration__Enabled` is on), and so are expired sessions
 and email links, email + password registrations never confirmed before their link expired, and
 moderation text evidence after 90 days (except legal holds). `lang` is `en`, `es`, or `pt`
 (default `en`); text without a translation falls back to English.

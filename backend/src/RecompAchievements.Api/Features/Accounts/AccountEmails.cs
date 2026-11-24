@@ -16,6 +16,7 @@ internal enum AccountEmailKind
     AccountDisabled,
     ReportActioned,
     ReportDismissed,
+    AlphaWelcome,
 }
 
 // The localized account emails (English, Spanish, Brazilian Portuguese).
@@ -166,6 +167,22 @@ internal static class AccountEmails
         [(AccountEmailKind.ReportDismissed, "pt")] = new(
             "Analisamos sua denúncia no RecompAchievements",
             "Obrigado pela denúncia. A moderação analisou o caso e não encontrou violação das nossas regras da comunidade."),
+
+        [(AccountEmailKind.AlphaWelcome, "en")] = new(
+            "Your RecompAchievements account is ready",
+            "Thanks for joining the RecompAchievements alpha list. We’ve created your player account with this email, and your username is {0}. Use this link to choose a password and sign in:",
+            "Choose a Password",
+            "This link expires in 7 days and works once; after that, use “Forgot password?” on the sign-in page. If you didn’t join the alpha list, write to contact@recompachievements.org and we’ll delete the account."),
+        [(AccountEmailKind.AlphaWelcome, "es")] = new(
+            "Tu cuenta de RecompAchievements está lista",
+            "Gracias por apuntarte a la lista de la alfa de RecompAchievements. Creamos tu cuenta de jugador con este correo y tu nombre de usuario es {0}. Usa este enlace para elegir una contraseña e iniciar sesión:",
+            "Elegir una contraseña",
+            "Este enlace caduca en 7 días y solo funciona una vez; después, usa «¿Olvidaste tu contraseña?» en la página de inicio de sesión. Si no te apuntaste a la lista de la alfa, escribe a contact@recompachievements.org y eliminaremos la cuenta."),
+        [(AccountEmailKind.AlphaWelcome, "pt")] = new(
+            "Sua conta do RecompAchievements está pronta",
+            "Obrigado por entrar na lista do alfa do RecompAchievements. Criamos sua conta de jogador com este e-mail, e seu nome de usuário é {0}. Use este link para escolher uma senha e entrar:",
+            "Escolher uma senha",
+            "Este link expira em 7 dias e funciona uma vez; depois disso, use “Esqueceu a senha?” na página de entrada. Se você não entrou na lista do alfa, escreva para contact@recompachievements.org e apagaremos a conta."),
     };
 
     /** Builds one email. Link is the full action URL (for kinds with a button); Detail fills "{1}"

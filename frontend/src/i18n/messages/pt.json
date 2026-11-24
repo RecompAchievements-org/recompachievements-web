@@ -4,8 +4,7 @@
   },
   "common": {
     "skipToContent": "Pular para o conteúdo",
-    "opensInNewTab": "(abre em uma nova aba)",
-    "alphaOpen": "Inscrições do alfa abertas · Vagas limitadas!"
+    "opensInNewTab": "(abre em uma nova aba)"
   },
   "header": {
     "homeLabel": "Página inicial do {siteName}",
@@ -183,78 +182,15 @@
     "description": "Esta página não existe ou mudou de endereço.",
     "backHome": "Voltar para o início"
   },
-  "alpha": {
-    "metaTitle": "Participe do alfa",
-    "metaDescription": "Inscreva-se para testar o RecompAchievements antes do lançamento: ganhe conquistas em recomps nativos e ajude a moldar a plataforma.",
-    "title": "Participe do alfa",
-    "intro": "Seja um dos primeiros a ganhar conquistas em recomps nativos. Quem testa o alfa experimenta as novidades antes de todo mundo e ajuda a moldar a plataforma.",
-    "testersHeading": "O que os testers fazem",
-    "testers": [
-      "Jogam recomps compatíveis com as conquistas ativadas.",
-      "Relatam bugs e contam o que funciona e o que não funciona.",
-      "Ajudam a decidir quais recomps ganham conquistas primeiro."
-    ],
-    "storeHeading": "O que guardamos",
-    "store": "Seu e-mail, apelido, plataformas e os recomps que você joga, apenas para organizar o alfa. Os detalhes estão no nosso {privacy}.",
-    "privacyLink": "aviso de privacidade",
-    "form": {
-      "email": "E-mail",
-      "emailPlaceholder": "voce@exemplo.com",
-      "nickname": "Apelido",
-      "nicknameHint": "De 2 a 32 caracteres.",
-      "platforms": "Plataformas em que você joga",
-      "recomps": "Recomps que você joga",
-      "recompsOptional": "Opcional",
-      "recompsPlaceholder": "ex.: Zelda 64: Recompiled, Ape Escape…",
-      "consent": "Concordo com o {privacy} e em ser contatado sobre o alfa.",
-      "submit": "Participe do alfa",
-      "submitting": "Enviando…",
-      "honeypot": "Deixe este campo vazio"
-    },
-    "errors": {
-      "required": "Este campo é obrigatório.",
-      "email": "Digite um e-mail válido.",
-      "nicknameLength": "Use de 2 a 32 caracteres.",
-      "platforms": "Escolha pelo menos uma plataforma.",
-      "recompsLength": "Use menos de 200 caracteres.",
-      "consent": "Aceite o aviso de privacidade para continuar.",
-      "rateLimited": "Muitas tentativas. Tente de novo em alguns minutos.",
-      "unavailable": "Algo deu errado do nosso lado. Tente de novo mais tarde.",
-      "invalid": "Confira os campos destacados.",
-      "challenge": "Conclua a verificação humana acima e tente de novo."
-    },
-    "success": {
-      "title": "Confira sua caixa de entrada",
-      "sentTo": "Enviamos um link de confirmação para:",
-      "expiry": "Abra-o em até 7 dias para garantir sua vaga.",
-      "spam": "Não encontrou? Confira a pasta de spam ou inscreva-se de novo daqui a 10 minutos para receber um link novo."
-    }
-  },
-  "alphaConfirm": {
-    "metaTitle": "Confirme sua inscrição",
-    "title": "Confirme sua inscrição no alfa",
-    "body": "Clique no botão para confirmar seu e-mail e entrar no alfa.",
-    "button": "Confirmar meu e-mail",
-    "confirming": "Confirmando…",
-    "successTitle": "Você está dentro!",
-    "successBody": "Seu e-mail foi confirmado. Vamos escrever assim que o alfa abrir.",
-    "expiredTitle": "Este link expirou",
-    "expiredBody": "Os links de confirmação valem por 7 dias. Inscreva-se de novo para receber um novo.",
-    "invalidTitle": "Este link não é válido",
-    "invalidBody": "Ele pode estar incompleto ou ter sido substituído por um e-mail mais recente. Inscreva-se de novo para receber um link novo.",
-    "unavailable": "Não conseguimos confirmar seu e-mail agora. Tente de novo em alguns minutos.",
-    "signUpAgain": "Inscrever-me de novo",
-    "backHome": "Voltar para o início"
-  },
   "privacy": {
     "metaTitle": "Aviso de privacidade",
     "title": "Aviso de privacidade",
     "updated": "Última atualização: {date}",
-    "intro": "O RecompAchievements é um projeto comunitário. Este aviso explica quais dados coletamos quando você se inscreve no alfa ou cria uma conta, por quê e como removê-los.",
+    "intro": "O RecompAchievements é um projeto comunitário. Este aviso explica quais dados coletamos quando você cria uma conta ou quando se inscreveu na nossa lista anterior de inscrições do alfa, por quê e como removê-los.",
     "sections": [
       {
         "title": "O que coletamos",
-        "body": "Inscrição no alfa: seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário) e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
+        "body": "Lista anterior de inscrições do alfa (já encerrada): seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário) e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
       },
       {
         "title": "Comentários",
@@ -266,7 +202,7 @@
       },
       {
         "title": "Para quê",
-        "body": "Para organizar o alfa e manter sua conta: confirmar seu e-mail, fazer sua entrada, manter sua conta segura, enviar os e-mails de conta que você pedir (links de confirmação e de senha) ou que protegem você (uma troca de senha ou uma plataforma recém-conectada) e, mais adiante, registrar suas conquistas. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
+        "body": "Para manter sua conta e a lista anterior de inscrições do alfa: confirmar seu e-mail, fazer sua entrada, manter sua conta segura, enviar os e-mails de conta que você pedir (links de confirmação e de senha) ou que protegem você (uma troca de senha ou uma plataforma recém-conectada) e, mais adiante, registrar suas conquistas. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
       },
       {
         "title": "Onde ficam",
@@ -278,7 +214,7 @@
       },
       {
         "title": "Por quanto tempo",
-        "body": "Inscrições no alfa não confirmadas são apagadas automaticamente 7 dias após o envio do link; as confirmadas ficam guardadas até o fim do alfa e depois são apagadas, a menos que você crie uma conta. As contas ficam guardadas até você pedir para apagá-las. Cadastros nunca confirmados são apagados quando o link expira (24 horas), e as sessões terminam após 30 dias sem uso."
+        "body": "Inscrições não confirmadas da lista anterior do alfa são apagadas automaticamente 7 dias após o envio do link. As confirmadas são migradas para contas de jogador: criamos uma conta com o e-mail da sua inscrição e enviamos por e-mail seu nome de usuário e um link para definir sua senha. As contas ficam guardadas até você pedir para apagá-las. Cadastros nunca confirmados são apagados quando o link expira (24 horas), e as sessões terminam após 30 dias sem uso."
       },
       {
         "title": "Cookies",

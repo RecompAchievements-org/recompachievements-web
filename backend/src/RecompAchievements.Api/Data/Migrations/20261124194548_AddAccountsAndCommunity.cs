@@ -344,6 +344,38 @@ namespace RecompAchievements.Api.Data.Migrations
                 column: "normalized_username",
                 unique: true);
 
+            // Progress of the alpha list migration (AlphaSignupMigration) on the existing sign-ups.
+            migrationBuilder.AddColumn<DateTimeOffset>(
+                name: "invite_sent_at",
+                table: "alpha_signups",
+                type: "timestamp with time zone",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTimeOffset>(
+                name: "migrated_at",
+                table: "alpha_signups",
+                type: "timestamp with time zone",
+                nullable: true);
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "migrated_user_id",
+                table: "alpha_signups",
+                type: "uuid",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_alpha_signups_migrated_user_id",
+                table: "alpha_signups",
+                column: "migrated_user_id");
+
+            migrationBuilder.AddForeignKey(
+                name: "fk_alpha_signups_users_migrated_user_id",
+                table: "alpha_signups",
+                column: "migrated_user_id",
+                principalTable: "users",
+                principalColumn: "id",
+                onDelete: ReferentialAction.SetNull);
+
             // The News category and the pinned Alpha v1.0 announcement; admins can edit the post afterwards.
             migrationBuilder.Sql(@"
                 INSERT INTO forum_categories (id, key, name, description, admin_only, comments_enabled, display_order)
@@ -444,6 +476,26 @@ Obrigado por chegar cedo!$seed$),
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "fk_alpha_signups_users_migrated_user_id",
+                table: "alpha_signups");
+
+            migrationBuilder.DropIndex(
+                name: "ix_alpha_signups_migrated_user_id",
+                table: "alpha_signups");
+
+            migrationBuilder.DropColumn(
+                name: "invite_sent_at",
+                table: "alpha_signups");
+
+            migrationBuilder.DropColumn(
+                name: "migrated_at",
+                table: "alpha_signups");
+
+            migrationBuilder.DropColumn(
+                name: "migrated_user_id",
+                table: "alpha_signups");
+
             migrationBuilder.DropTable(
                 name: "comments");
 

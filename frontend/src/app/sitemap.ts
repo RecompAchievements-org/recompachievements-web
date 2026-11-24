@@ -6,7 +6,7 @@ import { getGames } from "@/lib/api/games";
 import { siteConfig } from "@/lib/site";
 
 // Unprefixed paths of every static public page; each is listed once per locale with hreflang links.
-const publicPaths = ["/", "/alpha", "/games", "/forum", "/privacy", "/content-policy", "/rules"];
+const publicPaths = ["/", "/games", "/forum", "/privacy", "/content-policy", "/rules"];
 
 // Game pages come from the API at request time; if it's unreachable, the static pages are still listed.
 async function gamePaths(): Promise<string[]> {

@@ -27,7 +27,9 @@ builder.Services
     .AddOpenApi()
     .AddValidation()
     .AddSingleton(TimeProvider.System)
-    .AddHostedService<ExpiredSignupCleanup>();
+    .Configure<AlphaMigrationOptions>(builder.Configuration.GetSection("AlphaMigration"))
+    .AddHostedService<ExpiredSignupCleanup>()
+    .AddHostedService<AlphaSignupMigration>();
 
 var app = builder.Build();
 

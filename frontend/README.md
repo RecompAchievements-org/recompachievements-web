@@ -16,8 +16,8 @@ architecture, and roadmap, see the [root README](../README.md). Coding rules for
 
 ## Getting started
 
-Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the alpha sign-up, the games,
-and accounts) also need the backend running locally (see [`../backend/README.md`](../backend/README.md)).
+Requirements: Node.js 20.9+ and npm. Pages that talk to the API (the games, accounts,
+and the forum) also need the backend running locally (see [`../backend/README.md`](../backend/README.md)).
 
 ```bash
 npm install
@@ -29,7 +29,7 @@ npm run dev                  # http://localhost:3000
 |---|---|
 | `API_BASE_URL` | Address of the API (`http://localhost:5080` locally) |
 | `API_INTERNAL_KEY` | Must match the API's `InternalApi__Key` |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the alpha sign-up, account sign-up, and forgot-password forms |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public key of the human-verification challenge on the account sign-up and forgot-password forms |
 | `TURNSTILE_SECRET_KEY` | Secret key used by the server to verify that challenge |
 
 Only `NEXT_PUBLIC_` values reach the browser (and are fixed at build time); the rest are read only
@@ -53,10 +53,9 @@ src/
 ├── app/
 │   ├── [lang]/
 │   │   ├── layout.tsx        # Root layout: <html lang>, metadata, header, footer, skip link
-│   │   ├── page.tsx          # Home: alpha call to action, featured slider, and games
+│   │   ├── page.tsx          # Home: Join the Alpha (to sign-up), featured slider, games, and Latest News
 │   │   ├── not-found.tsx     # Localized 404 for notFound() inside pages
 │   │   ├── opengraph-image.tsx  # Social preview card (1200×630), one per locale
-│   │   ├── alpha/            # Alpha sign-up: page, form (client), server action
 │   │   │   └── confirm/      # Email confirmation: page, confirm button (client), server action
 │   │   ├── sign-up/, sign-in/  # Account forms (client) with their server actions
 │   │   ├── confirm-email/    # Confirms an account email (button POST)
@@ -81,7 +80,6 @@ src/
 │   ├── robots.ts             # /robots.txt: allow all, points to the sitemap
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
-│   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
 │   ├── auth/                 # AuthShell, PlatformButtons, PlatformIcon, FormParts (client: fields, submit, human check)
 │   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
 │   │                         # GeneratedArt, FadeInImage (client), GameBackdrop, GameArtCredits,

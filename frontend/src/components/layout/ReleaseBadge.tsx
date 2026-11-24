@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 /** The current release, shown beside the logo and linking to its announcement, in gold with a
- *  pulsing dot like the alpha sign-up badge (the pulse stops for visitors who prefer reduced
- *  motion). Hidden on narrow screens, where the header has no room; the home page's news card
- *  lists the same post there.
+ *  pulsing dot (the pulse stops for visitors who prefer reduced motion). Hidden on narrow screens,
+ *  where the header has no room; the home page's news card lists the same post there.
 **/
 export function ReleaseBadge({ href, label }: { href: string; label: string }) {
   return (

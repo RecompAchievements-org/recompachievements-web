@@ -1,13 +1,16 @@
 import "server-only";
 
 /** Server-only client for the RecompAchievements API. The base URL and internal key come from
- *  server environment variables and are never sent to the browser. Posts forward the visitor's IP
- *  so the API can rate-limit per visitor instead of per website server; cached reads don't.
+ *  server environment variables and are never sent to the browser. Requests made for a visitor
+ *  forward their IP (so the API can rate-limit per visitor instead of per website server) and,
+ *  when signed in, their session token; cached reads send neither.
 **/
 
 export interface ProblemDetails {
   status?: number;
   title?: string;
+  // Machine-readable reason some endpoints add (e.g. "username_taken"); the website translates it.
+  code?: string;
   errors?: Record<string, string[]>;
 }
 
@@ -35,26 +38,59 @@ export async function apiGet<T>(path: string): Promise<ApiResult<T>> {
   return toResult<T>(response);
 }
 
-export async function apiPost<T>(
+export interface VisitorContext {
+  clientIp?: string | null;
+  // The visitor's session token, sent as a bearer token; never cached or shared between visitors.
+  session?: string | null;
+}
+
+export function apiPost<T>(path: string, body: unknown, visitor: VisitorContext = {}): Promise<ApiResult<T>> {
+  return apiSend<T>("POST", path, body, visitor);
+}
+
+// A request made for one visitor (their IP and session); its result is never cached.
+export async function apiSend<T>(
+  method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
   body: unknown,
-  options: { clientIp?: string | null } = {},
+  visitor: VisitorContext = {},
 ): Promise<ApiResult<T>> {
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
     Accept: "application/json",
     "X-Internal-Key": requireEnv("API_INTERNAL_KEY"),
   };
-  if (options.clientIp) headers["X-Client-IP"] = options.clientIp;
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+  if (visitor.clientIp) headers["X-Client-IP"] = visitor.clientIp;
+  if (visitor.session) headers.Authorization = `Bearer ${visitor.session}`;
 
   const response = await fetch(new URL(path, requireEnv("API_BASE_URL")), {
-    method: "POST",
+    method,
     headers,
-    body: JSON.stringify(body),
+    body: body === undefined ? undefined : JSON.stringify(body),
     cache: "no-store",
     signal: AbortSignal.timeout(timeoutMs),
   });
 
+  return toResult<T>(response);
+}
+
+// Sends a file's bytes for one visitor; used only for profile photos.
+export async function apiUpload<T>(path: string, content: ArrayBuffer, visitor: VisitorContext = {}): Promise<ApiResult<T>> {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "Content-Type": "application/octet-stream",
+    "X-Internal-Key": requireEnv("API_INTERNAL_KEY"),
+  };
+  if (visitor.clientIp) headers["X-Client-IP"] = visitor.clientIp;
+  if (visitor.session) headers.Authorization = `Bearer ${visitor.session}`;
+
+  const response = await fetch(new URL(path, requireEnv("API_BASE_URL")), {
+    method: "PUT",
+    headers,
+    body: content,
+    cache: "no-store",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
   return toResult<T>(response);
 }
 

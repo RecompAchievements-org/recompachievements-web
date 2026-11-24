@@ -5,8 +5,11 @@ import { localeNames, localizePath } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { siteConfig } from "@/lib/site";
+import { AccountLink, SignInLink } from "./AccountLink";
+import { LocaleFlag } from "./LocaleFlag";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
+import { ReleaseBadge } from "./ReleaseBadge";
 
 export async function SiteHeader() {
   const locale = await getLocale();
@@ -15,13 +18,16 @@ export async function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
-        <Link
-          href={localizePath(locale, "/")}
-          aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
-          className="min-w-0 rounded-md"
-        >
-          <Logo />
-        </Link>
+        <div className="flex min-w-0 items-center gap-3">
+          <Link
+            href={localizePath(locale, "/")}
+            aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
+            className="min-w-0 rounded-md"
+          >
+            <Logo compact />
+          </Link>
+          <ReleaseBadge href={localizePath(locale, siteConfig.releasePost)} label={header.release} />
+        </div>
 
         <div className="flex shrink-0 items-center sm:gap-1">
           <nav aria-label={header.mainNav}>
@@ -29,13 +35,21 @@ export async function SiteHeader() {
               <li>
                 <Link
                   href={localizePath(locale, "/games")}
-                  className="rounded-md px-2 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
                 >
                   {header.games}
                 </Link>
               </li>
-              {/** Hidden on phones to keep the header on one line; the footer links to GitHub too. **/}
-              <li className="hidden sm:block">
+              <li>
+                <Link
+                  href={localizePath(locale, "/forum")}
+                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                >
+                  {header.forum}
+                </Link>
+              </li>
+              {/** Shown only on wide screens to keep the header on one line; the footer links to GitHub too. **/}
+              <li className="hidden lg:block">
                 <ExternalLink
                   href={siteConfig.repoUrl}
                   className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"
@@ -45,12 +59,18 @@ export async function SiteHeader() {
               </li>
             </ul>
           </nav>
+          {/** The account link reads the session cookie, known only per request; "Sign In" shows until then. **/}
+          <Suspense fallback={<SignInLink />}>
+            <AccountLink />
+          </Suspense>
           {/** The switcher reads the current URL, which pages with unlisted params (games) only
-           *  know at request time; the fallback shows the language until it streams in.
+           *  know at request time; the fallback shows the flag until it streams in.
           **/}
           <Suspense
             fallback={
-              <span className="flex h-9 items-center px-2 pr-6 font-mono text-sm text-muted uppercase">{locale}</span>
+              <span className="flex h-9 items-center px-1 pr-4.5 sm:px-2 sm:pr-6">
+                <LocaleFlag locale={locale} />
+              </span>
             }
           >
             <LocaleSwitcher

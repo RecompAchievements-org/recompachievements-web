@@ -55,7 +55,7 @@ public sealed class SignupFloodTests(ApiFactory factory) : IClassFixture<ApiFact
     [Fact]
     public async Task Signups_from_many_visitors_beyond_the_site_wide_limit_are_rate_limited()
     {
-        using var limited = factory.WithWebHostBuilder(builder => builder.UseSetting("RateLimiting:SignupsPerMinute", "3"));
+        using var limited = factory.WithWebHostBuilder(builder => builder.UseSetting("RateLimiting:EmailRequestsPerMinute", "3"));
 
         var statuses = new List<HttpStatusCode>();
         for (var visitor = 1; visitor <= 4; visitor++)

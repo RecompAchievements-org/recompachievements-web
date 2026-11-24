@@ -1,9 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RecompAchievements.Api.Features.Accounts;
 
 namespace RecompAchievements.Api.Features.AlphaSignups;
 
-// A person who asked to test the alpha; only confirmed sign-ups are invited.
+/** A person who joined the earlier alpha list. Confirmed sign-ups are migrated to player accounts
+ *  (AlphaSignupMigration): MigratedAt marks the sign-up as handled, MigratedUserId is the account
+ *  created for it (null when the email already had one), and InviteSentAt is when its welcome email
+ *  went out. The row stays, so an account with the same confirmed email is still an alpha tester.
+**/
 public sealed class AlphaSignup
 {
     public Guid Id { get; init; } = Guid.CreateVersion7();
@@ -19,6 +24,9 @@ public sealed class AlphaSignup
     public DateTimeOffset ConsentedAt { get; set; }
     public DateTimeOffset CreatedAt { get; init; }
     public DateTimeOffset? ConfirmedAt { get; set; }
+    public DateTimeOffset? MigratedAt { get; set; }
+    public Guid? MigratedUserId { get; set; }
+    public DateTimeOffset? InviteSentAt { get; set; }
 }
 
 internal static class AlphaSignupStatus
@@ -40,5 +48,6 @@ internal sealed class AlphaSignupConfiguration : IEntityTypeConfiguration<AlphaS
         builder.HasIndex(signup => signup.Email).IsUnique();
         builder.HasIndex(signup => signup.ConfirmationTokenHash).IsUnique();
         builder.HasIndex(signup => signup.ConfirmationSentAt);
+        builder.HasOne<User>().WithMany().HasForeignKey(signup => signup.MigratedUserId).OnDelete(DeleteBehavior.SetNull);
     }
 }

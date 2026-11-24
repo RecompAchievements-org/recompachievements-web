@@ -4,14 +4,25 @@
   },
   "common": {
     "skipToContent": "Pular para o conteúdo",
-    "opensInNewTab": "(abre em uma nova aba)",
-    "alphaOpen": "Inscrições do alfa abertas · Vagas limitadas!"
+    "opensInNewTab": "(abre em uma nova aba)"
   },
   "header": {
     "homeLabel": "Página inicial do {siteName}",
     "mainNav": "Principal",
     "github": "GitHub",
-    "games": "Jogos"
+    "games": "Jogos",
+    "forum": "Fórum",
+    "release": "Alpha v1.0 no ar",
+    "signIn": "Entrar",
+    "account": "Sua conta: {username}",
+    "accountMenu": {
+      "label": "Conta",
+      "profile": "Perfil",
+      "progress": "Progresso de conclusão",
+      "messages": "Mensagens",
+      "settings": "Configurações",
+      "moderation": "Moderação"
+    }
   },
   "localeSwitcher": {
     "label": "Idioma",
@@ -28,7 +39,8 @@
     "contentPolicy": "Política de conteúdo",
     "tagline": "Conquistas para recomps e ports nativos para PC, registradas pela comunidade.",
     "social": "Siga a gente",
-    "socialLink": "{siteName} no {network}"
+    "socialLink": "{siteName} no {network}",
+    "rules": "Regras da comunidade"
   },
   "home": {
     "metaTitle": "Conquistas para recomps nativos",
@@ -99,17 +111,47 @@
     "achievements": "Conquistas"
   },
   "comments": {
-    "heading": "Comentários",
-    "intro": "Dicas, bugs e notas de configuração de quem joga este recomp.",
-    "accountsNotice": "Para comentar será preciso uma conta. As contas chegam em breve; até lá, o que você publicar aqui fica só nesta página e não é salvo.",
     "label": "Seu comentário",
-    "placeholder": "Compartilhe uma dica, um bug ou sua configuração…",
     "post": "Publicar comentário",
+    "posting": "Publicando…",
+    "count": "{count} / {max}",
     "empty": "Ainda não há comentários.",
-    "you": "Você",
-    "justNow": "Agora mesmo",
-    "notSaved": "Não salvo",
-    "count": "{count} / {max}"
+    "signInToComment": "Entre para comentar",
+    "emailToComment": "Adicione e verifique um e-mail para comentar.",
+    "addEmail": "Adicionar e-mail",
+    "delete": "Excluir",
+    "deleteLabel": "Excluir o comentário de {username}",
+    "confirmDelete": "Confirmar",
+    "deleting": "Excluindo…",
+    "cancel": "Cancelar",
+    "invalid": "Escreva um comentário com texto visível, de até 1.000 caracteres.",
+    "unavailable": "Não conseguimos carregar estes comentários. Tente de novo em alguns minutos.",
+    "loading": "Carregando comentários…",
+    "reportLabel": "Denunciar comentário de {username}",
+    "pagination": {
+      "label": "Páginas de comentários",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "pageOf": "Página {page} de {total}",
+      "goToPage": "Página {page}"
+    },
+    "muted": "Sua conta está silenciada, então você não pode publicar comentários agora.",
+    "game": {
+      "heading": "Comentários",
+      "intro": "Dicas, bugs e notas de configuração de quem joga este recomp.",
+      "placeholder": "Compartilhe uma dica, um bug ou sua configuração…"
+    },
+    "author": {
+      "joined": "Entrou em {date}",
+      "open": "Abrir o perfil de {username}",
+      "view": "Ver perfil",
+      "loading": "Carregando…",
+      "unavailable": "Não foi possível carregar este perfil.",
+      "memberSince": "Membro desde",
+      "lastActivity": "Última atividade",
+      "badges": "Insígnias em destaque",
+      "sample": "Dados de exemplo"
+    }
   },
   "artCredits": {
     "heading": "Créditos das imagens",
@@ -140,102 +182,47 @@
     "description": "Esta página não existe ou mudou de endereço.",
     "backHome": "Voltar para o início"
   },
-  "alpha": {
-    "metaTitle": "Participe do alfa",
-    "metaDescription": "Inscreva-se para testar o RecompAchievements antes do lançamento: ganhe conquistas em recomps nativos e ajude a moldar a plataforma.",
-    "title": "Participe do alfa",
-    "intro": "Seja um dos primeiros a ganhar conquistas em recomps nativos. Quem testa o alfa experimenta as novidades antes de todo mundo e ajuda a moldar a plataforma.",
-    "testersHeading": "O que os testers fazem",
-    "testers": [
-      "Jogam recomps compatíveis com as conquistas ativadas.",
-      "Relatam bugs e contam o que funciona e o que não funciona.",
-      "Ajudam a decidir quais recomps ganham conquistas primeiro."
-    ],
-    "storeHeading": "O que guardamos",
-    "store": "Seu e-mail, apelido, plataformas e os recomps que você joga, apenas para organizar o alfa. Os detalhes estão no nosso {privacy}.",
-    "privacyLink": "aviso de privacidade",
-    "form": {
-      "email": "E-mail",
-      "emailPlaceholder": "voce@exemplo.com",
-      "nickname": "Apelido",
-      "nicknameHint": "De 2 a 32 caracteres.",
-      "platforms": "Plataformas em que você joga",
-      "recomps": "Recomps que você joga",
-      "recompsOptional": "Opcional",
-      "recompsPlaceholder": "ex.: Zelda 64: Recompiled, Ape Escape…",
-      "consent": "Concordo com o {privacy} e em ser contatado sobre o alfa.",
-      "submit": "Participe do alfa",
-      "submitting": "Enviando…",
-      "honeypot": "Deixe este campo vazio"
-    },
-    "errors": {
-      "required": "Este campo é obrigatório.",
-      "email": "Digite um e-mail válido.",
-      "nicknameLength": "Use de 2 a 32 caracteres.",
-      "platforms": "Escolha pelo menos uma plataforma.",
-      "recompsLength": "Use menos de 200 caracteres.",
-      "consent": "Aceite o aviso de privacidade para continuar.",
-      "rateLimited": "Muitas tentativas. Tente de novo em alguns minutos.",
-      "unavailable": "Algo deu errado do nosso lado. Tente de novo mais tarde.",
-      "invalid": "Confira os campos destacados.",
-      "challenge": "Conclua a verificação humana acima e tente de novo."
-    },
-    "success": {
-      "title": "Confira sua caixa de entrada",
-      "sentTo": "Enviamos um link de confirmação para:",
-      "expiry": "Abra-o em até 7 dias para garantir sua vaga.",
-      "spam": "Não encontrou? Confira a pasta de spam ou inscreva-se de novo daqui a 10 minutos para receber um link novo."
-    }
-  },
-  "alphaConfirm": {
-    "metaTitle": "Confirme sua inscrição",
-    "title": "Confirme sua inscrição no alfa",
-    "body": "Clique no botão para confirmar seu e-mail e entrar no alfa.",
-    "button": "Confirmar meu e-mail",
-    "confirming": "Confirmando…",
-    "successTitle": "Você está dentro!",
-    "successBody": "Seu e-mail foi confirmado. Vamos escrever assim que o alfa abrir.",
-    "expiredTitle": "Este link expirou",
-    "expiredBody": "Os links de confirmação valem por 7 dias. Inscreva-se de novo para receber um novo.",
-    "invalidTitle": "Este link não é válido",
-    "invalidBody": "Ele pode estar incompleto ou ter sido substituído por um e-mail mais recente. Inscreva-se de novo para receber um link novo.",
-    "unavailable": "Não conseguimos confirmar seu e-mail agora. Tente de novo em alguns minutos.",
-    "signUpAgain": "Inscrever-me de novo",
-    "backHome": "Voltar para o início"
-  },
   "privacy": {
     "metaTitle": "Aviso de privacidade",
     "title": "Aviso de privacidade",
     "updated": "Última atualização: {date}",
-    "intro": "O RecompAchievements é um projeto da comunidade. Este aviso explica quais dados coletamos quando você se inscreve no alfa, por quê e como removê-los.",
+    "intro": "O RecompAchievements é um projeto comunitário. Este aviso explica quais dados coletamos quando você cria uma conta ou quando se inscreveu na nossa lista anterior de inscrições do alfa, por quê e como removê-los.",
     "sections": [
       {
         "title": "O que coletamos",
-        "body": "Quando você se inscreve no alfa: seu e-mail, apelido, as plataformas em que joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Não guardamos seu endereço IP."
+        "body": "Lista anterior de inscrições do alfa (já encerrada): seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário) e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
+      },
+      {
+        "title": "Comentários",
+        "body": "Os comentários que você publica no mural de um jogador ou na página de um jogo são públicos e ficam guardados até você excluí-los, sua conta ser apagada ou nós os removermos. O dono de um mural também pode excluir os comentários do mural. As publicações do fórum são escritas pela equipe RecompAchievements e mostram o nome de usuário de quem as escreveu."
+      },
+      {
+        "title": "Fotos de perfil e moderação",
+        "body": "Se você enviar uma foto de perfil, ela será pública. Guardamos apenas uma cópia redimensionada sem metadados, como localização, e registramos quando você confirmou que pode usá-la. Sua foto é excluída quando você a remove ou troca, quando a moderação a remove ou quando sua conta é desativada. Se você denunciar um conteúdo, guardamos sua denúncia e a compartilhamos apenas com a moderação. Também mantemos um registro das decisões de moderação; o texto guardado como evidência é apagado após 90 dias, exceto quando a lei exige sua guarda, como em casos de conteúdo ilegal grave."
       },
       {
         "title": "Para quê",
-        "body": "Apenas para organizar o alfa: confirmar seu e-mail, convidar você quando ele abrir e coordenar os testes. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
+        "body": "Para manter sua conta e a lista anterior de inscrições do alfa: confirmar seu e-mail, fazer sua entrada, manter sua conta segura, enviar os e-mails de conta que você pedir (links de confirmação e de senha) ou que protegem você (uma troca de senha ou uma plataforma recém-conectada) e, mais adiante, registrar suas conquistas. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
       },
       {
         "title": "Onde ficam",
-        "body": "No nosso banco de dados, no nosso provedor de hospedagem. Os e-mails de confirmação são enviados pelo nosso provedor de envio de e-mail. Ambos atuam apenas sob nossas instruções."
+        "body": "No nosso banco de dados, no nosso provedor de hospedagem. Os e-mails são enviados pelo nosso provedor de envio de e-mail. Ambos agem só conforme nossas instruções. Se você escolher Discord ou GitHub, eles nos dizem quem você é ao entrar; nunca recebemos sua senha dessas plataformas."
       },
       {
         "title": "Proteção contra bots",
-        "body": "Antes da inscrição, uma verificação rápida no seu navegador confirma que você é uma pessoa e não um script automatizado. Ela é feita por um serviço de segurança que vê apenas informações técnicas do seu navegador e da sua conexão, usadas somente para essa verificação. Nós não recebemos nem guardamos essas informações."
+        "body": "Antes de se cadastrar ou pedir um link de senha, uma verificação rápida no seu navegador confirma que você é uma pessoa, não um script automatizado. Ela é feita por um serviço de segurança que vê apenas informações técnicas do seu navegador e da sua conexão, usadas só para essa verificação. Nós não recebemos nem guardamos essas informações."
       },
       {
         "title": "Por quanto tempo",
-        "body": "Inscrições não confirmadas são apagadas automaticamente 7 dias depois do envio do link. As confirmadas ficam guardadas até o fim do alfa e depois são apagadas, a menos que você crie uma conta."
+        "body": "Inscrições não confirmadas da lista anterior do alfa são apagadas automaticamente 7 dias após o envio do link. As confirmadas são migradas para contas de jogador: criamos uma conta com o e-mail da sua inscrição e enviamos por e-mail seu nome de usuário e um link para definir sua senha. As contas ficam guardadas até você pedir para apagá-las. Cadastros nunca confirmados são apagados quando o link expira (24 horas), e as sessões terminam após 30 dias sem uso."
       },
       {
         "title": "Cookies",
-        "body": "Nenhum cookie de rastreamento ou publicidade. Um cookie funcional (NEXT_LOCALE) lembra o idioma que você escolheu."
+        "body": "Nenhum cookie de rastreamento ou publicidade. Só cookies funcionais: NEXT_LOCALE lembra o idioma que você escolheu; ao entrar, um cookie mantém sua sessão; e outros de curta duração (15 minutos) guardam uma entrada com Discord ou GitHub enquanto ela está em andamento."
       },
       {
         "title": "Seus direitos",
-        "body": "Você pode pedir para ver, corrigir ou apagar seus dados a qualquer momento escrevendo para {email}."
+        "body": "Você pode pedir para ver, corrigir ou apagar seus dados ou sua conta a qualquer momento escrevendo para {email}."
       }
     ]
   },
@@ -262,9 +249,604 @@
         "body": "Nomes de jogos e plataformas são marcas de seus donos e são usados apenas para identificar os jogos. O RecompAchievements não tem vínculo nem apoio de nenhuma publicadora, fabricante de plataformas ou desenvolvedor de recomps, salvo indicação."
       },
       {
+        "title": "Comentários dos jogadores",
+        "body": "Cada jogador é responsável pelos comentários que publica nos murais de perfil e nas páginas de jogos. O autor pode excluí-los, assim como o dono do mural. Para denunciar comentários abusivos ou que infrinjam direitos, use o botão Denunciar ou escreva para {email}."
+      },
+      {
+        "title": "Fotos de jogadores",
+        "body": "As fotos de perfil são enviadas pelos jogadores, que confirmam que podem usá-las. Não conseguimos analisar cada imagem com antecedência. Para denunciar uma, use o botão Denunciar ou escreva para {email}."
+      },
+      {
         "title": "Pedidos de remoção",
         "body": "Se você tem direitos sobre algo exibido neste site e quer que seja removido, escreva para {email} com o link da página e o que deseja remover. Analisamos cada pedido e removemos o conteúdo em até 5 dias úteis quando o pedido é válido."
       }
     ]
+  },
+  "auth": {
+    "privacyLink": "aviso de privacidade",
+    "agreement": "Ao criar uma conta, você concorda com nosso {privacy}.",
+    "platformButton": "Continuar com {platform}",
+    "platformsLoading": "Carregando opções de entrada…",
+    "or": "ou",
+    "emailRequiredBanner": "Adicione e verifique um e-mail para começar a ganhar conquistas.",
+    "emailRequiredAction": "Adicionar e-mail",
+    "fields": {
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "password": "Senha",
+      "newPassword": "Nova senha",
+      "confirmPassword": "Confirmar senha",
+      "confirmNewPassword": "Confirmar nova senha",
+      "passwordHint": "Pelo menos 8 caracteres.",
+      "passwordsMatch": "As senhas coincidem.",
+      "username": "Nome de usuário",
+      "usernameHint": "De 3 a 24 letras, números, - ou _. Aparece no seu perfil.",
+      "emailValid": "E-mail válido.",
+      "usernameChecking": "Verificando disponibilidade…",
+      "usernameAvailable": "Este nome de usuário está disponível."
+    },
+    "errors": {
+      "invalid": "Corrija os campos destacados.",
+      "required": "Este campo é obrigatório.",
+      "email": "Digite um endereço de e-mail válido.",
+      "usernameFormat": "Use de 3 a 24 letras, números, - ou _.",
+      "passwordLength": "Use de 8 a 128 caracteres.",
+      "passwordMismatch": "As senhas não coincidem.",
+      "username_taken": "Esse nome de usuário já está em uso. Tente outro.",
+      "invalid_credentials": "E-mail ou senha incorretos. Se você acabou de se cadastrar, confirme seu e-mail primeiro.",
+      "email_in_use": "Esse e-mail é usado por outra conta. Entre nessa conta e conecte esta plataforma pelas configurações dela.",
+      "email_already_set": "Esta conta já tem um e-mail.",
+      "account_disabled": "Esta conta está desativada. Se você acha que é um erro, escreva para contact@recompachievements.org.",
+      "email_required": "Adicione e verifique um e-mail em Configurações para fazer isso.",
+      "signup_expired": "O cadastro demorou demais. Entre com a plataforma de novo.",
+      "platform_refused": "A plataforma não aceitou a entrada. Tente de novo.",
+      "platform_unavailable": "Não conseguimos falar com a plataforma. Tente de novo em alguns minutos.",
+      "platform_linked_elsewhere": "Essa conta da plataforma já está conectada a outra conta do RecompAchievements.",
+      "platform_already_connected": "Esta conta está conectada a outra conta dessa plataforma. Desconecte-a primeiro.",
+      "last_sign_in_method": "Defina uma senha ou conecte a outra plataforma primeiro, para continuar conseguindo entrar.",
+      "flow": "A entrada não confere. Comece de novo.",
+      "not_signed_in": "Sua sessão terminou. Entre de novo.",
+      "challenge": "Não conseguimos verificar que você é uma pessoa. Tente de novo.",
+      "rateLimited": "Tentativas demais. Espere alguns minutos e tente de novo.",
+      "unavailable": "Algo deu errado do nosso lado. Tente de novo em alguns minutos.",
+      "account_muted": "Sua conta está silenciada, então você não pode fazer isso agora.",
+      "photo_not_allowed_yet": "Sua conta é muito nova para enviar uma foto. Tente novamente mais tarde.",
+      "photo_invalid": "Use uma imagem estática JPEG, PNG ou WebP.",
+      "photo_rights_required": "Confirme que você pode usar esta imagem.",
+      "photos_unavailable": "O envio de fotos não está disponível agora.",
+      "cannot_report_self": "Você não pode denunciar seu próprio conteúdo.",
+      "moderation_forbidden": "Você não pode realizar esta ação nesta conta."
+    },
+    "signIn": {
+      "metaTitle": "Entrar",
+      "title": "Entrar",
+      "intro": "Entre para acompanhar suas conquistas em todos os recomps.",
+      "submit": "Entrar",
+      "submitting": "Entrando…",
+      "forgot": "Esqueceu a senha?",
+      "noAccount": "Novo por aqui? {signUp}",
+      "signUpLink": "Crie uma conta"
+    },
+    "signUp": {
+      "metaTitle": "Criar uma conta",
+      "title": "Criar uma conta",
+      "intro": "Uma única conta para todos os recomps compatíveis. Você também pode conectar o Discord ou o GitHub depois.",
+      "submit": "Criar conta",
+      "submitting": "Criando conta…",
+      "haveAccount": "Já tem uma conta? {signIn}",
+      "signInLink": "Entre",
+      "successTitle": "Confira seu e-mail",
+      "successSentTo": "Se este endereço puder ser usado, enviamos um link de confirmação para:",
+      "successExpiry": "O link expira em 24 horas. Confirme-o para entrar.",
+      "successSpam": "Nada depois de alguns minutos? Confira a pasta de spam."
+    },
+    "confirmEmail": {
+      "metaTitle": "Confirme seu e-mail",
+      "title": "Confirme seu e-mail",
+      "body": "Toque no botão para confirmar seu endereço de e-mail.",
+      "button": "Confirmar meu e-mail",
+      "confirming": "Confirmando…",
+      "successTitle": "E-mail confirmado",
+      "successBody": "Sua conta já pode ganhar conquistas.",
+      "expiredTitle": "Este link expirou",
+      "expiredBody": "Os links de confirmação duram 24 horas. Cadastre-se de novo ou adicione o e-mail de novo em Configurações.",
+      "invalidTitle": "Este link não é válido",
+      "invalidBody": "Ele pode estar incompleto, já ter sido usado ou ter sido substituído por um e-mail mais recente.",
+      "inUseTitle": "Este e-mail já está em uso",
+      "inUseBody": "Outra conta confirmou este e-mail antes. Entre nessa conta.",
+      "continue": "Continuar"
+    },
+    "forgotPassword": {
+      "metaTitle": "Definir ou redefinir sua senha",
+      "title": "Definir ou redefinir sua senha",
+      "intro": "Digite o e-mail da sua conta e enviaremos um link para escolher uma nova senha. Contas criadas com Discord ou GitHub também definem a primeira senha assim.",
+      "submit": "Enviar link",
+      "submitting": "Enviando…",
+      "successTitle": "Confira seu e-mail",
+      "successBody": "Se houver uma conta com esse e-mail confirmado, enviamos um link para ela. Ele expira em 1 hora e funciona uma vez.",
+      "backToSignIn": "Voltar para a entrada"
+    },
+    "resetPassword": {
+      "metaTitle": "Escolha uma senha",
+      "title": "Escolha uma senha",
+      "intro": "Escolha uma nova senha para sua conta. Todos os dispositivos serão desconectados.",
+      "submit": "Salvar senha",
+      "submitting": "Salvando…",
+      "successTitle": "Senha salva",
+      "successBody": "Entre com seu e-mail e sua nova senha.",
+      "expiredTitle": "Este link expirou",
+      "expiredBody": "Os links de senha duram 1 hora. Peça um novo.",
+      "invalidTitle": "Este link não é válido",
+      "invalidBody": "Ele pode estar incompleto ou já ter sido usado. Peça um novo.",
+      "requestNew": "Enviar um novo link",
+      "signIn": "Entrar"
+    },
+    "welcome": {
+      "metaTitle": "Boas-vindas",
+      "title": "Boas-vindas ao RecompAchievements",
+      "intro": "Só falta um passo: escolha seu nome de usuário.",
+      "emailHeading": "O e-mail da sua conta",
+      "withEmail": "Sua conta será criada com {email}, verificado pelo {platform}.",
+      "noEmail": "Esta conta ainda não tem e-mail. Você vai precisar adicionar e verificar um antes que suas conquistas sejam registradas.",
+      "submit": "Criar conta",
+      "submitting": "Criando conta…",
+      "expiredTitle": "Este cadastro expirou",
+      "expiredBody": "Demorou demais. Entre com a plataforma de novo para continuar.",
+      "startAgain": "Começar de novo"
+    },
+    "account": {
+      "metaTitle": "Sua conta",
+      "title": "Sua conta",
+      "loading": "Carregando sua conta…",
+      "profileHeading": "Informações do perfil",
+      "usernameLabel": "Nome de usuário",
+      "alphaTester": "Testador do alfa",
+      "accountTypeLabel": "Tipo de conta",
+      "memberSinceLabel": "Membro desde",
+      "lastActivityLabel": "Última atividade",
+      "standingHeading": "Situação da conta",
+      "standingNone": "Nenhuma",
+      "standingGood": "Sua conta não tem penalidades.",
+      "standingMutedBadge": "Silenciada",
+      "standingMutedUntil": "Até {date} UTC",
+      "standingMutedBody": "Até lá, você não pode publicar comentários nem trocar sua foto de perfil. Você ainda pode entrar, jogar e ganhar conquistas.",
+      "standingAppeal": "Se você acha que foi um engano, escreva para {email} para recorrer.",
+      "emailHeading": "E-mail",
+      "emailConfirmed": "Confirmado. Sua conta pode ganhar conquistas.",
+      "noEmailBody": "Adicione e verifique um e-mail para começar a ganhar conquistas. Enviaremos um link de confirmação.",
+      "addEmail": "Enviar link de confirmação",
+      "addingEmail": "Enviando…",
+      "emailSent": "Enviamos um link de confirmação para {email}. Abra-o para concluir.",
+      "offerTitle": "Usar este e-mail?",
+      "offerBody": "O {platform} informa que {email} é seu. Quer usá-lo como e-mail da sua conta? Ainda enviaremos nosso próprio link de confirmação.",
+      "offerAccept": "Usar este e-mail",
+      "offerDismiss": "Não, obrigado",
+      "platformsHeading": "Plataformas conectadas",
+      "platformsIntro": "Entre com qualquer plataforma conectada. Conectar uma nunca muda o e-mail da sua conta.",
+      "connected": "Conectada",
+      "notConnected": "Não conectada",
+      "connect": "Conectar",
+      "disconnect": "Desconectar",
+      "disconnecting": "Desconectando…",
+      "disconnectTitle": "Desconectar {platform}?",
+      "disconnectBody": "Você não poderá entrar com {platform} até conectá-lo novamente.",
+      "disconnectConfirm": "Desconectar {platform}",
+      "disconnectCancel": "Cancelar",
+      "signOut": "Sair",
+      "signingOut": "Saindo…"
+    },
+    "profileCard": {
+      "label": "Resumo do jogador",
+      "photoAlt": "Foto de perfil padrão",
+      "totalPoints": "Pontos totais",
+      "eloPoints": "Pontos Elo",
+      "ranking": "Classificação",
+      "unranked": "Sem classificação",
+      "lastActivity": "Última atividade",
+      "memberSince": "Membro desde"
+    },
+    "settings": {
+      "metaTitle": "Configurações",
+      "title": "Configurações",
+      "loading": "Carregando suas configurações…",
+      "changePasswordHeading": "Alterar senha",
+      "changePasswordBody": "Sua conta já tem uma senha. Para alterá-la, enviaremos um link seguro por e-mail.",
+      "changePasswordButton": "Enviar link para alterar",
+      "setPasswordHeading": "Definir uma senha",
+      "setPasswordBody": "Sua conta ainda não tem senha. Defina uma para também entrar com seu e-mail e senha. Enviaremos um link seguro por e-mail.",
+      "setPasswordButton": "Enviar link para definir",
+      "passwordNeedsEmail": "Primeiro adicione e verifique um e-mail para podermos enviar o link.",
+      "sendingPasswordLink": "Enviando…",
+      "passwordLinkSent": "Enviamos um link para seu e-mail. Ele expira em 1 hora."
+    },
+    "messages": {
+      "metaTitle": "Mensagens",
+      "title": "Mensagens",
+      "loading": "Carregando mensagens…",
+      "comingSoonTitle": "Em breve",
+      "comingSoonBody": "Aqui você poderá enviar mensagens para outros jogadores."
+    },
+    "photo": {
+      "heading": "Foto de perfil",
+      "intro": "Aparece publicamente no seu perfil e nos seus comentários.",
+      "chooseLabel": "Escolha uma foto",
+      "replaceLabel": "Troque sua foto",
+      "noFile": "Nenhum arquivo selecionado",
+      "hint": "JPEG, PNG ou WebP. Ela é recortada em formato quadrado.",
+      "rightsBefore": "Sou titular desta imagem ou tenho o direito de usá-la, e ela segue as",
+      "rulesLink": "regras da comunidade",
+      "rightsAfter": ".",
+      "save": "Salvar foto",
+      "saving": "Salvando…",
+      "saved": "Sua foto foi atualizada.",
+      "remove": "Remover foto",
+      "previewAlt": "Prévia da sua nova foto",
+      "currentAlt": "Sua foto de perfil",
+      "muted": "Sua conta está silenciada, então você não pode trocar sua foto agora.",
+      "needsEmail": "Adicione e confirme um e-mail para enviar uma foto."
+    }
+  },
+  "progress": {
+    "metaTitle": "Progresso de conclusão",
+    "title": "Progresso de conclusão de {username}",
+    "loading": "Carregando o progresso de conclusão…",
+    "unavailable": "Não conseguimos carregar este progresso. Tente de novo em alguns minutos.",
+    "photoAlt": "Foto de perfil padrão",
+    "sampleTitle": "Dados de exemplo",
+    "sampleText": "Esta página é uma prévia. Estes números são exemplos, não o progresso real desta pessoa. O progresso real vai aparecer quando os recomps puderem desbloquear conquistas.",
+    "averageCompletion": "Conclusão média",
+    "achievementsUnlocked": "Conquistas desbloqueadas",
+    "pointsEarned": "Pontos obtidos",
+    "gamesHeading": "Jogos",
+    "gameLine": "{unlocked} de {total} conquistas · {points}"
+  },
+  "profile": {
+    "metaTitle": "Perfil do jogador",
+    "loading": "Carregando o perfil…",
+    "unavailable": "Não conseguimos carregar este perfil. Tente de novo em alguns minutos.",
+    "progressLink": "Progresso de conclusão",
+    "settingsLink": "Configurações da conta",
+    "sampleText": "Os emblemas, medalhas, subsets, conquistas, a conclusão e o último jogo desta página são exemplos, não o progresso real desta pessoa. Os dados reais vão aparecer quando os recomps puderem desbloquear conquistas.",
+    "sectionsUnavailable": "Não conseguimos carregar esta seção. Tente de novo em alguns minutos.",
+    "medalsHeading": "Medalhas conquistadas",
+    "medalTiers": {
+      "platinum": "Platina",
+      "gold": "Ouro",
+      "silver": "Prata"
+    },
+    "noMedal": "Nenhuma medalha conquistada",
+    "noAchievements": "Nenhuma conquista obtida",
+    "medalTotal": "Total",
+    "subsetsHeading": "Subsets conquistados",
+    "subsetCounters": {
+      "mastered": "Masterizados",
+      "beaten": "Zerados"
+    },
+    "subsetStatus": {
+      "mastered": "Masterizado",
+      "beaten": "Zerado"
+    },
+    "subsetTypes": {
+      "dlc": "DLC",
+      "mod": "Mod",
+      "randomizer": "Randomizer",
+      "challenge": "Desafio"
+    },
+    "noSubsets": "Nenhum subset conquistado",
+    "achievementsHeading": "Últimas conquistas obtidas",
+    "medalsCount": {
+      "one": "{count} obtida",
+      "other": "{count} obtidas"
+    },
+    "achievementsCount": {
+      "one": "{count} obtida",
+      "other": "{count} obtidas"
+    },
+    "completionHeading": "Conclusão",
+    "viewAll": "Ver tudo",
+    "lastGameHeading": "Último jogo",
+    "viewGame": "Ver jogo",
+    "badges": {
+      "heading": "Emblemas",
+      "displayed": "Emblemas em destaque",
+      "none": "Nenhum emblema conquistado",
+      "count": {
+        "one": "{count} obtido",
+        "other": "{count} obtidos"
+      },
+      "kinds": {
+        "award": "Prêmio",
+        "recognition": "Reconhecimento",
+        "role": "Função no site",
+        "event": "Evento",
+        "contribution": "Contribuição"
+      },
+      "items": {
+        "recompPioneer": "Espírito pioneiro",
+        "sdkContributor": "Colaboração no SDK",
+        "alphaMarathon": "Maratona do alfa",
+        "communityTranslator": "Tradução comunitária",
+        "bugHunter": "Caça aos bugs",
+        "communityMember": "Membro da comunidade",
+        "weeklyChallenge": "Conquista da semana",
+        "firstComment": "Primeiro comentário"
+      },
+      "descriptions": {
+        "recompPioneer": "Ajudou a lançar o RecompAchievements nos primeiros dias.",
+        "sdkContributor": "Fez uma contribuição importante para o SDK de conquistas.",
+        "alphaMarathon": "Participou da maratona da comunidade durante o alfa.",
+        "communityTranslator": "Ajuda a traduzir o site para a comunidade.",
+        "bugHunter": "Relatou bugs que foram confirmados e corrigidos.",
+        "communityMember": "Entrou para a comunidade do RecompAchievements.",
+        "weeklyChallenge": "Ganhou a conquista destacada da semana no hardcore.",
+        "firstComment": "Publicou o primeiro comentário em um mural de perfil."
+      },
+      "unlocked": "Desbloqueado em {date}"
+    },
+    "wall": {
+      "heading": "Mural de {username}",
+      "intro": "Comentários da comunidade para {username}.",
+      "placeholder": "Escreva algo neste mural…"
+    }
+  },
+  "moderation": {
+    "metaTitle": "Moderação",
+    "title": "Moderação",
+    "nav": "Seções de moderação",
+    "queue": "Denúncias",
+    "log": "Registro de auditoria",
+    "statusNav": "Filtrar denúncias por status",
+    "findUser": "Buscar um usuário",
+    "find": "Buscar",
+    "loading": "Carregando ferramentas de moderação…",
+    "unavailable": "Não foi possível carregar isto. Tente novamente em alguns minutos.",
+    "noReports": "Nenhuma denúncia aqui.",
+    "noActions": "Nenhuma ação registrada.",
+    "review": "Analisar",
+    "older": "Anteriores",
+    "deletedAccount": "Conta excluída",
+    "reportedBy": "{target}, denunciado por {reporter}",
+    "until": "Até {date}",
+    "userTitle": "Análise da conta",
+    "reportTitle": "Análise da denúncia",
+    "disabled": "Desativada",
+    "muted": "Silenciada",
+    "joined": "Cadastro",
+    "lastActive": "Última atividade",
+    "openReports": "Denúncias abertas",
+    "mutedUntil": "Silenciada até",
+    "history": "Histórico de moderação",
+    "actionsHeading": "Ações",
+    "photoOf": "Foto de perfil de {username}",
+    "viewAccount": "Ver conta",
+    "viewInContext": "Ver no contexto",
+    "reporterDetails": "Detalhes da denúncia",
+    "reportedText": "Texto denunciado",
+    "reportedPhoto": "Foto denunciada",
+    "targetGone": "O conteúdo denunciado não existe mais.",
+    "resolution": "Resolução",
+    "statuses": {
+      "open": "Aberta",
+      "resolved": "Resolvida",
+      "dismissed": "Descartada"
+    },
+    "targets": {
+      "profile": "Perfil",
+      "photo": "Foto",
+      "comment": "Comentário"
+    },
+    "reasons": {
+      "sexual": "Conteúdo sexual ou nudez",
+      "violence": "Violência ou gore",
+      "hate": "Ódio ou discriminação",
+      "harassment": "Assédio ou ameaças",
+      "copyright": "Direitos autorais",
+      "personal_info": "Informações pessoais",
+      "spam": "Spam",
+      "other": "Outro motivo"
+    },
+    "logActions": {
+      "remove_photo": "Foto removida",
+      "remove_comment": "Comentário removido",
+      "mute": "Silenciada",
+      "unmute": "Silêncio encerrado",
+      "disable": "Desativada",
+      "enable": "Ativada",
+      "change_role": "Função alterada",
+      "resolve_report": "Denúncia resolvida",
+      "dismiss_report": "Denúncia descartada",
+      "legal_hold": "Retenção legal"
+    },
+    "report": {
+      "button": "Denunciar",
+      "title": "Denunciar conteúdo",
+      "intro": "A moderação analisa cada denúncia. Não informamos à pessoa denunciada quem a enviou.",
+      "what": "O que você quer denunciar?",
+      "targets": {
+        "profile": "Este perfil",
+        "photo": "Esta foto de perfil",
+        "comment": "Este comentário"
+      },
+      "reason": "Motivo",
+      "details": "Detalhes (opcional)",
+      "send": "Enviar denúncia",
+      "sending": "Enviando…",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "sent": "Obrigado. Sua denúncia foi enviada à moderação."
+    },
+    "actions": {
+      "notAllowed": "Você não pode realizar ações nesta conta.",
+      "duration": "Duração",
+      "days": "{count} dias",
+      "newRole": "Nova função",
+      "roles": {
+        "player": "Jogador",
+        "moderator": "Moderação",
+        "admin": "Administração"
+      },
+      "reason": "Motivo",
+      "reasonShared": "Este motivo é enviado por e-mail à pessoa.",
+      "working": "Processando…",
+      "done": "Concluído.",
+      "cacheWarning": "Concluído, mas a imagem pode continuar em cache por um tempo. Avise a administração.",
+      "noEvidence": "Removido, mas nenhuma cópia de evidência foi guardada. Avise o responsável agora.",
+      "ops": {
+        "resolve": {
+          "title": "Resolver denúncia",
+          "body": "Encerra esta denúncia como atendida e avisa que houve providências.",
+          "submit": "Resolver"
+        },
+        "dismiss": {
+          "title": "Descartar denúncia",
+          "body": "Encerra esta denúncia sem violação encontrada.",
+          "submit": "Descartar"
+        },
+        "remove_comment": {
+          "title": "Remover comentário",
+          "body": "Exclui este comentário e envia o motivo ao autor.",
+          "submit": "Remover comentário"
+        },
+        "remove_photo": {
+          "title": "Remover foto",
+          "body": "Exclui esta foto de todo o site e envia o motivo à pessoa.",
+          "submit": "Remover foto"
+        },
+        "mute": {
+          "title": "Silenciar conta",
+          "body": "Bloqueia comentários e trocas de foto. Ainda é possível ganhar conquistas.",
+          "submit": "Silenciar"
+        },
+        "unmute": {
+          "title": "Encerrar silêncio",
+          "body": "Permite voltar a publicar e trocar a foto.",
+          "submit": "Encerrar silêncio"
+        },
+        "disable": {
+          "title": "Desativar conta",
+          "body": "Encerra a sessão, oculta o perfil e remove a foto.",
+          "submit": "Desativar"
+        },
+        "enable": {
+          "title": "Ativar conta",
+          "body": "Permite entrar novamente.",
+          "submit": "Ativar"
+        },
+        "role": {
+          "title": "Alterar função",
+          "body": "Define a função desta conta na equipe.",
+          "submit": "Alterar função"
+        },
+        "legal_hold": {
+          "title": "Retenção legal",
+          "body": "Somente para conteúdo ilegal grave: remove a imagem, desativa a conta e guarda uma cópia privada para a comunicação legal. A pessoa não recebe e-mail.",
+          "submit": "Aplicar retenção legal"
+        }
+      }
+    }
+  },
+  "rules": {
+    "metaTitle": "Regras da comunidade",
+    "metaDescription": "O que você pode publicar no RecompAchievements, como funcionam as reclamações de direitos autorais e o que acontece quando as regras são violadas.",
+    "title": "Regras da comunidade",
+    "intro": "Estas regras valem para tudo o que é publicado no RecompAchievements, incluindo nomes de usuário, fotos de perfil e comentários.",
+    "sections": [
+      {
+        "title": "O que não é permitido",
+        "body": "Nudez ou conteúdo sexual, violência gráfica ou gore, ódio ou discriminação, assédio ou ameaças, informações privadas de outras pessoas, spam ou qualquer conteúdo ilegal. Conteúdo que sexualize menores nunca é permitido: nós o removemos, desativamos a conta e denunciamos às autoridades."
+      },
+      {
+        "title": "Fotos de perfil",
+        "body": "Ao enviar uma foto, você confirma que é titular dela ou tem o direito de usá-la e que ela segue estas regras. As fotos ficam públicas assim que são salvas. Você pode trocar ou remover a sua a qualquer momento nas configurações da conta."
+      },
+      {
+        "title": "Direitos autorais",
+        "body": "Publique apenas o que você tem permissão para usar. Não conseguimos analisar cada imagem com antecedência, então quem detém os direitos pode pedir a remoção escrevendo para {email} com o link do conteúdo, o que lhe pertence e como entrar em contato. Removemos o conteúdo em até 5 dias úteis quando o pedido é válido. Contas que violam direitos repetidamente são desativadas."
+      },
+      {
+        "title": "Denúncias",
+        "body": "Se você estiver conectado, use o botão Denunciar em um perfil, foto ou comentário. Você também pode escrever para {email}. A moderação analisa as denúncias, e não informamos à pessoa denunciada quem as enviou."
+      },
+      {
+        "title": "O que a moderação pode fazer",
+        "body": "Ela pode remover conteúdo, silenciar uma conta (que não pode publicar nem trocar a foto, mas ainda pode ganhar conquistas) ou desativá-la. Informamos o motivo por e-mail, a menos que a lei ou a segurança de outras pessoas impeça."
+      },
+      {
+        "title": "Recursos",
+        "body": "Se você acha que uma decisão foi errada, escreva para {email} com seu nome de usuário e o motivo. Uma pessoa vai analisar."
+      }
+    ]
+  },
+  "forum": {
+    "metaTitle": "Fórum",
+    "metaDescription": "Notícias e anúncios do projeto RecompAchievements.",
+    "title": "Fórum",
+    "intro": "Notícias e anúncios do projeto RecompAchievements.",
+    "loading": "Carregando o fórum…",
+    "unavailable": "Não foi possível carregar o fórum. Tente novamente em alguns minutos.",
+    "postCount": {
+      "one": "{count} publicação",
+      "other": "{count} publicações"
+    },
+    "noPosts": "Ainda não há publicações.",
+    "backToForum": "Fórum",
+    "backToCategory": "{category}",
+    "team": "Equipe RecompAchievements",
+    "createdOn": "Criada em {date}",
+    "editedOn": "Editada em {date}",
+    "englishOnly": "Esta publicação ainda não está disponível no seu idioma, então é mostrada em inglês.",
+    "newPost": "Nova publicação",
+    "edit": "Editar publicação",
+    "drafts": "Rascunhos",
+    "draftBadge": "Rascunho",
+    "pagination": {
+      "label": "Páginas de publicações",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "pageOf": "Página {page} de {total}",
+      "goToPage": "Página {page}"
+    },
+    "editor": {
+      "newTitle": "Nova publicação",
+      "editTitle": "Editar publicação",
+      "languages": "Idiomas da publicação",
+      "language": {
+        "en": "Inglês",
+        "es": "Espanhol (opcional)",
+        "pt": "Português (opcional)"
+      },
+      "titleLabel": "Título",
+      "bodyLabel": "Conteúdo",
+      "bodyHint": "Formatação: ## Título, ### Subtítulo, **negrito**, *itálico*, `código`, listas com - ou 1., e [links](https://…) ou caminhos do site como [regras](/rules).",
+      "write": "Escrever",
+      "preview": "Prévia",
+      "previewEmpty": "Ainda não há nada para mostrar.",
+      "slugLabel": "Endereço",
+      "slugHint": "Letras minúsculas, números e hifens. Não pode mudar depois de publicar.",
+      "slugLocked": "Esta publicação já foi publicada, então o endereço é fixo.",
+      "saveDraft": "Salvar rascunho",
+      "publish": "Publicar",
+      "update": "Atualizar publicação",
+      "unpublish": "Despublicar",
+      "saving": "Salvando…",
+      "delete": "Excluir publicação",
+      "deleteTitle": "Excluir esta publicação?",
+      "deleteBody": "Isso não pode ser desfeito, e o endereço deixa de funcionar para todos.",
+      "deleteConfirm": "Excluir publicação",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalid": "Confira o título, o conteúdo e o endereço. O inglês é obrigatório e só alguns caracteres são permitidos.",
+        "slug_taken": "Outra publicação já usa esse endereço.",
+        "slug_locked": "O endereço de uma publicação publicada não pode mudar.",
+        "rateLimited": "Muitas alterações. Espere alguns minutos e tente novamente.",
+        "unavailable": "Não foi possível salvar a publicação. Tente novamente."
+      },
+      "pinLabel": "Fixar esta publicação",
+      "pinHint": "As publicações fixadas ficam na seção Fixadas do fórum até você desafixá-las."
+    },
+    "pinned": "Fixadas",
+    "recent": "Publicações recentes",
+    "noPinned": "Não há publicações fixadas.",
+    "pinnedBadge": "Fixada"
   }
 }

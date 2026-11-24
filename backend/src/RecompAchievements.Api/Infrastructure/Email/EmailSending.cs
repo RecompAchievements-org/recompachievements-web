@@ -17,6 +17,9 @@ internal sealed class EmailOptions
 
     // Confirmation emails per rolling 24 hours, kept under the provider's free daily quota.
     public int DailyConfirmationLimit { get; set; } = 200;
+
+    // Account links (email confirmation, set password) per rolling 24 hours, site-wide.
+    public int DailyAccountEmailLimit { get; set; } = 200;
 }
 
 internal static class EmailSending

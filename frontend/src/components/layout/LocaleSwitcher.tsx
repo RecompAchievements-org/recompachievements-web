@@ -14,6 +14,7 @@ import {
   type Locale,
 } from "@/i18n/config";
 import { cx } from "@/lib/cx";
+import { LocaleFlag } from "./LocaleFlag";
 
 interface LocaleSwitcherProps {
   current: Locale;
@@ -65,9 +66,9 @@ export function LocaleSwitcher({ current, buttonLabel, menuLabel }: LocaleSwitch
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
-        className="flex h-9 items-center gap-1 rounded-md px-2 font-mono text-sm text-muted uppercase transition-colors hover:bg-surface-raised hover:text-foreground"
+        className="flex h-9 items-center gap-0.5 rounded-md px-1 text-muted transition-colors hover:bg-surface-raised hover:text-foreground sm:gap-1 sm:px-2"
       >
-        {current}
+        <LocaleFlag locale={current} />
         <svg viewBox="0 0 12 12" aria-hidden="true" className={cx("size-3", open && "rotate-180")}>
           <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
         </svg>
@@ -94,12 +95,12 @@ export function LocaleSwitcher({ current, buttonLabel, menuLabel }: LocaleSwitch
                     setOpen(false);
                   }}
                   className={cx(
-                    "flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors hover:bg-surface",
+                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors hover:bg-surface",
                     locale === current ? "text-accent" : "text-foreground",
                   )}
                 >
+                  <LocaleFlag locale={locale} />
                   {localeNames[locale]}
-                  <span className="font-mono text-xs text-subtle uppercase">{locale}</span>
                 </Link>
               </li>
             ))}

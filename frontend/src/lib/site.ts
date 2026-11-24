@@ -9,6 +9,9 @@ export const siteConfig = {
   licenseUrl:
     "https://github.com/RecompAchievements-org/recompachievements-web/blob/main/LICENSE",
   contactEmail: "contact@recompachievements.org",
+  // The forum category shown on the home page, and the post the header's release badge opens.
+  newsCategory: "news",
+  releasePost: "/forum/news/alpha-v1-0-is-live",
   // Official channels, shown as icon links in the footer.
   social: {
     github: "https://github.com/RecompAchievements-org",

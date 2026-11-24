@@ -1,8 +1,13 @@
+using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
+using RecompAchievements.Api.Features.Comments;
+using RecompAchievements.Api.Features.Forum;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Health;
+using RecompAchievements.Api.Features.Moderation;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Email;
+using RecompAchievements.Api.Infrastructure.Media;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,17 +21,22 @@ builder.Services
     .AddInternalKey(builder.Configuration)
     .AddEmailSending(builder.Configuration, builder.Environment)
     .AddGameArt(builder.Configuration)
+    .AddMediaStorage(builder.Configuration, builder.Environment)
+    .AddAccounts(builder.Configuration)
     .AddHealth()
     .AddOpenApi()
     .AddValidation()
     .AddSingleton(TimeProvider.System)
-    .AddHostedService<ExpiredSignupCleanup>();
+    .Configure<AlphaMigrationOptions>(builder.Configuration.GetSection("AlphaMigration"))
+    .AddHostedService<ExpiredSignupCleanup>()
+    .AddHostedService<AlphaSignupMigration>();
 
 var app = builder.Build();
 
 app.UseForwardedHeaders();
 app.UseErrorHandling();
 app.UseSecurityHeaders();
+app.UseLocalMedia();
 app.UseRateLimiter();
 app.UseInternalKey("/api/v1");
 
@@ -36,7 +46,15 @@ app.MapHealthEndpoints();
 // Public web API, called only by the website's server code (internal key required).
 app.MapGroup("/api/v1")
     .MapAlphaSignupEndpoints()
-    .MapGameEndpoints();
+    .MapGameEndpoints()
+    .MapAccountEndpoints()
+    .MapPlayerEndpoints()
+    .MapWallEndpoints()
+    .MapGameCommentEndpoints()
+    .MapForumEndpoints()
+    .MapPhotoEndpoints()
+    .MapModerationEndpoints()
+    .MapOAuthEndpoints();
 
 await app.ApplyMigrationsIfEnabledAsync();
 await app.ImportCatalogIfEnabledAsync();

@@ -1,8 +1,6 @@
 import type { ComponentProps } from "react";
 import { getMessages } from "@/i18n/server";
-
-// Props that open a link in a new tab without giving the new page access to this one.
-export const newTabProps = { target: "_blank", rel: "noopener noreferrer" } as const;
+import { newTabProps } from "./newTab";
 
 // Screen-reader hint appended to every link that opens a new tab.
 export async function NewTabHint() {

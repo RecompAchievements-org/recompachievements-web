@@ -8,7 +8,7 @@ import { isLocale } from "@/i18n/config";
 import { formatDate } from "@/i18n/format";
 import { loadMessages } from "@/i18n/server";
 import { getPublicPlayer } from "@/lib/api/accounts";
-import { deleteComment, getCommentPage, postComment, type CommentPage, type CommentThreadRef } from "@/lib/api/comments";
+import { deleteComment, postComment, type CommentThreadRef } from "@/lib/api/comments";
 import { errorFrom, usernamePattern, type AuthError } from "@/lib/auth/forms";
 import { visitor } from "@/lib/auth/session";
 
@@ -87,16 +87,4 @@ export async function deleteCommentAction(thread: CommentThreadRef, id: string):
 
   refresh();
   return null;
-}
-
-export async function loadMoreComments(thread: CommentThreadRef, cursor: string, locale: string): Promise<CommentPage | null> {
-  if (!validThread(thread) || !idPattern.test(cursor) || !isLocale(locale)) return null;
-
-  try {
-    const result = await getCommentPage(thread, cursor, locale, await visitor());
-    return result.ok ? result.data : null;
-  } catch (error) {
-    console.error("Loading comments failed", error);
-    return null;
-  }
 }

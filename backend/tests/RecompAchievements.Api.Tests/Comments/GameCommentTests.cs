@@ -165,6 +165,7 @@ public sealed class GameCommentTests(ApiFactory factory) : IClassFixture<ApiFact
         var location = (await detail.Content.ReadFromJsonAsync<JsonElement>(Ct)).GetProperty("commentLocation");
         Assert.Equal("game", location.GetProperty("kind").GetString());
         Assert.Equal(Game, location.GetProperty("key").GetString());
+        Assert.Equal(1, location.GetProperty("page").GetInt32());
 
         using var removed = await Send(client, HttpMethod.Post, $"/api/v1/moderation/comments/{id}/remove", moderator, new { reason = "Harassment", reportId });
 

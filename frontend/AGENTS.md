@@ -89,7 +89,9 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   text. Every comment section, including future ones, uses it, so each comment shows its author
   column (`CommentAuthor`: photo with profile preview, username, join date). A muted viewer gets
   `blockedNotice` instead of the composer in every section; the API refuses their posts too. Saved threads (walls and game
-  pages) use `SavedComments` with a `CommentThreadRef`; reads and writes go through
+  pages) use `SavedComments` with a `CommentThreadRef` and show one numbered page at a time
+  (`CommentPagination`, `?commentsPage=`; posting returns to page 1, a page past the end redirects
+  to the last); reads and writes go through
   `lib/api/comments.ts`, are per visitor, and are never cached.
 
 ### Internationalization
@@ -158,7 +160,8 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   the username on top, photo, points, Elo, ranking (empty until scoring exists), last
   active day, member since, and the progress, settings, and report buttons at the bottom; the comment wall
   below at full width. `noindex`; other casings redirect to the real username
-- `/account/settings` — private: profile photo (upload, replace, remove), email (add and confirm one when missing), connected platforms,
+- `/account/settings` — private: profile information (username, account type, member since, last
+  activity), account standing (an active mute, or "None"), profile photo (upload, replace, remove), email (add and confirm one when missing), connected platforms,
   password (worded as "change" or "set" depending on whether one exists), sign out
 - `/rules` — public community rules; keep them in step with moderation behavior and the content policy
 - `/moderation` — staff report queue; `/moderation/reports/[id]`, `/moderation/users/[username]`, and

@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useActionState, useState, useTransition } from "react";
 import { ReportButton, type ReportLabels } from "@/components/moderation/ReportButton";
 import { localizePath, type Locale } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
 import type { Messages } from "@/i18n/server";
-import type { CommentPage, CommentThreadRef, SavedComment } from "@/lib/api/comments";
+import type { CommentPage, CommentThreadRef } from "@/lib/api/comments";
 import type { AuthError } from "@/lib/auth/forms";
-import { deleteCommentAction, loadMoreComments, postCommentAction, type CommentPostState } from "./actions";
+import { deleteCommentAction, postCommentAction, type CommentPostState } from "./actions";
 import type { CommentAuthorLabels } from "./CommentAuthor";
+import { CommentPagination, commentPageHref } from "./CommentPagination";
 import { CommentComposer, CommentThread } from "./CommentThread";
 
 export interface SavedCommentsProps {
@@ -19,7 +21,9 @@ export interface SavedCommentsProps {
   intro: string;
   placeholder: string;
   locale: Locale;
-  first: CommentPage;
+  // The localized path of the page holding this section; page links add ?commentsPage=.
+  basePath: string;
+  page: CommentPage;
   // What this visitor can do: post, or what they need first.
   access: "post" | "signIn" | "email";
   messages: Messages["comments"];
@@ -31,8 +35,8 @@ export interface SavedCommentsProps {
   reportLabels: ReportLabels;
 }
 
-/** Saved comments for any thread: walls and game pages. The first page comes from the server and
- *  refreshes after each post or delete; older pages are added here with Load More.
+/** Saved comments for any thread: walls and game pages. The server renders one numbered page; links
+ *  move between pages, and the page refreshes after each post or delete.
 **/
 export function SavedComments({
   thread,
@@ -40,7 +44,8 @@ export function SavedComments({
   intro,
   placeholder,
   locale,
-  first,
+  basePath,
+  page,
   access,
   messages,
   errors,
@@ -49,43 +54,26 @@ export function SavedComments({
   mutedNotice,
   reportLabels,
 }: SavedCommentsProps) {
+  const router = useRouter();
   const [draft, setDraft] = useState("");
-  const [older, setOlder] = useState<SavedComment[]>([]);
-  const [cursor, setCursor] = useState<string | null | undefined>(undefined);
   const [removed, setRemoved] = useState<string[]>([]);
   const [confirming, setConfirming] = useState<string | null>(null);
-  const [actionError, setActionError] = useState<AuthError | "load" | null>(null);
+  const [actionError, setActionError] = useState<AuthError | null>(null);
   const [busy, startTransition] = useTransition();
 
   const [state, formAction, posting] = useActionState(async (previous: CommentPostState, formData: FormData) => {
     const result = await postCommentAction(previous, formData);
-    if (result.status === "posted") setDraft("");
+    if (result.status === "posted") {
+      setDraft("");
+      // A new comment is the newest, so it appears on page 1.
+      if (page.page > 1) router.push(commentPageHref(basePath, 1));
+    }
     return result;
   }, { status: "idle" } satisfies CommentPostState);
 
-  const nextCursor = cursor === undefined ? first.nextCursor : cursor;
-  const seen = new Set<string>();
-  const comments = [...first.comments, ...older].filter((comment) => {
-    if (seen.has(comment.id) || removed.includes(comment.id)) return false;
-    seen.add(comment.id);
-    return true;
-  });
+  const comments = page.comments.filter((comment) => !removed.includes(comment.id));
 
   const errorText = (error: AuthError) => (error === "invalid" ? messages.invalid : errors[error]);
-
-  function loadMore() {
-    if (!nextCursor) return;
-    setActionError(null);
-    startTransition(async () => {
-      const page = await loadMoreComments(thread, nextCursor, locale);
-      if (!page) {
-        setActionError("load");
-        return;
-      }
-      setOlder((list) => [...list, ...page.comments]);
-      setCursor(page.nextCursor);
-    });
-  }
 
   function remove(id: string) {
     setActionError(null);
@@ -189,19 +177,10 @@ export function SavedComments({
         <>
           {actionError && (
             <p role="alert" className="rounded-lg border border-danger/40 bg-surface-raised p-3 text-sm text-danger">
-              {actionError === "load" ? messages.unavailable : errorText(actionError)}
+              {errorText(actionError)}
             </p>
           )}
-          {nextCursor && (
-            <button
-              type="button"
-              disabled={busy}
-              onClick={loadMore}
-              className="inline-flex min-h-11 items-center justify-center self-center rounded-lg border border-border-strong bg-surface-raised px-5 font-semibold text-foreground transition-colors hover:border-accent disabled:opacity-60"
-            >
-              {busy ? messages.loadingMore : messages.loadMore}
-            </button>
-          )}
+          <CommentPagination page={page.page} totalPages={page.totalPages} href={(number) => commentPageHref(basePath, number)} labels={messages.pagination} />
         </>
       }
     />

@@ -26,9 +26,9 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
         return json.GetProperty("id").GetString()!;
     }
 
-    private static async Task<JsonElement> Page(HttpClient client, string wall, string? session = null, string? before = null)
+    private static async Task<JsonElement> Page(HttpClient client, string wall, string? session = null, int? page = null)
     {
-        using var response = await Send(client, HttpMethod.Get, Wall(wall) + (before is null ? string.Empty : $"?before={before}"), session);
+        using var response = await Send(client, HttpMethod.Get, Wall(wall) + (page is null ? string.Empty : $"?page={page}"), session);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         return await response.Content.ReadFromJsonAsync<JsonElement>(Ct);
     }
@@ -124,7 +124,7 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
     }
 
     [Fact]
-    public async Task Pages_are_newest_first_with_a_cursor()
+    public async Task Pages_are_numbered_newest_first_with_totals()
     {
         var (owner, session, email) = await NewPlayer();
         using var client = factory.CreateWebsiteClient();
@@ -132,7 +132,7 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
         {
             var id = await db.Users.Where(u => u.Email == email).Select(u => u.Id).SingleAsync(Ct);
             var start = DateTimeOffset.UtcNow.AddHours(-1);
-            for (var index = 0; index < 25; index++)
+            for (var index = 0; index < 30; index++)
             {
                 var at = start.AddSeconds(index);
                 db.Comments.Add(new Comment { Id = Guid.CreateVersion7(at), WallUserId = id, AuthorId = id, Body = $"c{index}", CreatedAt = at });
@@ -142,13 +142,32 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
         });
 
         var first = await Page(client, owner);
-        var second = await Page(client, owner, before: first.GetProperty("nextCursor").GetString());
+        var second = await Page(client, owner, page: 2);
+        var pastTheEnd = await Page(client, owner, page: 3);
 
-        Assert.Equal(20, first.GetProperty("comments").GetArrayLength());
-        Assert.Equal("c24", first.GetProperty("comments")[0].GetProperty("body").GetString());
+        Assert.Equal(25, first.GetProperty("comments").GetArrayLength());
+        Assert.Equal("c29", first.GetProperty("comments")[0].GetProperty("body").GetString());
+        Assert.Equal(1, first.GetProperty("page").GetInt32());
+        Assert.Equal(30, first.GetProperty("total").GetInt32());
+        Assert.Equal(2, first.GetProperty("totalPages").GetInt32());
         Assert.Equal(5, second.GetProperty("comments").GetArrayLength());
         Assert.Equal("c4", second.GetProperty("comments")[0].GetProperty("body").GetString());
-        Assert.Equal(JsonValueKind.Null, second.GetProperty("nextCursor").ValueKind);
+        Assert.Empty(pastTheEnd.GetProperty("comments").EnumerateArray());
+        Assert.Equal(2, pastTheEnd.GetProperty("totalPages").GetInt32());
+    }
+
+    [Theory]
+    [InlineData("0")]
+    [InlineData("-1")]
+    [InlineData("10001")]
+    public async Task Invalid_page_numbers_are_refused(string page)
+    {
+        var (owner, _, _) = await NewPlayer();
+        using var client = factory.CreateWebsiteClient();
+
+        using var response = await Send(client, HttpMethod.Get, $"{Wall(owner)}?page={page}", null);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
@@ -180,7 +199,9 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
         await PostComment(client, owner, authorSession);
 
         await WithDb(factory, db => db.Users.Where(u => u.Email == authorEmail).ExecuteUpdateAsync(set => set.SetProperty(u => u.IsEnabled, false), Ct));
-        Assert.Empty((await Page(client, owner, ownerSession)).GetProperty("comments").EnumerateArray());
+        var hidden = await Page(client, owner, ownerSession);
+        Assert.Empty(hidden.GetProperty("comments").EnumerateArray());
+        Assert.Equal(0, hidden.GetProperty("total").GetInt32());
 
         await WithDb(factory, db => db.Users.Where(u => u.Email == ownerEmail).ExecuteUpdateAsync(set => set.SetProperty(u => u.IsEnabled, false), Ct));
         using var wall = await Send(client, HttpMethod.Get, Wall(owner), null);

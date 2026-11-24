@@ -41,4 +41,4 @@ public sealed record CreateCommentRequest(
 
 public sealed record CommentResponse(Guid Id, string AuthorUsername, DateTimeOffset AuthorJoinedAt, PlayerAvatarResponse? AuthorAvatar, string Body, DateTimeOffset CreatedAt, bool CanDelete);
 
-public sealed record CommentPageResponse(CommentResponse[] Comments, Guid? NextCursor);
+public sealed record CommentPageResponse(CommentResponse[] Comments, int Page, int PageSize, int Total, int TotalPages);

@@ -7,12 +7,14 @@ import { platformNames } from "@/components/auth/platformNames";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
-import { localizePath } from "@/i18n/config";
+import { localizePath, type Locale } from "@/i18n/config";
+import { formatDate, interpolate } from "@/i18n/format";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getPlatforms, platforms, type Platform } from "@/lib/api/accounts";
 import { isAuthError } from "@/lib/auth/forms";
 import { getCurrentAccount, getEmailOffer } from "@/lib/auth/session";
+import { siteConfig } from "@/lib/site";
 import { startPlatform } from "../../auth/actions";
 import { dismissEmailOffer, signOutAction } from "./actions";
 import { DisconnectButton } from "./DisconnectButton";
@@ -41,7 +43,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/[lang]/
 
 async function SettingsPanel({ searchParams }: Pick<PageProps<"/[lang]/account/settings">, "searchParams">) {
   const locale = await getLocale();
-  const { auth } = await getMessages();
+  const { auth, moderation } = await getMessages();
   const account = await getCurrentAccount();
   if (!account) redirect(localizePath(locale, "/sign-in"));
 
@@ -65,11 +67,48 @@ async function SettingsPanel({ searchParams }: Pick<PageProps<"/[lang]/account/s
       {typeof error === "string" && isAuthError(error) && <FormMessage message={auth.errors[error]} />}
 
       <Section title={copy.profileHeading}>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <span className="text-sm text-muted">{copy.usernameLabel}</span>
-          <span className="font-semibold wrap-anywhere">{account.username}</span>
-          {account.isAlphaTester && <Badge tone="gold">{copy.alphaTester}</Badge>}
-        </div>
+        <dl className="grid grid-cols-[minmax(0,1fr)] gap-x-6 gap-y-3 sm:grid-cols-[auto_minmax(0,1fr)]">
+          <InfoRow label={copy.usernameLabel}>
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="wrap-anywhere">{account.username}</span>
+              {account.isAlphaTester && <Badge tone="gold">{copy.alphaTester}</Badge>}
+            </span>
+          </InfoRow>
+          <InfoRow label={copy.accountTypeLabel}>{moderation.actions.roles[account.role]}</InfoRow>
+          <InfoRow label={copy.memberSinceLabel}>{longDate(locale, account.createdAt)}</InfoRow>
+          <InfoRow label={copy.lastActivityLabel}>{longDate(locale, account.lastActivityAt)}</InfoRow>
+        </dl>
+      </Section>
+
+      {/** Shown to every player, so the absence of a penalty is stated as clearly as one. **/}
+      <Section title={copy.standingHeading}>
+        {account.isMuted && account.mutedUntil ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <Badge tone="gold">{copy.standingMutedBadge}</Badge>
+              <span className="text-sm font-semibold">
+                {interpolate(copy.standingMutedUntil, {
+                  date: formatDate(locale, new Date(account.mutedUntil), { dateStyle: "long", timeStyle: "short", timeZone: "UTC" }),
+                })}
+              </span>
+            </div>
+            <p className="text-sm leading-relaxed text-muted">{copy.standingMutedBody}</p>
+            <p className="text-sm leading-relaxed text-muted">
+              {rich(copy.standingAppeal, {
+                email: (
+                  <a href={`mailto:${siteConfig.contactEmail}`} className="text-accent underline hover:text-accent-strong">
+                    {siteConfig.contactEmail}
+                  </a>
+                ),
+              })}
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge tone="success">{copy.standingNone}</Badge>
+            <span className="text-sm text-muted">{copy.standingGood}</span>
+          </div>
+        )}
       </Section>
 
       <Section title={auth.photo.heading} intro={auth.photo.intro}>
@@ -176,6 +215,17 @@ async function SettingsPanel({ searchParams }: Pick<PageProps<"/[lang]/account/s
   );
 }
 
+function InfoRow({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <>
+      <dt className="text-sm text-muted">{label}</dt>
+      <dd className="-mt-2 font-semibold sm:mt-0">{children}</dd>
+    </>
+  );
+}
+
+const longDate = (locale: Locale, value: string) => formatDate(locale, new Date(value), { dateStyle: "long", timeZone: "UTC" });
+
 function Section({ title, intro, children }: { title: string; intro?: string; children: ReactNode }) {
   return (
     <Card className="flex flex-col gap-4 p-5 sm:p-6">
@@ -192,7 +242,7 @@ function Section({ title, intro, children }: { title: string; intro?: string; ch
 function SettingsSkeleton({ label }: { label: string }) {
   return (
     <div role="status" aria-label={label} className="flex flex-col gap-6">
-      {[1, 3, 2, 3, 2].map((lines, index) => (
+      {[4, 1, 3, 2, 3, 2].map((lines, index) => (
         <Card key={index} className="flex flex-col gap-4 p-5 sm:p-6">
           <SkeletonText widths={["w-32"]} className="font-display text-xl" />
           <SkeletonText widths={Array.from({ length: lines }, (_, line) => (line === lines - 1 ? "w-1/2" : "w-full"))} />

@@ -30,7 +30,10 @@ export interface SavedComment {
 
 export interface CommentPage {
   comments: SavedComment[];
-  nextCursor: string | null;
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
 }
 
 const dateOptions = { dateStyle: "medium", timeZone: "UTC" } as const;
@@ -40,21 +43,23 @@ const threadPath = (thread: CommentThreadRef) =>
     ? `/api/v1/users/${encodeURIComponent(thread.username)}/wall`
     : `/api/v1/games/${encodeURIComponent(thread.slug)}/comments`;
 
-// One page for this visitor (who may delete what depends on them), so it's never cached.
+// One numbered page for this visitor (who may delete what depends on them), so it's never cached.
 export async function getCommentPage(
   thread: CommentThreadRef,
-  before: string | null,
+  page: number,
   locale: Locale,
   visitor: VisitorContext,
 ): Promise<ApiResult<CommentPage>> {
-  const query = before ? `?before=${encodeURIComponent(before)}` : "";
-  const result = await apiSend<{ comments: ApiComment[]; nextCursor: string | null }>("GET", threadPath(thread) + query, undefined, visitor);
+  const result = await apiSend<Omit<CommentPage, "comments"> & { comments: ApiComment[] }>("GET", `${threadPath(thread)}?page=${page}`, undefined, visitor);
   if (!result.ok) return result;
 
   return {
     ...result,
     data: {
-      nextCursor: result.data.nextCursor,
+      page: result.data.page,
+      pageSize: result.data.pageSize,
+      total: result.data.total,
+      totalPages: result.data.totalPages,
       comments: result.data.comments.map(({ createdAt, authorJoinedAt, ...comment }) => ({
         ...comment,
         authorJoined: formatDate(locale, new Date(authorJoinedAt), dateOptions),

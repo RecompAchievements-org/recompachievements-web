@@ -45,7 +45,7 @@ export function CommentThread({
   const loadPreview = usePlayerPreviews(locale);
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col gap-6">
+    <section id="comments" aria-labelledby={headingId} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h2 id={headingId} className="font-display text-2xl font-semibold wrap-anywhere">
           {heading}
@@ -66,7 +66,7 @@ export function CommentThread({
           <li className="rounded-xl border border-dashed border-border px-5 py-8 text-center text-sm text-muted">{empty}</li>
         ) : (
           comments.map((comment) => (
-            <li key={comment.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:gap-4">
+            <li key={comment.id} id={`comment-${comment.id}`} className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:gap-4">
               <CommentAuthor author={comment.author} locale={locale} labels={authorLabels} load={loadPreview} />
               <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-2 text-sm">

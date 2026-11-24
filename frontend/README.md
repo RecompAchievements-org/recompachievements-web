@@ -188,7 +188,7 @@ account pages are `noindex` and left out of the sitemap.
 (`getPublicPlayer`), labeled sample sections (badges, medals, last achievements earned, subsets earned, completion, last game played), and a
 full-width comment wall. Walls and game pages both use `SavedComments` (built on the shared
 `CommentThread`) with a thread reference, so they share posting, deleting, reports, mute notices,
-and Load More. Every comment
+and numbered pages (`CommentPagination`, `?commentsPage=` in the URL, one page shown at a time). Every comment
 section shows each author’s photo, username, and join date (`CommentAuthor`); `PlayerPreview`
 previews their profile and links to it.
 Signed-out visitors can read; accounts with a confirmed email can post; a comment's author and

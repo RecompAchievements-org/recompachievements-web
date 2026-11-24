@@ -6,13 +6,14 @@ using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Features.Comments;
 
-/** The rules every comment thread shares: newest-first pages that hide disabled authors, who may
+/** The rules every comment thread shares: numbered newest-first pages that hide disabled authors, who may
  *  post (an enabled account with a confirmed email and no active mute), and a per-author posting
  *  limit counted across all threads, so moving between walls and games doesn't reset it.
 **/
 internal static class CommentThreads
 {
-    private const int PageSize = 20;
+    public const int PageSize = 25;
+    public const int MaxPage = 10_000;
     private const int MaxCommentsPerWindow = 10;
     private static readonly TimeSpan CommentWindow = TimeSpan.FromMinutes(10);
 
@@ -20,17 +21,15 @@ internal static class CommentThreads
         AppDbContext db,
         IMediaStore media,
         IQueryable<Comment> thread,
-        Guid? before,
+        int page,
         Func<Guid, bool> canDelete,
         CancellationToken cancellationToken)
     {
-        if (before is { } cursor)
-        {
-            thread = thread.Where(comment => comment.Id.CompareTo(cursor) < 0);
-        }
+        var visible = Visible(db, thread);
+        var total = await visible.CountAsync(cancellationToken);
 
-        var rows = await thread
-            .Join(db.Users.Where(author => author.IsEnabled), comment => comment.AuthorId, author => author.Id, (comment, author) => new
+        var rows = await visible
+            .Join(db.Users, comment => comment.AuthorId, author => author.Id, (comment, author) => new
             {
                 comment.Id,
                 comment.AuthorId,
@@ -41,10 +40,11 @@ internal static class CommentThreads
                 comment.CreatedAt,
             })
             .OrderByDescending(row => row.Id)
-            .Take(PageSize + 1)
+            .Skip((page - 1) * PageSize)
+            .Take(PageSize)
             .ToListAsync(cancellationToken);
 
-        var page = rows.Take(PageSize)
+        var comments = rows
             .Select(row => new CommentResponse(
                 row.Id,
                 row.Username,
@@ -55,8 +55,17 @@ internal static class CommentThreads
                 canDelete(row.AuthorId)))
             .ToArray();
 
-        return new CommentPageResponse(page, rows.Count > PageSize ? page[^1].Id : null);
+        return new CommentPageResponse(comments, page, PageSize, total, (total + PageSize - 1) / PageSize);
     }
+
+    // Comments shown to readers: those whose author's account is enabled.
+    public static IQueryable<Comment> Visible(AppDbContext db, IQueryable<Comment> thread) =>
+        thread.Where(comment => db.Users.Any(author => author.Id == comment.AuthorId && author.IsEnabled));
+
+    public static bool IsValidPage(int page) => page is >= 1 and <= MaxPage;
+
+    public static ValidationProblem InvalidPage() =>
+        TypedResults.ValidationProblem(new Dictionary<string, string[]> { ["page"] = [$"Use a page from 1 to {MaxPage}."] });
 
     // Null when this account may comment right now.
     public static ProblemHttpResult? RefusePoster(User author, DateTimeOffset now)

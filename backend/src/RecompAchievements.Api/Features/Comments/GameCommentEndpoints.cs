@@ -16,7 +16,7 @@ internal static class GameCommentEndpoints
     {
         var group = api.MapGroup("/games/{slug}/comments").WithTags("Comments");
 
-        group.MapGet("/", ListAsync).WithSummary("A page of a game's comments, newest first");
+        group.MapGet("/", ListAsync).WithSummary("One numbered page of a game's comments, newest first");
         group.MapPost("/", CreateAsync)
             .RequireRateLimiting(RateLimiting.CommentPolicy)
             .WithSummary("Post a comment on a game page");
@@ -27,29 +27,35 @@ internal static class GameCommentEndpoints
         return api;
     }
 
-    private static async Task<Results<Ok<CommentPageResponse>, NotFound>> ListAsync(
+    private static async Task<Results<Ok<CommentPageResponse>, NotFound, ValidationProblem>> ListAsync(
         string slug,
-        Guid? before,
+        int? page,
         HttpContext context,
         AppDbContext db,
         Sessions sessions,
         IMediaStore media,
         CancellationToken cancellationToken)
     {
+        var number = page ?? 1;
+        if (!CommentThreads.IsValidPage(number))
+        {
+            return CommentThreads.InvalidPage();
+        }
+
         if (await GameIdAsync(db, slug, cancellationToken) is not { } gameId)
         {
             return TypedResults.NotFound();
         }
 
         var viewerId = (await sessions.ResolveAsync(context, cancellationToken))?.UserId;
-        var page = await CommentThreads.PageAsync(
+        var result = await CommentThreads.PageAsync(
             db,
             media,
             db.Comments.Where(comment => comment.GameId == gameId),
-            before,
+            number,
             authorId => viewerId == authorId,
             cancellationToken);
-        return TypedResults.Ok(page);
+        return TypedResults.Ok(result);
     }
 
     private static async Task<Results<Created<CommentResponse>, NotFound, ProblemHttpResult>> CreateAsync(

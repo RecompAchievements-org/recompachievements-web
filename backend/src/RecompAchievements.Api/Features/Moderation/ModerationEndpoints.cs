@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using RecompAchievements.Api.Data;
 using RecompAchievements.Api.Features.Accounts;
+using RecompAchievements.Api.Features.Comments;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Media;
 
@@ -289,15 +290,26 @@ internal static partial class ModerationEndpoints
             .Where(c => c.Id == commentId)
             .Select(c => new
             {
+                c.WallUserId,
+                c.GameId,
                 Wall = db.Users.Where(u => u.Id == c.WallUserId).Select(u => u.Username).FirstOrDefault(),
                 Game = db.Games.Where(g => g.Id == c.GameId).Select(g => g.Slug).FirstOrDefault(),
             })
             .FirstOrDefaultAsync(cancellationToken);
+        if (thread is null)
+        {
+            return null;
+        }
+
+        // The page it's on: newer visible comments in the same thread come before it.
+        var sameThread = db.Comments.Where(c => c.WallUserId == thread.WallUserId && c.GameId == thread.GameId && c.Id.CompareTo(commentId) > 0);
+        var newer = await CommentThreads.Visible(db, sameThread).CountAsync(cancellationToken);
+        var page = newer / CommentThreads.PageSize + 1;
 
         return thread switch
         {
-            { Wall: { } wall } => new CommentLocationResponse("wall", wall),
-            { Game: { } game } => new CommentLocationResponse("game", game),
+            { Wall: { } wall } => new CommentLocationResponse("wall", wall, page),
+            { Game: { } game } => new CommentLocationResponse("game", game, page),
             _ => null,
         };
     }

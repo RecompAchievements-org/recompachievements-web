@@ -85,8 +85,8 @@ public sealed record ReportDetailResponse(
     CommentLocationResponse? CommentLocation,
     ModerationUserResponse? ReportedUser);
 
-// Where a reported comment is shown: Kind "wall" with the wall owner's username, or "game" with its slug.
-public sealed record CommentLocationResponse(string Kind, string Key);
+// Where a reported comment is shown: Kind "wall" with the wall owner's username, or "game" with its slug, and its page.
+public sealed record CommentLocationResponse(string Kind, string Key, int Page);
 
 public sealed record ModerationActionResponse(
     Guid Id,

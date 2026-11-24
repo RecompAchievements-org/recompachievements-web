@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { commentPageHref } from "@/components/comments/CommentPagination";
 import { ModerationControls } from "@/components/moderation/ModerationControls";
 import { formatModerationDate, ModerationShell, ModerationSkeleton, statusTone } from "@/components/moderation/ModerationShell";
 import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
@@ -50,7 +51,9 @@ async function ReportPanel({ params }: Pick<Props, "params">) {
   const canAct = !!user && user.username !== staff.username && (staff.role === "admin" || user.role === "player");
   const isComment = report.targetType === "comment";
   const location = result.data.commentLocation;
-  const contextHref = location && localizePath(locale, location.kind === "wall" ? `/account/${location.key}` : `/games/${location.key}`);
+  const contextHref =
+    location &&
+    commentPageHref(localizePath(locale, location.kind === "wall" ? `/account/${location.key}` : `/games/${location.key}`), location.page, `comment-${targetKey}`);
 
   return (
     <ModerationShell locale={locale} copy={copy} active={null}>

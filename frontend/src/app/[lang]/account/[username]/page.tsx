@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect, unstable_rethrow } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
+import { commentPageFrom, commentPageHref } from "@/components/comments/CommentPagination";
 import { SavedComments } from "@/components/comments/SavedComments";
 import { ReportButton } from "@/components/moderation/ReportButton";
 import { ProfileBadges, ProfileBadgesSkeleton } from "@/components/profile/ProfileBadges";
@@ -36,13 +37,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: readUsername(username) ?? profile.metaTitle, robots: { index: false, follow: false } };
 }
 
-export default async function ProfilePage({ params }: Props) {
+export default async function ProfilePage({ params, searchParams }: Props) {
   const { profile } = await getMessages();
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-12 sm:px-6 sm:py-16">
       <Suspense fallback={<ProfileSkeleton label={profile.loading} />}>
-        <ProfilePanel params={params} />
+        <ProfilePanel params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );
@@ -51,7 +52,7 @@ export default async function ProfilePage({ params }: Props) {
 /** The public profile. It renders only public player data (never the /me account), so nothing
  *  private can reach a visitor's page.
 **/
-async function ProfilePanel({ params }: Pick<Props, "params">) {
+async function ProfilePanel({ params, searchParams }: Pick<Props, "params" | "searchParams">) {
   const { username: raw } = await params;
   const username = readUsername(raw);
   if (!username) notFound();
@@ -61,6 +62,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
 
   let player: PublicPlayer;
   let wall: CommentPage | null = null;
+  const requestedPage = commentPageFrom((await searchParams).commentsPage);
   const context = await visitor();
   try {
     const result = await getPublicPlayer(username, context);
@@ -70,13 +72,17 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
     // One address per player: other casings go to the real username.
     if (player.username !== username) redirect(localizePath(locale, `/account/${player.username}`));
 
-    const page = await getCommentPage({ kind: "wall", username: player.username }, null, locale, context);
+    const page = await getCommentPage({ kind: "wall", username: player.username }, requestedPage, locale, context);
     if (page.ok) wall = page.data;
   } catch (error) {
     unstable_rethrow(error);
     console.error("Profile unavailable", error);
     return <p className="text-muted">{profile.unavailable}</p>;
   }
+
+  const wallPath = localizePath(locale, `/account/${player.username}`);
+  // A page past the end (comments were removed since the link was made) moves to the last page.
+  if (wall && wall.totalPages > 0 && requestedPage > wall.totalPages) redirect(commentPageHref(wallPath, wall.totalPages));
 
   const viewer = await getCurrentAccount();
   const reportLabels = { ...moderation.report, reasons: moderation.reasons };
@@ -124,7 +130,8 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
           intro={interpolate(profile.wall.intro, { username: player.username })}
           placeholder={profile.wall.placeholder}
           locale={locale}
-          first={wall}
+          basePath={wallPath}
+          page={wall}
           access={access}
           messages={comments}
           errors={auth.errors}

@@ -166,12 +166,12 @@ disabled accounts, and unconfirmed registrations). Names of pages under `/accoun
 | Route | Purpose |
 |---|---|
 | `GET /` | Public information only: `username`, `createdAt`, `lastActiveOn` (a UTC date, never a time), and `avatar` (`small` and `large` URLs, or `null`) |
-| `GET /wall?before=<id>` | A page of comments, newest first, with each author’s username, join date, and photo, `canDelete` for the signed-in viewer, and a `nextCursor`. Comments by disabled accounts are hidden |
+| `GET /wall?page=<n>` | One numbered page of comments (default `1`), newest first, with each author’s username, join date, and photo, `canDelete` for the signed-in viewer, and `page`, `pageSize`, `total`, and `totalPages`; an invalid page is `400`, and a page past the end is empty. Comments by disabled accounts are hidden |
 | `POST /wall` | Signed in with a confirmed email (`403 email_required`) and not muted (`403 account_muted`): posts plain text, up to 1000 characters. Rate limited |
 | `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |
 
 **Game comments** (`/api/v1/games/{slug}/comments`; `404` for unknown games) share the wall's
-rules and response shape: anyone reads, posting needs a confirmed email and no active mute, and the
+rules and response shape, including `?page=<n>`: anyone reads, posting needs a confirmed email and no active mute, and the
 posting limit is shared with walls. `DELETE /{id}` is for the comment's author only (anyone else
 gets `404`); staff remove others through moderation. Removing a game from the catalog deletes its
 comments.
@@ -188,7 +188,7 @@ entry, and answer `403 moderation_forbidden` when the target isn't allowed.
 | `POST /reports/{id}/resolve`, `/dismiss` | Closes a report and tells the reporter the outcome |
 | `GET /users/{username}` | Account summary for staff, with no email or platform IDs |
 | `GET /log?before=` | The append-only audit log |
-| `POST /comments/{id}/remove` | Removes a comment (wall or game page) and emails its author the reason; report reviews include `commentLocation` to open it in context |
+| `POST /comments/{id}/remove` | Removes a comment (wall or game page) and emails its author the reason; report reviews include `commentLocation` (thread and page) to open it in context |
 | `POST /users/{username}/photo/remove` | Deletes a photo, purges it from the CDN, and emails the reason |
 | `POST /users/{username}/mute`, `/unmute` | Mutes until a date, or ends the mute |
 | `POST /users/{username}/disable`, `/enable` | Disables an account (ends its sessions and removes its photo) or enables it |

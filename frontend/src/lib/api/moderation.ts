@@ -52,7 +52,7 @@ export interface ReportDetail {
   resolvedAt: string | null;
   resolutionNote: string | null;
   // Where a reported comment is shown, while it still exists.
-  commentLocation: { kind: "wall" | "game"; key: string } | null;
+  commentLocation: { kind: "wall" | "game"; key: string; page: number } | null;
   reportedUser: ModerationUser | null;
 }
 

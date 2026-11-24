@@ -4,7 +4,10 @@ import { formatDate } from "@/i18n/format";
 import type { PlayerAvatar } from "./accounts";
 import { apiSend, type ApiResult, type VisitorContext } from "./client";
 
-interface ApiWallComment {
+// Where comments live: a player's profile wall or a game page.
+export type CommentThreadRef = { kind: "wall"; username: string } | { kind: "game"; slug: string };
+
+interface ApiComment {
   id: string;
   authorUsername: string;
   authorJoinedAt: string;
@@ -14,7 +17,7 @@ interface ApiWallComment {
   canDelete: boolean;
 }
 
-export interface WallComment {
+export interface SavedComment {
   id: string;
   authorUsername: string;
   authorAvatar: PlayerAvatar | null;
@@ -25,24 +28,27 @@ export interface WallComment {
   canDelete: boolean;
 }
 
-export interface WallPage {
-  comments: WallComment[];
+export interface CommentPage {
+  comments: SavedComment[];
   nextCursor: string | null;
 }
 
 const dateOptions = { dateStyle: "medium", timeZone: "UTC" } as const;
 
-const wallPath = (username: string) => `/api/v1/users/${encodeURIComponent(username)}/wall`;
+const threadPath = (thread: CommentThreadRef) =>
+  thread.kind === "wall"
+    ? `/api/v1/users/${encodeURIComponent(thread.username)}/wall`
+    : `/api/v1/games/${encodeURIComponent(thread.slug)}/comments`;
 
 // One page for this visitor (who may delete what depends on them), so it's never cached.
-export async function getWallPage(
-  username: string,
+export async function getCommentPage(
+  thread: CommentThreadRef,
   before: string | null,
   locale: Locale,
   visitor: VisitorContext,
-): Promise<ApiResult<WallPage>> {
+): Promise<ApiResult<CommentPage>> {
   const query = before ? `?before=${encodeURIComponent(before)}` : "";
-  const result = await apiSend<{ comments: ApiWallComment[]; nextCursor: string | null }>("GET", wallPath(username) + query, undefined, visitor);
+  const result = await apiSend<{ comments: ApiComment[]; nextCursor: string | null }>("GET", threadPath(thread) + query, undefined, visitor);
   if (!result.ok) return result;
 
   return {
@@ -58,8 +64,8 @@ export async function getWallPage(
   };
 }
 
-export const postWallComment = (username: string, body: string, visitor: VisitorContext) =>
-  apiSend<ApiWallComment>("POST", wallPath(username), { body }, visitor);
+export const postComment = (thread: CommentThreadRef, body: string, visitor: VisitorContext) =>
+  apiSend<ApiComment>("POST", threadPath(thread), { body }, visitor);
 
-export const deleteWallComment = (username: string, id: string, visitor: VisitorContext) =>
-  apiSend<void>("DELETE", `${wallPath(username)}/${encodeURIComponent(id)}`, undefined, visitor);
+export const deleteComment = (thread: CommentThreadRef, id: string, visitor: VisitorContext) =>
+  apiSend<void>("DELETE", `${threadPath(thread)}/${encodeURIComponent(id)}`, undefined, visitor);

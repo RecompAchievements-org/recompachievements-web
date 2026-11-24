@@ -19,9 +19,9 @@ internal static class RateLimiting
     public const string SignInPolicy = "sign-in";
     private const int SignInsPerWindow = 20;
 
-    // Wall comment writes per client IP within 10 minutes.
-    public const string WallPolicy = "wall";
-    private const int WallWritesPerWindow = 30;
+    // Comment writes (walls and game pages) per client IP within 10 minutes.
+    public const string CommentPolicy = "comments";
+    private const int CommentWritesPerWindow = 30;
 
     // Reports filed per client IP within 10 minutes.
     public const string ReportPolicy = "reports";
@@ -86,12 +86,12 @@ internal static class RateLimiting
                         QueueLimit = 0,
                     }));
 
-            options.AddPolicy(WallPolicy, context =>
+            options.AddPolicy(CommentPolicy, context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     ClientAddress.Resolve(context),
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = WallWritesPerWindow,
+                        PermitLimit = CommentWritesPerWindow,
                         Window = TimeSpan.FromMinutes(10),
                         QueueLimit = 0,
                     }));

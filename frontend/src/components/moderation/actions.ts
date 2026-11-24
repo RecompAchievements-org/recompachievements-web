@@ -6,7 +6,7 @@ import { visitor } from "@/lib/auth/session";
 
 export type ReportState = { status: "idle" | "sent" } | { status: "error"; error: AuthError };
 
-const targets: readonly ReportTarget[] = ["profile", "photo", "wall_comment"];
+const targets: readonly ReportTarget[] = ["profile", "photo", "comment"];
 const idPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function submitReport(_previous: ReportState, formData: FormData): Promise<ReportState> {
@@ -16,7 +16,7 @@ export async function submitReport(_previous: ReportState, formData: FormData): 
   const reason = String(formData.get("reason") ?? "") as ReportReason;
   const details = String(formData.get("details") ?? "").trim() || null;
 
-  const validComment = targetType === "wall_comment" ? !!commentId && idPattern.test(commentId) : commentId === null;
+  const validComment = targetType === "comment" ? !!commentId && idPattern.test(commentId) : commentId === null;
   if (!targets.includes(targetType) || !usernamePattern.test(targetUsername) || !validComment || !reportReasons.includes(reason) || (details?.length ?? 0) > 500) {
     return { status: "error", error: "invalid" };
   }

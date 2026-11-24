@@ -110,18 +110,31 @@
     "achievements": "Conquistas"
   },
   "comments": {
-    "heading": "Comentários",
-    "intro": "Dicas, bugs e notas de configuração de quem joga este recomp.",
-    "accountsNotice": "Para comentar será preciso uma conta. Os comentários salvos chegam em breve; até lá, o que você publicar aqui fica só nesta página e não é salvo.",
     "label": "Seu comentário",
-    "placeholder": "Compartilhe uma dica, um bug ou sua configuração…",
     "post": "Publicar comentário",
-    "empty": "Ainda não há comentários.",
-    "you": "Você",
-    "justNow": "Agora mesmo",
-    "notSaved": "Não salvo",
+    "posting": "Publicando…",
     "count": "{count} / {max}",
+    "empty": "Ainda não há comentários.",
+    "signInToComment": "Entre para comentar",
+    "emailToComment": "Adicione e verifique um e-mail para comentar.",
+    "addEmail": "Adicionar e-mail",
+    "delete": "Excluir",
+    "deleteLabel": "Excluir o comentário de {username}",
+    "confirmDelete": "Confirmar",
+    "deleting": "Excluindo…",
+    "cancel": "Cancelar",
+    "loadMore": "Carregar mais",
+    "loadingMore": "Carregando…",
+    "invalid": "Escreva um comentário com texto visível, de até 1.000 caracteres.",
+    "unavailable": "Não conseguimos carregar estes comentários. Tente de novo em alguns minutos.",
+    "loading": "Carregando comentários…",
+    "reportLabel": "Denunciar comentário de {username}",
     "muted": "Sua conta está silenciada, então você não pode publicar comentários agora.",
+    "game": {
+      "heading": "Comentários",
+      "intro": "Dicas, bugs e notas de configuração de quem joga este recomp.",
+      "placeholder": "Compartilhe uma dica, um bug ou sua configuração…"
+    },
     "author": {
       "joined": "Entrou em {date}",
       "open": "Abrir o perfil de {username}",
@@ -237,8 +250,8 @@
         "body": "Inscrição no alfa: seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário) e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
       },
       {
-        "title": "Murais de perfil",
-        "body": "Os comentários que você publica no mural de um jogador são públicos e ficam guardados até você excluí-los, o dono do mural excluí-los, sua conta ser apagada ou nós os removermos."
+        "title": "Comentários",
+        "body": "Os comentários que você publica no mural de um jogador ou na página de um jogo são públicos e ficam guardados até você excluí-los, sua conta ser apagada ou nós os removermos. O dono de um mural também pode excluir os comentários do mural."
       },
       {
         "title": "Fotos de perfil e moderação",
@@ -294,7 +307,7 @@
       },
       {
         "title": "Comentários dos jogadores",
-        "body": "Cada jogador é responsável pelos comentários que publica nos murais de perfil. O autor e o dono do mural podem excluí-los. Para denunciar comentários abusivos ou que infrinjam direitos, escreva para {email}."
+        "body": "Cada jogador é responsável pelos comentários que publica nos murais de perfil e nas páginas de jogos. O autor pode excluí-los, assim como o dono do mural. Para denunciar comentários abusivos ou que infrinjam direitos, use o botão Denunciar ou escreva para {email}."
       },
       {
         "title": "Fotos de jogadores",
@@ -500,7 +513,7 @@
       "intro": "Aparece publicamente no seu perfil e nos seus comentários.",
       "chooseLabel": "Escolha uma foto",
       "replaceLabel": "Troque sua foto",
-        "noFile": "Nenhum arquivo selecionado",
+      "noFile": "Nenhum arquivo selecionado",
       "hint": "JPEG, PNG ou WebP. Ela é recortada em formato quadrado.",
       "rightsBefore": "Sou titular desta imagem ou tenho o direito de usá-la, e ela segue as",
       "rulesLink": "regras da comunidade",
@@ -615,25 +628,7 @@
     "wall": {
       "heading": "Mural de {username}",
       "intro": "Comentários da comunidade para {username}.",
-      "label": "Seu comentário",
-      "placeholder": "Escreva algo neste mural…",
-      "post": "Publicar comentário",
-      "posting": "Publicando…",
-      "count": "{count} / {max}",
-      "empty": "Ainda não há comentários.",
-      "signInToComment": "Entre para comentar",
-      "emailToComment": "Adicione e verifique um e-mail para comentar.",
-      "addEmail": "Adicionar e-mail",
-      "delete": "Excluir",
-      "deleteLabel": "Excluir o comentário de {username}",
-      "confirmDelete": "Confirmar",
-      "deleting": "Excluindo…",
-      "cancel": "Cancelar",
-      "loadMore": "Carregar mais",
-      "loadingMore": "Carregando…",
-      "invalid": "Escreva um comentário com texto visível, de até 1.000 caracteres.",
-      "unavailable": "Não conseguimos carregar estes comentários. Tente de novo em alguns minutos.",
-      "reportLabel": "Denunciar comentário de {username}"
+      "placeholder": "Escreva algo neste mural…"
     }
   },
   "moderation": {
@@ -666,6 +661,7 @@
     "actionsHeading": "Ações",
     "photoOf": "Foto de perfil de {username}",
     "viewAccount": "Ver conta",
+    "viewInContext": "Ver no contexto",
     "reporterDetails": "Detalhes da denúncia",
     "reportedText": "Texto denunciado",
     "reportedPhoto": "Foto denunciada",
@@ -679,7 +675,7 @@
     "targets": {
       "profile": "Perfil",
       "photo": "Foto",
-      "wall_comment": "Comentário"
+      "comment": "Comentário"
     },
     "reasons": {
       "sexual": "Conteúdo sexual ou nudez",
@@ -711,7 +707,7 @@
       "targets": {
         "profile": "Este perfil",
         "photo": "Esta foto de perfil",
-        "wall_comment": "Este comentário"
+        "comment": "Este comentário"
       },
       "reason": "Motivo",
       "details": "Detalhes (opcional)",

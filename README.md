@@ -151,8 +151,8 @@ Discord or GitHub; the other methods can be connected later from Settings.
 
 Data: `users` (username, email, confirmation, Discord and GitHub IDs, password hash, enabled flag,
 role, mute end, profile photo, created, edited, and last activity dates), `user_sessions`
-(hashed session tokens), `user_tokens` (hashed single-use email links), `wall_comments`
-(plain-text comments on public profiles), `moderation_reports`, and the append-only
+(hashed session tokens), `user_tokens` (hashed single-use email links), `comments`
+(plain-text comments on profile walls and game pages), `moderation_reports`, and the append-only
 `moderation_actions` audit log. Endpoints are listed in
 [`backend/README.md`](backend/README.md#endpoints).
 
@@ -186,7 +186,7 @@ infringers are disabled. The public rules are at `/rules`.
 | `/rules` | Community rules: allowed content, copyright, reports, consequences, and appeals |
 | `/moderation` | Staff only: report queue, report and account reviews, and the audit log |
 | `/games` | Game directory |
-| `/games/[slug]` | Game detail — achievements, points, rarity |
+| `/games/[slug]` | Game detail — achievements, points, rarity, and saved player comments |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |
 
 The site is available in **English** (unprefixed URLs), **Spanish** (`/es/...`), and **Portuguese,
@@ -254,7 +254,8 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Public player profiles with comment walls (scores are placeholders until real unlocks exist)
 - [x] Profile photos and community moderation: reports, roles, content removal, mutes, disabled
   accounts, an audit log, and public community rules
-- [ ] Saved game comments (the game page has a not-saved preview) and developer portal. The portal **replaces the JSON game catalog**: games and achievements are then edited
+- [x] Saved game comments, sharing the wall's rules, reports, and moderation
+- [ ] Developer portal. It **replaces the JSON game catalog**: games and achievements are then edited
   only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK
 - [ ] Launch integration: bbport (Bloodborne), the first supported recomp and the SDK's reference

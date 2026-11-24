@@ -1,9 +1,9 @@
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
+using RecompAchievements.Api.Features.Comments;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Health;
 using RecompAchievements.Api.Features.Moderation;
-using RecompAchievements.Api.Features.Walls;
 using RecompAchievements.Api.Infrastructure;
 using RecompAchievements.Api.Infrastructure.Email;
 using RecompAchievements.Api.Infrastructure.Media;
@@ -47,6 +47,7 @@ app.MapGroup("/api/v1")
     .MapAccountEndpoints()
     .MapPlayerEndpoints()
     .MapWallEndpoints()
+    .MapGameCommentEndpoints()
     .MapPhotoEndpoints()
     .MapModerationEndpoints()
     .MapOAuthEndpoints();

@@ -2,10 +2,10 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using RecompAchievements.Api.Features.Walls;
+using RecompAchievements.Api.Features.Comments;
 using static RecompAchievements.Api.Tests.Accounts.AccountTestKit;
 
-namespace RecompAchievements.Api.Tests.Walls;
+namespace RecompAchievements.Api.Tests.Comments;
 
 public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
 {
@@ -107,7 +107,7 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
         var (owner, session, _) = await NewPlayer();
         using var client = factory.CreateWebsiteClient();
 
-        using var response = await Send(client, HttpMethod.Post, Wall(owner), session, new { body = new string('a', WallText.MaxLength + 1) });
+        using var response = await Send(client, HttpMethod.Post, Wall(owner), session, new { body = new string('a', CommentText.MaxLength + 1) });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -135,7 +135,7 @@ public sealed class WallTests(ApiFactory factory) : IClassFixture<ApiFactory>
             for (var index = 0; index < 25; index++)
             {
                 var at = start.AddSeconds(index);
-                db.WallComments.Add(new WallComment { Id = Guid.CreateVersion7(at), WallUserId = id, AuthorId = id, Body = $"c{index}", CreatedAt = at });
+                db.Comments.Add(new Comment { Id = Guid.CreateVersion7(at), WallUserId = id, AuthorId = id, Body = $"c{index}", CreatedAt = at });
             }
 
             await db.SaveChangesAsync(Ct);

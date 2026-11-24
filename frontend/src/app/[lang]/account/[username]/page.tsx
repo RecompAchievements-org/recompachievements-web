@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect, unstable_rethrow } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
+import { SavedComments } from "@/components/comments/SavedComments";
 import { ReportButton } from "@/components/moderation/ReportButton";
 import { ProfileBadges, ProfileBadgesSkeleton } from "@/components/profile/ProfileBadges";
 import { ProfileCard, ProfileCardSkeleton } from "@/components/profile/ProfileCard";
@@ -8,12 +9,12 @@ import { ProfileSampleSections, ProfileSampleSectionsSkeleton } from "@/componen
 import { ButtonLink } from "@/components/ui/Button";
 import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { localizePath } from "@/i18n/config";
+import { interpolate } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getPublicPlayer, type PublicPlayer } from "@/lib/api/accounts";
-import { getWallPage, type WallPage } from "@/lib/api/walls";
+import { getCommentPage, type CommentPage } from "@/lib/api/comments";
 import { usernamePattern } from "@/lib/auth/forms";
 import { getCurrentAccount, visitor } from "@/lib/auth/session";
-import { WallComments } from "./WallComments";
 
 type Props = PageProps<"/[lang]/account/[username]">;
 
@@ -59,7 +60,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
   const { profile, auth, comments, moderation } = await getMessages();
 
   let player: PublicPlayer;
-  let wall: WallPage | null = null;
+  let wall: CommentPage | null = null;
   const context = await visitor();
   try {
     const result = await getPublicPlayer(username, context);
@@ -69,7 +70,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
     // One address per player: other casings go to the real username.
     if (player.username !== username) redirect(localizePath(locale, `/account/${player.username}`));
 
-    const page = await getWallPage(player.username, null, locale, context);
+    const page = await getCommentPage({ kind: "wall", username: player.username }, null, locale, context);
     if (page.ok) wall = page.data;
   } catch (error) {
     unstable_rethrow(error);
@@ -117,12 +118,15 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
       </ProfileGrid>
       {/** The wall uses the page's full width, like the comments on a game page. **/}
       {wall ? (
-        <WallComments
-          username={player.username}
+        <SavedComments
+          thread={{ kind: "wall", username: player.username }}
+          heading={interpolate(profile.wall.heading, { username: player.username })}
+          intro={interpolate(profile.wall.intro, { username: player.username })}
+          placeholder={profile.wall.placeholder}
           locale={locale}
           first={wall}
           access={access}
-          messages={profile.wall}
+          messages={comments}
           errors={auth.errors}
           authorLabels={comments.author}
           viewerUsername={viewer?.username ?? null}
@@ -130,7 +134,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
           reportLabels={reportLabels}
         />
       ) : (
-        <p className="text-muted">{profile.wall.unavailable}</p>
+        <p className="text-muted">{comments.unavailable}</p>
       )}
     </>
   );

@@ -110,18 +110,31 @@
     "achievements": "Achievements"
   },
   "comments": {
-    "heading": "Comments",
-    "intro": "Tips, bugs, and setup notes from players of this recomp.",
-    "accountsNotice": "Commenting will need an account. Saved comments are coming soon; until then, what you post here stays on this page only and isn’t saved.",
     "label": "Your comment",
-    "placeholder": "Share a tip, a bug, or your setup…",
     "post": "Post Comment",
-    "empty": "No comments yet.",
-    "you": "You",
-    "justNow": "Just now",
-    "notSaved": "Not saved",
+    "posting": "Posting…",
     "count": "{count} / {max}",
+    "empty": "No comments yet.",
+    "signInToComment": "Sign In to Comment",
+    "emailToComment": "Add and verify an email to comment.",
+    "addEmail": "Add Email",
+    "delete": "Delete",
+    "deleteLabel": "Delete comment by {username}",
+    "confirmDelete": "Confirm Delete",
+    "deleting": "Deleting…",
+    "cancel": "Cancel",
+    "loadMore": "Load More",
+    "loadingMore": "Loading…",
+    "invalid": "Write a comment using visible text, up to 1,000 characters.",
+    "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes.",
+    "loading": "Loading comments…",
+    "reportLabel": "Report comment by {username}",
     "muted": "Your account is muted, so you can’t post comments right now.",
+    "game": {
+      "heading": "Comments",
+      "intro": "Tips, bugs, and setup notes from players of this recomp.",
+      "placeholder": "Share a tip, a bug, or your setup…"
+    },
     "author": {
       "joined": "Joined {date}",
       "open": "Open {username}’s profile",
@@ -237,8 +250,8 @@
         "body": "Alpha sign-up: your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
       },
       {
-        "title": "Profile Walls",
-        "body": "Comments you post on a player’s wall are public and stored until you delete them, the wall’s owner deletes them, your account is deleted, or we remove them."
+        "title": "Comments",
+        "body": "Comments you post on a player’s wall or a game page are public and stored until you delete them, your account is deleted, or we remove them. A wall’s owner can also delete comments on their wall."
       },
       {
         "title": "Profile Photos and Moderation",
@@ -294,7 +307,7 @@
       },
       {
         "title": "Player Comments",
-        "body": "Players are responsible for the comments they post on profile walls. A comment’s author and the wall’s owner can delete it. To report abusive or infringing comments, write to {email}."
+        "body": "Players are responsible for the comments they post on profile walls and game pages. A comment’s author can delete it, and so can a wall’s owner. To report abusive or infringing comments, use the Report button or write to {email}."
       },
       {
         "title": "Player Photos",
@@ -500,7 +513,7 @@
       "intro": "Shown publicly on your profile and comments.",
       "chooseLabel": "Choose a Photo",
       "replaceLabel": "Replace Your Photo",
-        "noFile": "No file chosen",
+      "noFile": "No file chosen",
       "hint": "JPEG, PNG, or WebP. It’s cropped to a square.",
       "rightsBefore": "I own this image or have the right to use it, and it follows the",
       "rulesLink": "community rules",
@@ -615,25 +628,7 @@
     "wall": {
       "heading": "{username} Wall",
       "intro": "Comments from the community for {username}.",
-      "label": "Your comment",
-      "placeholder": "Write something on this wall…",
-      "post": "Post Comment",
-      "posting": "Posting…",
-      "count": "{count} / {max}",
-      "empty": "No comments yet.",
-      "signInToComment": "Sign In to Comment",
-      "emailToComment": "Add and verify an email to comment.",
-      "addEmail": "Add Email",
-      "delete": "Delete",
-      "deleteLabel": "Delete comment by {username}",
-      "confirmDelete": "Confirm Delete",
-      "deleting": "Deleting…",
-      "cancel": "Cancel",
-      "loadMore": "Load More",
-      "loadingMore": "Loading…",
-      "invalid": "Write a comment using visible text, up to 1,000 characters.",
-      "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes.",
-      "reportLabel": "Report comment by {username}"
+      "placeholder": "Write something on this wall…"
     }
   },
   "moderation": {
@@ -666,6 +661,7 @@
     "actionsHeading": "Actions",
     "photoOf": "Profile photo of {username}",
     "viewAccount": "View Account",
+    "viewInContext": "View in Context",
     "reporterDetails": "Reporter’s Details",
     "reportedText": "Reported Text",
     "reportedPhoto": "Reported Photo",
@@ -679,7 +675,7 @@
     "targets": {
       "profile": "Profile",
       "photo": "Photo",
-      "wall_comment": "Comment"
+      "comment": "Comment"
     },
     "reasons": {
       "sexual": "Sexual content or nudity",
@@ -711,7 +707,7 @@
       "targets": {
         "profile": "This profile",
         "photo": "This profile photo",
-        "wall_comment": "This comment"
+        "comment": "This comment"
       },
       "reason": "Reason",
       "details": "Details (optional)",

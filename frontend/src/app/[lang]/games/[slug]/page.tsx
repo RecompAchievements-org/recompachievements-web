@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AchievementRow } from "@/components/game/AchievementRow";
-import { CommentsPreview } from "@/components/game/CommentsPreview";
+import { CommentsSkeleton } from "@/components/comments/CommentsSkeleton";
 import { ConsolePill } from "@/components/game/ConsolePill";
-import { GameComments } from "@/components/game/GameComments";
+import { GameCommentsSection } from "@/components/game/GameCommentsSection";
 import { GameDetailsCard } from "@/components/game/GameDetailsCard";
 import { GameArt } from "@/components/game/GameArt";
 import { GameArtCredits } from "@/components/game/GameArtCredits";
@@ -133,9 +133,9 @@ async function GameDetails({ params }: Pick<Props, "params">) {
         </div>
       </div>
 
-      {/** The signed-out form has the same layout, so nothing shifts when the visitor is known. **/}
-      <Suspense fallback={<CommentsPreview labels={comments} locale={locale} viewer={null} />}>
-        <GameComments />
+      {/** Per-visitor comments stream in after the cached game details. **/}
+      <Suspense fallback={<CommentsSkeleton label={comments.loading} />}>
+        <GameCommentsSection slug={game.slug} />
       </Suspense>
 
       {game.art && <GameArtCredits art={game.art} />}

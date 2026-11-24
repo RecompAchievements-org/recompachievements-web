@@ -3,13 +3,13 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using RecompAchievements.Api.Features.Accounts;
 
-namespace RecompAchievements.Api.Features.Walls;
+namespace RecompAchievements.Api.Features.Comments;
 
-/** Rules for wall comment text. Comments are plain text: never rendered as HTML or Markdown. Text
+/** Rules for comment text on walls and game pages. Comments are plain text: never rendered as HTML or Markdown. Text
  *  needs something visible, and can't contain control characters or the invisible direction
  *  overrides used to disguise text. Emoji joiners and other formatting characters stay allowed.
 **/
-internal static partial class WallText
+internal static partial class CommentText
 {
     public const int MaxLength = 1000;
 
@@ -27,18 +27,18 @@ internal static partial class WallText
     private static partial Regex ExtraBlankLines();
 }
 
-public sealed record CreateWallCommentRequest(
-    [property: Required, MaxLength(WallText.MaxLength)] string Body) : IValidatableObject
+public sealed record CreateCommentRequest(
+    [property: Required, MaxLength(CommentText.MaxLength)] string Body) : IValidatableObject
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (Body is not null && !WallText.IsAllowed(Body))
+        if (Body is not null && !CommentText.IsAllowed(Body))
         {
             yield return new ValidationResult("The comment has no visible text or contains characters that aren't allowed.", [nameof(Body)]);
         }
     }
 }
 
-public sealed record WallCommentResponse(Guid Id, string AuthorUsername, DateTimeOffset AuthorJoinedAt, PlayerAvatarResponse? AuthorAvatar, string Body, DateTimeOffset CreatedAt, bool CanDelete);
+public sealed record CommentResponse(Guid Id, string AuthorUsername, DateTimeOffset AuthorJoinedAt, PlayerAvatarResponse? AuthorAvatar, string Body, DateTimeOffset CreatedAt, bool CanDelete);
 
-public sealed record WallPageResponse(WallCommentResponse[] Comments, Guid? NextCursor);
+public sealed record CommentPageResponse(CommentResponse[] Comments, Guid? NextCursor);

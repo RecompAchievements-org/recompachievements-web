@@ -88,8 +88,9 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - Comment UI is shared through `components/comments/CommentThread.tsx` and always renders plain
   text. Every comment section, including future ones, uses it, so each comment shows its author
   column (`CommentAuthor`: photo with profile preview, username, join date). A muted viewer gets
-  `blockedNotice` instead of the composer in every section; saved comments must also be refused by
-  the API. Wall reads and writes are per visitor (`lib/api/walls.ts`) and never cached.
+  `blockedNotice` instead of the composer in every section; the API refuses their posts too. Saved threads (walls and game
+  pages) use `SavedComments` with a `CommentThreadRef`; reads and writes go through
+  `lib/api/comments.ts`, are per visitor, and are never cached.
 
 ### Internationalization
 
@@ -136,11 +137,9 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/games` — game directory (`GameGrid`)
 - `/games/[slug]` — game detail: info, preview notice, and achievements on the left; a sticky
   `GameDetailsCard` on the right (download and repository links, what the player must own,
-  platforms, version, license); on phones the card follows the header. Below both, a Comments
-  section (`CommentsPreview`) that only works in the browser until saved comments are built:
-  posted text stays in page state, shows the signed-in player as its author (or "You" for a
-  signed-out visitor, with no profile link), is labeled "not saved", and must never be sent to the API
-  before then
+  platforms, version, license); on phones the card follows the header. Below both, saved player
+  comments (`GameCommentsSection`) in their own `<Suspense>`, so the cached game details never wait
+  for per-visitor comments
 - `/sign-up`, `/sign-in` — create an account or sign in (email and password, Discord, GitHub)
 - `/confirm-email` — confirms an account email with the emailed token (button POST)
 - `/forgot-password`, `/reset-password` — set or reset a password through an emailed link

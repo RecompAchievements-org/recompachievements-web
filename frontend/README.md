@@ -86,10 +86,11 @@ src/
 │   │                         # GeneratedArt, FadeInImage (client), GameBackdrop, GameArtCredits,
 │   │                         # GameDetailsCard,
 │   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
-│   │                         # GameComments, CommentsPreview (client, not saved)
+│   │                         # GameCommentsSection (saved comments, per visitor)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, LocaleFlag, SocialLinks, AccountLink,
 │   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner
-│   ├── comments/             # CommentThread and CommentAuthor (client): every comment section
+│   ├── comments/             # CommentThread, CommentAuthor, SavedComments (client), CommentsSkeleton,
+│   │                         # actions.ts: every comment section
 │   ├── moderation/           # ReportButton, ModerationControls (client), ModerationShell, UserSearch
 │   ├── profile/              # ProfilePhoto, ProfileCard, ProfileBadges, BadgeIcon,
 │   │                         # BadgeDetails and PlayerPreview (client popovers), sampleBadges,
@@ -105,7 +106,7 @@ src/
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
-│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached; accounts.ts, walls.ts, moderation.ts)
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached; accounts.ts, comments.ts, moderation.ts)
 │   ├── auth/                 # session.ts: the only code touching account cookies; staff.ts: moderation page guard; forms.ts: shared form rules and error codes
 │   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
 │   ├── turnstile.ts          # Server-side verification of the human-verification challenge
@@ -185,7 +186,9 @@ account pages are `noindex` and left out of the sitemap.
 
 **Public profiles:** `/account/<username>` can be opened by anyone and shows only public data
 (`getPublicPlayer`), labeled sample sections (badges, medals, last achievements earned, subsets earned, completion, last game played), and a
-full-width comment wall (`WallComments`, built on the shared `CommentThread`). Every comment
+full-width comment wall. Walls and game pages both use `SavedComments` (built on the shared
+`CommentThread`) with a thread reference, so they share posting, deleting, reports, mute notices,
+and Load More. Every comment
 section shows each author’s photo, username, and join date (`CommentAuthor`); `PlayerPreview`
 previews their profile and links to it.
 Signed-out visitors can read; accounts with a confirmed email can post; a comment's author and

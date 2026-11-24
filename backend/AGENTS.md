@@ -129,10 +129,12 @@ are security rules; keep every one when changing the code:
   private field; disabled accounts and unconfirmed registrations stay `404`.
 - **Reserved usernames** include every page directly under `/account` (`AccountText`): when adding
   such a page, reserve its name in the same change.
-- **Walls** (`Features/Walls/`): anyone reads; posting needs `CanCollectAchievements` and no active
-  mute; only the
-  author or the wall's owner deletes, and anyone else gets `404`. Bodies are plain text, checked by
-  `WallText`, and must never be rendered as HTML or Markdown.
+- **Comments** (`Features/Comments/`): walls and game pages share one `comments` table (exactly one
+  of `wall_user_id` or `game_id`, enforced by a check) and the rules in `CommentThreads`: anyone
+  reads, posting needs `CanCollectAchievements` and no active mute, and the posting limit counts
+  across all threads. A wall comment's author or the wall's owner deletes it; a game comment only
+  its author; anyone else gets `404`. Bodies are plain text, checked by `CommentText`, and must
+  never be rendered as HTML or Markdown. New comment threads reuse `CommentThreads`.
 - **Profile photos** (`PhotoEndpoints`, `AvatarImages`): never store or serve an upload as received.
   Decode it, refuse anything but a static JPEG, PNG, or WebP, and store only the re-encoded WebP
   files. Storage goes through `IMediaStore`; photo URLs come from `AvatarImages.Urls`.

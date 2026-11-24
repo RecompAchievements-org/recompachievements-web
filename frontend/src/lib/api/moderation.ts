@@ -4,7 +4,7 @@ import type { PlayerAvatar } from "./accounts";
 
 export const reportReasons = ["sexual", "violence", "hate", "harassment", "copyright", "personal_info", "spam", "other"] as const;
 export type ReportReason = (typeof reportReasons)[number];
-export type ReportTarget = "profile" | "photo" | "wall_comment";
+export type ReportTarget = "profile" | "photo" | "comment";
 export type ReportStatus = "open" | "resolved" | "dismissed";
 export type UserRole = "player" | "moderator" | "admin";
 
@@ -51,6 +51,8 @@ export interface ReportDetail {
   resolvedByUsername: string | null;
   resolvedAt: string | null;
   resolutionNote: string | null;
+  // Where a reported comment is shown, while it still exists.
+  commentLocation: { kind: "wall" | "game"; key: string } | null;
   reportedUser: ModerationUser | null;
 }
 

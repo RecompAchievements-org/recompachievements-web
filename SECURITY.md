@@ -35,7 +35,7 @@ In scope:
 - Forging, replaying, or tampering with achievement unlocks (e.g. bypassing request signing)
 - Authentication, session, or API-key weaknesses, including email + password, Discord and GitHub
   sign-in, account linking, and password reset
-- Bypassing who may post or delete wall comments, or private account data appearing on a public
+- Bypassing who may post or delete comments (profile walls and game pages), or private account data appearing on a public
   profile
 - Bypassing moderation roles, changing the audit log, or reaching staff-only data
 - Uploading a file that survives profile photo processing with active or hidden content

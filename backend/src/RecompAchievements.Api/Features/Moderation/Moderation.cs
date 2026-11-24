@@ -7,7 +7,7 @@ internal static class ReportTargets
 {
     public const string Profile = "profile";
     public const string Photo = "photo";
-    public const string WallComment = "wall_comment";
+    public const string Comment = "comment";
 }
 
 internal static class ReportStatuses

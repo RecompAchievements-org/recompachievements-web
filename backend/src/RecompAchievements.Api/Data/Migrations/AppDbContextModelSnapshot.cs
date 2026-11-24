@@ -317,6 +317,53 @@ namespace RecompAchievements.Api.Data.Migrations
                     b.ToTable("alpha_signups", (string)null);
                 });
 
+            modelBuilder.Entity("RecompAchievements.Api.Features.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("body");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid?>("GameId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("game_id");
+
+                    b.Property<Guid?>("WallUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("wall_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_comments");
+
+                    b.HasIndex("AuthorId", "CreatedAt")
+                        .HasDatabaseName("ix_comments_author_id_created_at");
+
+                    b.HasIndex("GameId", "Id")
+                        .HasDatabaseName("ix_comments_game_id_id");
+
+                    b.HasIndex("WallUserId", "Id")
+                        .HasDatabaseName("ix_comments_wall_user_id_id");
+
+                    b.ToTable("comments", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_comments_one_thread", "num_nonnulls(wall_user_id, game_id) = 1");
+                        });
+                });
+
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -725,43 +772,6 @@ namespace RecompAchievements.Api.Data.Migrations
                     b.ToTable("moderation_reports", (string)null);
                 });
 
-            modelBuilder.Entity("RecompAchievements.Api.Features.Walls.WallComment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("author_id");
-
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("body");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<Guid>("WallUserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("wall_user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_wall_comments");
-
-                    b.HasIndex("AuthorId", "CreatedAt")
-                        .HasDatabaseName("ix_wall_comments_author_id_created_at");
-
-                    b.HasIndex("WallUserId", "Id")
-                        .HasDatabaseName("ix_wall_comments_wall_user_id_id");
-
-                    b.ToTable("wall_comments", (string)null);
-                });
-
             modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.UserSession", b =>
                 {
                     b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
@@ -782,6 +792,28 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasConstraintName("fk_user_tokens_users_user_id");
                 });
 
+            modelBuilder.Entity("RecompAchievements.Api.Features.Comments.Comment", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_comments_users_author_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Games.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_comments_games_game_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("WallUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_comments_users_wall_user_id");
+                });
+
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>
                 {
                     b.HasOne("RecompAchievements.Api.Features.Games.AchievementSet", null)
@@ -800,23 +832,6 @@ namespace RecompAchievements.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_achievement_sets_games_game_id");
-                });
-
-            modelBuilder.Entity("RecompAchievements.Api.Features.Walls.WallComment", b =>
-                {
-                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_wall_comments_users_author_id");
-
-                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
-                        .WithMany()
-                        .HasForeignKey("WallUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_wall_comments_users_wall_user_id");
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.AchievementSet", b =>

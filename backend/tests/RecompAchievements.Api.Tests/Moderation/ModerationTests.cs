@@ -116,7 +116,7 @@ public sealed class ModerationTests(ApiFactory factory) : IClassFixture<ApiFacto
         var (_, moderator, _) = await NewPlayer("moderator");
         using var client = factory.CreateWebsiteClient();
         var commentId = await Comment(client, wall, authorSession);
-        using (await Report(client, reporter, author, "wall_comment", commentId))
+        using (await Report(client, reporter, author, "comment", commentId))
         {
         }
 
@@ -131,7 +131,7 @@ public sealed class ModerationTests(ApiFactory factory) : IClassFixture<ApiFacto
         await WithDb(factory, async db =>
         {
             var id = Guid.Parse(commentId);
-            Assert.False(await db.WallComments.AnyAsync(c => c.Id == id, Ct));
+            Assert.False(await db.Comments.AnyAsync(c => c.Id == id, Ct));
             var key = id.ToString();
             Assert.Equal(ReportStatuses.Resolved, await db.ModerationReports.Where(r => r.TargetKey == key).Select(r => r.Status).SingleAsync(Ct));
         });

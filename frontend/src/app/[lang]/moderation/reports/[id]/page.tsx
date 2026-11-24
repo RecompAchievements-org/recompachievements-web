@@ -48,7 +48,9 @@ async function ReportPanel({ params }: Pick<Props, "params">) {
   const { report, reportedUser: user, snapshot, targetKey, targetStillExists } = result.data;
   const isMuted = user?.isMuted ?? false;
   const canAct = !!user && user.username !== staff.username && (staff.role === "admin" || user.role === "player");
-  const isComment = report.targetType === "wall_comment";
+  const isComment = report.targetType === "comment";
+  const location = result.data.commentLocation;
+  const contextHref = location && localizePath(locale, location.kind === "wall" ? `/account/${location.key}` : `/games/${location.key}`);
 
   return (
     <ModerationShell locale={locale} copy={copy} active={null}>
@@ -65,11 +67,18 @@ async function ReportPanel({ params }: Pick<Props, "params">) {
               .replace("{reporter}", report.reporterUsername ?? copy.deletedAccount)}{" "}
             · {formatModerationDate(locale, report.createdAt)}
           </p>
-          {user && (
-            <Link href={localizePath(locale, `/moderation/users/${user.username}`)} className="self-start text-sm font-semibold text-accent underline hover:text-accent-strong">
-              {copy.viewAccount}
-            </Link>
-          )}
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {user && (
+              <Link href={localizePath(locale, `/moderation/users/${user.username}`)} className="text-sm font-semibold text-accent underline hover:text-accent-strong">
+                {copy.viewAccount}
+              </Link>
+            )}
+            {contextHref && (
+              <Link href={contextHref} className="text-sm font-semibold text-accent underline hover:text-accent-strong">
+                {copy.viewInContext}
+              </Link>
+            )}
+          </div>
           {report.details && (
             <div className="flex flex-col gap-1">
               <h2 className="text-sm font-semibold">{copy.reporterDetails}</h2>

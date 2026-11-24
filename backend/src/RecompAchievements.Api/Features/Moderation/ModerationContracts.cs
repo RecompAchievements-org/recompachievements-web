@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using RecompAchievements.Api.Features.Accounts;
-using RecompAchievements.Api.Features.Walls;
+using RecompAchievements.Api.Features.Comments;
 
 namespace RecompAchievements.Api.Features.Moderation;
 
@@ -8,11 +8,11 @@ internal static class ModerationText
 {
     public const int MaxLength = 500;
 
-    public static string? Clean(string? text) => string.IsNullOrWhiteSpace(text) ? null : WallText.Clean(text);
+    public static string? Clean(string? text) => string.IsNullOrWhiteSpace(text) ? null : CommentText.Clean(text);
 
     public static IEnumerable<ValidationResult> CheckReason(string? reason)
     {
-        if (reason is not null && !WallText.IsAllowed(reason))
+        if (reason is not null && !CommentText.IsAllowed(reason))
         {
             yield return new ValidationResult("The reason has no visible text or contains characters that aren't allowed.", ["Reason"]);
         }
@@ -20,7 +20,7 @@ internal static class ModerationText
 }
 
 public sealed record CreateReportRequest(
-    [property: Required, AllowedValues(ReportTargets.Profile, ReportTargets.Photo, ReportTargets.WallComment)] string TargetType,
+    [property: Required, AllowedValues(ReportTargets.Profile, ReportTargets.Photo, ReportTargets.Comment)] string TargetType,
     [property: Required, RegularExpression(AccountRules.UsernamePattern)] string TargetUsername,
     Guid? CommentId,
     [property: Required, AllowedValues("sexual", "violence", "hate", "harassment", "copyright", "personal_info", "spam", "other")] string Reason,
@@ -28,12 +28,12 @@ public sealed record CreateReportRequest(
 {
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (!string.IsNullOrWhiteSpace(Details) && !WallText.IsAllowed(Details))
+        if (!string.IsNullOrWhiteSpace(Details) && !CommentText.IsAllowed(Details))
         {
             yield return new ValidationResult("The details contain characters that aren't allowed.", [nameof(Details)]);
         }
 
-        if (TargetType == ReportTargets.WallComment && CommentId is null)
+        if (TargetType == ReportTargets.Comment && CommentId is null)
         {
             yield return new ValidationResult("A comment report needs the comment.", [nameof(CommentId)]);
         }
@@ -82,7 +82,11 @@ public sealed record ReportDetailResponse(
     string? ResolvedByUsername,
     DateTimeOffset? ResolvedAt,
     string? ResolutionNote,
+    CommentLocationResponse? CommentLocation,
     ModerationUserResponse? ReportedUser);
+
+// Where a reported comment is shown: Kind "wall" with the wall owner's username, or "game" with its slug.
+public sealed record CommentLocationResponse(string Kind, string Key);
 
 public sealed record ModerationActionResponse(
     Guid Id,

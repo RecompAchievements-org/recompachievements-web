@@ -116,8 +116,8 @@ internal static partial class ModerationEndpoints
         string? snapshot = null;
         switch (request.TargetType)
         {
-            case ReportTargets.WallComment:
-                var comment = await db.WallComments
+            case ReportTargets.Comment:
+                var comment = await db.Comments
                     .Where(c => c.Id == request.CommentId && c.AuthorId == target.Id)
                     .Select(c => new { c.Id, c.Body })
                     .FirstOrDefaultAsync(cancellationToken);
@@ -225,10 +225,10 @@ internal static partial class ModerationEndpoints
 
         var summary = await Summaries(db, db.ModerationReports.Where(r => r.Id == id)).SingleAsync(cancellationToken);
         var reported = await db.Users.FirstOrDefaultAsync(u => u.Id == report.ReportedUserId, cancellationToken);
+        var location = await CommentLocationAsync(db, report, cancellationToken);
         var stillExists = report.TargetType switch
         {
-            ReportTargets.WallComment => Guid.TryParse(report.TargetKey, out var commentId)
-                && await db.WallComments.AnyAsync(c => c.Id == commentId, cancellationToken),
+            ReportTargets.Comment => location is not null,
             ReportTargets.Photo => reported?.AvatarKey == report.TargetKey,
             _ => reported is not null,
         };
@@ -244,6 +244,7 @@ internal static partial class ModerationEndpoints
             resolver,
             report.ResolvedAt,
             report.ResolutionNote,
+            location,
             reported is null ? null : await UserSummaryAsync(db, media, time, reported, cancellationToken)));
     }
 
@@ -274,6 +275,31 @@ internal static partial class ModerationEndpoints
             AvatarImages.Urls(media, user.AvatarKey),
             openReports,
             actions);
+    }
+
+    // Where the reported comment still is, or null once it's gone.
+    private static async Task<CommentLocationResponse?> CommentLocationAsync(AppDbContext db, ModerationReport report, CancellationToken cancellationToken)
+    {
+        if (report.TargetType != ReportTargets.Comment || !Guid.TryParse(report.TargetKey, out var commentId))
+        {
+            return null;
+        }
+
+        var thread = await db.Comments
+            .Where(c => c.Id == commentId)
+            .Select(c => new
+            {
+                Wall = db.Users.Where(u => u.Id == c.WallUserId).Select(u => u.Username).FirstOrDefault(),
+                Game = db.Games.Where(g => g.Id == c.GameId).Select(g => g.Slug).FirstOrDefault(),
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return thread switch
+        {
+            { Wall: { } wall } => new CommentLocationResponse("wall", wall),
+            { Game: { } game } => new CommentLocationResponse("game", game),
+            _ => null,
+        };
     }
 
     private static async Task<Ok<ModerationActionPageResponse>> ListLogAsync(Guid? before, AppDbContext db, CancellationToken cancellationToken)
@@ -327,7 +353,7 @@ internal static partial class ModerationEndpoints
         var kind = status == ReportStatuses.Resolved ? ModerationActionKinds.ResolveReport : ModerationActionKinds.DismissReport;
         await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
         var now = time.GetUtcNow();
-        var reason = WallTextClean(request.Reason);
+        var reason = ReasonText(request.Reason);
         db.ModerationActions.Add(new ModerationAction { ModeratorId = staff.Id, TargetUserId = report.ReportedUserId, Action = kind, ReportId = id, Reason = reason, CreatedAt = now });
         await db.SaveChangesAsync(cancellationToken);
         await db.ModerationReports.Where(r => r.Id == id).ExecuteUpdateAsync(set => set
@@ -352,7 +378,7 @@ internal static partial class ModerationEndpoints
         CancellationToken cancellationToken)
     {
         var staff = Staff(context);
-        var comment = await db.WallComments.AsTracking().FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+        var comment = await db.Comments.AsTracking().FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         if (comment is null)
         {
             return TypedResults.NotFound();
@@ -365,11 +391,11 @@ internal static partial class ModerationEndpoints
         }
 
         await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
-        db.WallComments.Remove(comment);
-        var reporters = await RecordAsync(db, time, staff, author.Id, ModerationActionKinds.RemoveComment, request.Reason, request.ReportId, ReportTargets.WallComment, id.ToString(), comment.Body, null, cancellationToken);
+        db.Comments.Remove(comment);
+        var reporters = await RecordAsync(db, time, staff, author.Id, ModerationActionKinds.RemoveComment, request.Reason, request.ReportId, ReportTargets.Comment, id.ToString(), comment.Body, null, cancellationToken);
         await transaction.CommitAsync(cancellationToken);
 
-        await links.SendModerationNoticeAsync(author, AccountEmailKind.ContentRemoved, WallTextClean(request.Reason), null, cancellationToken);
+        await links.SendModerationNoticeAsync(author, AccountEmailKind.ContentRemoved, ReasonText(request.Reason), null, cancellationToken);
         await NotifyReportersAsync(db, links, reporters, AccountEmailKind.ReportActioned, cancellationToken);
         return TypedResults.Ok(new ModerationResultResponse("removed", true));
     }
@@ -403,7 +429,7 @@ internal static partial class ModerationEndpoints
         await transaction.CommitAsync(cancellationToken);
 
         var purged = await PhotoEndpoints.RemoveFilesAsync(media, prefix, loggers.CreateLogger(nameof(ModerationEndpoints)), cancellationToken);
-        await links.SendModerationNoticeAsync(user, AccountEmailKind.ContentRemoved, WallTextClean(request.Reason), null, cancellationToken);
+        await links.SendModerationNoticeAsync(user, AccountEmailKind.ContentRemoved, ReasonText(request.Reason), null, cancellationToken);
         await NotifyReportersAsync(db, links, reporters, AccountEmailKind.ReportActioned, cancellationToken);
         return TypedResults.Ok(new ModerationResultResponse("removed", purged));
     }
@@ -485,7 +511,7 @@ internal static partial class ModerationEndpoints
         var reporters = await RecordAsync(db, time, staff, user.Id, ModerationActionKinds.Mute, request.Reason, request.ReportId, null, null, null, until, cancellationToken);
         await transaction.CommitAsync(cancellationToken);
 
-        await links.SendModerationNoticeAsync(user, AccountEmailKind.AccountMuted, WallTextClean(request.Reason), until, cancellationToken);
+        await links.SendModerationNoticeAsync(user, AccountEmailKind.AccountMuted, ReasonText(request.Reason), until, cancellationToken);
         await NotifyReportersAsync(db, links, reporters, AccountEmailKind.ReportActioned, cancellationToken);
         return TypedResults.Ok(new ModerationResultResponse("muted", true));
     }
@@ -551,7 +577,7 @@ internal static partial class ModerationEndpoints
         await transaction.CommitAsync(cancellationToken);
 
         var purged = prefix is null || await PhotoEndpoints.RemoveFilesAsync(media, prefix, loggers.CreateLogger(nameof(ModerationEndpoints)), cancellationToken);
-        await links.SendModerationNoticeAsync(user, AccountEmailKind.AccountDisabled, WallTextClean(request.Reason), null, cancellationToken);
+        await links.SendModerationNoticeAsync(user, AccountEmailKind.AccountDisabled, ReasonText(request.Reason), null, cancellationToken);
         await NotifyReportersAsync(db, links, reporters, AccountEmailKind.ReportActioned, cancellationToken);
         return TypedResults.Ok(new ModerationResultResponse("disabled", purged));
     }
@@ -635,7 +661,7 @@ internal static partial class ModerationEndpoints
         CancellationToken cancellationToken)
     {
         var now = time.GetUtcNow();
-        var note = WallTextClean(reason);
+        var note = ReasonText(reason);
         db.ModerationActions.Add(new ModerationAction
         {
             ModeratorId = staff.Id,
@@ -681,7 +707,7 @@ internal static partial class ModerationEndpoints
         return users.FirstOrDefaultAsync(u => u.NormalizedUsername == normalized, cancellationToken);
     }
 
-    private static string WallTextClean(string reason) => ModerationText.Clean(reason)!;
+    private static string ReasonText(string reason) => ModerationText.Clean(reason)!;
 
     [LoggerMessage(Level = LogLevel.Critical, Message = "Legal hold for user {UserId} kept no evidence copy")]
     private static partial void LogEvidenceNotKept(ILogger logger, Guid userId);

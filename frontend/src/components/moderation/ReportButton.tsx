@@ -10,7 +10,7 @@ export interface ReportLabels {
   title: string;
   intro: string;
   what: string;
-  targets: { profile: string; photo: string; wall_comment: string };
+  targets: { profile: string; photo: string; comment: string };
   reason: string;
   reasons: Record<"sexual" | "violence" | "hate" | "harassment" | "copyright" | "personal_info" | "spam" | "other", string>;
   details: string;

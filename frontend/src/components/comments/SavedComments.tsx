@@ -2,23 +2,27 @@
 
 import Link from "next/link";
 import { useActionState, useState, useTransition } from "react";
-import type { CommentAuthorLabels } from "@/components/comments/CommentAuthor";
-import { CommentComposer, CommentThread } from "@/components/comments/CommentThread";
 import { ReportButton, type ReportLabels } from "@/components/moderation/ReportButton";
 import { localizePath, type Locale } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
 import type { Messages } from "@/i18n/server";
-import type { WallComment, WallPage } from "@/lib/api/walls";
+import type { CommentPage, CommentThreadRef, SavedComment } from "@/lib/api/comments";
 import type { AuthError } from "@/lib/auth/forms";
-import { deleteWallCommentAction, loadMoreWallComments, postWallCommentAction, type WallPostState } from "./actions";
+import { deleteCommentAction, loadMoreComments, postCommentAction, type CommentPostState } from "./actions";
+import type { CommentAuthorLabels } from "./CommentAuthor";
+import { CommentComposer, CommentThread } from "./CommentThread";
 
-interface WallCommentsProps {
-  username: string;
+export interface SavedCommentsProps {
+  thread: CommentThreadRef;
+  // The section's own heading, intro, and placeholder (a wall's or a game page's).
+  heading: string;
+  intro: string;
+  placeholder: string;
   locale: Locale;
-  first: WallPage;
+  first: CommentPage;
   // What this visitor can do: post, or what they need first.
   access: "post" | "signIn" | "email";
-  messages: Messages["profile"]["wall"];
+  messages: Messages["comments"];
   errors: Messages["auth"]["errors"];
   authorLabels: CommentAuthorLabels;
   viewerUsername: string | null;
@@ -27,23 +31,37 @@ interface WallCommentsProps {
   reportLabels: ReportLabels;
 }
 
-/** A player's wall. The first page comes from the server and refreshes after each post or delete;
- *  older pages are added here with Load More.
+/** Saved comments for any thread: walls and game pages. The first page comes from the server and
+ *  refreshes after each post or delete; older pages are added here with Load More.
 **/
-export function WallComments({ username, locale, first, access, messages, errors, authorLabels, viewerUsername, mutedNotice, reportLabels }: WallCommentsProps) {
+export function SavedComments({
+  thread,
+  heading,
+  intro,
+  placeholder,
+  locale,
+  first,
+  access,
+  messages,
+  errors,
+  authorLabels,
+  viewerUsername,
+  mutedNotice,
+  reportLabels,
+}: SavedCommentsProps) {
   const [draft, setDraft] = useState("");
-  const [older, setOlder] = useState<WallComment[]>([]);
+  const [older, setOlder] = useState<SavedComment[]>([]);
   const [cursor, setCursor] = useState<string | null | undefined>(undefined);
   const [removed, setRemoved] = useState<string[]>([]);
   const [confirming, setConfirming] = useState<string | null>(null);
   const [actionError, setActionError] = useState<AuthError | "load" | null>(null);
   const [busy, startTransition] = useTransition();
 
-  const [state, formAction, posting] = useActionState(async (previous: WallPostState, formData: FormData) => {
-    const result = await postWallCommentAction(previous, formData);
+  const [state, formAction, posting] = useActionState(async (previous: CommentPostState, formData: FormData) => {
+    const result = await postCommentAction(previous, formData);
     if (result.status === "posted") setDraft("");
     return result;
-  }, { status: "idle" } satisfies WallPostState);
+  }, { status: "idle" } satisfies CommentPostState);
 
   const nextCursor = cursor === undefined ? first.nextCursor : cursor;
   const seen = new Set<string>();
@@ -59,7 +77,7 @@ export function WallComments({ username, locale, first, access, messages, errors
     if (!nextCursor) return;
     setActionError(null);
     startTransition(async () => {
-      const page = await loadMoreWallComments(username, nextCursor, locale);
+      const page = await loadMoreComments(thread, nextCursor, locale);
       if (!page) {
         setActionError("load");
         return;
@@ -72,7 +90,7 @@ export function WallComments({ username, locale, first, access, messages, errors
   function remove(id: string) {
     setActionError(null);
     startTransition(async () => {
-      const error = await deleteWallCommentAction(username, id);
+      const error = await deleteCommentAction(thread, id);
       setConfirming(null);
       if (error) {
         setActionError(error);
@@ -89,14 +107,15 @@ export function WallComments({ username, locale, first, access, messages, errors
         action={formAction}
         error={state.status === "error" ? errorText(state.error) : null}
         label={messages.label}
-        placeholder={messages.placeholder}
+        placeholder={placeholder}
         postLabel={posting ? messages.posting : messages.post}
         countTemplate={messages.count}
         draft={draft}
         onDraftChange={setDraft}
         pending={posting}
       >
-        <input type="hidden" name="username" value={username} />
+        <input type="hidden" name="threadKind" value={thread.kind} />
+        <input type="hidden" name="threadKey" value={thread.kind === "wall" ? thread.username : thread.slug} />
       </CommentComposer>
     ) : (
       <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl border border-border bg-surface p-5 text-sm text-muted">
@@ -119,8 +138,8 @@ export function WallComments({ username, locale, first, access, messages, errors
 
   return (
     <CommentThread
-      heading={interpolate(messages.heading, { username })}
-      intro={interpolate(messages.intro, { username })}
+      heading={heading}
+      intro={intro}
       empty={messages.empty}
       locale={locale}
       authorLabels={authorLabels}
@@ -136,7 +155,7 @@ export function WallComments({ username, locale, first, access, messages, errors
             {viewerUsername && viewerUsername !== comment.authorUsername && (
               <ReportButton
                 username={comment.authorUsername}
-                targets={["wall_comment"]}
+                targets={["comment"]}
                 commentId={comment.id}
                 labels={reportLabels}
                 errors={errors}
@@ -145,23 +164,23 @@ export function WallComments({ username, locale, first, access, messages, errors
               />
             )}
             {!comment.canDelete ? null : confirming === comment.id ? (
-          <>
-            <button type="button" disabled={busy} onClick={() => remove(comment.id)} className={`${actionButton} text-danger hover:bg-surface-raised`}>
-              {busy ? messages.deleting : messages.confirmDelete}
-            </button>
-            <button type="button" disabled={busy} onClick={() => setConfirming(null)} className={`${actionButton} text-muted hover:bg-surface-raised`}>
-              {messages.cancel}
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            aria-label={interpolate(messages.deleteLabel, { username: comment.authorUsername })}
-            onClick={() => setConfirming(comment.id)}
-            className={`${actionButton} text-muted hover:bg-surface-raised hover:text-danger`}
-          >
-            {messages.delete}
-          </button>
+              <>
+                <button type="button" disabled={busy} onClick={() => remove(comment.id)} className={`${actionButton} text-danger hover:bg-surface-raised`}>
+                  {busy ? messages.deleting : messages.confirmDelete}
+                </button>
+                <button type="button" disabled={busy} onClick={() => setConfirming(null)} className={`${actionButton} text-muted hover:bg-surface-raised`}>
+                  {messages.cancel}
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                aria-label={interpolate(messages.deleteLabel, { username: comment.authorUsername })}
+                onClick={() => setConfirming(comment.id)}
+                className={`${actionButton} text-muted hover:bg-surface-raised hover:text-danger`}
+              >
+                {messages.delete}
+              </button>
             )}
           </>
         ),

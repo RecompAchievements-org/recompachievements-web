@@ -303,8 +303,8 @@ the rest, and fields marked *later*, arrive with their features.
 | Table | Key fields |
 |---|---|
 | `users` (*built*) | `username` (unique ignoring case), `email` (unique), `email_confirmed`, `discord_id` and `github_id` (each unique), `password_hash` (null until a password is set), `locale`, `is_enabled`, `created_at`, `edited_at` (null until first edited), `last_activity_at`; only enabled accounts with a confirmed email can collect achievements; `role` (`player`, `moderator`, `admin`), `muted_until`, `avatar_key`, `avatar_terms_accepted_at` |
-| `wall_comments` (*built*) | `wall_user_id`, `author_id`, `body` (plain text, up to 1000 characters), `created_at` (comments on public profiles) |
-| `moderation_reports` (*built*) | `reporter_id`, `reported_user_id`, `target_type` (`profile`, `photo`, `wall_comment`), `target_key`, `reason`, `details`, `snapshot`, `status` (`open`, `resolved`, `dismissed`), `resolved_by_id`, `resolved_at`, `resolution_note`, `created_at`; one open report per reporter and target |
+| `comments` (*built*) | `wall_user_id` or `game_id` (exactly one), `author_id`, `body` (plain text, up to 1000 characters), `created_at` (comments on profile walls and game pages) |
+| `moderation_reports` (*built*) | `reporter_id`, `reported_user_id`, `target_type` (`profile`, `photo`, `comment`), `target_key`, `reason`, `details`, `snapshot`, `status` (`open`, `resolved`, `dismissed`), `resolved_by_id`, `resolved_at`, `resolution_note`, `created_at`; one open report per reporter and target |
 | `moderation_actions` (*built*) | `moderator_id`, `target_user_id`, `action`, `report_id`, `reason`, `evidence`, `expires_at`, `created_at`; append-only audit log of staff actions |
 | `user_sessions` (*built*) | `user_id`, `token_hash`, `last_seen_at`, `expires_at` (website sign-ins, not game sessions) |
 | `user_tokens` (*built*) | `user_id`, `purpose` (`confirm_email`, `set_password`), `email`, `token_hash`, `expires_at` (single-use emailed links) |

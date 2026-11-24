@@ -70,7 +70,7 @@ backend/
 │   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
 │       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, profile photos, account emails, cleanup
-│       ├── Walls/                    # Comments on public player profiles
+│       ├── Comments/                 # Comments on profile walls and game pages (one shared table)
 │       ├── Moderation/               # Reports, staff actions, and the audit log
 │       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
@@ -170,8 +170,14 @@ disabled accounts, and unconfirmed registrations). Names of pages under `/accoun
 | `POST /wall` | Signed in with a confirmed email (`403 email_required`) and not muted (`403 account_muted`): posts plain text, up to 1000 characters. Rate limited |
 | `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |
 
+**Game comments** (`/api/v1/games/{slug}/comments`; `404` for unknown games) share the wall's
+rules and response shape: anyone reads, posting needs a confirmed email and no active mute, and the
+posting limit is shared with walls. `DELETE /{id}` is for the comment's author only (anyone else
+gets `404`); staff remove others through moderation. Removing a game from the catalog deletes its
+comments.
+
 **Moderation.** `POST /api/v1/reports` lets a signed-in player report a `profile`, `photo`, or
-`wall_comment` (`202`, also for a repeated open report; `400 cannot_report_self`; rate limited).
+`comment` (`202`, also for a repeated open report; `400 cannot_report_self`; rate limited).
 Everything under `/api/v1/moderation` is for staff: anyone else gets `404`, and the role is read
 from the database on every request. Writes need a reason, are rate limited, commit with their audit
 entry, and answer `403 moderation_forbidden` when the target isn't allowed.
@@ -182,7 +188,7 @@ entry, and answer `403 moderation_forbidden` when the target isn't allowed.
 | `POST /reports/{id}/resolve`, `/dismiss` | Closes a report and tells the reporter the outcome |
 | `GET /users/{username}` | Account summary for staff, with no email or platform IDs |
 | `GET /log?before=` | The append-only audit log |
-| `POST /comments/{id}/remove` | Removes a wall comment and emails its author the reason |
+| `POST /comments/{id}/remove` | Removes a comment (wall or game page) and emails its author the reason; report reviews include `commentLocation` to open it in context |
 | `POST /users/{username}/photo/remove` | Deletes a photo, purges it from the CDN, and emails the reason |
 | `POST /users/{username}/mute`, `/unmute` | Mutes until a date, or ends the mute |
 | `POST /users/{username}/disable`, `/enable` | Disables an account (ends its sessions and removes its photo) or enables it |

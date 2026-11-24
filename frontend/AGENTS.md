@@ -85,6 +85,9 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - `/moderation` pages call `requireStaff()` inside `<Suspense>` and are `noindex`. That guard only
   hides the page; every permission is enforced by the API. New comment sections offer `ReportButton`
   once their comments are saved.
+- Forum posts render only through `components/forum/Markdown.tsx` (headings, paragraphs, lists,
+  bold, italic, code, and links to `https://` or site paths). Never render post text as HTML or
+  add a Markdown library without asking. The editor preview uses the same renderer.
 - Comment UI is shared through `components/comments/CommentThread.tsx` and always renders plain
   text. Every comment section, including future ones, uses it, so each comment shows its author
   column (`CommentAuthor`: photo with profile preview, username, join date). A muted viewer gets
@@ -123,7 +126,7 @@ language on unprefixed visits.
 - Brand names and code tokens (`RecompAchievements`, `GitHub`, `AGPL-3.0`) are wrapped in
   `translate="no"` so browser auto-translation leaves them intact.
 
-### Routes (v0.1)
+### Routes (v1.0)
 
 Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
 `src/app/[lang]/`.
@@ -164,6 +167,11 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   activity), account standing (an active mute, or "None"), profile photo (upload, replace, remove), email (add and confirm one when missing), connected platforms,
   password (worded as "change" or "set" depending on whether one exists), sign out
 - `/rules` — public community rules; keep them in step with moderation behavior and the content policy
+- `/forum` — forum home: each category with its Pinned and Recent Posts sections (skeletons match);
+  `/forum/[category]` lists published posts in numbered pages of 25
+  (`?page=`), and admins also see drafts and New Post; `/forum/[category]/[slug]` shows a post;
+  `/forum/[category]/new` and `/forum/[category]/[slug]/edit` are the admin editor (`requireAdmin`,
+  `noindex`). Published reads are cached with the `forum` tag; editor actions call `updateTag`
 - `/moderation` — staff report queue; `/moderation/reports/[id]`, `/moderation/users/[username]`, and
   `/moderation/log` review a report, an account, and the audit log
 - `/account/messages` — placeholder for messages between players; nothing is sent or stored

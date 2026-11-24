@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { FormMessage } from "@/components/auth/FormParts";
-import { PlatformButtons } from "@/components/auth/PlatformButtons";
+import { PlatformButtons, PlatformButtonsSkeleton } from "@/components/auth/PlatformButtons";
 import { localeAlternates, localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
@@ -30,7 +30,7 @@ export default async function SignInPage({ searchParams }: PageProps<"/[lang]/si
       <Suspense>
         <CallbackError searchParams={searchParams} />
       </Suspense>
-      <Suspense>
+      <Suspense fallback={<PlatformButtonsSkeleton label={auth.platformsLoading} />}>
         <PlatformButtons />
       </Suspense>
       <SignInForm locale={locale} forgotHref={localizePath(locale, "/forgot-password")} messages={auth} />

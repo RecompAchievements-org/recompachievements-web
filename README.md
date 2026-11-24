@@ -9,10 +9,11 @@ native PC ports built via **static recompilation** — such as N64, GameCube, PS
 recomp projects (e.g. *Zelda 64: Recompiled*, *bbport* for Bloodborne) — that run outside
 traditional emulators.
 
-> 🚧 **Status: alpha (v0.1).** The website and the API are live, with the alpha tester sign-up
-> open, a game directory of preview achievement sets, and player accounts (email and password,
-> Discord, or GitHub) with public profiles, profile photos, comment walls, and community
-> moderation. The developer portal and the C/C++ SDK come next.
+> 🚧 **Status: alpha (v1.0).** The website and the API are live, with the alpha tester sign-up
+> open, a game directory of preview achievement sets, player accounts (email and password,
+> Discord, or GitHub) with public profiles, profile photos, and comments, community moderation,
+> and a forum for project news. Badges, medals, scores, and progress are previews with sample data
+> for now. The developer portal and the C/C++ SDK come next.
 
 ---
 
@@ -153,7 +154,9 @@ Data: `users` (username, email, confirmation, Discord and GitHub IDs, password h
 role, mute end, profile photo, created, edited, and last activity dates), `user_sessions`
 (hashed session tokens), `user_tokens` (hashed single-use email links), `comments`
 (plain-text comments on profile walls and game pages), `moderation_reports`, and the append-only
-`moderation_actions` audit log. Endpoints are listed in
+`moderation_actions` audit log. The forum uses `forum_categories` (each decides who may post and
+whether posts take comments) and `forum_posts` (Markdown text in English with optional Spanish and
+Portuguese). Endpoints are listed in
 [`backend/README.md`](backend/README.md#endpoints).
 
 ### Community moderation
@@ -166,7 +169,7 @@ with how to appeal. **Admins** also manage roles. Copyright complaints use notic
 valid requests to `contact@recompachievements.org` are handled within 5 business days, and repeat
 infringers are disabled. The public rules are at `/rules`.
 
-### Website pages (v0.1)
+### Website pages (v1.0)
 
 | Route | Page |
 |---|---|
@@ -184,6 +187,7 @@ infringers are disabled. The public rules are at `/rules`.
 | `/privacy` | Privacy notice |
 | `/content-policy` | What the site hosts, image sources, and removal requests |
 | `/rules` | Community rules: allowed content, copyright, reports, consequences, and appeals |
+| `/forum` | Forum home: each category with its pinned posts and five most recent posts; `/forum/news` lists official announcements (admins post, no comments), and `/forum/news/[slug]` shows one post. Admins write and edit posts at `/forum/news/new` and `/forum/news/[slug]/edit` |
 | `/moderation` | Staff only: report queue, report and account reviews, and the audit log |
 | `/games` | Game directory |
 | `/games/[slug]` | Game detail — achievements, points, rarity, and saved player comments |
@@ -255,6 +259,7 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Profile photos and community moderation: reports, roles, content removal, mutes, disabled
   accounts, an audit log, and public community rules
 - [x] Saved game comments, sharing the wall's rules, reports, and moderation
+- [x] Forum with an admin-only News category and the Alpha v1.0 announcement
 - [ ] Developer portal. It **replaces the JSON game catalog**: games and achievements are then edited
   only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK

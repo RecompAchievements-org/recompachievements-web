@@ -12,6 +12,7 @@
     "mainNav": "Principal",
     "github": "GitHub",
     "games": "Jogos",
+    "forum": "Fórum",
     "signIn": "Entrar",
     "account": "Sua conta: {username}",
     "accountMenu": {
@@ -256,7 +257,7 @@
       },
       {
         "title": "Comentários",
-        "body": "Os comentários que você publica no mural de um jogador ou na página de um jogo são públicos e ficam guardados até você excluí-los, sua conta ser apagada ou nós os removermos. O dono de um mural também pode excluir os comentários do mural."
+        "body": "Os comentários que você publica no mural de um jogador ou na página de um jogo são públicos e ficam guardados até você excluí-los, sua conta ser apagada ou nós os removermos. O dono de um mural também pode excluir os comentários do mural. As publicações do fórum são escritas pela equipe RecompAchievements e mostram o nome de usuário de quem as escreveu."
       },
       {
         "title": "Fotos de perfil e moderação",
@@ -328,6 +329,7 @@
     "privacyLink": "aviso de privacidade",
     "agreement": "Ao criar uma conta, você concorda com nosso {privacy}.",
     "platformButton": "Continuar com {platform}",
+    "platformsLoading": "Carregando opções de entrada…",
     "or": "ou",
     "emailRequiredBanner": "Adicione e verifique um e-mail para começar a ganhar conquistas.",
     "emailRequiredAction": "Adicionar e-mail",
@@ -833,5 +835,77 @@
         "body": "Se você acha que uma decisão foi errada, escreva para {email} com seu nome de usuário e o motivo. Uma pessoa vai analisar."
       }
     ]
+  },
+  "forum": {
+    "metaTitle": "Fórum",
+    "metaDescription": "Notícias e anúncios do projeto RecompAchievements.",
+    "title": "Fórum",
+    "intro": "Notícias e anúncios do projeto RecompAchievements.",
+    "loading": "Carregando o fórum…",
+    "unavailable": "Não foi possível carregar o fórum. Tente novamente em alguns minutos.",
+    "postCount": {
+      "one": "{count} publicação",
+      "other": "{count} publicações"
+    },
+    "noPosts": "Ainda não há publicações.",
+    "backToForum": "Fórum",
+    "backToCategory": "{category}",
+    "team": "Equipe RecompAchievements",
+    "createdOn": "Criada em {date}",
+    "editedOn": "Editada em {date}",
+    "englishOnly": "Esta publicação ainda não está disponível no seu idioma, então é mostrada em inglês.",
+    "newPost": "Nova publicação",
+    "edit": "Editar publicação",
+    "drafts": "Rascunhos",
+    "draftBadge": "Rascunho",
+    "pagination": {
+      "label": "Páginas de publicações",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "pageOf": "Página {page} de {total}",
+      "goToPage": "Página {page}"
+    },
+    "editor": {
+      "newTitle": "Nova publicação",
+      "editTitle": "Editar publicação",
+      "languages": "Idiomas da publicação",
+      "language": {
+        "en": "Inglês",
+        "es": "Espanhol (opcional)",
+        "pt": "Português (opcional)"
+      },
+      "titleLabel": "Título",
+      "bodyLabel": "Conteúdo",
+      "bodyHint": "Formatação: ## Título, ### Subtítulo, **negrito**, *itálico*, `código`, listas com - ou 1., e [links](https://…) ou caminhos do site como [regras](/rules).",
+      "write": "Escrever",
+      "preview": "Prévia",
+      "previewEmpty": "Ainda não há nada para mostrar.",
+      "slugLabel": "Endereço",
+      "slugHint": "Letras minúsculas, números e hifens. Não pode mudar depois de publicar.",
+      "slugLocked": "Esta publicação já foi publicada, então o endereço é fixo.",
+      "saveDraft": "Salvar rascunho",
+      "publish": "Publicar",
+      "update": "Atualizar publicação",
+      "unpublish": "Despublicar",
+      "saving": "Salvando…",
+      "delete": "Excluir publicação",
+      "deleteTitle": "Excluir esta publicação?",
+      "deleteBody": "Isso não pode ser desfeito, e o endereço deixa de funcionar para todos.",
+      "deleteConfirm": "Excluir publicação",
+      "cancel": "Cancelar",
+      "errors": {
+        "invalid": "Confira o título, o conteúdo e o endereço. O inglês é obrigatório e só alguns caracteres são permitidos.",
+        "slug_taken": "Outra publicação já usa esse endereço.",
+        "slug_locked": "O endereço de uma publicação publicada não pode mudar.",
+        "rateLimited": "Muitas alterações. Espere alguns minutos e tente novamente.",
+        "unavailable": "Não foi possível salvar a publicação. Tente novamente."
+      },
+      "pinLabel": "Fixar esta publicação",
+      "pinHint": "As publicações fixadas ficam na seção Fixadas do fórum até você desafixá-las."
+    },
+    "pinned": "Fixadas",
+    "recent": "Publicações recentes",
+    "noPinned": "Não há publicações fixadas.",
+    "pinnedBadge": "Fixada"
   }
 }

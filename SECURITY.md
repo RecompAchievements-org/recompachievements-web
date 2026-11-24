@@ -38,6 +38,8 @@ In scope:
 - Bypassing who may post or delete comments (profile walls and game pages), or private account data appearing on a public
   profile
 - Bypassing moderation roles, changing the audit log, or reaching staff-only data
+- Writing, editing, or seeing drafts of forum posts without being an admin, or getting markup
+  into a rendered post
 - Uploading a file that survives profile photo processing with active or hidden content
 - Exposure of user data or developer secrets
 

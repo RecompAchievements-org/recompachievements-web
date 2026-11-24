@@ -441,6 +441,8 @@ fixing a desktop-only layout for phones usually means rebuilding it.
 - **Role** — `player`, `moderator`, or `admin`. Staff act only through the audited moderation API;
   nobody acts on themselves, moderators act only on players, and only admins change roles.
 - **Report** — a signed-in player's complaint about a profile, photo, or comment.
+- **Forum** — categories of Markdown posts at `/forum`. Each category decides who may start posts
+  and whether posts take comments; **News** is for admins only and has comments off.
 - **Comments** — plain-text posts in one shared `comments` table, on a profile **wall** or a game
   page; the same posting, mute, report, and moderation rules apply everywhere.
 - **Mute** — until `muted_until`, an account can't post comments or change its photo, but can still

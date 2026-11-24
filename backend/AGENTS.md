@@ -143,6 +143,19 @@ are security rules; keep every one when changing the code:
 - Errors the website must tell apart carry a `code` extension (`AccountProblems`); add new codes
   there and to the website's `AuthError` list together.
 
+## Forum
+
+`Features/Forum/` holds forum categories and posts:
+
+- Admin endpoints (`/api/v1/forum-admin`) re-read the role from the database and answer `404` to
+  everyone else. Public endpoints return published posts only.
+- Posts are Markdown **source**; the API validates text with the comment rules and never renders
+  HTML. Rendering is the website's job, with its safe subset.
+- Who may start posts (`admin_only`) and whether posts take comments (`comments_enabled`) are
+  per-category settings. When the first commentable category arrives, comments on posts join the
+  shared `comments` table as a new thread.
+- A published post's slug never changes (`slug_locked`), because links to it are shared.
+
 ## Moderation
 
 `Features/Moderation/` holds reports and staff actions; keep every rule when changing it:

@@ -1,6 +1,7 @@
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Comments;
+using RecompAchievements.Api.Features.Forum;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Health;
 using RecompAchievements.Api.Features.Moderation;
@@ -48,6 +49,7 @@ app.MapGroup("/api/v1")
     .MapPlayerEndpoints()
     .MapWallEndpoints()
     .MapGameCommentEndpoints()
+    .MapForumEndpoints()
     .MapPhotoEndpoints()
     .MapModerationEndpoints()
     .MapOAuthEndpoints();

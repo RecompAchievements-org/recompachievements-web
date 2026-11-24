@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Comments;
+using RecompAchievements.Api.Features.Forum;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Moderation;
 using RecompAchievements.Api.Infrastructure.Media;
@@ -48,6 +49,11 @@ namespace RecompAchievements.Api.Infrastructure;
 [JsonSerializable(typeof(ModerationUserResponse))]
 [JsonSerializable(typeof(ModerationResultResponse))]
 [JsonSerializable(typeof(MediaPurgeRequest))]
+[JsonSerializable(typeof(SaveForumPostRequest))]
+[JsonSerializable(typeof(ForumCategoryResponse[]))]
+[JsonSerializable(typeof(ForumPostPageResponse))]
+[JsonSerializable(typeof(ForumPostResponse))]
+[JsonSerializable(typeof(ForumPostSourceResponse))]
 internal sealed partial class AppJsonContext : JsonSerializerContext;
 
 internal static class Json

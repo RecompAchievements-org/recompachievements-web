@@ -6,9 +6,9 @@ import { getCurrentAccount } from "@/lib/auth/session";
 import { AccountMenu } from "./AccountMenu";
 
 /** The header's account entry: "Sign In", or the signed-in player's photo, name, and menu. Phones
- *  show only the icon or photo (the label stays as its accessible name) to keep the header on one
- *  line. It reads the session cookie, so the header renders it inside <Suspense> with SignInLink
- *  as the fallback.
+ *  show only the icon or photo, and the username appears from tablet widths up (the label stays as
+ *  its accessible name), to keep the header on one line. It reads the session cookie, so the header
+ *  renders it inside <Suspense> with SignInLink as the fallback.
 **/
 export async function AccountLink() {
   const account = await getCurrentAccount();

@@ -364,6 +364,168 @@ namespace RecompAchievements.Api.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admin_only");
+
+                    b.Property<bool>("CommentsEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("comments_enabled");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer")
+                        .HasColumnName("display_order");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("key");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Description", "RecompAchievements.Api.Features.Forum.ForumCategory.Description#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("description")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Name", "RecompAchievements.Api.Features.Forum.ForumCategory.Name#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("name")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_forum_categories");
+
+                    b.HasIndex("Key")
+                        .IsUnique()
+                        .HasDatabaseName("ix_forum_categories_key");
+
+                    b.ToTable("forum_categories", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("edited_at");
+
+                    b.Property<DateTimeOffset?>("PinnedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("pinned_at");
+
+                    b.Property<DateTimeOffset?>("PublishedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("published_at");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)")
+                        .HasColumnName("slug");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Body", "RecompAchievements.Api.Features.Forum.ForumPost.Body#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("body")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Title", "RecompAchievements.Api.Features.Forum.ForumPost.Title#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("title")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_forum_posts");
+
+                    b.HasIndex("AuthorId")
+                        .HasDatabaseName("ix_forum_posts_author_id");
+
+                    b.HasIndex("CategoryId", "PinnedAt")
+                        .HasDatabaseName("ix_forum_posts_category_id_pinned_at")
+                        .HasFilter("pinned_at IS NOT NULL");
+
+                    b.HasIndex("CategoryId", "Slug")
+                        .IsUnique()
+                        .HasDatabaseName("ix_forum_posts_category_id_slug");
+
+                    b.HasIndex("CategoryId", "Status", "PublishedAt")
+                        .HasDatabaseName("ix_forum_posts_category_id_status_published_at");
+
+                    b.ToTable("forum_posts", (string)null);
+                });
+
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -812,6 +974,22 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasForeignKey("WallUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_comments_users_wall_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumPost", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_forum_posts_users_author_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Forum.ForumCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_forum_posts_forum_categories_category_id");
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>

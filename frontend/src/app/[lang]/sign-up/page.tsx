@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
-import { PlatformButtons } from "@/components/auth/PlatformButtons";
+import { PlatformButtons, PlatformButtonsSkeleton } from "@/components/auth/PlatformButtons";
 import { localeAlternates, localizePath } from "@/i18n/config";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
@@ -25,7 +25,7 @@ export default async function SignUpPage() {
 
   return (
     <AuthShell title={auth.signUp.title} intro={auth.signUp.intro}>
-      <Suspense>
+      <Suspense fallback={<PlatformButtonsSkeleton label={auth.platformsLoading} />}>
         <PlatformButtons />
       </Suspense>
       <SignUpForm

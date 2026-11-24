@@ -67,6 +67,8 @@ export function SubmitButton({
   ready = true,
   variant = "primary",
   icon,
+  name,
+  value,
   className,
 }: {
   label: string;
@@ -74,12 +76,17 @@ export function SubmitButton({
   ready?: boolean;
   variant?: "primary" | "secondary";
   icon?: ReactNode;
+  // Sent with the form when this button submits it (for forms with several actions).
+  name?: string;
+  value?: string;
   className?: string;
 }) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
+      name={name}
+      value={value}
       disabled={pending || !ready}
       className={cx(
         "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2 text-center font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",

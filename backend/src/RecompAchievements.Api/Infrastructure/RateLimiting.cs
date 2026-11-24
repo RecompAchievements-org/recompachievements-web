@@ -31,6 +31,10 @@ internal static class RateLimiting
     public const string ModerationPolicy = "moderation";
     private const int ModerationWritesPerWindow = 120;
 
+    // Forum post writes (admins only) per client IP within 10 minutes.
+    public const string ForumPolicy = "forum";
+    private const int ForumWritesPerWindow = 60;
+
     // Profile photo changes per client IP within 10 minutes.
     public const string PhotoPolicy = "photos";
     private const int PhotoWritesPerWindow = 10;
@@ -99,6 +103,7 @@ internal static class RateLimiting
             options.AddPolicy(ReportPolicy, context => WindowLimit(context, ReportsPerWindow));
             options.AddPolicy(ModerationPolicy, context => WindowLimit(context, ModerationWritesPerWindow));
             options.AddPolicy(PhotoPolicy, context => WindowLimit(context, PhotoWritesPerWindow));
+            options.AddPolicy(ForumPolicy, context => WindowLimit(context, ForumWritesPerWindow));
 
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.OnRejected = async (rejection, cancellationToken) =>

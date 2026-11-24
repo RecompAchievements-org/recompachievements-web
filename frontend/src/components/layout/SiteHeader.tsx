@@ -22,7 +22,7 @@ export async function SiteHeader() {
           aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
           className="min-w-0 rounded-md"
         >
-          <Logo />
+          <Logo compact />
         </Link>
 
         <div className="flex shrink-0 items-center sm:gap-1">
@@ -36,8 +36,16 @@ export async function SiteHeader() {
                   {header.games}
                 </Link>
               </li>
-              {/** Hidden on phones to keep the header on one line; the footer links to GitHub too. **/}
-              <li className="hidden sm:block">
+              <li>
+                <Link
+                  href={localizePath(locale, "/forum")}
+                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                >
+                  {header.forum}
+                </Link>
+              </li>
+              {/** Shown only on wide screens to keep the header on one line; the footer links to GitHub too. **/}
+              <li className="hidden lg:block">
                 <ExternalLink
                   href={siteConfig.repoUrl}
                   className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"

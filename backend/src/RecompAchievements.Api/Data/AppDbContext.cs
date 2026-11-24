@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Comments;
+using RecompAchievements.Api.Features.Forum;
 using RecompAchievements.Api.Features.Games;
 using RecompAchievements.Api.Features.Moderation;
 
@@ -20,6 +21,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<UserSession> UserSessions => Set<UserSession>();
     public DbSet<UserToken> UserTokens => Set<UserToken>();
     public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<ForumCategory> ForumCategories => Set<ForumCategory>();
+    public DbSet<ForumPost> ForumPosts => Set<ForumPost>();
     public DbSet<ModerationReport> ModerationReports => Set<ModerationReport>();
     public DbSet<ModerationAction> ModerationActions => Set<ModerationAction>();
 

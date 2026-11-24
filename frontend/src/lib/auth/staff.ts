@@ -8,3 +8,10 @@ export async function requireStaff() {
   if (!account || (account.role !== "moderator" && account.role !== "admin")) notFound();
   return account;
 }
+
+// Admin-only pages (such as the forum editor) don't exist for anyone else; the API checks again.
+export async function requireAdmin() {
+  const account = await getCurrentAccount();
+  if (!account || account.role !== "admin") notFound();
+  return account;
+}

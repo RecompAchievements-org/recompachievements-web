@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { startPlatform } from "@/app/[lang]/auth/actions";
+import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { interpolate } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getPlatforms } from "@/lib/api/accounts";
@@ -40,8 +41,28 @@ export async function PlatformButtons() {
           );
         })}
       </div>
-      <p className="flex items-center gap-3 text-sm text-subtle before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
+      <p className={dividerClasses}>
         {auth.or}
+      </p>
+    </div>
+  );
+}
+
+const dividerClasses =
+  "flex items-center gap-3 text-sm text-subtle before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border";
+
+/** Same size as the two platform buttons and the "or" divider, so the email form below doesn't move
+ *  when they arrive. If the API offers no platforms, the space closes once loading ends.
+**/
+export function PlatformButtonsSkeleton({ label }: { label: string }) {
+  return (
+    <div role="status" aria-label={label} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
+        <Skeleton className="min-h-11 w-full rounded-lg" />
+        <Skeleton className="min-h-11 w-full rounded-lg" />
+      </div>
+      <p aria-hidden="true" className={dividerClasses}>
+        <SkeletonText widths={["w-4"]} className="text-sm" />
       </p>
     </div>
   );

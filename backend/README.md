@@ -72,6 +72,7 @@ backend/
 │       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, profile photos, account emails, cleanup
 │       ├── Comments/                 # Comments on profile walls and game pages (one shared table)
 │       ├── Moderation/               # Reports, staff actions, and the audit log
+│       ├── Forum/                    # Forum categories and posts (admin-managed News)
 │       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
@@ -175,6 +176,21 @@ rules and response shape, including `?page=<n>`: anyone reads, posting needs a c
 posting limit is shared with walls. `DELETE /{id}` is for the comment's author only (anyone else
 gets `404`); staff remove others through moderation. Removing a game from the catalog deletes its
 comments.
+
+**Forum.** Anyone reads published posts; text uses `lang` and falls back to English. Posts are
+Markdown source: the API never renders HTML. Admin endpoints answer `404` to everyone else, read
+the role from the database on every request, and are rate limited.
+
+| Route | Purpose |
+|---|---|
+| `GET /api/v1/forum/categories` | Categories with their published post count, every pinned post, and the five most recent posts |
+| `GET /api/v1/forum/{category}/posts?page=<n>` | One numbered page of published posts (title, excerpt, author, date) |
+| `GET /api/v1/forum/{category}/posts/{slug}` | One published post, with the languages it has |
+| `GET /api/v1/forum-admin/{category}/posts`, `GET …/{slug}` | Admin: every post including drafts, and a post's source in each language |
+| `POST /api/v1/forum-admin/{category}/posts`, `PUT …/{slug}`, `DELETE …/{slug}` | Admin: create, update (publish or unpublish), or delete. `409 slug_taken`; `409 slug_locked` when a published post's address would change |
+
+The `AddAccountsAndCommunity` migration creates the **News** category (admins only, comments off) and publishes the
+Alpha v1.0 announcement, shown as written by the RecompAchievements Team.
 
 **Moderation.** `POST /api/v1/reports` lets a signed-in player report a `profile`, `photo`, or
 `comment` (`202`, also for a repeated open report; `400 cannot_report_self`; rate limited).

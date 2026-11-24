@@ -18,11 +18,12 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
-export function Logo({ className }: { className?: string }) {
+// compact hides the wordmark on narrow phones, where the header needs the room for navigation.
+export function Logo({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
     <span className={cx("flex items-center gap-1.5 min-[400px]:gap-2", className)}>
       <LogoMark />
-      <span translate="no" className="font-display text-[0.9375rem] font-bold tracking-tight min-[400px]:text-lg">
+      <span translate="no" className={cx("font-display text-[0.9375rem] font-bold tracking-tight min-[400px]:text-lg", compact && "hidden min-[480px]:inline")}>
         Recomp<span className="text-accent">Achievements</span>
       </span>
     </span>

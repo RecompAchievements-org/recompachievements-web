@@ -69,6 +69,7 @@ src/
 │   │   ├── games/            # Game directory; [slug]/ game page, its loading skeleton, and social card
 │   │   ├── moderation/       # Staff only: report queue, reports/[id], users/[username], log, server actions
 │   │   ├── rules/            # Public community rules
+│   │   ├── forum/            # Forum home, [category]/ lists, [category]/[slug]/ posts, admin new/ and edit/, actions.ts
 │   │   ├── content-policy/   # What we host, image sources, removal requests
 │   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
@@ -91,6 +92,7 @@ src/
 │   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner
 │   ├── comments/             # CommentThread, CommentAuthor, SavedComments (client), CommentsSkeleton,
 │   │                         # actions.ts: every comment section
+│   ├── forum/                # Markdown (safe subset renderer), PostEditor (client), ForumParts
 │   ├── moderation/           # ReportButton, ModerationControls (client), ModerationShell, UserSearch
 │   ├── profile/              # ProfilePhoto, ProfileCard, ProfileBadges, BadgeIcon,
 │   │                         # BadgeDetails and PlayerPreview (client popovers), sampleBadges,

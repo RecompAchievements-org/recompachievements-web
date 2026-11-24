@@ -12,6 +12,7 @@
     "mainNav": "Main",
     "github": "GitHub",
     "games": "Games",
+    "forum": "Forum",
     "signIn": "Sign In",
     "account": "Your account: {username}",
     "accountMenu": {
@@ -256,7 +257,7 @@
       },
       {
         "title": "Comments",
-        "body": "Comments you post on a player’s wall or a game page are public and stored until you delete them, your account is deleted, or we remove them. A wall’s owner can also delete comments on their wall."
+        "body": "Comments you post on a player’s wall or a game page are public and stored until you delete them, your account is deleted, or we remove them. A wall’s owner can also delete comments on their wall. Forum posts are written by the RecompAchievements team and show the author’s username."
       },
       {
         "title": "Profile Photos and Moderation",
@@ -328,6 +329,7 @@
     "privacyLink": "privacy notice",
     "agreement": "By creating an account you agree to our {privacy}.",
     "platformButton": "Continue with {platform}",
+    "platformsLoading": "Loading sign-in options…",
     "or": "or",
     "emailRequiredBanner": "Add and verify an email to start collecting achievements.",
     "emailRequiredAction": "Add Email",
@@ -833,5 +835,77 @@
         "body": "If you think a decision was wrong, write to {email} with your username and why. A person will review it."
       }
     ]
+  },
+  "forum": {
+    "metaTitle": "Forum",
+    "metaDescription": "News and announcements from the RecompAchievements project.",
+    "title": "Forum",
+    "intro": "News and announcements from the RecompAchievements project.",
+    "loading": "Loading the forum…",
+    "unavailable": "We couldn’t load the forum right now. Please try again in a few minutes.",
+    "postCount": {
+      "one": "{count} post",
+      "other": "{count} posts"
+    },
+    "noPosts": "No posts yet.",
+    "backToForum": "Forum",
+    "backToCategory": "{category}",
+    "team": "RecompAchievements Team",
+    "createdOn": "Created {date}",
+    "editedOn": "Edited {date}",
+    "englishOnly": "This post isn’t available in your language yet, so it’s shown in English.",
+    "newPost": "New Post",
+    "edit": "Edit Post",
+    "drafts": "Drafts",
+    "draftBadge": "Draft",
+    "pagination": {
+      "label": "Post pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}",
+      "goToPage": "Page {page}"
+    },
+    "editor": {
+      "newTitle": "New Post",
+      "editTitle": "Edit Post",
+      "languages": "Post languages",
+      "language": {
+        "en": "English",
+        "es": "Spanish (optional)",
+        "pt": "Portuguese (optional)"
+      },
+      "titleLabel": "Title",
+      "bodyLabel": "Body",
+      "bodyHint": "Formatting: ## Heading, ### Subheading, **bold**, *italic*, `code`, - lists, 1. lists, and [links](https://…) or site paths such as [rules](/rules).",
+      "write": "Write",
+      "preview": "Preview",
+      "previewEmpty": "Nothing to preview yet.",
+      "slugLabel": "Address",
+      "slugHint": "Lowercase letters, numbers, and hyphens. It can’t change after the post is published.",
+      "slugLocked": "This post has been published, so its address is fixed.",
+      "saveDraft": "Save Draft",
+      "publish": "Publish",
+      "update": "Update Post",
+      "unpublish": "Unpublish",
+      "saving": "Saving…",
+      "delete": "Delete Post",
+      "deleteTitle": "Delete this post?",
+      "deleteBody": "This can’t be undone, and its address stops working for everyone.",
+      "deleteConfirm": "Delete Post",
+      "cancel": "Cancel",
+      "errors": {
+        "invalid": "Check the title, body, and address. English is required, and only some characters are allowed.",
+        "slug_taken": "Another post already uses that address.",
+        "slug_locked": "A published post’s address can’t change.",
+        "rateLimited": "Too many changes. Please wait a few minutes and try again.",
+        "unavailable": "We couldn’t save the post right now. Please try again."
+      },
+      "pinLabel": "Pin this post",
+      "pinHint": "Pinned posts stay in the Pinned section of the forum until you unpin them."
+    },
+    "pinned": "Pinned",
+    "recent": "Recent Posts",
+    "noPinned": "No pinned posts.",
+    "pinnedBadge": "Pinned"
   }
 }

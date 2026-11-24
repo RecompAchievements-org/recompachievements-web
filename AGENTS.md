@@ -20,7 +20,7 @@ This repo contains the public web platform:
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks, the alpha sign-up, and the game directory; live, deploys from `main` |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks, the alpha sign-up, the game directory, accounts, public profiles with walls and photos, and moderation; live, deploys from `main` |
 | `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
 | `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
@@ -34,7 +34,9 @@ Read `README.md` for the full architecture and data model.
   official API (never by crawling its website), referenced by link on its CDN (never downloaded or
   committed), shown only to identify the game, and credited
   per image (artist + SteamGridDB page) in the game page's credits. Images are removed within 5
-  business days of a valid request. Everything else uses original or generated art.
+  business days of a valid request. Everything else uses original or generated art. Player profile
+  photos are user content: they live only in media storage, never in the repo, and follow the
+  community rules and notice-and-takedown process.
 - **No secrets in the repo.** API keys, HMAC secrets, DB credentials, and session keys come from
   environment variables. Commit only `.env.example` files with dummy values.
 - **No infrastructure details.** Docs, code, and comments never include DNS records, IP addresses,
@@ -206,7 +208,7 @@ document the change affects is updated on the same branch, so the docs land with
 - `backend/README.md` and `backend/AGENTS.md`: commands, configuration and environment variables,
   endpoints, project structure, database and migration rules
 - `SECURITY.md`: scope, API surfaces, signing and timestamp rules
-- `docs/achievement-system.md`: sets, hardcore rules, scoring and Elo, badges, titles, integrity,
+- `docs/achievement-system.md`: sets, hardcore rules, scoring and Elo, medals, titles, integrity,
   data model, and SDK operations
 - `.env.example` files: every new, renamed, or removed environment variable (except abuse-protection
   tuning settings, which have safe defaults in code and stay undocumented per the "No defense
@@ -430,6 +432,23 @@ fixing a desktop-only layout for phones usually means rebuilding it.
   SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
 - **Hardcore / softcore** — an unlock is hardcore only when its session has had a verified build,
   no assist toggles, and allowlisted mods; only hardcore unlocks count toward the ranking.
+- **Account** — a player (`users` table) identified by up to three unique identities: email,
+  Discord ID, GitHub ID. It can collect achievements only while **enabled** and with a **confirmed
+  email**; accounts created through Discord or GitHub without a verified email must add and confirm
+  one first. A disabled account is kept but can't be used.
+  Emails never link accounts; only a platform's ID finds its account. Browser sign-ins are
+  `user_sessions`, not to be confused with game sessions below.
+- **Role** — `player`, `moderator`, or `admin`. Staff act only through the audited moderation API;
+  nobody acts on themselves, moderators act only on players, and only admins change roles.
+- **Report** — a signed-in player's complaint about a profile, photo, or comment.
+- **Forum** — categories of Markdown posts at `/forum`. Each category decides who may start posts
+  and whether posts take comments; **News** (`news`, titled "Latest News") is for admins only and has comments off.
+- **Comments** — plain-text posts in one shared `comments` table, on a profile **wall** or a game
+  page; the same posting, mute, report, and moderation rules apply everywhere.
+- **Mute** — until `muted_until`, an account can't post comments or change its photo, but can still
+  earn achievements. It ends on its own; the indefinite block is disabling the account.
+- **Profile** — a player's public page at `/account/<username>`; shows only public fields, never
+  an email or sign-in details. **Wall** — the plain-text comments on a profile.
 - **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be
   upgraded); records `build_hash` (SHA-256 of the executable).
 - **Session** — one player playing one game, started by the SDK; records the build, toggles, and
@@ -438,7 +457,15 @@ fixing a desktop-only layout for phones usually means rebuilding it.
 - **Global score** — Σ over hardcore unlocks of `points × rarity multiplier + Elo bonus`.
 - **Elo bonus** — `base value × (1 − share)`, where share = hardcore players with the achievement ÷
   hardcore players with at least one unlock in its set; recalculated nightly.
-- **Completion badges** — Silver / Gold / Platinum for core sets, Beaten / Mastered for subsets;
-  display only.
+- **Completion medals** — Silver / Gold / Platinum for core sets, Beaten / Mastered for subsets;
+  display only. One per player per set, upgrade-only: later gameplay, even with in-game hacks, never
+  lowers a medal. For achievements not legitimately earned (forged unlocks, or earned with a
+  hidden hack), an audited moderator action removes them with their points, and the medal is
+  recalculated. They can be earned again legitimately; repeat or serious cheaters are disabled.
 
-The full rules are in `docs/achievement-system.md`; scoring and badge code must follow it.
+- **Badges** — site awards, recognitions, roles, events, and contributions, separate from medals.
+  Each has a rarity tier (Common → Legendary) set by the level of the goal or contribution; display
+  only. A player features one to six in the profile's badges card and up to three on the bottom
+  edge of their profile photo.
+
+The full rules are in `docs/achievement-system.md`; scoring, medal, and badge code must follow it.

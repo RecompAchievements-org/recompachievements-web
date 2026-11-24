@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
+import { EmailRequiredBanner } from "@/components/layout/EmailRequiredBanner";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { htmlLang, locales, openGraphLocale } from "@/i18n/config";
@@ -52,6 +54,10 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           {messages.common.skipToContent}
         </a>
         <SiteHeader />
+        {/** Only for signed-in accounts without a confirmed email; reads the session per request. **/}
+        <Suspense>
+          <EmailRequiredBanner />
+        </Suspense>
         <main id="main" className="flex-1">
           {children}
         </main>

@@ -16,3 +16,22 @@ X-Internal-Key: local-development-internal-key
 ### One game with its achievements
 GET {{api}}/api/v1/games/zelda64-recompiled
 X-Internal-Key: local-development-internal-key
+
+### Create an account (the confirmation link is printed in the API console in Development)
+POST {{api}}/api/v1/auth/register
+X-Internal-Key: local-development-internal-key
+Content-Type: application/json
+
+{ "email": "player@example.com", "password": "local test password", "username": "player1", "locale": "en" }
+
+### Sign in (after confirming the email); returns a session token
+POST {{api}}/api/v1/auth/sign-in
+X-Internal-Key: local-development-internal-key
+Content-Type: application/json
+
+{ "email": "player@example.com", "password": "local test password" }
+
+### The signed-in account (paste the token from sign-in)
+GET {{api}}/api/v1/auth/me
+X-Internal-Key: local-development-internal-key
+Authorization: Bearer paste-the-session-token-here

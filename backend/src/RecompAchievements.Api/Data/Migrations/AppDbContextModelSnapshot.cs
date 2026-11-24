@@ -23,6 +23,217 @@ namespace RecompAchievements.Api.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("AvatarKey")
+                        .HasMaxLength(96)
+                        .HasColumnType("character varying(96)")
+                        .HasColumnName("avatar_key");
+
+                    b.Property<DateTimeOffset?>("AvatarTermsAcceptedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("avatar_terms_accepted_at");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("DiscordId")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("discord_id");
+
+                    b.Property<DateTimeOffset?>("EditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("edited_at");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)")
+                        .HasColumnName("email");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("email_confirmed");
+
+                    b.Property<int>("FailedSignInCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("failed_sign_in_count");
+
+                    b.Property<string>("GithubId")
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("github_id");
+
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_enabled");
+
+                    b.Property<DateTimeOffset>("LastActivityAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_activity_at");
+
+                    b.Property<string>("Locale")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)")
+                        .HasColumnName("locale");
+
+                    b.Property<DateTimeOffset?>("LockedUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("locked_until");
+
+                    b.Property<DateTimeOffset?>("MutedUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("muted_until");
+
+                    b.Property<string>("NormalizedUsername")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)")
+                        .HasColumnName("normalized_username");
+
+                    b.Property<string>("PasswordHash")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasDefaultValue("player")
+                        .HasColumnName("role");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.HasIndex("DiscordId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_discord_id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
+
+                    b.HasIndex("GithubId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_github_id");
+
+                    b.HasIndex("NormalizedUsername")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_normalized_username");
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.UserSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<DateTimeOffset>("LastSeenAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_seen_at");
+
+                    b.Property<byte[]>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("token_hash");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_sessions");
+
+                    b.HasIndex("ExpiresAt")
+                        .HasDatabaseName("ix_user_sessions_expires_at");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique()
+                        .HasDatabaseName("ix_user_sessions_token_hash");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_sessions_user_id");
+
+                    b.ToTable("user_sessions", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.UserToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(254)
+                        .HasColumnType("character varying(254)")
+                        .HasColumnName("email");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("purpose");
+
+                    b.Property<byte[]>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("token_hash");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_tokens");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_user_tokens_created_at");
+
+                    b.HasIndex("TokenHash")
+                        .IsUnique()
+                        .HasDatabaseName("ix_user_tokens_token_hash");
+
+                    b.HasIndex("UserId", "Purpose")
+                        .HasDatabaseName("ix_user_tokens_user_id_purpose");
+
+                    b.ToTable("user_tokens", (string)null);
+                });
+
             modelBuilder.Entity("RecompAchievements.Api.Features.AlphaSignups.AlphaSignup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,11 +272,23 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("character varying(254)")
                         .HasColumnName("email");
 
+                    b.Property<DateTimeOffset?>("InviteSentAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("invite_sent_at");
+
                     b.Property<string>("Locale")
                         .IsRequired()
                         .HasMaxLength(5)
                         .HasColumnType("character varying(5)")
                         .HasColumnName("locale");
+
+                    b.Property<DateTimeOffset?>("MigratedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("migrated_at");
+
+                    b.Property<Guid?>("MigratedUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("migrated_user_id");
 
                     b.Property<string>("Nickname")
                         .IsRequired()
@@ -103,7 +326,219 @@ namespace RecompAchievements.Api.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_alpha_signups_email");
 
+                    b.HasIndex("MigratedUserId")
+                        .HasDatabaseName("ix_alpha_signups_migrated_user_id");
+
                     b.ToTable("alpha_signups", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("body");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<Guid?>("GameId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("game_id");
+
+                    b.Property<Guid?>("WallUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("wall_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_comments");
+
+                    b.HasIndex("AuthorId", "CreatedAt")
+                        .HasDatabaseName("ix_comments_author_id_created_at");
+
+                    b.HasIndex("GameId", "Id")
+                        .HasDatabaseName("ix_comments_game_id_id");
+
+                    b.HasIndex("WallUserId", "Id")
+                        .HasDatabaseName("ix_comments_wall_user_id_id");
+
+                    b.ToTable("comments", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_comments_one_thread", "num_nonnulls(wall_user_id, game_id) = 1");
+                        });
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("AdminOnly")
+                        .HasColumnType("boolean")
+                        .HasColumnName("admin_only");
+
+                    b.Property<bool>("CommentsEnabled")
+                        .HasColumnType("boolean")
+                        .HasColumnName("comments_enabled");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer")
+                        .HasColumnName("display_order");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("key");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Description", "RecompAchievements.Api.Features.Forum.ForumCategory.Description#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("description")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Name", "RecompAchievements.Api.Features.Forum.ForumCategory.Name#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("name")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_forum_categories");
+
+                    b.HasIndex("Key")
+                        .IsUnique()
+                        .HasDatabaseName("ix_forum_categories_key");
+
+                    b.ToTable("forum_categories", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumPost", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid?>("AuthorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("author_id");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("category_id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTimeOffset?>("EditedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("edited_at");
+
+                    b.Property<DateTimeOffset?>("PinnedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("pinned_at");
+
+                    b.Property<DateTimeOffset?>("PublishedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("published_at");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)")
+                        .HasColumnName("slug");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Body", "RecompAchievements.Api.Features.Forum.ForumPost.Body#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("body")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Title", "RecompAchievements.Api.Features.Forum.ForumPost.Title#LocalizedText", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("En")
+                                .IsRequired();
+
+                            b1.Property<string>("Es");
+
+                            b1.Property<string>("Pt");
+
+                            b1
+                                .ToJson("title")
+                                .HasColumnType("jsonb");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_forum_posts");
+
+                    b.HasIndex("AuthorId")
+                        .HasDatabaseName("ix_forum_posts_author_id");
+
+                    b.HasIndex("CategoryId", "PinnedAt")
+                        .HasDatabaseName("ix_forum_posts_category_id_pinned_at")
+                        .HasFilter("pinned_at IS NOT NULL");
+
+                    b.HasIndex("CategoryId", "Slug")
+                        .IsUnique()
+                        .HasDatabaseName("ix_forum_posts_category_id_slug");
+
+                    b.HasIndex("CategoryId", "Status", "PublishedAt")
+                        .HasDatabaseName("ix_forum_posts_category_id_status_published_at");
+
+                    b.ToTable("forum_posts", (string)null);
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>
@@ -370,6 +805,215 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasDatabaseName("ix_games_slug");
 
                     b.ToTable("games", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Moderation.ModerationAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)")
+                        .HasColumnName("action");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Evidence")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("evidence");
+
+                    b.Property<DateTimeOffset?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("ModeratorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("moderator_id");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("reason");
+
+                    b.Property<Guid?>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_moderation_actions");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_moderation_actions_created_at");
+
+                    b.HasIndex("TargetUserId", "Id")
+                        .HasDatabaseName("ix_moderation_actions_target_user_id_id");
+
+                    b.ToTable("moderation_actions", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Moderation.ModerationReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("details");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("reason");
+
+                    b.Property<Guid>("ReportedUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reported_user_id");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reporter_id");
+
+                    b.Property<string>("ResolutionNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("resolution_note");
+
+                    b.Property<DateTimeOffset?>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("resolved_at");
+
+                    b.Property<Guid?>("ResolvedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("resolved_by_id");
+
+                    b.Property<string>("Snapshot")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("snapshot");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TargetKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("target_key");
+
+                    b.Property<string>("TargetType")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("target_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_moderation_reports");
+
+                    b.HasIndex("ReportedUserId", "Id")
+                        .HasDatabaseName("ix_moderation_reports_reported_user_id_id");
+
+                    b.HasIndex("ReporterId", "CreatedAt")
+                        .HasDatabaseName("ix_moderation_reports_reporter_id_created_at");
+
+                    b.HasIndex("Status", "Id")
+                        .HasDatabaseName("ix_moderation_reports_status_id");
+
+                    b.HasIndex("ReporterId", "TargetType", "TargetKey")
+                        .IsUnique()
+                        .HasDatabaseName("ix_moderation_reports_reporter_id_target_type_target_key")
+                        .HasFilter("status = 'open'");
+
+                    b.ToTable("moderation_reports", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.UserSession", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_sessions_users_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Accounts.UserToken", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_tokens_users_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.AlphaSignups.AlphaSignup", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("MigratedUserId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_alpha_signups_users_migrated_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Comments.Comment", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_comments_users_author_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Games.Game", null)
+                        .WithMany()
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_comments_games_game_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("WallUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_comments_users_wall_user_id");
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Forum.ForumPost", b =>
+                {
+                    b.HasOne("RecompAchievements.Api.Features.Accounts.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_forum_posts_users_author_id");
+
+                    b.HasOne("RecompAchievements.Api.Features.Forum.ForumCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_forum_posts_forum_categories_category_id");
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Games.Achievement", b =>

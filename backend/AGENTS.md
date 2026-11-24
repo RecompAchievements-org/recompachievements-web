@@ -41,7 +41,8 @@ Testcontainers.
   when `Brevo:ApiKey` is set, console logging in Development. User-facing email text is localized
   (en, es, pt) and every value inserted into HTML is encoded. Email failures are logged, never shown
   as API errors.
-- Store secrets as hashes when only comparison is needed (e.g. confirmation tokens: SHA-256).
+- Store secrets as hashes when only comparison is needed: confirmation links, password links, and
+  session tokens all come from `SecureToken` (`Infrastructure/SecureToken.cs`, SHA-256 stored).
 - Use the injected `TimeProvider` for "now", never `DateTime.UtcNow` directly.
 - Endpoints with writes or abuse risk get a named rate-limit policy (`RequireRateLimiting`) on top of
   the global limit (see Security).
@@ -63,7 +64,7 @@ Testcontainers.
   and the updated snapshot together. Never hand-edit the snapshot. If an analyzer flags the
   generated code (e.g. CA1861 on column arrays), add a `#pragma warning disable` with a reason at
   the top of that migration instead of rewriting it.
-- Production holds real user data (alpha sign-ups), so RULE-005 exception 2 applies: applied
+- Production holds real user data (alpha sign-ups, accounts), so RULE-005 exception 2 applies: applied
   migrations are never edited or deleted, and every schema change is a new forward migration that
   fills in existing rows. `ApiFactory` applies the full migration chain, so CI tests it.
 - No lazy loading. Select only the columns an endpoint needs (`Select` into a response record).
@@ -92,13 +93,95 @@ Testcontainers.
   That must happen before the first real unlock is accepted (the bbport launch integration), and
   the catalog and the portal must never both edit games (README roadmap).
 
+## Accounts
+
+`Features/Accounts/` holds users, sessions, emailed links, and Discord/GitHub sign-in. Its rules
+are security rules; keep every one when changing the code:
+
+- **Identity.** An account has up to three identities, each unique where set: `Email`, `DiscordId`,
+  `GithubId`. Only a platform's ID finds an account for a platform sign-in; emails never find,
+  link, or merge accounts. Connecting a platform never changes `Email`.
+- **Collecting achievements needs an enabled account with a confirmed email**
+  (`User.CanCollectAchievements`). A platform
+  email is used only when the platform marks it verified and no confirmed account has it; an
+  unverified one is never stored. Every other email is confirmed through our own link. The SDK
+  unlock endpoints must check `CanCollectAchievements`.
+- **Passwords.** Email sign-in needs a confirmed email and a set `PasswordHash`; a null hash never
+  matches anything. A password is set only through the emailed set-password link
+  (`forgot-password` → `reset-password`), never directly by a signed-in request, and setting one
+  revokes every session. Every sign-in failure returns the same `invalid_credentials` problem and
+  must stay indistinguishable from the others (keep `DummyPassword` in place).
+- **Disabled accounts** (`IsEnabled` false) are kept, never deleted automatically, so their email
+  and platform IDs stay reserved. Every new way in (sign-in, session, emailed link, future SDK
+  token) must refuse them. Email sign-in answers with the usual `invalid_credentials`.
+- **`EditedAt`** is set only by the `UserEditStamp` interceptor on saved changes; don't set it by
+  hand. `ExecuteUpdate` bypasses it, so account data is changed through tracked entities.
+- **`LastActivityAt`** is the exception: `Sessions` moves it forward with a direct update, so
+  activity never counts as an edit. Future activity (SDK sessions) updates this same column.
+- **Sessions.** Read the signed-in user only with `Sessions.ResolveAsync` (bearer token from the
+  website). Signed-in endpoints return `AccountProblems.NotSignedIn()` without a valid session.
+- **No enumeration.** Register, resend, and forgot-password always answer `202`; links are sent
+  only through `AccountLinks`, whose abuse protection never changes the answer.
+- **Disconnecting** a platform must leave a way to sign in (confirmed email with a password, or the
+  other platform).
+- **Public player data** comes only from `PlayerEndpoints` (`PublicPlayerResponse`,
+  `PublicByUsername`). Never add an email, platform ID, alpha status, exact activity time, or other
+  private field; disabled accounts and unconfirmed registrations stay `404`.
+- **Reserved usernames** include every page directly under `/account` (`AccountText`): when adding
+  such a page, reserve its name in the same change.
+- **Comments** (`Features/Comments/`): walls and game pages share one `comments` table (exactly one
+  of `wall_user_id` or `game_id`, enforced by a check) and the rules in `CommentThreads`: anyone
+  reads, posting needs `CanCollectAchievements` and no active mute, and the posting limit counts
+  across all threads. A wall comment's author or the wall's owner deletes it; a game comment only
+  its author; anyone else gets `404`. Bodies are plain text, checked by `CommentText`, and must
+  never be rendered as HTML or Markdown. New comment threads reuse `CommentThreads`.
+- **Profile photos** (`PhotoEndpoints`, `AvatarImages`): never store or serve an upload as received.
+  Decode it, refuse anything but a static JPEG, PNG, or WebP, and store only the re-encoded WebP
+  files. Storage goes through `IMediaStore`; photo URLs come from `AvatarImages.Urls`.
+- **Pending platform sign-ups** are never stored: `PendingSignupTokens` signs them (HMAC, short
+  lifetime) until the welcome step creates the account.
+- Errors the website must tell apart carry a `code` extension (`AccountProblems`); add new codes
+  there and to the website's `AuthError` list together.
+
+## Forum
+
+`Features/Forum/` holds forum categories and posts:
+
+- Admin endpoints (`/api/v1/forum-admin`) re-read the role from the database and answer `404` to
+  everyone else. Public endpoints return published posts only.
+- Posts are Markdown **source**; the API validates text with the comment rules and never renders
+  HTML. Rendering is the website's job, with its safe subset.
+- Who may start posts (`admin_only`) and whether posts take comments (`comments_enabled`) are
+  per-category settings. When the first commentable category arrives, comments on posts join the
+  shared `comments` table as a new thread.
+- A published post's slug never changes (`slug_locked`), because links to it are shared.
+
+## Moderation
+
+`Features/Moderation/` holds reports and staff actions; keep every rule when changing it:
+
+- **Access.** Staff endpoints are in the `/moderation` group, whose filter re-reads the role from the
+  database and answers `404` to everyone else. Check `StaffMember.CanActOn` before every action:
+  nobody acts on themselves, moderators act only on players, and only admins change roles.
+- **Audit.** Every staff change and its `ModerationAction` commit in one transaction. The log is
+  append-only (only expired text evidence is erased). User IDs there aren't foreign keys, so records
+  survive account deletion.
+- **After the commit:** emails and file cleanup run only once the change is saved, and their failure
+  never undoes it. A removed image must also be purged from the CDN; report a failed purge to staff.
+- **Mute** is stored only as `MutedUntil` and read through `User.IsMutedAt`. It blocks social
+  features and must never block earning achievements.
+- **Privacy.** Staff responses never include an email or platform ID. A legal hold's evidence
+  location is never returned, and its owner isn't emailed.
+
 ## Tests
 
 - Every endpoint gets integration tests through `ApiFactory` (real PostgreSQL in a container):
   success, validation failure, and error paths. Test names use `Behavior_under_condition`.
 - Tests run in the `Testing` environment (API docs off). `ApiFactory` applies migrations at
-  startup, captures emails in `CapturingEmailSender`, and `CreateWebsiteClient()` calls like the
-  website does, isolated per test. Use unique emails per test.
+  startup, captures emails in `CapturingEmailSender`, replaces Discord and GitHub with
+  `FakeOAuthProvider` (tests issue codes for any identity), stores media in `FakeMediaStore`, and `CreateWebsiteClient()` calls like
+  the website does, isolated per test. Use unique emails per test; account tests share helpers in
+  `Accounts/AccountTestKit.cs`.
 - Don't mock EF Core or the database.
 
 ## Performance

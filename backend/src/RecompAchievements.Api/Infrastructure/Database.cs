@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using RecompAchievements.Api.Data;
+using RecompAchievements.Api.Features.Accounts;
 
 namespace RecompAchievements.Api.Infrastructure;
 
@@ -13,6 +14,7 @@ internal static class Database
     **/
     public static IServiceCollection AddDatabase(this IServiceCollection services)
     {
+        services.AddSingleton<UserEditStamp>();
         services.AddDbContextPool<AppDbContext>((provider, options) =>
         {
             var connectionString = provider.GetRequiredService<IConfiguration>()
@@ -29,7 +31,8 @@ internal static class Database
             options
                 .UseNpgsql(builder.ConnectionString)
                 .UseSnakeCaseNamingConvention()
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                .AddInterceptors(provider.GetRequiredService<UserEditStamp>());
         });
 
         return services;

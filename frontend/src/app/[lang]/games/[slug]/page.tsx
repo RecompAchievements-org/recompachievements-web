@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AchievementRow } from "@/components/game/AchievementRow";
-import { CommentsPreview } from "@/components/game/CommentsPreview";
+import { CommentsSkeleton } from "@/components/comments/CommentsSkeleton";
 import { ConsolePill } from "@/components/game/ConsolePill";
+import { GameCommentsSection } from "@/components/game/GameCommentsSection";
 import { GameDetailsCard } from "@/components/game/GameDetailsCard";
 import { GameArt } from "@/components/game/GameArt";
 import { GameArtCredits } from "@/components/game/GameArtCredits";
@@ -44,19 +45,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function GamePage({ params }: Props) {
+export default async function GamePage({ params, searchParams }: Props) {
   const { game } = await getMessages();
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-12 sm:px-6 sm:py-16">
       <Suspense fallback={<GamePageSkeleton label={game.loading} />}>
-        <GameDetails params={params} />
+        <GameDetails params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );
 }
 
-async function GameDetails({ params }: Pick<Props, "params">) {
+async function GameDetails({ params, searchParams }: Pick<Props, "params" | "searchParams">) {
   const { slug } = await params;
   const locale = await getLocale();
   const { game: text, games, achievement, comments } = await getMessages();
@@ -132,7 +133,10 @@ async function GameDetails({ params }: Pick<Props, "params">) {
         </div>
       </div>
 
-      <CommentsPreview labels={comments} />
+      {/** Per-visitor comments stream in after the cached game details. **/}
+      <Suspense fallback={<CommentsSkeleton label={comments.loading} />}>
+        <GameCommentsSection slug={game.slug} searchParams={searchParams} />
+      </Suspense>
 
       {game.art && <GameArtCredits art={game.art} />}
     </>

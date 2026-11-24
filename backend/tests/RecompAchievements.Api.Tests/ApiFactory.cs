@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Infrastructure.Email;
+using RecompAchievements.Api.Infrastructure.Media;
 using Testcontainers.PostgreSql;
 
 namespace RecompAchievements.Api.Tests;
@@ -21,6 +23,12 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     public CapturingEmailSender Emails { get; } = new();
 
+    public FakeMediaStore Media { get; } = new();
+
+    // Stand-ins for Discord and GitHub: tests choose who the platform says the user is.
+    internal FakeOAuthProvider Discord { get; } = new(OAuthProviderNames.Discord);
+    internal FakeOAuthProvider Github { get; } = new(OAuthProviderNames.Github);
+
     public async ValueTask InitializeAsync() => await _database.StartAsync();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -31,9 +39,15 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("Catalog:ImportOnStartup", "true");
         builder.UseSetting("InternalApi:Key", InternalKey);
         builder.UseSetting("Site:BaseUrl", "https://recompachievements.test");
-        // High site-wide sign-up limit so ordinary tests never hit it; abuse tests lower it.
-        builder.UseSetting("RateLimiting:SignupsPerMinute", "10000");
-        builder.ConfigureTestServices(services => services.AddSingleton<IEmailSender>(Emails));
+        // High site-wide email-request limit so ordinary tests never hit it; abuse tests lower it.
+        builder.UseSetting("RateLimiting:EmailRequestsPerMinute", "10000");
+        builder.ConfigureTestServices(services =>
+        {
+            services.AddSingleton<IEmailSender>(Emails);
+            services.AddSingleton<IMediaStore>(Media);
+            services.AddSingleton<IOAuthProvider>(Discord);
+            services.AddSingleton<IOAuthProvider>(Github);
+        });
     }
 
     public override async ValueTask DisposeAsync()
@@ -61,6 +75,50 @@ public static class WebsiteClientExtensions
 }
 
 // Collects emails in memory so tests can read confirmation links.
+// In-memory media storage that records what was deleted, purged, and preserved.
+public sealed class FakeMediaStore : IMediaStore
+{
+    public ConcurrentDictionary<string, byte[]> Files { get; } = new();
+    public ConcurrentQueue<string> Purged { get; } = new();
+    public ConcurrentQueue<string> Preserved { get; } = new();
+
+    public bool IsAvailable => true;
+
+    public Uri? PublicUrl(string key) => new($"https://media.test/{key}");
+
+    public Task PutAsync(string key, byte[] content, string contentType, CancellationToken cancellationToken)
+    {
+        Files[key] = content;
+        return Task.CompletedTask;
+    }
+
+    public Task DeleteAsync(IReadOnlyCollection<string> keys, CancellationToken cancellationToken)
+    {
+        foreach (var key in keys)
+        {
+            Files.TryRemove(key, out _);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> PurgeAsync(IReadOnlyCollection<string> keys, CancellationToken cancellationToken)
+    {
+        foreach (var key in keys)
+        {
+            Purged.Enqueue(key);
+        }
+
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> PreserveAsync(string key, string evidenceKey, CancellationToken cancellationToken)
+    {
+        Preserved.Enqueue(evidenceKey);
+        return Task.FromResult(true);
+    }
+}
+
 public sealed class CapturingEmailSender : IEmailSender
 {
     public ConcurrentQueue<EmailMessage> Sent { get; } = new();
@@ -73,6 +131,29 @@ public sealed class CapturingEmailSender : IEmailSender
 
     public IReadOnlyList<EmailMessage> To(string address) =>
         [.. Sent.Where(message => string.Equals(message.ToAddress, address, StringComparison.OrdinalIgnoreCase))];
+}
+
+/** A Discord/GitHub stand-in. Issue() returns a one-time authorization code for an identity;
+ *  exchanging any other code (or the same one twice) is refused, like the real platforms.
+**/
+internal sealed class FakeOAuthProvider(string name) : IOAuthProvider
+{
+    private readonly ConcurrentDictionary<string, ExternalIdentity> _codes = new();
+
+    public string Name => name;
+
+    public string Issue(string id, string username, string? verifiedEmail = null)
+    {
+        var code = Guid.NewGuid().ToString("N");
+        _codes[code] = new ExternalIdentity(id, username, verifiedEmail);
+        return code;
+    }
+
+    public Uri BuildAuthorizeUrl(string state, string codeChallenge, Uri redirectUri) =>
+        new($"https://{name}.test/authorize?state={state}&code_challenge={codeChallenge}&redirect_uri={Uri.EscapeDataString(redirectUri.ToString())}");
+
+    public Task<ExternalIdentity?> ExchangeAsync(string code, string codeVerifier, Uri redirectUri, CancellationToken cancellationToken) =>
+        Task.FromResult(_codes.TryRemove(code, out var identity) ? identity : null);
 }
 
 // Same API, pointed at a port where no database listens, to test failure paths.

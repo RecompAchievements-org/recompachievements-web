@@ -26,7 +26,10 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - **All data access goes through `src/lib/api/`.** Pages and components never call `fetch` on the
   backend directly. That layer calls the .NET API (`backend/`) from server code only, using a
   server-only base URL environment variable; the browser never talks to the API. Features are
-  built end to end (database → API → page), so there is no mock-data layer.
+  built end to end (database → API → page), so there is no mock-data layer. The exceptions, by
+  the owner's request, are `components/progress/sampleProgress.ts` (used by `/progress` and public
+  profiles) and `components/profile/sampleBadges.ts`: they must stay labeled "sample data" on
+  screen, those pages stay `noindex`, and they're deleted when real data exists.
 - `src/lib/api/client.ts` (`apiPost`, typed `ApiResult`, ProblemDetails) is the only place that
   attaches the website's API credentials and request context. Every file under `src/lib/api/` starts
   with `import "server-only"`.
@@ -35,9 +38,11 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   available there), return error **codes** that the client translates, and never return secrets.
   Validate on the server even when the input has native constraints.
 - Mutations triggered by emailed links happen on a button press (POST), never on page load.
-- The alpha sign-up form includes a human-verification challenge. Its token must be verified on the
-  server (`verifyHumanToken` in `src/lib/turnstile.ts`) before the API is called; never skip or
-  weaken that check, and keep it failing closed when its secret is missing.
+- Forms that send email to a typed address (account sign-up, forgot-password)
+  include a human-verification challenge (`HumanCheck`, or `HumanCheckSubmit` in account forms).
+  Its token must be verified on the server (`verifyHumanToken` in `src/lib/turnstile.ts`) with
+  that form's action name before the API is called; never skip or weaken that check, and keep it
+  failing closed when its secret is missing.
 - **Caching uses `"use cache"`** in data functions, always paired with `cacheLife(...)`, and
   `cacheTag(...)` where the data can be invalidated (e.g. `game:${slug}`). Do not use the legacy
   `fetch` `next: { revalidate }` options or `export const revalidate`.
@@ -53,6 +58,49 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
   anything in the shared layout that reads the URL (`LocaleSwitcher`) has its own boundary.
 - Mutations (forms, settings, dev portal) use **Server Actions**, validated on the server.
 - Secrets and backend URLs are read only in server code. Only `NEXT_PUBLIC_*` vars reach the client.
+
+### Accounts and sessions
+
+- The session token, the pending Discord/GitHub sign-up, the OAuth `state`/PKCE verifier, and the
+  email offer live only in HttpOnly cookies managed by `src/lib/auth/session.ts`. Nothing else
+  reads or writes them, and they are never passed to Client Components or put in URLs.
+- Read the signed-in account with `getCurrentAccount()` (deduplicated per request) inside
+  `<Suspense>`; never outside a boundary, or the page stops being prerendered. Pages that need a
+  signed-in visitor redirect to `/sign-in` from inside that boundary.
+- Calls made for a visitor use `apiSend` with `visitor()` (session and IP); never cache them.
+- `/auth/callback/[provider]` must keep checking the returned `state` against the saved flow
+  before sending the code to the API, and each flow is used once (`takeOAuthFlow`).
+- The welcome step reads the pending sign-up from its cookie, never from the form.
+- Forms that create or replace a password (sign-up, reset) use `NewPasswordFields`: it asks twice
+  and shows live whether the two match, and the server still compares them
+  (`checkPasswordConfirmation`); the repeated value is never sent to the API. Sign-in asks once.
+- Account forms use `EmailField` and `UsernameField` (`components/auth/LiveFields.tsx`) for live
+  feedback: format as you type (problems shown after leaving the field, or at once for characters
+  that are never allowed) and, for usernames, availability checked after a short pause. Feedback
+  lines use the shared `FieldStatus`, which takes no space until it has something to say. The
+  server always validates again on submit.
+- Account error codes come from the API's `code` field; the list is `AuthError` in
+  `src/lib/auth/forms.ts`, translated from `auth.errors`. Add new codes in both places.
+- Account pages are `noindex` and stay out of `publicPaths`, including public profiles for now.
+- `/account/[username]` is public: it renders only `getPublicPlayer` data and never passes the
+  `/me` account to its UI. Anything private belongs in `/account/settings`. A new page directly
+  under `/account` must also be added to the API's reserved usernames.
+- Profile photos render through `ProfilePhoto` with `unoptimized`, so removed images keep no copy in
+  the image cache. Uploads go through the Settings Server Action; the API is what validates them.
+- `/moderation` pages call `requireStaff()` inside `<Suspense>` and are `noindex`. That guard only
+  hides the page; every permission is enforced by the API. New comment sections offer `ReportButton`
+  once their comments are saved.
+- Forum posts render only through `components/forum/Markdown.tsx` (headings, paragraphs, lists,
+  bold, italic, code, and links to `https://` or site paths). Never render post text as HTML or
+  add a Markdown library without asking. The editor preview uses the same renderer.
+- Comment UI is shared through `components/comments/CommentThread.tsx` and always renders plain
+  text. Every comment section, including future ones, uses it, so each comment shows its author
+  column (`CommentAuthor`: photo with profile preview, username, join date). A muted viewer gets
+  `blockedNotice` instead of the composer in every section; the API refuses their posts too. Saved threads (walls and game
+  pages) use `SavedComments` with a `CommentThreadRef` and show one numbered page at a time
+  (`CommentPagination`, `?commentsPage=`; posting returns to page 1, a page past the end redirects
+  to the last); reads and writes go through
+  `lib/api/comments.ts`, are per visitor, and are never cached.
 
 ### Internationalization
 
@@ -83,15 +131,14 @@ language on unprefixed visits.
 - Brand names and code tokens (`RecompAchievements`, `GitHub`, `AGPL-3.0`) are wrapped in
   `translate="no"` so browser auto-translation leaves them intact.
 
-### Routes (v0.1)
+### Routes (v1.0)
 
 Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pages live in
 `src/app/[lang]/`.
 
-- `/` — home: featured recomps slider (`FeaturedSlider`) and games; primary call to action: Join
-  the Alpha
-- `/alpha` — alpha tester sign-up form
-- `/alpha/confirm` — confirms a sign-up with the emailed token (`noindex`, not in the sitemap)
+- `/` — home: featured recomps slider (`FeaturedSlider`), games, and the news `CategoryCard`
+  (Latest News) at full width at the bottom; primary call to action: Join the Alpha, which opens
+  `/sign-up`
 - `/privacy` — privacy notice; update its `lastUpdated` date and translations whenever data
   handling changes
 - `/content-policy` — what the site hosts, image sources, removal requests; keep it in step with the
@@ -99,15 +146,53 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/games` — game directory (`GameGrid`)
 - `/games/[slug]` — game detail: info, preview notice, and achievements on the left; a sticky
   `GameDetailsCard` on the right (download and repository links, what the player must own,
-  platforms, version, license); on phones the card follows the header. Below both, a Comments
-  section (`CommentsPreview`) that only works in the browser until accounts exist: posted text
-  stays in page state, is labeled "not saved", and must never be sent to the API before then
-- `/u/[username]` — user profile: completion %, recent unlocks
+  platforms, version, license); on phones the card follows the header. Below both, saved player
+  comments (`GameCommentsSection`) in their own `<Suspense>`, so the cached game details never wait
+  for per-visitor comments
+- `/sign-up`, `/sign-in` — create an account or sign in (email and password, Discord, GitHub)
+- `/confirm-email` — confirms an account email with the emailed token (button POST)
+- `/forgot-password`, `/reset-password` — set or reset a password through an emailed link
+- `/welcome` — after a Discord/GitHub sign-up: the account email (or that there is none yet) and
+  the username
+- `/account` — redirects to the signed-in player's profile, or to `/sign-in`
+- `/account/[username]` — public profile: a compact badges card (one to six featured with the
+  total earned; two rows of three on phones, one row of six from tablets up; up to three also
+  overlap the photo's bottom edge), medal counters with
+  featured games (icon, name, platform; up to three in the large Platinum square, one each in the
+  Gold and Silver rows beside it; original medal icon, never official
+  trophy icons), last achievements earned, subsets
+  earned (Mastered and Beaten counters with a list; medals, achievements, and subsets each
+  show a short "none earned" legend when empty), completion, and last game played on the left
+  (`ProfileSampleSections`, labeled sample data); `ProfileCard` on the right (first on phones) with
+  the username on top, photo, points, Elo, ranking (empty until scoring exists), last
+  active day, member since, and the progress, settings, and report buttons at the bottom; the comment wall
+  below at full width. `noindex`; other casings redirect to the real username
+- `/account/settings` — private: profile information (username, account type, member since, last
+  activity), account standing (an active mute, or "None"), profile photo (upload, replace, remove), email (add and confirm one when missing), connected platforms,
+  password (worded as "change" or "set" depending on whether one exists), sign out
+- `/rules` — public community rules; keep them in step with moderation behavior and the content policy
+- `/forum` — forum home: each category with its Pinned and Recent Posts sections (skeletons match);
+  `/forum/[category]` lists published posts in numbered pages of 25
+  (`?page=`), and admins also see drafts and New Post; `/forum/[category]/[slug]` shows a post;
+  `/forum/[category]/new` and `/forum/[category]/[slug]/edit` are the admin editor (`requireAdmin`,
+  `noindex`). Published reads are cached with the `forum` tag; editor actions call `updateTag`
+  (`CategoryCard` is shared with the home page's Latest News). The header's `ReleaseBadge` opens
+  `siteConfig.releasePost`; point it at the new announcement with each release
+- `/moderation` — staff report queue; `/moderation/reports/[id]`, `/moderation/users/[username]`, and
+  `/moderation/log` review a report, an account, and the audit log
+- `/account/messages` — placeholder for messages between players; nothing is sent or stored
+- `/progress/[username]` — public completion progress; only real, active players (`notFound()`
+  otherwise). Sample data, labeled on screen and `noindex`, until real unlocks exist
+- `/auth/callback/[provider]` — Route Handler where Discord and GitHub return (unprefixed path,
+  registered with each platform)
 - `/dev` — developer portal: register a recomp, manage achievements and keys
 
-`/`, `/alpha`, `/alpha/confirm` (linked from sent emails), `/privacy`, `/content-policy`, `/games`,
+`/`, `/privacy`, `/content-policy`, `/games`,
 and `/games/[slug]` are live in production:
 renaming any of them needs a permanent (308) redirect from the old path (RULE-005, exception 2).
+Once accounts deploy, the same applies to `/confirm-email` and `/reset-password` (linked from sent
+emails), the other account pages, and `/auth/callback/[provider]`, which is also registered with
+Discord and GitHub (renaming it means updating both apps too).
 
 Every public page defines its metadata (`metadata` or `generateMetadata`), building on the
 defaults and title template in the root layout and including `localeAlternates`.
@@ -141,10 +226,11 @@ src/
 ├── components/
 │   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks)
 │   ├── seo/        # JsonLd for schema.org structured data
-│   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink, Skeleton)
-│   └── <feature>/  # feature components (alpha/, game/; later profile/)
+│   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink, Skeleton, HumanCheck)
+│   └── <feature>/  # feature components (alpha/, auth/, comments/, game/, moderation/, profile/)
 ├── lib/
 │   ├── api/        # data access layer: server-only calls to the .NET API and their response types
+│   ├── auth/       # session.ts (account cookies, current account); forms.ts (form rules, error codes)
 │   ├── clientIp.ts # visitor IP from proxy headers (server-only)
 │   ├── turnstile.ts # server-side human-verification check (server-only)
 │   ├── socialImage.tsx # shared pieces of the opengraph-image routes
@@ -179,7 +265,22 @@ src/
 - Global base styles in `globals.css` already handle reduced motion (`prefers-reduced-motion`),
   sticky-header scroll padding, `touch-action: manipulation`, balanced heading wrap, and the pointer
   cursor on enabled buttons (Tailwind v4 dropped it); don't re-implement them per component.
+- Discord and GitHub buttons show the platform's official mark through `PlatformIcon` (simple-icons,
+  CC0). Disconnecting a platform uses a red button and a confirmation dialog (`DisconnectButton`).
+- Language choices show a country flag (`LocaleFlag`: United States, Spain, Brazil) next to the
+  language name. Flags and the footer's official GitHub, Reddit, and YouTube marks (`SocialLinks`,
+  from simple-icons, CC0) are fixed artwork, so they keep their own colors instead of theme tokens.
 - Interactive menus close on Escape and outside click, and Escape returns focus to the toggle.
+- `BadgeDetails` shows a badge's name, kind, rarity, description, and unlock date on mouse hover,
+  tap, and keyboard focus (Escape closes). It renders on `document.body` so cards can't
+  clip it, and its button name carries the same details for screen readers.
+- `PlayerPreview` is a player’s photo that links to their profile. Its preview opens on mouse hover,
+  keyboard focus, or the first tap on touch screens (a second tap follows the link), and loads public
+  player data only when opened, once per player in each comment section. It also lists up to three
+  featured badges (sample data, labeled on screen, until real badges exist). It and `BadgeDetails` share `ui/useFloatingPanel`.
+- The signed-in header menu (`AccountMenu`) opens on mouse hover (a click goes to the profile), on
+  the first tap on touch screens (a second tap goes to the profile), and on keyboard focus. Each entry
+  has a `MenuIcon`; for staff, Moderation sits in its own separated section.
 - Anything that moves on its own (the featured slider) has a pause button, pauses on hover and
   keyboard focus, and doesn't move at all when the visitor prefers reduced motion (`globals.css`
   shortens every animation then, so never drive timing from an animation in that mode).

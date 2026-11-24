@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { cx } from "@/lib/cx";
-import { NewTabHint, newTabProps } from "./ExternalLink";
+import { NewTabHint } from "./ExternalLink";
+import { newTabProps } from "./newTab";
 
 type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md";

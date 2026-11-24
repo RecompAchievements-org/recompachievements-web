@@ -39,6 +39,7 @@ internal static partial class CatalogImporter
         await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
 
         var existing = await db.Games.AsTracking()
+            .AsSplitQuery()
             .Include(game => game.Sets).ThenInclude(set => set.Achievements)
             .ToDictionaryAsync(game => game.Slug, cancellationToken);
 

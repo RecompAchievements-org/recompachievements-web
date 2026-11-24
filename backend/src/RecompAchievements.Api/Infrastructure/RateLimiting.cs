@@ -11,9 +11,33 @@ internal static class RateLimiting
     // Default budget per client IP; endpoints that need stricter limits add their own named policy.
     private const int PermitsPerMinute = 120;
 
-    // Sign-ups per client IP within 10 minutes.
-    public const string SignupsPolicy = "signups";
-    private const int SignupsPerWindow = 5;
+    // Requests that send email (alpha sign-up, account emails) per client IP within 10 minutes.
+    public const string EmailSendingPolicy = "email-sending";
+    private const int EmailsPerWindow = 5;
+
+    // Sign-in attempts and other credential checks per client IP within 10 minutes.
+    public const string SignInPolicy = "sign-in";
+    private const int SignInsPerWindow = 20;
+
+    // Comment writes (walls and game pages) per client IP within 10 minutes.
+    public const string CommentPolicy = "comments";
+    private const int CommentWritesPerWindow = 30;
+
+    // Reports filed per client IP within 10 minutes.
+    public const string ReportPolicy = "reports";
+    private const int ReportsPerWindow = 15;
+
+    // Staff moderation writes per client IP within 10 minutes.
+    public const string ModerationPolicy = "moderation";
+    private const int ModerationWritesPerWindow = 120;
+
+    // Forum post writes (admins only) per client IP within 10 minutes.
+    public const string ForumPolicy = "forum";
+    private const int ForumWritesPerWindow = 60;
+
+    // Profile photo changes per client IP within 10 minutes.
+    public const string PhotoPolicy = "photos";
+    private const int PhotoWritesPerWindow = 10;
 
     public static IServiceCollection AddApiRateLimiting(this IServiceCollection services, IConfiguration configuration)
     {
@@ -21,8 +45,8 @@ internal static class RateLimiting
         services.AddRateLimiter(options =>
         {
             /** Two global limiters run on every request: a budget per client IP, and a site-wide cap
-             *  on sign-ups across all visitors, so a flood from many IPs (each under its own limit)
-             *  still can't create unlimited sign-ups or emails.
+             *  on email-sending requests across all visitors, so a flood from many IPs (each under
+             *  its own limit) still can't create unlimited sign-ups or emails.
             **/
             options.GlobalLimiter = PartitionedRateLimiter.CreateChained(
                 PartitionedRateLimiter.Create<HttpContext, string>(context =>
@@ -35,26 +59,51 @@ internal static class RateLimiting
                             QueueLimit = 0,
                         })),
                 PartitionedRateLimiter.Create<HttpContext, string>(context =>
-                    IsSignupEndpoint(context)
+                    SendsEmail(context)
                         ? RateLimitPartition.GetFixedWindowLimiter(
                             "all-visitors",
                             _ => new FixedWindowRateLimiterOptions
                             {
-                                PermitLimit = context.RequestServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value.SignupsPerMinute,
+                                PermitLimit = context.RequestServices.GetRequiredService<IOptions<RateLimitingOptions>>().Value.EmailRequestsPerMinute,
                                 Window = TimeSpan.FromMinutes(1),
                                 QueueLimit = 0,
                             })
                         : RateLimitPartition.GetNoLimiter("other")));
 
-            options.AddPolicy(SignupsPolicy, context =>
+            options.AddPolicy(EmailSendingPolicy, context =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     ClientAddress.Resolve(context),
                     _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = SignupsPerWindow,
+                        PermitLimit = EmailsPerWindow,
                         Window = TimeSpan.FromMinutes(10),
                         QueueLimit = 0,
                     }));
+
+            options.AddPolicy(SignInPolicy, context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    ClientAddress.Resolve(context),
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = SignInsPerWindow,
+                        Window = TimeSpan.FromMinutes(10),
+                        QueueLimit = 0,
+                    }));
+
+            options.AddPolicy(CommentPolicy, context =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    ClientAddress.Resolve(context),
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = CommentWritesPerWindow,
+                        Window = TimeSpan.FromMinutes(10),
+                        QueueLimit = 0,
+                    }));
+
+            options.AddPolicy(ReportPolicy, context => WindowLimit(context, ReportsPerWindow));
+            options.AddPolicy(ModerationPolicy, context => WindowLimit(context, ModerationWritesPerWindow));
+            options.AddPolicy(PhotoPolicy, context => WindowLimit(context, PhotoWritesPerWindow));
+            options.AddPolicy(ForumPolicy, context => WindowLimit(context, ForumWritesPerWindow));
 
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.OnRejected = async (rejection, cancellationToken) =>
@@ -82,12 +131,22 @@ internal static class RateLimiting
         return services;
     }
 
-    private static bool IsSignupEndpoint(HttpContext context) =>
-        context.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName == SignupsPolicy;
+    private static RateLimitPartition<string> WindowLimit(HttpContext context, int permits) =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ClientAddress.Resolve(context),
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = permits,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0,
+            });
+
+    private static bool SendsEmail(HttpContext context) =>
+        context.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName == EmailSendingPolicy;
 }
 
 internal sealed class RateLimitingOptions
 {
-    // Sign-ups per minute across all visitors combined.
-    public int SignupsPerMinute { get; set; } = 30;
+    // Email-sending requests (sign-ups and account emails) per minute across all visitors combined.
+    public int EmailRequestsPerMinute { get; set; } = 30;
 }

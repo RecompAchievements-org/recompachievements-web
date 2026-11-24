@@ -6,14 +6,16 @@ The REST API behind [recompachievements.org](https://recompachievements.org/): t
 [root README](../README.md); coding rules for this folder live in [`AGENTS.md`](AGENTS.md).
 
 > **Status:** live in production with health checks, the alpha tester sign-up (with double
-> opt-in email), and the game directory (preview achievement sets from the catalog). Account and
-> SDK endpoints come next.
+> opt-in email), the game directory (preview achievement sets from the catalog), and player
+> accounts (email and password, Discord, GitHub), profile photos, walls, and moderation. SDK
+> endpoints come next.
 
 ## Stack
 
 - **.NET 10 (LTS)**, ASP.NET Core **Minimal APIs**
 - **EF Core 10** with **PostgreSQL 17** (Npgsql), snake_case table and column names
 - **xUnit v3** integration tests against a real PostgreSQL container (Testcontainers)
+- **SkiaSharp** to re-create uploaded photos and the **AWS S3 SDK** for S3-compatible media storage
 - Built-in ASP.NET Core rate limiting, ProblemDetails errors, OpenAPI, and health checks
 - Container image on Microsoft's minimal "chiseled" runtime (no shell, non-root)
 
@@ -63,10 +65,16 @@ backend/
 │   ├── Program.cs                    # Composition root: wires the pieces below
 │   ├── Infrastructure/               # Database, error handling, rate limiting, proxy, security, API docs
 │   ├── Infrastructure/Email/         # IEmailSender: transactional email API (hosted) or console logging (Development)
+│   ├── Infrastructure/Media/         # IMediaStore: S3-compatible storage and CDN purge, or a local folder (Development)
 │   ├── Data/                         # AppDbContext and Migrations/
 │   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
-│       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
+│       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, profile photos, account emails, cleanup
+│       ├── Comments/                 # Comments on profile walls and game pages (one shared table)
+│       ├── Moderation/               # Reports, staff actions, and the audit log
+│       ├── Forum/                    # Forum categories and posts (admin-managed News)
+│       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup,
+│       │                             # AlphaSignupMigration (alpha list to accounts)
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
     ├── ApiFactory.cs                 # In-memory API + throwaway PostgreSQL container
@@ -86,18 +94,32 @@ environments set these (see `.env.example`):
 | `ForwardedHeaders__TrustAllProxies` | `true` only where the API is reachable solely through the host's proxy |
 | `Database__ApplyMigrationsOnStartup` | `true` to apply pending migrations at startup |
 | `Catalog__ImportOnStartup` | `true` to import the game catalog at startup (after migrations) |
-| `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value) |
+| `InternalApi__Key` | Shared secret between the website and the API; required for `/api/v1` (long random value). Also the base of the key that signs pending Discord/GitHub sign-ups, so changing it cancels sign-ups in progress |
 | `Brevo__ApiKey` | Transactional email API key. Required outside Development; without it, Development logs emails to the console instead |
 | `Email__FromAddress`, `Email__FromName` | Sender of outgoing email (`contact@recompachievements.org`, `RecompAchievements`) |
+| `Discord__ClientId`, `Discord__ClientSecret` | Optional. The Discord application used for "Continue with Discord"; without both, Discord isn't offered |
+| `GitHub__ClientId`, `GitHub__ClientSecret` | Optional. The GitHub OAuth app used for "Continue with GitHub"; without both, GitHub isn't offered |
 | `SteamGridDb__ApiKey` | Optional. SteamGridDB API key: games whose catalog file has no `art` get art picked once after startup. Empty: nothing is fetched |
+| `MediaStorage__BucketName`, `__ServiceUrl`, `__AccessKey`, `__SecretKey`, `__PublicBaseUrl` | S3-compatible bucket for profile photos and its public CDN address. Without a bucket, Development uses an ignored `.local-media/` folder and other environments turn uploads off |
+| `MediaStorage__PurgeUrl`, `MediaStorage__PurgeToken` | CDN purge endpoint and token; required with a bucket outside Development, so removed images leave the CDN |
+| `MediaStorage__EvidenceBucketName` | Optional private bucket for evidence kept under a legal hold |
+| `AlphaPhase__EndsAt` | Optional. When the alpha phase ends (ISO 8601). Empty while the alpha runs; accounts created before it are alpha testers (`isAlphaTester`) |
+| `AlphaMigration__Enabled` | `true` for the release that migrates the earlier alpha list: confirmed sign-ups become accounts and get a welcome email with a set-password link. Runs at startup and then hourly until everyone is migrated; safe to leave on |
+| `AlphaMigration__DryRun` | With `Enabled`, only logs what a run would do (accounts to create, existing accounts, adjusted usernames, welcomes waiting) |
 | `Site__BaseUrl` | Website address used in email links (`https://recompachievements.org`; `http://localhost:3000` locally) |
 
 `appsettings.Development.json` holds local-only values (database credentials matching
 `docker-compose.yml`, a development internal key); real secrets never go in the repository.
 Abuse-protection settings have safe defaults in code and are intentionally not listed here.
 
-**Emails in development:** with no `Brevo__ApiKey`, confirmation emails are written to the API's
-console, so you can copy the confirmation link from there.
+**Emails in development:** with no `Brevo__ApiKey`, every email (alpha and account confirmations,
+password links, notices) is written to the API's console, so you can copy links from there.
+
+**Discord and GitHub sign-in:** each platform's app must list the website's callback as its
+redirect URL: `{Site__BaseUrl}/auth/callback/discord` and `{Site__BaseUrl}/auth/callback/github`
+(for local testing, `http://localhost:3000/auth/callback/…`). The Discord app needs the `identify`
+and `email` scopes; the GitHub app asks for `user:email`. Both use the authorization code flow
+with PKCE; client secrets stay on the API.
 
 ## Endpoints
 
@@ -111,7 +133,92 @@ console, so you can copy the confirmation link from there.
 | `GET /api/v1/games?lang=en` | Games in display order, with their core set's status, achievement count, total points, featured flag, latest version, release date, and image |
 | `GET /api/v1/games/{slug}?lang=en` | One game (including original game, repository, and license) with its core-set achievements in order; `404` if unknown |
 
-Pending sign-ups whose link expired are deleted automatically. `lang` is `en`, `es`, or `pt`
+**Accounts** (`/api/v1/auth`). Signed-in requests send the session token as
+`Authorization: Bearer <token>`; errors carry a machine-readable `code` (e.g. `username_taken`)
+next to the ProblemDetails fields.
+
+| Route | Purpose |
+|---|---|
+| `POST /register` | Email + password account; emails a confirmation link. Always `202` (the owner of an already registered email gets an email instead), `409 username_taken`. Rate limited |
+| `POST /confirm-email` | Confirms an email with the emailed token (after registering or `email/add`): `200`, `404` unknown or used, `410` expired (links last 24 hours), `409 email_in_use` |
+| `POST /resend-confirmation` | Sends the confirmation link again for an unconfirmed registration. Always `202` |
+| `POST /sign-in` | Email and password; returns `{ token, expiresAt }`. Every failure is the same `401 invalid_credentials` (unknown email, wrong password, no password set, unconfirmed email). Rate limited |
+| `POST /sign-out` | Ends the current session (`204`) |
+| `GET /me` | The signed-in account: username, email and whether it's confirmed, password set, connected platforms, `canCollectAchievements`, `isAlphaTester`, `createdAt`, `lastActivityAt`, `role`, `isMuted`, `mutedUntil`, and `avatar` |
+| `POST /forgot-password` | Emails a single-use link (1 hour) to set or reset the password, only to a confirmed email. Always `202`. This is also how platform-created accounts set their first password |
+| `POST /reset-password` | Sets the password with that link; signs out every session and sends a notice. `404`, `410` |
+| `GET /usernames/available?username=` | Whether a username can be chosen |
+| `POST /email/add` | Signed in, no confirmed email yet: emails a confirmation link for this address. `409 email_in_use`, `409 email_already_set` |
+| `GET /providers` | Platforms configured for sign-in (`discord`, `github`) |
+| `POST /oauth/{provider}/start` | The platform's authorize URL, `state`, and PKCE `codeVerifier` (the website keeps the last two) |
+| `POST /oauth/{provider}/complete` | Exchanges the code: `403 account_disabled` if the platform ID's account is disabled; `signed-in` with a session when it has an account, else `pending` with a short-lived signed `pendingToken`, the email the new account will use (or `null`), and a suggested username |
+| `POST /oauth/complete-signup` | Creates the pending account with the chosen username; returns a session. `409 username_taken`, `400 signup_expired` |
+| `POST /oauth/{provider}/connect` | Signed in: connects the platform if its ID isn't on another account (`409 platform_linked_elsewhere`); returns an `emailOffer` (the platform's verified email) only for accounts without a confirmed email |
+| `DELETE /connections/{provider}` | Signed in: disconnects a platform, only if a confirmed email with a password or the other platform remains (`409 last_sign_in_method`) |
+| `PUT /photo?rightsConfirmed=true` | Uploads or replaces the player's photo (raw image body). Needs a confirmed email, an established account, no active mute, and the rights confirmation. Accepts static JPEG, PNG, or WebP and stores new square WebP files. `400 photo_invalid`, `400 photo_rights_required`, `403 account_muted`, `403 photo_not_allowed_yet`, `503 photos_unavailable`. Rate limited |
+| `DELETE /photo` | Deletes the player's photo (`204`). Rate limited |
+
+A **disabled** account (`users.is_enabled = false`) keeps its data, and its email and platform IDs
+stay reserved, but it can't use anything: its sessions stop working on the next request, email
+sign-in gets the usual `401 invalid_credentials`, platform sign-in gets `403 account_disabled`, and
+no emailed link is sent or accepted. `users.edited_at` is null until the account's data first
+changes. `users.last_activity_at` starts at creation and moves forward on sign-in and session use;
+it survives sign-out and session cleanup and doesn't count as an edit.
+
+**Players and walls** (`/api/v1/users/{username}`, matched ignoring case; `404` for unknown names,
+disabled accounts, and unconfirmed registrations). Names of pages under `/account` are reserved.
+
+| Route | Purpose |
+|---|---|
+| `GET /` | Public information only: `username`, `createdAt`, `lastActiveOn` (a UTC date, never a time), and `avatar` (`small` and `large` URLs, or `null`) |
+| `GET /wall?page=<n>` | One numbered page of comments (default `1`), newest first, with each author’s username, join date, and photo, `canDelete` for the signed-in viewer, and `page`, `pageSize`, `total`, and `totalPages`; an invalid page is `400`, and a page past the end is empty. Comments by disabled accounts are hidden |
+| `POST /wall` | Signed in with a confirmed email (`403 email_required`) and not muted (`403 account_muted`): posts plain text, up to 1000 characters. Rate limited |
+| `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |
+
+**Game comments** (`/api/v1/games/{slug}/comments`; `404` for unknown games) share the wall's
+rules and response shape, including `?page=<n>`: anyone reads, posting needs a confirmed email and no active mute, and the
+posting limit is shared with walls. `DELETE /{id}` is for the comment's author only (anyone else
+gets `404`); staff remove others through moderation. Removing a game from the catalog deletes its
+comments.
+
+**Forum.** Anyone reads published posts; text uses `lang` and falls back to English. Posts are
+Markdown source: the API never renders HTML. Admin endpoints answer `404` to everyone else, read
+the role from the database on every request, and are rate limited.
+
+| Route | Purpose |
+|---|---|
+| `GET /api/v1/forum/categories` | Categories with their published post count, every pinned post, and the five most recent posts |
+| `GET /api/v1/forum/{category}/posts?page=<n>` | One numbered page of published posts (title, excerpt, author, date) |
+| `GET /api/v1/forum/{category}/posts/{slug}` | One published post, with the languages it has |
+| `GET /api/v1/forum-admin/{category}/posts`, `GET …/{slug}` | Admin: every post including drafts, and a post's source in each language |
+| `POST /api/v1/forum-admin/{category}/posts`, `PUT …/{slug}`, `DELETE …/{slug}` | Admin: create, update (publish or unpublish), or delete. `409 slug_taken`; `409 slug_locked` when a published post's address would change |
+
+The `AddAccountsAndCommunity` migration creates the **news** category, titled "Latest News" (admins only, comments off), and publishes the
+Alpha v1.0 announcement, shown as written by the RecompAchievements Team.
+
+**Moderation.** `POST /api/v1/reports` lets a signed-in player report a `profile`, `photo`, or
+`comment` (`202`, also for a repeated open report; `400 cannot_report_self`; rate limited).
+Everything under `/api/v1/moderation` is for staff: anyone else gets `404`, and the role is read
+from the database on every request. Writes need a reason, are rate limited, commit with their audit
+entry, and answer `403 moderation_forbidden` when the target isn't allowed.
+
+| Route | Purpose |
+|---|---|
+| `GET /reports?status=&before=`, `GET /reports/{id}` | The report queue and one report with its target and account summary |
+| `POST /reports/{id}/resolve`, `/dismiss` | Closes a report and tells the reporter the outcome |
+| `GET /users/{username}` | Account summary for staff, with no email or platform IDs |
+| `GET /log?before=` | The append-only audit log |
+| `POST /comments/{id}/remove` | Removes a comment (wall or game page) and emails its author the reason; report reviews include `commentLocation` (thread and page) to open it in context |
+| `POST /users/{username}/photo/remove` | Deletes a photo, purges it from the CDN, and emails the reason |
+| `POST /users/{username}/mute`, `/unmute` | Mutes until a date, or ends the mute |
+| `POST /users/{username}/disable`, `/enable` | Disables an account (ends its sessions and removes its photo) or enables it |
+| `PUT /users/{username}/role` | Admin only: changes a role |
+| `POST /users/{username}/photo/legal-hold` | Admin only, for serious illegal content: preserves a private copy, unpublishes the image, and disables the account without emailing its owner |
+
+Pending alpha sign-ups whose link expired are deleted automatically (confirmed ones are migrated
+to accounts when `AlphaMigration__Enabled` is on), and so are expired sessions
+and email links, email + password registrations never confirmed before their link expired, and
+moderation text evidence after 90 days (except legal holds). `lang` is `en`, `es`, or `pt`
 (default `en`); text without a translation falls back to English.
 
 ### Conventions for all endpoints

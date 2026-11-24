@@ -4,14 +4,25 @@
   },
   "common": {
     "skipToContent": "Skip to content",
-    "opensInNewTab": "(opens in a new tab)",
-    "alphaOpen": "Alpha Sign-Up Open · Limited Spots!"
+    "opensInNewTab": "(opens in a new tab)"
   },
   "header": {
     "homeLabel": "{siteName} home",
     "mainNav": "Main",
     "github": "GitHub",
-    "games": "Games"
+    "games": "Games",
+    "forum": "Forum",
+    "release": "Alpha v1.0 Live",
+    "signIn": "Sign In",
+    "account": "Your account: {username}",
+    "accountMenu": {
+      "label": "Account",
+      "profile": "Profile",
+      "progress": "Completion Progress",
+      "messages": "Messages",
+      "settings": "Settings",
+      "moderation": "Moderation"
+    }
   },
   "localeSwitcher": {
     "label": "Language",
@@ -28,7 +39,8 @@
     "contentPolicy": "Content policy",
     "tagline": "Achievements for recomps and native PC ports, tracked by the community.",
     "social": "Follow us",
-    "socialLink": "{siteName} on {network}"
+    "socialLink": "{siteName} on {network}",
+    "rules": "Community rules"
   },
   "home": {
     "metaTitle": "Achievements for Native Recomps",
@@ -99,17 +111,47 @@
     "achievements": "Achievements"
   },
   "comments": {
-    "heading": "Comments",
-    "intro": "Tips, bugs, and setup notes from players of this recomp.",
-    "accountsNotice": "Commenting will need an account. Accounts are coming soon; until then, what you post here stays on this page only and isn’t saved.",
     "label": "Your comment",
-    "placeholder": "Share a tip, a bug, or your setup…",
     "post": "Post Comment",
+    "posting": "Posting…",
+    "count": "{count} / {max}",
     "empty": "No comments yet.",
-    "you": "You",
-    "justNow": "Just now",
-    "notSaved": "Not saved",
-    "count": "{count} / {max}"
+    "signInToComment": "Sign In to Comment",
+    "emailToComment": "Add and verify an email to comment.",
+    "addEmail": "Add Email",
+    "delete": "Delete",
+    "deleteLabel": "Delete comment by {username}",
+    "confirmDelete": "Confirm Delete",
+    "deleting": "Deleting…",
+    "cancel": "Cancel",
+    "invalid": "Write a comment using visible text, up to 1,000 characters.",
+    "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes.",
+    "loading": "Loading comments…",
+    "reportLabel": "Report comment by {username}",
+    "pagination": {
+      "label": "Comment pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}",
+      "goToPage": "Page {page}"
+    },
+    "muted": "Your account is muted, so you can’t post comments right now.",
+    "game": {
+      "heading": "Comments",
+      "intro": "Tips, bugs, and setup notes from players of this recomp.",
+      "placeholder": "Share a tip, a bug, or your setup…"
+    },
+    "author": {
+      "joined": "Joined {date}",
+      "open": "Open {username}’s profile",
+      "view": "View Profile",
+      "loading": "Loading…",
+      "unavailable": "We couldn’t load this profile.",
+      "memberSince": "Member Since",
+      "lastActivity": "Last Activity",
+      "badges": "Featured Badges",
+      "sample": "Sample Data"
+    }
   },
   "artCredits": {
     "heading": "Image Credits",
@@ -140,102 +182,47 @@
     "description": "This page doesn’t exist or has moved.",
     "backHome": "Back to Home"
   },
-  "alpha": {
-    "metaTitle": "Join the Alpha",
-    "metaDescription": "Sign up to test RecompAchievements before launch: earn achievements in native recomps and help shape the platform.",
-    "title": "Join the Alpha",
-    "intro": "Be one of the first players to earn achievements in native recomps. Alpha testers try new features before anyone else and help shape the platform.",
-    "testersHeading": "What Testers Do",
-    "testers": [
-      "Play supported recomps with achievements switched on.",
-      "Report bugs and share what feels good or bad.",
-      "Help decide which recomps get achievements first."
-    ],
-    "storeHeading": "What We Store",
-    "store": "Your email, nickname, platforms, and the recomps you play, only to run the alpha. Details are in our {privacy}.",
-    "privacyLink": "privacy notice",
-    "form": {
-      "email": "Email",
-      "emailPlaceholder": "you@example.com",
-      "nickname": "Nickname",
-      "nicknameHint": "2 to 32 characters.",
-      "platforms": "Platforms You Play On",
-      "recomps": "Recomps You Play",
-      "recompsOptional": "Optional",
-      "recompsPlaceholder": "e.g. Zelda 64: Recompiled, Ape Escape…",
-      "consent": "I agree to the {privacy} and to being contacted about the alpha.",
-      "submit": "Join the Alpha",
-      "submitting": "Sending…",
-      "honeypot": "Leave this field empty"
-    },
-    "errors": {
-      "required": "This field is required.",
-      "email": "Enter a valid email address.",
-      "nicknameLength": "Use 2 to 32 characters.",
-      "platforms": "Choose at least one platform.",
-      "recompsLength": "Keep it under 200 characters.",
-      "consent": "Please accept the privacy notice to continue.",
-      "rateLimited": "Too many attempts. Please try again in a few minutes.",
-      "unavailable": "Something went wrong on our side. Please try again later.",
-      "invalid": "Please check the highlighted fields.",
-      "challenge": "Please complete the human verification above and try again."
-    },
-    "success": {
-      "title": "Check Your Inbox",
-      "sentTo": "We sent a confirmation link to:",
-      "expiry": "Open it within 7 days to secure your spot.",
-      "spam": "Can’t find it? Check your spam folder, or sign up again in 10 minutes to get a new link."
-    }
-  },
-  "alphaConfirm": {
-    "metaTitle": "Confirm Your Sign-Up",
-    "title": "Confirm Your Alpha Sign-Up",
-    "body": "Press the button to confirm your email address and join the alpha.",
-    "button": "Confirm My Email",
-    "confirming": "Confirming…",
-    "successTitle": "You’re In!",
-    "successBody": "Your email is confirmed. We’ll write to you as soon as the alpha opens.",
-    "expiredTitle": "This Link Has Expired",
-    "expiredBody": "Confirmation links last 7 days. Sign up again to get a new one.",
-    "invalidTitle": "This Link Isn’t Valid",
-    "invalidBody": "It may be incomplete, or a newer email replaced it. Sign up again to get a new link.",
-    "unavailable": "We couldn’t confirm your email right now. Please try again in a few minutes.",
-    "signUpAgain": "Sign Up Again",
-    "backHome": "Back to Home"
-  },
   "privacy": {
     "metaTitle": "Privacy Notice",
     "title": "Privacy Notice",
     "updated": "Last updated: {date}",
-    "intro": "RecompAchievements is a community project. This notice explains what we collect when you sign up for the alpha, why, and how to remove it.",
+    "intro": "RecompAchievements is a community project. This notice explains what we collect when you create an account or joined our earlier alpha sign-up list, why, and how to remove it.",
     "sections": [
       {
         "title": "What We Collect",
-        "body": "When you sign up for the alpha: your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. We don’t store your IP address."
+        "body": "Earlier alpha sign-up list (now closed): your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
+      },
+      {
+        "title": "Comments",
+        "body": "Comments you post on a player’s wall or a game page are public and stored until you delete them, your account is deleted, or we remove them. A wall’s owner can also delete comments on their wall. Forum posts are written by the RecompAchievements team and show the author’s username."
+      },
+      {
+        "title": "Profile Photos and Moderation",
+        "body": "If you upload a profile photo, it’s public. We store only a resized copy without its metadata, such as location, and we record when you confirmed you may use it. Your photo is deleted when you remove or replace it, when moderators remove it, or when your account is disabled. If you report content, we keep your report and share it only with moderators. We also keep a record of moderation decisions; text kept as evidence is erased after 90 days, except where the law requires us to keep it, such as serious illegal content."
       },
       {
         "title": "Why",
-        "body": "Only to run the alpha: to confirm your email, invite you when the alpha opens, and organize testing. We don’t sell or share your data, and we don’t send marketing emails."
+        "body": "To run your account and the earlier alpha sign-up list: confirm your email, sign you in, keep your account secure, send account emails you ask for (confirmation and password links) or that protect you (a password change or a newly connected platform), and, later, track your achievements. We don’t sell or share your data, and we don’t send marketing emails."
       },
       {
         "title": "Where It’s Kept",
-        "body": "In our database at our hosting provider. Confirmation emails are sent through our email delivery provider. Both act only on our instructions."
+        "body": "In our database at our hosting provider. Emails are sent through our email delivery provider. Both act only on our instructions. If you choose Discord or GitHub, they tell us who you are when you sign in; we never receive your password there."
       },
       {
         "title": "Bot Protection",
-        "body": "Before you sign up, a short check in your browser confirms you’re a person, not an automated script. It’s run by a security service that sees only technical information about your browser and connection, used solely for this check. We don’t receive or store it."
+        "body": "Before you sign up or ask for a password link, a short check in your browser confirms you’re a person, not an automated script. It’s run by a security service that sees only technical information about your browser and connection, used solely for this check. We don’t receive or store it."
       },
       {
         "title": "How Long",
-        "body": "Unconfirmed sign-ups are deleted automatically 7 days after the link is sent. Confirmed sign-ups are kept until the alpha ends, then deleted unless you create an account."
+        "body": "Unconfirmed sign-ups from the earlier alpha list are deleted automatically 7 days after the link is sent. Confirmed ones are migrated to player accounts: we create an account with your sign-up email and email you your username and a link to set your password. Accounts are kept until you ask us to delete them. Registrations never confirmed are deleted once their link expires (24 hours), and sign-in sessions end after 30 days without use."
       },
       {
         "title": "Cookies",
-        "body": "No tracking or advertising cookies. One functional cookie (NEXT_LOCALE) remembers the language you chose."
+        "body": "No tracking or advertising cookies. Functional cookies only: NEXT_LOCALE remembers the language you chose; when you sign in, one cookie keeps you signed in; and short-lived ones (15 minutes) hold a Discord or GitHub sign-in while it’s in progress."
       },
       {
         "title": "Your Rights",
-        "body": "You can ask to see, correct, or delete your data at any time by writing to {email}."
+        "body": "You can ask to see, correct, or delete your data or your account at any time by writing to {email}."
       }
     ]
   },
@@ -262,9 +249,604 @@
         "body": "Game and platform names are trademarks of their owners and are used only to identify the games. RecompAchievements is not affiliated with or endorsed by any game publisher, platform holder, or recomp developer unless stated."
       },
       {
+        "title": "Player Comments",
+        "body": "Players are responsible for the comments they post on profile walls and game pages. A comment’s author can delete it, and so can a wall’s owner. To report abusive or infringing comments, use the Report button or write to {email}."
+      },
+      {
+        "title": "Player Photos",
+        "body": "Profile photos are uploaded by players, who confirm they may use them. We can’t review every image in advance. To report one, use the Report button or write to {email}."
+      },
+      {
         "title": "Removal Requests",
         "body": "If you hold rights to something shown on this site and want it removed, email {email} with a link to the page and what you’d like removed. We review every request and remove content within 5 business days when the request is valid."
       }
     ]
+  },
+  "auth": {
+    "privacyLink": "privacy notice",
+    "agreement": "By creating an account you agree to our {privacy}.",
+    "platformButton": "Continue with {platform}",
+    "platformsLoading": "Loading sign-in options…",
+    "or": "or",
+    "emailRequiredBanner": "Add and verify an email to start collecting achievements.",
+    "emailRequiredAction": "Add Email",
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "confirmNewPassword": "Confirm new password",
+      "passwordHint": "At least 8 characters.",
+      "passwordsMatch": "Passwords match.",
+      "username": "Username",
+      "usernameHint": "3–24 letters, numbers, - or _. Shown on your profile.",
+      "emailValid": "Valid email address.",
+      "usernameChecking": "Checking availability…",
+      "usernameAvailable": "This username is available."
+    },
+    "errors": {
+      "invalid": "Please fix the highlighted fields.",
+      "required": "This field is required.",
+      "email": "Enter a valid email address.",
+      "usernameFormat": "Use 3–24 letters, numbers, - or _.",
+      "passwordLength": "Use 8 to 128 characters.",
+      "passwordMismatch": "Passwords don’t match.",
+      "username_taken": "That username is taken. Try another one.",
+      "invalid_credentials": "Email or password is incorrect. If you just signed up, confirm your email first.",
+      "email_in_use": "That email is used by another account. Sign in to that account and connect this platform from its Settings.",
+      "email_already_set": "This account already has an email.",
+      "account_disabled": "This account is disabled. If you think that’s a mistake, write to contact@recompachievements.org.",
+      "email_required": "Add and verify an email in Settings to do this.",
+      "signup_expired": "This sign-up took too long. Sign in with the platform again.",
+      "platform_refused": "The platform didn’t accept the sign-in. Please try again.",
+      "platform_unavailable": "We couldn’t reach the platform. Please try again in a few minutes.",
+      "platform_linked_elsewhere": "That platform account is already connected to another RecompAchievements account.",
+      "platform_already_connected": "This account is connected to another account on that platform. Disconnect it first.",
+      "last_sign_in_method": "Set a password or connect the other platform first, so you can still sign in.",
+      "flow": "The sign-in didn’t match. Please start again.",
+      "not_signed_in": "Your session ended. Please sign in again.",
+      "challenge": "We couldn’t verify you’re human. Please try again.",
+      "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "unavailable": "Something went wrong on our side. Please try again in a few minutes.",
+      "account_muted": "Your account is muted, so you can’t do this right now.",
+      "photo_not_allowed_yet": "Your account is too new to upload a photo. Please try again later.",
+      "photo_invalid": "Use a static JPEG, PNG, or WebP image.",
+      "photo_rights_required": "Confirm that you may use this image.",
+      "photos_unavailable": "Photo uploads aren’t available right now.",
+      "cannot_report_self": "You can’t report your own content.",
+      "moderation_forbidden": "You can’t take this action on this account."
+    },
+    "signIn": {
+      "metaTitle": "Sign In",
+      "title": "Sign In",
+      "intro": "Sign in to track your achievements across recomps.",
+      "submit": "Sign In",
+      "submitting": "Signing in…",
+      "forgot": "Forgot password?",
+      "noAccount": "New here? {signUp}",
+      "signUpLink": "Create an account"
+    },
+    "signUp": {
+      "metaTitle": "Create an Account",
+      "title": "Create an Account",
+      "intro": "One account for every supported recomp. You can also connect Discord or GitHub later.",
+      "submit": "Create Account",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account? {signIn}",
+      "signInLink": "Sign in",
+      "successTitle": "Check Your Email",
+      "successSentTo": "If this address can be used, we sent a confirmation link to:",
+      "successExpiry": "The link expires in 24 hours. Confirm it to sign in.",
+      "successSpam": "Nothing after a few minutes? Check your spam folder."
+    },
+    "confirmEmail": {
+      "metaTitle": "Confirm Your Email",
+      "title": "Confirm Your Email",
+      "body": "Press the button to confirm your email address.",
+      "button": "Confirm My Email",
+      "confirming": "Confirming…",
+      "successTitle": "Email Confirmed",
+      "successBody": "Your account can now collect achievements.",
+      "expiredTitle": "This Link Has Expired",
+      "expiredBody": "Confirmation links last 24 hours. Sign up again, or add the email again from Settings.",
+      "invalidTitle": "This Link Isn’t Valid",
+      "invalidBody": "It may be incomplete, already used, or replaced by a newer email.",
+      "inUseTitle": "This Email Is Already Used",
+      "inUseBody": "Another account confirmed this email first. Sign in to that account instead.",
+      "continue": "Continue"
+    },
+    "forgotPassword": {
+      "metaTitle": "Set or Reset Your Password",
+      "title": "Set or Reset Your Password",
+      "intro": "Enter your account email and we’ll send you a link to choose a new password. Accounts created with Discord or GitHub set their first password this way too.",
+      "submit": "Send Link",
+      "submitting": "Sending…",
+      "successTitle": "Check Your Email",
+      "successBody": "If an account with a confirmed email matches, we sent it a link. It expires in 1 hour and works once.",
+      "backToSignIn": "Back to Sign In"
+    },
+    "resetPassword": {
+      "metaTitle": "Choose a Password",
+      "title": "Choose a Password",
+      "intro": "Choose a new password for your account. Every device will be signed out.",
+      "submit": "Save Password",
+      "submitting": "Saving…",
+      "successTitle": "Password Saved",
+      "successBody": "Sign in with your email and your new password.",
+      "expiredTitle": "This Link Has Expired",
+      "expiredBody": "Password links last 1 hour. Ask for a new one.",
+      "invalidTitle": "This Link Isn’t Valid",
+      "invalidBody": "It may be incomplete or already used. Ask for a new one.",
+      "requestNew": "Send a New Link",
+      "signIn": "Sign In"
+    },
+    "welcome": {
+      "metaTitle": "Welcome",
+      "title": "Welcome to RecompAchievements",
+      "intro": "One last step: choose your username.",
+      "emailHeading": "Your Account Email",
+      "withEmail": "Your account will be created with {email}, verified by {platform}.",
+      "noEmail": "This account has no email yet. You’ll need to add and verify one before achievements can be tracked.",
+      "submit": "Create Account",
+      "submitting": "Creating account…",
+      "expiredTitle": "This Sign-Up Expired",
+      "expiredBody": "It took too long. Sign in with the platform again to continue.",
+      "startAgain": "Start Again"
+    },
+    "account": {
+      "metaTitle": "Your Account",
+      "title": "Your Account",
+      "loading": "Loading your account…",
+      "profileHeading": "Profile Information",
+      "usernameLabel": "Username",
+      "alphaTester": "Alpha tester",
+      "accountTypeLabel": "Account type",
+      "memberSinceLabel": "Member since",
+      "lastActivityLabel": "Last activity",
+      "standingHeading": "Account Standing",
+      "standingNone": "None",
+      "standingGood": "Your account is in good standing.",
+      "standingMutedBadge": "Muted",
+      "standingMutedUntil": "Until {date} UTC",
+      "standingMutedBody": "You can’t post comments or change your profile photo until then. You can still sign in, play, and earn achievements.",
+      "standingAppeal": "If you think this is a mistake, write to {email} to appeal.",
+      "emailHeading": "Email",
+      "emailConfirmed": "Confirmed. Your account can collect achievements.",
+      "noEmailBody": "Add and verify an email to start collecting achievements. We’ll send a confirmation link.",
+      "addEmail": "Send Confirmation Link",
+      "addingEmail": "Sending…",
+      "emailSent": "We sent a confirmation link to {email}. Follow it to finish.",
+      "offerTitle": "Use This Email?",
+      "offerBody": "{platform} says {email} is yours. Use it as your account email? We’ll still send our own confirmation link.",
+      "offerAccept": "Use This Email",
+      "offerDismiss": "No, Thanks",
+      "platformsHeading": "Connected Platforms",
+      "platformsIntro": "Sign in with any connected platform. Connecting one never changes your account email.",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "connect": "Connect",
+      "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "disconnectTitle": "Disconnect {platform}?",
+      "disconnectBody": "You won’t be able to sign in with {platform} until you connect it again.",
+      "disconnectConfirm": "Disconnect {platform}",
+      "disconnectCancel": "Cancel",
+      "signOut": "Sign Out",
+      "signingOut": "Signing out…"
+    },
+    "profileCard": {
+      "label": "Player summary",
+      "photoAlt": "Default profile photo",
+      "totalPoints": "Total Points",
+      "eloPoints": "Elo Points",
+      "ranking": "Ranking",
+      "unranked": "Unranked",
+      "lastActivity": "Last Activity",
+      "memberSince": "Member Since"
+    },
+    "settings": {
+      "metaTitle": "Settings",
+      "title": "Settings",
+      "loading": "Loading your settings…",
+      "changePasswordHeading": "Change Password",
+      "changePasswordBody": "Your account already has a password. To change it, we’ll email you a secure link.",
+      "changePasswordButton": "Send Password Change Link",
+      "setPasswordHeading": "Set a Password",
+      "setPasswordBody": "Your account doesn’t have a password yet. Set one to also sign in with your email and password. We’ll email you a secure link.",
+      "setPasswordButton": "Send Link to Set Password",
+      "passwordNeedsEmail": "Add and verify an email first, so we can send you the link.",
+      "sendingPasswordLink": "Sending…",
+      "passwordLinkSent": "We sent a link to your email. It expires in 1 hour."
+    },
+    "messages": {
+      "metaTitle": "Messages",
+      "title": "Messages",
+      "loading": "Loading messages…",
+      "comingSoonTitle": "Coming Soon",
+      "comingSoonBody": "You’ll be able to send messages to other players here."
+    },
+    "photo": {
+      "heading": "Profile Photo",
+      "intro": "Shown publicly on your profile and comments.",
+      "chooseLabel": "Choose a Photo",
+      "replaceLabel": "Replace Your Photo",
+      "noFile": "No file chosen",
+      "hint": "JPEG, PNG, or WebP. It’s cropped to a square.",
+      "rightsBefore": "I own this image or have the right to use it, and it follows the",
+      "rulesLink": "community rules",
+      "rightsAfter": ".",
+      "save": "Save Photo",
+      "saving": "Saving…",
+      "saved": "Your photo was updated.",
+      "remove": "Remove Photo",
+      "previewAlt": "Preview of your new photo",
+      "currentAlt": "Your profile photo",
+      "muted": "Your account is muted, so you can’t change your photo right now.",
+      "needsEmail": "Add and confirm an email to upload a photo."
+    }
+  },
+  "progress": {
+    "metaTitle": "Completion Progress",
+    "title": "{username}’s Completion Progress",
+    "loading": "Loading completion progress…",
+    "unavailable": "We couldn’t load this progress right now. Please try again in a few minutes.",
+    "photoAlt": "Default profile photo",
+    "sampleTitle": "Sample Data",
+    "sampleText": "This page is a preview. These numbers are examples, not this player’s real progress. Real progress will appear once recomps can unlock achievements.",
+    "averageCompletion": "Average Completion",
+    "achievementsUnlocked": "Achievements Unlocked",
+    "pointsEarned": "Points Earned",
+    "gamesHeading": "Games",
+    "gameLine": "{unlocked} of {total} achievements · {points}"
+  },
+  "profile": {
+    "metaTitle": "Player Profile",
+    "loading": "Loading profile…",
+    "unavailable": "We couldn’t load this profile right now. Please try again in a few minutes.",
+    "progressLink": "Completion Progress",
+    "settingsLink": "Account Settings",
+    "sampleText": "Badges, medals, subsets, achievements, completion, and last game on this page are examples, not this player’s real progress. Real data will appear once recomps can unlock achievements.",
+    "sectionsUnavailable": "We couldn’t load this section right now. Please try again in a few minutes.",
+    "medalsHeading": "Medals Earned",
+    "medalTiers": {
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver"
+    },
+    "noMedal": "No medal earned",
+    "noAchievements": "No achievements earned",
+    "medalTotal": "Total",
+    "subsetsHeading": "Subsets Earned",
+    "subsetCounters": {
+      "mastered": "Mastered",
+      "beaten": "Beaten"
+    },
+    "subsetStatus": {
+      "mastered": "Mastered",
+      "beaten": "Beaten"
+    },
+    "subsetTypes": {
+      "dlc": "DLC",
+      "mod": "Mod",
+      "randomizer": "Randomizer",
+      "challenge": "Challenge"
+    },
+    "noSubsets": "No subsets earned",
+    "achievementsHeading": "Last Achievements Earned",
+    "medalsCount": {
+      "one": "{count} earned",
+      "other": "{count} earned"
+    },
+    "achievementsCount": {
+      "one": "{count} earned",
+      "other": "{count} earned"
+    },
+    "completionHeading": "Completion",
+    "viewAll": "View All",
+    "lastGameHeading": "Last Game Played",
+    "viewGame": "View Game",
+    "badges": {
+      "heading": "Badges",
+      "displayed": "Displayed badges",
+      "none": "No badges earned",
+      "count": {
+        "one": "{count} earned",
+        "other": "{count} earned"
+      },
+      "kinds": {
+        "award": "Award",
+        "recognition": "Recognition",
+        "role": "Site Role",
+        "event": "Event",
+        "contribution": "Contribution"
+      },
+      "items": {
+        "recompPioneer": "Recomp Pioneer",
+        "sdkContributor": "SDK Contributor",
+        "alphaMarathon": "Alpha Marathon",
+        "communityTranslator": "Community Translator",
+        "bugHunter": "Bug Hunter",
+        "communityMember": "Community Member",
+        "weeklyChallenge": "Achievement of the Week",
+        "firstComment": "First Comment"
+      },
+      "descriptions": {
+        "recompPioneer": "Helped launch RecompAchievements in its earliest days.",
+        "sdkContributor": "Made a significant contribution to the achievement SDK.",
+        "alphaMarathon": "Took part in the community marathon during the alpha.",
+        "communityTranslator": "Helps translate the site for the community.",
+        "bugHunter": "Reported bugs that were confirmed and fixed.",
+        "communityMember": "Joined the RecompAchievements community.",
+        "weeklyChallenge": "Earned the highlighted achievement of the week in hardcore.",
+        "firstComment": "Posted a first comment on a profile wall."
+      },
+      "unlocked": "Unlocked {date}"
+    },
+    "wall": {
+      "heading": "{username} Wall",
+      "intro": "Comments from the community for {username}.",
+      "placeholder": "Write something on this wall…"
+    }
+  },
+  "moderation": {
+    "metaTitle": "Moderation",
+    "title": "Moderation",
+    "nav": "Moderation sections",
+    "queue": "Reports",
+    "log": "Audit Log",
+    "statusNav": "Filter reports by status",
+    "findUser": "Find a username",
+    "find": "Find",
+    "loading": "Loading moderation tools…",
+    "unavailable": "We couldn’t load this right now. Please try again in a few minutes.",
+    "noReports": "No reports here.",
+    "noActions": "No actions recorded.",
+    "review": "Review",
+    "older": "Older",
+    "deletedAccount": "Deleted account",
+    "reportedBy": "{target}, reported by {reporter}",
+    "until": "Until {date}",
+    "userTitle": "Account Review",
+    "reportTitle": "Report Review",
+    "disabled": "Disabled",
+    "muted": "Muted",
+    "joined": "Joined",
+    "lastActive": "Last active",
+    "openReports": "Open reports",
+    "mutedUntil": "Muted until",
+    "history": "Moderation History",
+    "actionsHeading": "Actions",
+    "photoOf": "Profile photo of {username}",
+    "viewAccount": "View Account",
+    "viewInContext": "View in Context",
+    "reporterDetails": "Reporter’s Details",
+    "reportedText": "Reported Text",
+    "reportedPhoto": "Reported Photo",
+    "targetGone": "The reported content no longer exists.",
+    "resolution": "Resolution",
+    "statuses": {
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "targets": {
+      "profile": "Profile",
+      "photo": "Photo",
+      "comment": "Comment"
+    },
+    "reasons": {
+      "sexual": "Sexual content or nudity",
+      "violence": "Violence or gore",
+      "hate": "Hate or discrimination",
+      "harassment": "Harassment or threats",
+      "copyright": "Copyright",
+      "personal_info": "Personal information",
+      "spam": "Spam",
+      "other": "Something else"
+    },
+    "logActions": {
+      "remove_photo": "Photo removed",
+      "remove_comment": "Comment removed",
+      "mute": "Muted",
+      "unmute": "Unmuted",
+      "disable": "Disabled",
+      "enable": "Enabled",
+      "change_role": "Role changed",
+      "resolve_report": "Report resolved",
+      "dismiss_report": "Report dismissed",
+      "legal_hold": "Legal hold"
+    },
+    "report": {
+      "button": "Report",
+      "title": "Report Content",
+      "intro": "Moderators review every report. The person you report isn’t told who sent it.",
+      "what": "What are you reporting?",
+      "targets": {
+        "profile": "This profile",
+        "photo": "This profile photo",
+        "comment": "This comment"
+      },
+      "reason": "Reason",
+      "details": "Details (optional)",
+      "send": "Send Report",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "sent": "Thanks. Your report was sent to the moderators."
+    },
+    "actions": {
+      "notAllowed": "You can’t take actions on this account.",
+      "duration": "Duration",
+      "days": "{count} days",
+      "newRole": "New role",
+      "roles": {
+        "player": "Player",
+        "moderator": "Moderator",
+        "admin": "Admin"
+      },
+      "reason": "Reason",
+      "reasonShared": "This reason is emailed to the player.",
+      "working": "Working…",
+      "done": "Done.",
+      "cacheWarning": "Done, but the image may stay cached for a while. Tell an admin.",
+      "noEvidence": "Unpublished, but no evidence copy was kept. Tell the owner now.",
+      "ops": {
+        "resolve": {
+          "title": "Resolve Report",
+          "body": "Close this report as handled and tell the reporter action was taken.",
+          "submit": "Resolve"
+        },
+        "dismiss": {
+          "title": "Dismiss Report",
+          "body": "Close this report with no violation found.",
+          "submit": "Dismiss"
+        },
+        "remove_comment": {
+          "title": "Remove Comment",
+          "body": "Delete this comment and email its author the reason.",
+          "submit": "Remove Comment"
+        },
+        "remove_photo": {
+          "title": "Remove Photo",
+          "body": "Delete this photo everywhere and email the player the reason.",
+          "submit": "Remove Photo"
+        },
+        "mute": {
+          "title": "Mute Account",
+          "body": "Blocks comments and photo changes. The player can still earn achievements.",
+          "submit": "Mute"
+        },
+        "unmute": {
+          "title": "End Mute",
+          "body": "Let this player post and change their photo again.",
+          "submit": "End Mute"
+        },
+        "disable": {
+          "title": "Disable Account",
+          "body": "Signs the player out, hides the profile, and removes the photo.",
+          "submit": "Disable"
+        },
+        "enable": {
+          "title": "Enable Account",
+          "body": "Let this player sign in again.",
+          "submit": "Enable"
+        },
+        "role": {
+          "title": "Change Role",
+          "body": "Set this account’s staff role.",
+          "submit": "Change Role"
+        },
+        "legal_hold": {
+          "title": "Legal Hold",
+          "body": "Only for serious illegal content: unpublishes the image, disables the account, and keeps a private copy for legal reporting. The player isn’t emailed.",
+          "submit": "Apply Legal Hold"
+        }
+      }
+    }
+  },
+  "rules": {
+    "metaTitle": "Community Rules",
+    "metaDescription": "What you can post on RecompAchievements, how copyright complaints work, and what happens when rules are broken.",
+    "title": "Community Rules",
+    "intro": "These rules apply to everything players post on RecompAchievements, including usernames, profile photos, and comments.",
+    "sections": [
+      {
+        "title": "Not Allowed",
+        "body": "No nudity or sexual content, graphic violence or gore, hate or discrimination, harassment or threats, other people’s private information, spam, or anything illegal. Content that sexualizes minors is never allowed; we remove it, disable the account, and report it to the authorities."
+      },
+      {
+        "title": "Profile Photos",
+        "body": "By uploading a photo, you confirm that you own it or have the right to use it, and that it follows these rules. Photos are public as soon as you save them. You can replace or remove yours at any time in your account settings."
+      },
+      {
+        "title": "Copyright",
+        "body": "Only post what you’re allowed to use. We can’t review every image in advance, so rights holders can ask us to remove content by emailing {email} with a link to it, what they own, and how to contact them. We remove content within 5 business days when a request is valid. Accounts that repeatedly infringe are disabled."
+      },
+      {
+        "title": "Reporting",
+        "body": "If you’re signed in, use the Report button on a profile, photo, or comment. You can also write to {email}. Moderators review reports, and we don’t tell the reported player who sent them."
+      },
+      {
+        "title": "What Moderators Can Do",
+        "body": "Moderators can remove content, mute an account (it can’t post or change its photo, but it can still earn achievements), or disable it. We tell you the reason by email, unless the law or the safety of others prevents it."
+      },
+      {
+        "title": "Appeals",
+        "body": "If you think a decision was wrong, write to {email} with your username and why. A person will review it."
+      }
+    ]
+  },
+  "forum": {
+    "metaTitle": "Forum",
+    "metaDescription": "News and announcements from the RecompAchievements project.",
+    "title": "Forum",
+    "intro": "News and announcements from the RecompAchievements project.",
+    "loading": "Loading the forum…",
+    "unavailable": "We couldn’t load the forum right now. Please try again in a few minutes.",
+    "postCount": {
+      "one": "{count} post",
+      "other": "{count} posts"
+    },
+    "noPosts": "No posts yet.",
+    "backToForum": "Forum",
+    "backToCategory": "{category}",
+    "team": "RecompAchievements Team",
+    "createdOn": "Created {date}",
+    "editedOn": "Edited {date}",
+    "englishOnly": "This post isn’t available in your language yet, so it’s shown in English.",
+    "newPost": "New Post",
+    "edit": "Edit Post",
+    "drafts": "Drafts",
+    "draftBadge": "Draft",
+    "pagination": {
+      "label": "Post pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}",
+      "goToPage": "Page {page}"
+    },
+    "editor": {
+      "newTitle": "New Post",
+      "editTitle": "Edit Post",
+      "languages": "Post languages",
+      "language": {
+        "en": "English",
+        "es": "Spanish (optional)",
+        "pt": "Portuguese (optional)"
+      },
+      "titleLabel": "Title",
+      "bodyLabel": "Body",
+      "bodyHint": "Formatting: ## Heading, ### Subheading, **bold**, *italic*, `code`, - lists, 1. lists, and [links](https://…) or site paths such as [rules](/rules).",
+      "write": "Write",
+      "preview": "Preview",
+      "previewEmpty": "Nothing to preview yet.",
+      "slugLabel": "Address",
+      "slugHint": "Lowercase letters, numbers, and hyphens. It can’t change after the post is published.",
+      "slugLocked": "This post has been published, so its address is fixed.",
+      "saveDraft": "Save Draft",
+      "publish": "Publish",
+      "update": "Update Post",
+      "unpublish": "Unpublish",
+      "saving": "Saving…",
+      "delete": "Delete Post",
+      "deleteTitle": "Delete this post?",
+      "deleteBody": "This can’t be undone, and its address stops working for everyone.",
+      "deleteConfirm": "Delete Post",
+      "cancel": "Cancel",
+      "errors": {
+        "invalid": "Check the title, body, and address. English is required, and only some characters are allowed.",
+        "slug_taken": "Another post already uses that address.",
+        "slug_locked": "A published post’s address can’t change.",
+        "rateLimited": "Too many changes. Please wait a few minutes and try again.",
+        "unavailable": "We couldn’t save the post right now. Please try again."
+      },
+      "pinLabel": "Pin this post",
+      "pinHint": "Pinned posts stay in the Pinned section of the forum until you unpin them."
+    },
+    "pinned": "Pinned",
+    "recent": "Recent Posts",
+    "noPinned": "No pinned posts.",
+    "pinnedBadge": "Pinned"
   }
 }

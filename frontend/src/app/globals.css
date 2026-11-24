@@ -34,6 +34,11 @@
   --color-gold: #f5c04a;
   --color-on-gold: #0a0c14;
 
+  /* Completion medals, from highest to lowest */
+  --color-medal-platinum: #bfe8f5;
+  --color-medal-gold: #f5c04a;
+  --color-medal-silver: #c4ccd8;
+
   /* Status */
   --color-success: #3ddc97;
   --color-danger: #ff6b7a;

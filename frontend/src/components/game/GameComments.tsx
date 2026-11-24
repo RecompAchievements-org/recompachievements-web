@@ -10,8 +10,9 @@ export async function GameComments() {
   const account = await getCurrentAccount();
   const viewer = account && {
     username: account.username,
+    avatar: account.avatar,
     joined: formatDate(locale, new Date(account.createdAt), { dateStyle: "medium", timeZone: "UTC" }),
   };
 
-  return <CommentsPreview labels={comments} locale={locale} viewer={viewer} />;
+  return <CommentsPreview labels={comments} locale={locale} viewer={viewer} muted={account?.isMuted ?? false} />;
 }

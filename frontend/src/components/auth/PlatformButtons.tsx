@@ -4,6 +4,7 @@ import { interpolate } from "@/i18n/format";
 import { getLocale, getMessages } from "@/i18n/server";
 import { getPlatforms } from "@/lib/api/accounts";
 import { SubmitButton } from "./FormParts";
+import { PlatformIcon } from "./PlatformIcon";
 import { platformNames } from "./platformNames";
 
 /** "Continue with Discord / GitHub" buttons for the sign-in and sign-up pages. Only platforms the
@@ -34,7 +35,7 @@ export async function PlatformButtons() {
               <input type="hidden" name="platform" value={platform} />
               <input type="hidden" name="mode" value="sign-in" />
               <input type="hidden" name="locale" value={locale} />
-              <SubmitButton variant="secondary" label={label} pendingLabel={label} className="w-full" />
+              <SubmitButton variant="secondary" icon={<PlatformIcon platform={platform} />} label={label} pendingLabel={label} className="w-full" />
             </form>
           );
         })}

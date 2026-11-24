@@ -30,6 +30,15 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("AvatarKey")
+                        .HasMaxLength(96)
+                        .HasColumnType("character varying(96)")
+                        .HasColumnName("avatar_key");
+
+                    b.Property<DateTimeOffset?>("AvatarTermsAcceptedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("avatar_terms_accepted_at");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -79,6 +88,10 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("locked_until");
 
+                    b.Property<DateTimeOffset?>("MutedUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("muted_until");
+
                     b.Property<string>("NormalizedUsername")
                         .IsRequired()
                         .HasMaxLength(24)
@@ -89,6 +102,14 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("password_hash");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasDefaultValue("player")
+                        .HasColumnName("role");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -560,6 +581,148 @@ namespace RecompAchievements.Api.Data.Migrations
                         .HasDatabaseName("ix_games_slug");
 
                     b.ToTable("games", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Moderation.ModerationAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("character varying(24)")
+                        .HasColumnName("action");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Evidence")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("evidence");
+
+                    b.Property<DateTimeOffset?>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at");
+
+                    b.Property<Guid>("ModeratorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("moderator_id");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("reason");
+
+                    b.Property<Guid?>("ReportId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("report_id");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("target_user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_moderation_actions");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("ix_moderation_actions_created_at");
+
+                    b.HasIndex("TargetUserId", "Id")
+                        .HasDatabaseName("ix_moderation_actions_target_user_id_id");
+
+                    b.ToTable("moderation_actions", (string)null);
+                });
+
+            modelBuilder.Entity("RecompAchievements.Api.Features.Moderation.ModerationReport", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Details")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("details");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("reason");
+
+                    b.Property<Guid>("ReportedUserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reported_user_id");
+
+                    b.Property<Guid>("ReporterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("reporter_id");
+
+                    b.Property<string>("ResolutionNote")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("resolution_note");
+
+                    b.Property<DateTimeOffset?>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("resolved_at");
+
+                    b.Property<Guid?>("ResolvedById")
+                        .HasColumnType("uuid")
+                        .HasColumnName("resolved_by_id");
+
+                    b.Property<string>("Snapshot")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("snapshot");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("TargetKey")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("target_key");
+
+                    b.Property<string>("TargetType")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("target_type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_moderation_reports");
+
+                    b.HasIndex("ReportedUserId", "Id")
+                        .HasDatabaseName("ix_moderation_reports_reported_user_id_id");
+
+                    b.HasIndex("ReporterId", "CreatedAt")
+                        .HasDatabaseName("ix_moderation_reports_reporter_id_created_at");
+
+                    b.HasIndex("Status", "Id")
+                        .HasDatabaseName("ix_moderation_reports_status_id");
+
+                    b.HasIndex("ReporterId", "TargetType", "TargetKey")
+                        .IsUnique()
+                        .HasDatabaseName("ix_moderation_reports_reporter_id_target_type_target_key")
+                        .HasFilter("status = 'open'");
+
+                    b.ToTable("moderation_reports", (string)null);
                 });
 
             modelBuilder.Entity("RecompAchievements.Api.Features.Walls.WallComment", b =>

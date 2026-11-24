@@ -1,7 +1,8 @@
 import "server-only";
 import { cacheLife } from "next/cache";
 import type { Locale } from "@/i18n/config";
-import { apiGet, apiSend, type ApiResult, type VisitorContext } from "./client";
+import { apiGet, apiSend, apiUpload, type ApiResult, type VisitorContext } from "./client";
+import type { UserRole } from "./moderation";
 
 export const platforms = ["discord", "github"] as const;
 export type Platform = (typeof platforms)[number];
@@ -13,6 +14,11 @@ export function isPlatform(value: string): value is Platform {
 export interface Session {
   token: string;
   expiresAt: string;
+}
+
+export interface PlayerAvatar {
+  small: string;
+  large: string;
 }
 
 export interface Account {
@@ -28,6 +34,10 @@ export interface Account {
   locale: Locale;
   createdAt: string;
   lastActivityAt: string;
+  role: UserRole;
+  isMuted: boolean;
+  mutedUntil: string | null;
+  avatar: PlayerAvatar | null;
 }
 
 // What anyone can see about a player. lastActiveOn is a date (YYYY-MM-DD) with no time.
@@ -35,6 +45,7 @@ export interface PublicPlayer {
   username: string;
   createdAt: string;
   lastActiveOn: string;
+  avatar: PlayerAvatar | null;
 }
 
 export interface OAuthStart {
@@ -79,6 +90,11 @@ export const isUsernameAvailable = (username: string, visitor: VisitorContext) =
 
 export const addEmail = (email: string, locale: Locale, visitor: VisitorContext) =>
   apiSend<Accepted>("POST", `${base}/email/add`, { email, locale }, visitor);
+
+export const uploadPhoto = (content: ArrayBuffer, visitor: VisitorContext) =>
+  apiUpload<PlayerAvatar>(`${base}/photo?rightsConfirmed=true`, content, visitor);
+
+export const deletePhoto = (visitor: VisitorContext) => apiSend<void>("DELETE", `${base}/photo`, undefined, visitor);
 
 // A player's public information; a 404 means no such active player.
 export const getPublicPlayer = (username: string, visitor: VisitorContext) =>

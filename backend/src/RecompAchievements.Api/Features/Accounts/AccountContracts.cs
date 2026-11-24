@@ -68,7 +68,7 @@ public sealed record OAuthSignInResponse(
 public sealed record ConnectResponse(string Provider, string? EmailOffer);
 
 // What anyone can see about a player; never add private fields.
-public sealed record PublicPlayerResponse(string Username, DateTimeOffset CreatedAt, DateOnly LastActiveOn);
+public sealed record PublicPlayerResponse(string Username, DateTimeOffset CreatedAt, DateOnly LastActiveOn, PlayerAvatarResponse? Avatar);
 
 public sealed record MeResponse(
     Guid Id,
@@ -82,4 +82,8 @@ public sealed record MeResponse(
     bool IsAlphaTester,
     string Locale,
     DateTimeOffset CreatedAt,
-    DateTimeOffset LastActivityAt);
+    DateTimeOffset LastActivityAt,
+    string Role,
+    bool IsMuted,
+    DateTimeOffset? MutedUntil,
+    PlayerAvatarResponse? Avatar);

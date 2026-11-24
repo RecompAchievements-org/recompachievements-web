@@ -17,6 +17,7 @@ export interface CommentsLabels {
   justNow: string;
   notSaved: string;
   count: string;
+  muted: string;
   author: CommentAuthorLabels;
 }
 
@@ -25,7 +26,17 @@ export interface CommentsLabels {
  *  clears it.
  *  Replace with real, account-backed comments when that feature lands.
 **/
-export function CommentsPreview({ labels, locale, viewer }: { labels: CommentsLabels; locale: Locale; viewer: Extract<CommentAuthorInfo, { username: string }> | null }) {
+export function CommentsPreview({
+  labels,
+  locale,
+  viewer,
+  muted = false,
+}: {
+  labels: CommentsLabels;
+  locale: Locale;
+  viewer: Extract<CommentAuthorInfo, { username: string }> | null;
+  muted?: boolean;
+}) {
   const [draft, setDraft] = useState("");
   const [posted, setPosted] = useState<{ id: number; text: string }[]>([]);
 
@@ -36,6 +47,7 @@ export function CommentsPreview({ labels, locale, viewer }: { labels: CommentsLa
       empty={labels.empty}
       locale={locale}
       authorLabels={labels.author}
+      blockedNotice={muted ? labels.muted : null}
       comments={posted.map((comment) => ({
         id: comment.id,
         author: viewer ?? { name: labels.you },

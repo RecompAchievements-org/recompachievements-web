@@ -63,10 +63,12 @@ src/
 │   │   ├── forgot-password/, reset-password/  # Set or reset a password through an emailed link
 │   │   ├── welcome/          # After a Discord/GitHub sign-up: shows the account email, picks the username
 │   │   ├── account/          # Redirect to own profile; [username]/ public profile and wall;
-│   │   │                     # settings/ (email, platforms, password, sign out); messages/ (placeholder)
+│   │   │                     # settings/ (photo, email, platforms, password, sign out); messages/ (placeholder)
 │   │   ├── progress/         # [username]/: public completion progress (labeled sample data for now)
 │   │   ├── auth/             # startPlatform action; callback/[provider]/route.ts receives Discord/GitHub
 │   │   ├── games/            # Game directory; [slug]/ game page, its loading skeleton, and social card
+│   │   ├── moderation/       # Staff only: report queue, reports/[id], users/[username], log, server actions
+│   │   ├── rules/            # Public community rules
 │   │   ├── content-policy/   # What we host, image sources, removal requests
 │   │   └── privacy/          # Privacy notice
 │   ├── global-not-found.tsx  # Trilingual 404 for URLs that match no route
@@ -79,16 +81,17 @@ src/
 │   └── sitemap.ts            # /sitemap.xml: every public page × locale, with hreflang links
 ├── components/
 │   ├── alpha/                # AlphaOpenBadge ("sign-up open" announcement)
-│   ├── auth/                 # AuthShell, PlatformButtons, FormParts (client: fields, submit, human check)
+│   ├── auth/                 # AuthShell, PlatformButtons, PlatformIcon, FormParts (client: fields, submit, human check)
 │   ├── game/                 # GameGrid, GameCard, FeaturedSlider + SliderControls (client), GameArt,
 │   │                         # GeneratedArt, FadeInImage (client), GameBackdrop, GameArtCredits,
 │   │                         # GameDetailsCard,
 │   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
 │   │                         # GameComments, CommentsPreview (client, not saved)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, LocaleFlag, SocialLinks, AccountLink,
-│   │                         # AccountMenu (client), EmailRequiredBanner
+│   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner
 │   ├── comments/             # CommentThread and CommentAuthor (client): every comment section
-│   ├── profile/              # ProfilePhoto (placeholder), ProfileCard, ProfileBadges, BadgeIcon,
+│   ├── moderation/           # ReportButton, ModerationControls (client), ModerationShell, UserSearch
+│   ├── profile/              # ProfilePhoto, ProfileCard, ProfileBadges, BadgeIcon,
 │   │                         # BadgeDetails and PlayerPreview (client popovers), sampleBadges,
 │   │                         # ProfileSampleSections
 │   ├── progress/             # ProgressRow; sampleProgress: mock data until real unlocks exist
@@ -102,8 +105,8 @@ src/
 │   ├── rich.tsx              # rich(): elements inside translated strings
 │   └── messages/             # en.json (source of truth), es.json, pt.json
 ├── lib/
-│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached; accounts.ts)
-│   ├── auth/                 # session.ts: the only code touching account cookies; forms.ts: shared form rules and error codes
+│   ├── api/                  # Server-only API client (client.ts) and per-feature calls (games.ts is cached; accounts.ts, walls.ts, moderation.ts)
+│   ├── auth/                 # session.ts: the only code touching account cookies; staff.ts: moderation page guard; forms.ts: shared form rules and error codes
 │   ├── clientIp.ts           # Visitor IP from the proxy headers (forwarded to the API)
 │   ├── turnstile.ts          # Server-side verification of the human-verification challenge
 │   ├── socialImage.tsx       # Shared size, colors, font, and logo for social preview images
@@ -172,7 +175,8 @@ to the API. Then:
   platform has a verified one, Settings offers to use it (still confirmed by our email).
 
 The header shows signed-in players their photo and a menu with Profile, Completion Progress
-(`/progress/<username>`, public), Messages (placeholder), Settings, and Sign Out. A mouse opens it
+(`/progress/<username>`, public), Messages (placeholder), Settings, Moderation (staff only), and
+Sign Out. A mouse opens it
 on hover and a click goes to the profile; on touch screens the first tap opens it.
 
 Signed-in accounts without a confirmed email see a banner under the header
@@ -186,6 +190,14 @@ section shows each author’s photo, username, and join date (`CommentAuthor`); 
 previews their profile and links to it.
 Signed-out visitors can read; accounts with a confirmed email can post; a comment's author and
 the wall's owner can delete it. Reads and writes are per visitor and never cached.
+
+**Profile photos:** Settings shrinks a chosen JPEG, PNG, or WebP in the browser and sends it through
+a Server Action; the API checks it and creates the stored files. `ProfilePhoto` shows them without
+the image optimizer, so a removed photo leaves no copy on the website.
+
+**Moderation:** signed-in players report profiles, photos, and comments with `ReportButton`. Staff
+use `/moderation` for the report queue, report and account reviews, and the audit log. These pages
+are `noindex` and show the not-found page to everyone else; the API enforces every permission.
 
 ## Featured slider and game images
 

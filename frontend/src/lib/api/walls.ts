@@ -1,12 +1,14 @@
 import "server-only";
 import type { Locale } from "@/i18n/config";
 import { formatDate } from "@/i18n/format";
+import type { PlayerAvatar } from "./accounts";
 import { apiSend, type ApiResult, type VisitorContext } from "./client";
 
 interface ApiWallComment {
   id: string;
   authorUsername: string;
   authorJoinedAt: string;
+  authorAvatar: PlayerAvatar | null;
   body: string;
   createdAt: string;
   canDelete: boolean;
@@ -15,6 +17,7 @@ interface ApiWallComment {
 export interface WallComment {
   id: string;
   authorUsername: string;
+  authorAvatar: PlayerAvatar | null;
   body: string;
   // Already formatted on the server, so the page and the browser always show the same text.
   authorJoined: string;

@@ -7,13 +7,15 @@ The REST API behind [recompachievements.org](https://recompachievements.org/): t
 
 > **Status:** live in production with health checks, the alpha tester sign-up (with double
 > opt-in email), the game directory (preview achievement sets from the catalog), and player
-> accounts (email and password, Discord, GitHub). SDK endpoints come next.
+> accounts (email and password, Discord, GitHub), profile photos, walls, and moderation. SDK
+> endpoints come next.
 
 ## Stack
 
 - **.NET 10 (LTS)**, ASP.NET Core **Minimal APIs**
 - **EF Core 10** with **PostgreSQL 17** (Npgsql), snake_case table and column names
 - **xUnit v3** integration tests against a real PostgreSQL container (Testcontainers)
+- **SkiaSharp** to re-create uploaded photos and the **AWS S3 SDK** for S3-compatible media storage
 - Built-in ASP.NET Core rate limiting, ProblemDetails errors, OpenAPI, and health checks
 - Container image on Microsoft's minimal "chiseled" runtime (no shell, non-root)
 
@@ -63,11 +65,13 @@ backend/
 │   ├── Program.cs                    # Composition root: wires the pieces below
 │   ├── Infrastructure/               # Database, error handling, rate limiting, proxy, security, API docs
 │   ├── Infrastructure/Email/         # IEmailSender: transactional email API (hosted) or console logging (Development)
+│   ├── Infrastructure/Media/         # IMediaStore: S3-compatible storage and CDN purge, or a local folder (Development)
 │   ├── Data/                         # AppDbContext and Migrations/
 │   ├── Catalog/Games/                # Curated game catalog: one JSON file per game, imported at startup
 │   └── Features/<Feature>/           # One folder per feature: endpoints, contracts, entity config
-│       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, account emails, cleanup
+│       ├── Accounts/                 # Users, sessions, email links, Discord/GitHub sign-in, profile photos, account emails, cleanup
 │       ├── Walls/                    # Comments on public player profiles
+│       ├── Moderation/               # Reports, staff actions, and the audit log
 │       ├── AlphaSignups/             # Sign-up, confirmation email, expired sign-up cleanup
 │       └── Games/                    # Games, sets, achievements; catalog import; SteamGridDB art picking
 └── tests/RecompAchievements.Api.Tests/
@@ -94,6 +98,9 @@ environments set these (see `.env.example`):
 | `Discord__ClientId`, `Discord__ClientSecret` | Optional. The Discord application used for "Continue with Discord"; without both, Discord isn't offered |
 | `GitHub__ClientId`, `GitHub__ClientSecret` | Optional. The GitHub OAuth app used for "Continue with GitHub"; without both, GitHub isn't offered |
 | `SteamGridDb__ApiKey` | Optional. SteamGridDB API key: games whose catalog file has no `art` get art picked once after startup. Empty: nothing is fetched |
+| `MediaStorage__BucketName`, `__ServiceUrl`, `__AccessKey`, `__SecretKey`, `__PublicBaseUrl` | S3-compatible bucket for profile photos and its public CDN address. Without a bucket, Development uses an ignored `.local-media/` folder and other environments turn uploads off |
+| `MediaStorage__PurgeUrl`, `MediaStorage__PurgeToken` | CDN purge endpoint and token; required with a bucket outside Development, so removed images leave the CDN |
+| `MediaStorage__EvidenceBucketName` | Optional private bucket for evidence kept under a legal hold |
 | `Site__BaseUrl` | Website address used in email links (`https://recompachievements.org`; `http://localhost:3000` locally) |
 
 `appsettings.Development.json` holds local-only values (database credentials matching
@@ -132,7 +139,7 @@ next to the ProblemDetails fields.
 | `POST /resend-confirmation` | Sends the confirmation link again for an unconfirmed registration. Always `202` |
 | `POST /sign-in` | Email and password; returns `{ token, expiresAt }`. Every failure is the same `401 invalid_credentials` (unknown email, wrong password, no password set, unconfirmed email). Rate limited |
 | `POST /sign-out` | Ends the current session (`204`) |
-| `GET /me` | The signed-in account: username, email and whether it's confirmed, password set, connected platforms, `canCollectAchievements`, `isAlphaTester`, `createdAt`, and `lastActivityAt` |
+| `GET /me` | The signed-in account: username, email and whether it's confirmed, password set, connected platforms, `canCollectAchievements`, `isAlphaTester`, `createdAt`, `lastActivityAt`, `role`, `isMuted`, `mutedUntil`, and `avatar` |
 | `POST /forgot-password` | Emails a single-use link (1 hour) to set or reset the password, only to a confirmed email. Always `202`. This is also how platform-created accounts set their first password |
 | `POST /reset-password` | Sets the password with that link; signs out every session and sends a notice. `404`, `410` |
 | `GET /usernames/available?username=` | Whether a username can be chosen |
@@ -143,6 +150,8 @@ next to the ProblemDetails fields.
 | `POST /oauth/complete-signup` | Creates the pending account with the chosen username; returns a session. `409 username_taken`, `400 signup_expired` |
 | `POST /oauth/{provider}/connect` | Signed in: connects the platform if its ID isn't on another account (`409 platform_linked_elsewhere`); returns an `emailOffer` (the platform's verified email) only for accounts without a confirmed email |
 | `DELETE /connections/{provider}` | Signed in: disconnects a platform, only if a confirmed email with a password or the other platform remains (`409 last_sign_in_method`) |
+| `PUT /photo?rightsConfirmed=true` | Uploads or replaces the player's photo (raw image body). Needs a confirmed email, an established account, no active mute, and the rights confirmation. Accepts static JPEG, PNG, or WebP and stores new square WebP files. `400 photo_invalid`, `400 photo_rights_required`, `403 account_muted`, `403 photo_not_allowed_yet`, `503 photos_unavailable`. Rate limited |
+| `DELETE /photo` | Deletes the player's photo (`204`). Rate limited |
 
 A **disabled** account (`users.is_enabled = false`) keeps its data, and its email and platform IDs
 stay reserved, but it can't use anything: its sessions stop working on the next request, email
@@ -156,13 +165,33 @@ disabled accounts, and unconfirmed registrations). Names of pages under `/accoun
 
 | Route | Purpose |
 |---|---|
-| `GET /` | Public information only: `username`, `createdAt`, and `lastActiveOn` (a UTC date, never a time) |
-| `GET /wall?before=<id>` | A page of comments, newest first, with each author’s username and join date, `canDelete` for the signed-in viewer, and a `nextCursor`. Comments by disabled accounts are hidden |
-| `POST /wall` | Signed in with a confirmed email (`403 email_required`): posts plain text, up to 1000 characters. Rate limited |
+| `GET /` | Public information only: `username`, `createdAt`, `lastActiveOn` (a UTC date, never a time), and `avatar` (`small` and `large` URLs, or `null`) |
+| `GET /wall?before=<id>` | A page of comments, newest first, with each author’s username, join date, and photo, `canDelete` for the signed-in viewer, and a `nextCursor`. Comments by disabled accounts are hidden |
+| `POST /wall` | Signed in with a confirmed email (`403 email_required`) and not muted (`403 account_muted`): posts plain text, up to 1000 characters. Rate limited |
 | `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |
 
+**Moderation.** `POST /api/v1/reports` lets a signed-in player report a `profile`, `photo`, or
+`wall_comment` (`202`, also for a repeated open report; `400 cannot_report_self`; rate limited).
+Everything under `/api/v1/moderation` is for staff: anyone else gets `404`, and the role is read
+from the database on every request. Writes need a reason, are rate limited, commit with their audit
+entry, and answer `403 moderation_forbidden` when the target isn't allowed.
+
+| Route | Purpose |
+|---|---|
+| `GET /reports?status=&before=`, `GET /reports/{id}` | The report queue and one report with its target and account summary |
+| `POST /reports/{id}/resolve`, `/dismiss` | Closes a report and tells the reporter the outcome |
+| `GET /users/{username}` | Account summary for staff, with no email or platform IDs |
+| `GET /log?before=` | The append-only audit log |
+| `POST /comments/{id}/remove` | Removes a wall comment and emails its author the reason |
+| `POST /users/{username}/photo/remove` | Deletes a photo, purges it from the CDN, and emails the reason |
+| `POST /users/{username}/mute`, `/unmute` | Mutes until a date, or ends the mute |
+| `POST /users/{username}/disable`, `/enable` | Disables an account (ends its sessions and removes its photo) or enables it |
+| `PUT /users/{username}/role` | Admin only: changes a role |
+| `POST /users/{username}/photo/legal-hold` | Admin only, for serious illegal content: preserves a private copy, unpublishes the image, and disables the account without emailing its owner |
+
 Pending alpha sign-ups whose link expired are deleted automatically, and so are expired sessions
-and email links, and email + password registrations never confirmed before their link expired. `lang` is `en`, `es`, or `pt`
+and email links, email + password registrations never confirmed before their link expired, and
+moderation text evidence after 90 days (except legal holds). `lang` is `en`, `es`, or `pt`
 (default `en`); text without a translation falls back to English.
 
 ### Conventions for all endpoints

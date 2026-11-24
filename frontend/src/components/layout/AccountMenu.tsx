@@ -6,15 +6,19 @@ import { useFormStatus } from "react-dom";
 import { signOutAction } from "@/app/[lang]/account/settings/actions";
 import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
 import type { Locale } from "@/i18n/config";
+import type { PlayerAvatar } from "@/lib/api/accounts";
 import { cx } from "@/lib/cx";
+import { MenuIcon, type MenuIconName } from "./MenuIcon";
 
 interface AccountMenuProps {
   username: string;
+  avatar: PlayerAvatar | null;
   profileHref: string;
   // Accessible name of the button, already translated ("Your account: name").
   buttonLabel: string;
   menuLabel: string;
-  items: { href: string; label: string }[];
+  // A separated entry gets a line above it, setting it apart from the regular account options.
+  items: { href: string; label: string; icon: MenuIconName; separated?: boolean }[];
   locale: Locale;
   signOutLabel: string;
   signingOutLabel: string;
@@ -24,7 +28,7 @@ interface AccountMenuProps {
  *  profile. Touch has no hover, so the first tap opens it and a second tap goes to the profile. The
  *  keyboard opens it on focus. Escape and an outside press close it.
 **/
-export function AccountMenu({ username, profileHref, buttonLabel, menuLabel, items, locale, signOutLabel, signingOutLabel }: AccountMenuProps) {
+export function AccountMenu({ username, avatar, profileHref, buttonLabel, menuLabel, items, locale, signOutLabel, signingOutLabel }: AccountMenuProps) {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -102,7 +106,7 @@ export function AccountMenu({ username, profileHref, buttonLabel, menuLabel, ite
         onFocus={onLinkFocus}
         className="flex h-9 items-center gap-2 rounded-md px-1.5 text-sm font-medium whitespace-nowrap text-foreground transition-colors hover:bg-surface-raised sm:px-2"
       >
-        <ProfilePhoto className="size-5 rounded sm:size-6" />
+        <ProfilePhoto avatar={avatar} className="size-5 rounded sm:size-6" />
         <span className="hidden max-w-32 truncate sm:inline">{username}</span>
         <svg viewBox="0 0 12 12" aria-hidden="true" className={cx("hidden size-3 text-muted sm:block", open && "rotate-180")}>
           <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -113,12 +117,13 @@ export function AccountMenu({ username, profileHref, buttonLabel, menuLabel, ite
       <nav id={menuId} aria-label={menuLabel} hidden={!open} className="absolute top-full right-0 z-50 w-56 pt-2">
         <ul className="rounded-lg border border-border-strong bg-surface-raised p-1 shadow-lg">
           {items.map((item) => (
-            <li key={item.href}>
+            <li key={item.href} className={item.separated ? "mt-1 border-t border-border pt-1" : undefined}>
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="flex min-h-11 items-center rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
+                className="flex min-h-11 items-center gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-surface"
               >
+                <MenuIcon name={item.icon} />
                 {item.label}
               </Link>
             </li>
@@ -141,8 +146,9 @@ function SignOutButton({ label, pendingLabel }: { label: string; pendingLabel: s
     <button
       type="submit"
       disabled={pending}
-      className="flex min-h-11 w-full items-center rounded-md px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-surface disabled:opacity-60"
+      className="flex min-h-11 w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-surface disabled:opacity-60"
     >
+      <MenuIcon name="signOut" />
       {pending ? pendingLabel : label}
     </button>
   );

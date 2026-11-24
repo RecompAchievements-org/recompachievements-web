@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RecompAchievements.Api.Data;
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Infrastructure;
+using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Features.Walls;
 
@@ -37,6 +38,7 @@ internal static class WallEndpoints
         HttpContext context,
         AppDbContext db,
         Sessions sessions,
+        IMediaStore media,
         CancellationToken cancellationToken)
     {
         if (await WallIdAsync(db, username, cancellationToken) is not { } wallId)
@@ -58,6 +60,7 @@ internal static class WallEndpoints
                 comment.AuthorId,
                 author.Username,
                 AuthorJoinedAt = author.CreatedAt,
+                author.AvatarKey,
                 comment.Body,
                 comment.CreatedAt,
             })
@@ -70,6 +73,7 @@ internal static class WallEndpoints
                 row.Id,
                 row.Username,
                 row.AuthorJoinedAt,
+                AvatarImages.Urls(media, row.AvatarKey),
                 row.Body,
                 row.CreatedAt,
                 viewerId is { } viewer && (viewer == row.AuthorId || viewer == wallId)))
@@ -85,6 +89,7 @@ internal static class WallEndpoints
         AppDbContext db,
         Sessions sessions,
         TimeProvider time,
+        IMediaStore media,
         CancellationToken cancellationToken)
     {
         if (await sessions.ResolveAsync(context, cancellationToken) is not { } session)
@@ -96,6 +101,11 @@ internal static class WallEndpoints
         if (!author.CanCollectAchievements)
         {
             return AccountProblems.Create(StatusCodes.Status403Forbidden, "email_required", "Add and confirm an email to comment");
+        }
+
+        if (author.IsMutedAt(time.GetUtcNow()))
+        {
+            return AccountProblems.Create(StatusCodes.Status403Forbidden, "account_muted", "This account is muted");
         }
 
         if (await WallIdAsync(db, username, cancellationToken) is not { } wallId)
@@ -117,7 +127,7 @@ internal static class WallEndpoints
 
         return TypedResults.Created(
             $"/api/v1/users/{Uri.EscapeDataString(username)}/wall/{comment.Id}",
-            new WallCommentResponse(comment.Id, author.Username, author.CreatedAt, comment.Body, comment.CreatedAt, true));
+            new WallCommentResponse(comment.Id, author.Username, author.CreatedAt, AvatarImages.Urls(media, author.AvatarKey), comment.Body, comment.CreatedAt, true));
     }
 
     // Anything the viewer can't delete answers 404, so it reveals nothing about the comment.

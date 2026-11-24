@@ -11,7 +11,7 @@ import { Skeleton, SkeletonText } from "@/components/ui/Skeleton";
 import { formatNumber, interpolate } from "@/i18n/format";
 import { rich } from "@/i18n/rich";
 import { getLocale, getMessages } from "@/i18n/server";
-import { getPublicPlayer } from "@/lib/api/accounts";
+import { getPublicPlayer, type PlayerAvatar } from "@/lib/api/accounts";
 import { getGames, type GameSummary } from "@/lib/api/games";
 import { getClientIp } from "@/lib/clientIp";
 
@@ -43,12 +43,14 @@ async function ProgressPanel({ params }: Pick<Props, "params">) {
 
   // Sent with the visitor's IP and never cached: a disabled player disappears at once.
   let player: string;
+  let avatar: PlayerAvatar | null;
   let games: GameSummary[];
   try {
     const result = await getPublicPlayer(decodeURIComponent(username), { clientIp: await getClientIp() });
     if (!result.ok && result.status === 404) notFound();
     if (!result.ok) throw new Error(`Loading the player failed with status ${result.status}.`);
     player = result.data.username;
+    avatar = result.data.avatar;
     games = await getGames(locale);
   } catch (error) {
     unstable_rethrow(error);
@@ -64,7 +66,7 @@ async function ProgressPanel({ params }: Pick<Props, "params">) {
   return (
     <>
       <header className="flex items-center gap-4">
-        <ProfilePhoto label={progress.photoAlt} className="size-16 rounded-lg sm:size-20" />
+        <ProfilePhoto avatar={avatar} label={progress.photoAlt} className="size-16 rounded-lg sm:size-20" />
         <h1 className="min-w-0 font-display text-3xl font-bold tracking-tight wrap-anywhere sm:text-4xl">
           {interpolate(progress.title, { username: player })}
         </h1>

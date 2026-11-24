@@ -23,6 +23,18 @@ internal static class RateLimiting
     public const string WallPolicy = "wall";
     private const int WallWritesPerWindow = 30;
 
+    // Reports filed per client IP within 10 minutes.
+    public const string ReportPolicy = "reports";
+    private const int ReportsPerWindow = 15;
+
+    // Staff moderation writes per client IP within 10 minutes.
+    public const string ModerationPolicy = "moderation";
+    private const int ModerationWritesPerWindow = 120;
+
+    // Profile photo changes per client IP within 10 minutes.
+    public const string PhotoPolicy = "photos";
+    private const int PhotoWritesPerWindow = 10;
+
     public static IServiceCollection AddApiRateLimiting(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<RateLimitingOptions>(configuration.GetSection("RateLimiting"));
@@ -84,6 +96,10 @@ internal static class RateLimiting
                         QueueLimit = 0,
                     }));
 
+            options.AddPolicy(ReportPolicy, context => WindowLimit(context, ReportsPerWindow));
+            options.AddPolicy(ModerationPolicy, context => WindowLimit(context, ModerationWritesPerWindow));
+            options.AddPolicy(PhotoPolicy, context => WindowLimit(context, PhotoWritesPerWindow));
+
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
             options.OnRejected = async (rejection, cancellationToken) =>
             {
@@ -109,6 +125,16 @@ internal static class RateLimiting
 
         return services;
     }
+
+    private static RateLimitPartition<string> WindowLimit(HttpContext context, int permits) =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            ClientAddress.Resolve(context),
+            _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = permits,
+                Window = TimeSpan.FromMinutes(10),
+                QueueLimit = 0,
+            });
 
     private static bool SendsEmail(HttpContext context) =>
         context.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName == EmailSendingPolicy;

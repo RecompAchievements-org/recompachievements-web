@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using RecompAchievements.Api.Data;
+using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Features.Accounts;
 
@@ -35,11 +36,12 @@ internal static class PlayerEndpoints
     private static async Task<Results<Ok<PublicPlayerResponse>, NotFound>> GetAsync(
         string username,
         AppDbContext db,
+        IMediaStore media,
         CancellationToken cancellationToken)
     {
         var player = await db.Users
             .PublicByUsername(username)
-            .Select(u => new { u.Username, u.CreatedAt, u.LastActivityAt })
+            .Select(u => new { u.Username, u.CreatedAt, u.LastActivityAt, u.AvatarKey })
             .FirstOrDefaultAsync(cancellationToken);
 
         return player is null
@@ -47,6 +49,7 @@ internal static class PlayerEndpoints
             : TypedResults.Ok(new PublicPlayerResponse(
                 player.Username,
                 player.CreatedAt,
-                DateOnly.FromDateTime(player.LastActivityAt.UtcDateTime)));
+                DateOnly.FromDateTime(player.LastActivityAt.UtcDateTime),
+                AvatarImages.Urls(media, player.AvatarKey)));
     }
 }

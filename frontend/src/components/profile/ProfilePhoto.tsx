@@ -1,9 +1,36 @@
+import Image from "next/image";
+import type { PlayerAvatar } from "@/lib/api/accounts";
 import { cx } from "@/lib/cx";
 
-/** A player's square profile photo. Every account shows this original placeholder until photo
- *  uploads exist. Without a label it's decorative and hidden from screen readers.
+const pixelSizes = { small: 96, large: 512 } as const;
+
+/** A player's square profile photo, or an original placeholder when they have none. Photos skip the
+ *  image optimizer, so a removed photo leaves no copy behind. Without a label it's decorative.
 **/
-export function ProfilePhoto({ label, className }: { label?: string; className?: string }) {
+export function ProfilePhoto({
+  label,
+  className,
+  avatar,
+  variant = "small",
+}: {
+  label?: string;
+  className?: string;
+  avatar?: PlayerAvatar | null;
+  variant?: keyof typeof pixelSizes;
+}) {
+  if (avatar) {
+    return (
+      <Image
+        src={avatar[variant]}
+        alt={label ?? ""}
+        width={pixelSizes[variant]}
+        height={pixelSizes[variant]}
+        unoptimized
+        className={cx("shrink-0 bg-surface-raised object-cover", className)}
+      />
+    );
+  }
+
   return (
     <svg
       viewBox="0 0 96 96"

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using RecompAchievements.Api.Features.Accounts;
 
 namespace RecompAchievements.Api.Features.Walls;
 
@@ -38,6 +39,6 @@ public sealed record CreateWallCommentRequest(
     }
 }
 
-public sealed record WallCommentResponse(Guid Id, string AuthorUsername, DateTimeOffset AuthorJoinedAt, string Body, DateTimeOffset CreatedAt, bool CanDelete);
+public sealed record WallCommentResponse(Guid Id, string AuthorUsername, DateTimeOffset AuthorJoinedAt, PlayerAvatarResponse? AuthorAvatar, string Body, DateTimeOffset CreatedAt, bool CanDelete);
 
 public sealed record WallPageResponse(WallCommentResponse[] Comments, Guid? NextCursor);

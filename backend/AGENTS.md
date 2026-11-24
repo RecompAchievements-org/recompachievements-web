@@ -129,13 +129,34 @@ are security rules; keep every one when changing the code:
   private field; disabled accounts and unconfirmed registrations stay `404`.
 - **Reserved usernames** include every page directly under `/account` (`AccountText`): when adding
   such a page, reserve its name in the same change.
-- **Walls** (`Features/Walls/`): anyone reads; posting needs `CanCollectAchievements`; only the
+- **Walls** (`Features/Walls/`): anyone reads; posting needs `CanCollectAchievements` and no active
+  mute; only the
   author or the wall's owner deletes, and anyone else gets `404`. Bodies are plain text, checked by
   `WallText`, and must never be rendered as HTML or Markdown.
+- **Profile photos** (`PhotoEndpoints`, `AvatarImages`): never store or serve an upload as received.
+  Decode it, refuse anything but a static JPEG, PNG, or WebP, and store only the re-encoded WebP
+  files. Storage goes through `IMediaStore`; photo URLs come from `AvatarImages.Urls`.
 - **Pending platform sign-ups** are never stored: `PendingSignupTokens` signs them (HMAC, short
   lifetime) until the welcome step creates the account.
 - Errors the website must tell apart carry a `code` extension (`AccountProblems`); add new codes
   there and to the website's `AuthError` list together.
+
+## Moderation
+
+`Features/Moderation/` holds reports and staff actions; keep every rule when changing it:
+
+- **Access.** Staff endpoints are in the `/moderation` group, whose filter re-reads the role from the
+  database and answers `404` to everyone else. Check `StaffMember.CanActOn` before every action:
+  nobody acts on themselves, moderators act only on players, and only admins change roles.
+- **Audit.** Every staff change and its `ModerationAction` commit in one transaction. The log is
+  append-only (only expired text evidence is erased). User IDs there aren't foreign keys, so records
+  survive account deletion.
+- **After the commit:** emails and file cleanup run only once the change is saved, and their failure
+  never undoes it. A removed image must also be purged from the CDN; report a failed purge to staff.
+- **Mute** is stored only as `MutedUntil` and read through `User.IsMutedAt`. It blocks social
+  features and must never block earning achievements.
+- **Privacy.** Staff responses never include an email or platform ID. A legal hold's evidence
+  location is never returned, and its owner isn't emailed.
 
 ## Tests
 
@@ -143,7 +164,7 @@ are security rules; keep every one when changing the code:
   success, validation failure, and error paths. Test names use `Behavior_under_condition`.
 - Tests run in the `Testing` environment (API docs off). `ApiFactory` applies migrations at
   startup, captures emails in `CapturingEmailSender`, replaces Discord and GitHub with
-  `FakeOAuthProvider` (tests issue codes for any identity), and `CreateWebsiteClient()` calls like
+  `FakeOAuthProvider` (tests issue codes for any identity), stores media in `FakeMediaStore`, and `CreateWebsiteClient()` calls like
   the website does, isolated per test. Use unique emails per test; account tests share helpers in
   `Accounts/AccountTestKit.cs`.
 - Don't mock EF Core or the database.

@@ -23,6 +23,14 @@ public sealed class User
     public DateTimeOffset? LockedUntil { get; set; }
     public required string Locale { get; set; }
     public bool IsEnabled { get; set; } = true;
+    public string Role { get; set; } = UserRoles.Player;
+
+    // Null means not muted. A mute ends by itself when this time passes.
+    public DateTimeOffset? MutedUntil { get; set; }
+
+    // The storage prefix of the profile photo; null shows the placeholder.
+    public string? AvatarKey { get; set; }
+    public DateTimeOffset? AvatarTermsAcceptedAt { get; set; }
     public DateTimeOffset CreatedAt { get; init; }
 
     // Null until the account is first edited; set by UserEditStamp.
@@ -32,6 +40,15 @@ public sealed class User
     public required DateTimeOffset LastActivityAt { get; set; }
 
     public bool CanCollectAchievements => IsEnabled && Email is not null && EmailConfirmed;
+
+    public bool IsMutedAt(DateTimeOffset now) => MutedUntil > now;
+}
+
+internal static class UserRoles
+{
+    public const string Player = "player";
+    public const string Moderator = "moderator";
+    public const string Admin = "admin";
 }
 
 // A signed-in browser. The website holds the token; only its SHA-256 hash is stored.
@@ -77,6 +94,8 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.GithubId).HasMaxLength(32);
         builder.Property(user => user.PasswordHash).HasMaxLength(256);
         builder.Property(user => user.Locale).HasMaxLength(5);
+        builder.Property(user => user.Role).HasMaxLength(16).HasDefaultValue(UserRoles.Player);
+        builder.Property(user => user.AvatarKey).HasMaxLength(96);
         builder.Ignore(user => user.CanCollectAchievements);
 
         // PostgreSQL allows many NULLs in a unique index, so each identity is unique only where set.

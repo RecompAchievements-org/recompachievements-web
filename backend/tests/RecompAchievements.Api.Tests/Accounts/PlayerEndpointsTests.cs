@@ -22,7 +22,7 @@ public sealed class PlayerEndpointsTests(ApiFactory factory) : IClassFixture<Api
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadFromJsonAsync<JsonElement>(Ct);
-        Assert.Equal(["createdAt", "lastActiveOn", "username"], json.EnumerateObject().Select(p => p.Name).Order(StringComparer.Ordinal));
+        Assert.Equal(["avatar", "createdAt", "lastActiveOn", "username"], json.EnumerateObject().Select(p => p.Name).Order(StringComparer.Ordinal));
         Assert.Equal(username, json.GetProperty("username").GetString());
         // A date, with no time of day.
         Assert.Matches(@"^\d{4}-\d{2}-\d{2}$", json.GetProperty("lastActiveOn").GetString()!);

@@ -11,8 +11,8 @@ traditional emulators.
 
 > 🚧 **Status: alpha (v0.1).** The website and the API are live, with the alpha tester sign-up
 > open, a game directory of preview achievement sets, and player accounts (email and password,
-> Discord, or GitHub) with public profiles and comment walls. The developer portal and the C/C++
-> SDK come next.
+> Discord, or GitHub) with public profiles, profile photos, comment walls, and community
+> moderation. The developer portal and the C/C++ SDK come next.
 
 ---
 
@@ -75,8 +75,8 @@ What that means for design decisions:
                                          │                      │─────▶│ Redis (later)│
  ┌────────────────────┐   /api/v1/*      │                      │      └──────────────┘
  │ Next.js frontend   │ ───────────────▶ │                      │      ┌──────────────┐
- │ (SSR, OG embeds)   │                  └──────────────────────┘      │ Cloudflare R2│
- └────────────────────┘                                                │ (icons, art) │
+ │ (SSR, OG embeds)   │                  └──────────────────────┘      │ Media storage│
+ └────────────────────┘                                                │ (photos, CDN)│
           ▲  browsers, Discord embeds          ▲  community bots       └──────────────┘
 ```
 
@@ -86,7 +86,7 @@ What that means for design decisions:
 | Backend API | .NET 10 (LTS) · ASP.NET Core Minimal APIs · EF Core | Raw performance for the high-frequency SDK telemetry API; strong typing; built-in OpenAPI |
 | Database | PostgreSQL 17 | Relational integrity; unique constraints prevent duplicate unlocks |
 | Cache / rate limit | Redis (or Valkey), added when needed | Live presence heartbeats, cross-instance rate limits, cached rarity (in-memory rate limiting until then) |
-| Asset storage | Cloudflare R2 (S3-compatible) | Achievement icons and cover art with zero egress fees |
+| Media storage | S3-compatible object storage behind a CDN | Player profile photos, processed by the API and served from a separate media address |
 | Hosting (frontend) | Vercel | First-party support for Next.js 16 features (proxy, Cache Components, partial prerendering); preview deploy per PR |
 
 ### API surfaces
@@ -146,12 +146,25 @@ Discord or GitHub; the other methods can be connected later from Settings.
   stay out of search engines for now. Email and sign-in details live in private Settings.
 - An account can be **disabled** without deleting it: it can't sign in or use its sessions or
   emailed links, and its email and platform IDs stay reserved.
+- Established accounts with a confirmed email can upload a **profile photo**, confirming they may
+  use the image. The API re-creates every upload as a square WebP without metadata.
 
 Data: `users` (username, email, confirmation, Discord and GitHub IDs, password hash, enabled flag,
-created, edited, and last activity dates), `user_sessions`
-(hashed session tokens), `user_tokens` (hashed single-use email links), and `wall_comments`
-(plain-text comments on public profiles). Endpoints are listed in
+role, mute end, profile photo, created, edited, and last activity dates), `user_sessions`
+(hashed session tokens), `user_tokens` (hashed single-use email links), `wall_comments`
+(plain-text comments on public profiles), `moderation_reports`, and the append-only
+`moderation_actions` audit log. Endpoints are listed in
 [`backend/README.md`](backend/README.md#endpoints).
+
+### Community moderation
+
+Photos and comments are public as soon as they're posted. Signed-in players can **report** a
+profile, photo, or comment, and **moderators** review the queue. They can remove content, **mute**
+an account (no comments or photo changes until a set date, but it can still earn achievements), or
+disable it. Each decision needs a reason, is recorded in an audit log, and is emailed to the player
+with how to appeal. **Admins** also manage roles. Copyright complaints use notice and takedown:
+valid requests to `contact@recompachievements.org` are handled within 5 business days, and repeat
+infringers are disabled. The public rules are at `/rules`.
 
 ### Website pages (v0.1)
 
@@ -164,12 +177,14 @@ created, edited, and last activity dates), `user_sessions`
 | `/forgot-password`, `/reset-password` | Set or reset a password through an emailed link |
 | `/welcome` | After a Discord/GitHub sign-up: shows the account email (or that there is none yet) and picks the username |
 | `/account` | Sends signed-in players to their own profile |
-| `/account/[username]` | Public player profile: a compact badges card (one to six featured, with the total earned; up to three also shown on the photo's bottom edge), Platinum, Gold, and Silver medal counters (up to three featured Platinum games, one each for Gold and Silver), last achievements earned, subsets earned (Mastered and Beaten), completion, and last game played (labeled sample data for now) beside a card with the username on top, photo placeholder, points, Elo, ranking, last activity, member since, and the progress and settings buttons at the bottom; full-width comment wall below |
-| `/account/settings` | Private settings: email, connected platforms, password, sign out |
+| `/account/[username]` | Public player profile: a compact badges card (one to six featured, with the total earned; up to three also shown on the photo's bottom edge), Platinum, Gold, and Silver medal counters (up to three featured Platinum games, one each for Gold and Silver), last achievements earned, subsets earned (Mastered and Beaten), completion, and last game played (labeled sample data for now) beside a card with the username on top, photo, points, Elo, ranking, last activity, member since, and the progress, settings, and report buttons at the bottom; full-width comment wall below |
+| `/account/settings` | Private settings: profile photo, email, connected platforms, password, sign out |
 | `/account/messages` | Placeholder for messages between players (future feature) |
 | `/progress/[username]` | Public completion progress of a player; shows labeled sample data until real unlocks exist |
 | `/privacy` | Privacy notice |
 | `/content-policy` | What the site hosts, image sources, and removal requests |
+| `/rules` | Community rules: allowed content, copyright, reports, consequences, and appeals |
+| `/moderation` | Staff only: report queue, report and account reviews, and the audit log |
 | `/games` | Game directory |
 | `/games/[slug]` | Game detail — achievements, points, rarity |
 | `/dev` | Developer portal — register a recomp, manage achievements and keys |
@@ -237,6 +252,8 @@ Account, DNS, and email configuration are kept outside this repository.
 - [x] Accounts and sign-in: email and password, Discord, and GitHub, with the confirmed email
   required to collect achievements
 - [x] Public player profiles with comment walls (scores are placeholders until real unlocks exist)
+- [x] Profile photos and community moderation: reports, roles, content removal, mutes, disabled
+  accounts, an audit log, and public community rules
 - [ ] Saved game comments (the game page has a not-saved preview) and developer portal. The portal **replaces the JSON game catalog**: games and achievements are then edited
   only through it and stored only in PostgreSQL, and the catalog importer is deleted.
 - [ ] `librecompachievements` C/C++ SDK
@@ -244,8 +261,8 @@ Account, DNS, and email configuration are kept outside this repository.
   integration (see [Launch target](#launch-target-bbport-bloodborne-)). **Requires the catalog to be
   replaced first:** its import deletes achievements removed from the files, which would erase
   players' unlocks once real unlocks exist.
-- [ ] Moderation tools for reviewing reports and removing achievements not legitimately earned,
-  later assisted by an automated bot
+- [ ] Moderator tools for removing achievements not legitimately earned, later assisted by an
+  automated bot
 - [ ] Leaderboards, live presence, and the public API docs
 
 ## Legal & content policy
@@ -262,8 +279,10 @@ publisher, platform holder, or with RetroAchievements.
 
 If you believe content on the platform infringes your rights, contact
 [contact@recompachievements.org](mailto:contact@recompachievements.org); valid requests are
-handled within 5 business days. The full policy is on the website's
-[content policy](https://recompachievements.org/content-policy) page.
+handled within 5 business days. Profile photos are uploaded by players, who confirm they may use
+them, and repeat infringers are disabled. The full policy is on the website's
+[content policy](https://recompachievements.org/content-policy) and
+[community rules](https://recompachievements.org/rules) pages.
 
 ## Contributing
 

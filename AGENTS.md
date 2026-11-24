@@ -20,7 +20,7 @@ This repo contains the public web platform:
 | Path | Purpose | Status |
 |---|---|---|
 | `frontend/` | Next.js 16 App Router site (React, TypeScript, Tailwind CSS v4) | Active; live at recompachievements.org (Vercel, deploys from `main`) |
-| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks, the alpha sign-up, the game directory, accounts, and public profiles with walls; live, deploys from `main` |
+| `backend/` | .NET 10 Minimal APIs + EF Core: public `/api/v1/...` and game-client `/api/sdk/v1/...` | Active: health checks, the alpha sign-up, the game directory, accounts, public profiles with walls and photos, and moderation; live, deploys from `main` |
 | `docker-compose.yml` | Local PostgreSQL 17 for development | Active |
 | `.github/workflows/ci.yml` | CI on PRs into `develop`/`main` (and manual runs): backend build/tests, frontend lint/build, summarized by the `CI result` check | Active |
 
@@ -34,7 +34,9 @@ Read `README.md` for the full architecture and data model.
   official API (never by crawling its website), referenced by link on its CDN (never downloaded or
   committed), shown only to identify the game, and credited
   per image (artist + SteamGridDB page) in the game page's credits. Images are removed within 5
-  business days of a valid request. Everything else uses original or generated art.
+  business days of a valid request. Everything else uses original or generated art. Player profile
+  photos are user content: they live only in media storage, never in the repo, and follow the
+  community rules and notice-and-takedown process.
 - **No secrets in the repo.** API keys, HMAC secrets, DB credentials, and session keys come from
   environment variables. Commit only `.env.example` files with dummy values.
 - **No infrastructure details.** Docs, code, and comments never include DNS records, IP addresses,
@@ -436,6 +438,11 @@ fixing a desktop-only layout for phones usually means rebuilding it.
   one first. A disabled account is kept but can't be used.
   Emails never link accounts; only a platform's ID finds its account. Browser sign-ins are
   `user_sessions`, not to be confused with game sessions below.
+- **Role** — `player`, `moderator`, or `admin`. Staff act only through the audited moderation API;
+  nobody acts on themselves, moderators act only on players, and only admins change roles.
+- **Report** — a signed-in player's complaint about a profile, photo, or wall comment.
+- **Mute** — until `muted_until`, an account can't post comments or change its photo, but can still
+  earn achievements. It ends on its own; the indefinite block is disabling the account.
 - **Profile** — a player's public page at `/account/<username>`; shows only public fields, never
   an email or sign-in details. **Wall** — the plain-text comments on a profile.
 - **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be

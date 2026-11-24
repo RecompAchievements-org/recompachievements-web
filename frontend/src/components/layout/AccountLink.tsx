@@ -22,6 +22,7 @@ export async function AccountLink() {
   return (
     <AccountMenu
       username={account.username}
+      avatar={account.avatar}
       profileHref={profileHref}
       buttonLabel={interpolate(header.account, { username: account.username })}
       menuLabel={menu.label}
@@ -29,10 +30,11 @@ export async function AccountLink() {
       signOutLabel={auth.account.signOut}
       signingOutLabel={auth.account.signingOut}
       items={[
-        { href: profileHref, label: menu.profile },
-        { href: localizePath(locale, `/progress/${account.username}`), label: menu.progress },
-        { href: localizePath(locale, "/account/messages"), label: menu.messages },
-        { href: localizePath(locale, "/account/settings"), label: menu.settings },
+        { href: profileHref, label: menu.profile, icon: "profile" },
+        { href: localizePath(locale, `/progress/${account.username}`), label: menu.progress, icon: "progress" },
+        { href: localizePath(locale, "/account/messages"), label: menu.messages, icon: "messages" },
+        { href: localizePath(locale, "/account/settings"), label: menu.settings, icon: "settings" },
+        ...(account.role === "player" ? [] : [{ href: localizePath(locale, "/moderation"), label: menu.moderation, icon: "moderation" as const, separated: true }]),
       ]}
     />
   );

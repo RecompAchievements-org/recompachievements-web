@@ -66,12 +66,14 @@ export function SubmitButton({
   pendingLabel,
   ready = true,
   variant = "primary",
+  icon,
   className,
 }: {
   label: string;
   pendingLabel: string;
   ready?: boolean;
   variant?: "primary" | "secondary";
+  icon?: ReactNode;
   className?: string;
 }) {
   const { pending } = useFormStatus();
@@ -96,6 +98,7 @@ export function SubmitButton({
           )}
         />
       )}
+      {!pending && icon}
       {pending ? pendingLabel : label}
     </button>
   );

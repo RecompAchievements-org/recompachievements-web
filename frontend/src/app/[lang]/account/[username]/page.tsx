@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect, unstable_rethrow } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
+import { ReportButton } from "@/components/moderation/ReportButton";
 import { ProfileBadges, ProfileBadgesSkeleton } from "@/components/profile/ProfileBadges";
 import { ProfileCard, ProfileCardSkeleton } from "@/components/profile/ProfileCard";
 import { ProfileSampleSections, ProfileSampleSectionsSkeleton } from "@/components/profile/ProfileSampleSections";
@@ -55,7 +56,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
   if (!username) notFound();
 
   const locale = await getLocale();
-  const { profile, auth, comments } = await getMessages();
+  const { profile, auth, comments, moderation } = await getMessages();
 
   let player: PublicPlayer;
   let wall: WallPage | null = null;
@@ -77,6 +78,7 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
   }
 
   const viewer = await getCurrentAccount();
+  const reportLabels = { ...moderation.report, reasons: moderation.reasons };
   const isOwner = viewer?.username === player.username;
   const access = !viewer ? "signIn" : viewer.canCollectAchievements ? "post" : "email";
 
@@ -96,6 +98,15 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
                     {profile.settingsLink}
                   </ButtonLink>
                 )}
+                {viewer && !isOwner && (
+                  <ReportButton
+                    username={player.username}
+                    targets={player.avatar ? ["profile", "photo"] : ["profile"]}
+                    labels={reportLabels}
+                    errors={auth.errors}
+                    className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg border border-danger/50 px-3 text-sm font-semibold text-danger transition-colors hover:border-danger hover:bg-danger/10"
+                  />
+                )}
               </>
             }
           />
@@ -114,6 +125,9 @@ async function ProfilePanel({ params }: Pick<Props, "params">) {
           messages={profile.wall}
           errors={auth.errors}
           authorLabels={comments.author}
+          viewerUsername={viewer?.username ?? null}
+          mutedNotice={viewer?.isMuted ? comments.muted : null}
+          reportLabels={reportLabels}
         />
       ) : (
         <p className="text-muted">{profile.wall.unavailable}</p>

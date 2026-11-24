@@ -6,10 +6,11 @@ import { PlayerPreview, type PlayerPreviewData, type PlayerPreviewLabels } from 
 import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
 import { localizePath, type Locale } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
+import type { PlayerAvatar } from "@/lib/api/accounts";
 import { loadPlayerPreview } from "./actions";
 
 // A real player, or a label for a visitor without an account (no profile to link to).
-export type CommentAuthorInfo = { username: string; joined: string } | { name: string };
+export type CommentAuthorInfo = { username: string; joined: string; avatar: PlayerAvatar | null } | { name: string };
 
 export type CommentAuthorLabels = PlayerPreviewLabels & { joined: string };
 
@@ -68,6 +69,7 @@ export function CommentAuthor({
     <div className={columnClasses}>
       <PlayerPreview
         username={author.username}
+        avatar={author.avatar}
         href={href}
         labels={{ ...labels, open: interpolate(labels.open, { username: author.username }) }}
         load={load}

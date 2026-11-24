@@ -11,6 +11,11 @@ internal enum AccountEmailKind
     AlreadyRegistered,
     PasswordChanged,
     PlatformConnected,
+    ContentRemoved,
+    AccountMuted,
+    AccountDisabled,
+    ReportActioned,
+    ReportDismissed,
 }
 
 // The localized account emails (English, Spanish, Brazilian Portuguese).
@@ -102,10 +107,70 @@ internal static class AccountEmails
             "{1} foi conectado à sua conta do RecompAchievements",
             "{1} acabou de ser conectado à sua conta do RecompAchievements e agora pode ser usado para entrar.",
             Footer: "Se não foi você, desconecte-o nas configurações da sua conta e fale conosco em contact@recompachievements.org."),
+
+        [(AccountEmailKind.ContentRemoved, "en")] = new(
+            "Content was removed from your RecompAchievements account",
+            "A moderator removed your content because it broke our community rules. Reason: {1}",
+            Footer: "If you think this was a mistake, write to contact@recompachievements.org to appeal."),
+        [(AccountEmailKind.ContentRemoved, "es")] = new(
+            "Se retiró contenido de tu cuenta de RecompAchievements",
+            "Un moderador retiró tu contenido porque incumple nuestras normas de la comunidad. Motivo: {1}",
+            Footer: "Si crees que es un error, escribe a contact@recompachievements.org para apelar."),
+        [(AccountEmailKind.ContentRemoved, "pt")] = new(
+            "Um conteúdo foi removido da sua conta do RecompAchievements",
+            "A moderação removeu seu conteúdo porque ele viola nossas regras da comunidade. Motivo: {1}",
+            Footer: "Se você acha que foi um engano, escreva para contact@recompachievements.org para recorrer."),
+
+        [(AccountEmailKind.AccountMuted, "en")] = new(
+            "Your RecompAchievements account was muted",
+            "Until {2} (UTC), you can’t post comments or change your profile photo. You can still play and earn achievements. Reason: {1}",
+            Footer: "If you think this was a mistake, write to contact@recompachievements.org to appeal."),
+        [(AccountEmailKind.AccountMuted, "es")] = new(
+            "Tu cuenta de RecompAchievements fue silenciada",
+            "Hasta el {2} (UTC), no puedes publicar comentarios ni cambiar tu foto de perfil. Puedes seguir jugando y consiguiendo logros. Motivo: {1}",
+            Footer: "Si crees que es un error, escribe a contact@recompachievements.org para apelar."),
+        [(AccountEmailKind.AccountMuted, "pt")] = new(
+            "Sua conta do RecompAchievements foi silenciada",
+            "Até {2} (UTC), você não pode publicar comentários nem alterar sua foto de perfil. Você ainda pode jogar e ganhar conquistas. Motivo: {1}",
+            Footer: "Se você acha que foi um engano, escreva para contact@recompachievements.org para recorrer."),
+
+        [(AccountEmailKind.AccountDisabled, "en")] = new(
+            "Your RecompAchievements account was disabled",
+            "A moderator disabled your account because it broke our community rules, so you can’t sign in. Reason: {1}",
+            Footer: "If you think this was a mistake, write to contact@recompachievements.org to appeal."),
+        [(AccountEmailKind.AccountDisabled, "es")] = new(
+            "Tu cuenta de RecompAchievements fue desactivada",
+            "Un moderador desactivó tu cuenta porque incumple nuestras normas de la comunidad, así que no puedes iniciar sesión. Motivo: {1}",
+            Footer: "Si crees que es un error, escribe a contact@recompachievements.org para apelar."),
+        [(AccountEmailKind.AccountDisabled, "pt")] = new(
+            "Sua conta do RecompAchievements foi desativada",
+            "A moderação desativou sua conta porque ela viola nossas regras da comunidade, então você não pode entrar. Motivo: {1}",
+            Footer: "Se você acha que foi um engano, escreva para contact@recompachievements.org para recorrer."),
+
+        [(AccountEmailKind.ReportActioned, "en")] = new(
+            "We reviewed your RecompAchievements report",
+            "Thanks for your report. A moderator reviewed it and took action."),
+        [(AccountEmailKind.ReportActioned, "es")] = new(
+            "Revisamos tu reporte en RecompAchievements",
+            "Gracias por tu reporte. Un moderador lo revisó y tomó medidas."),
+        [(AccountEmailKind.ReportActioned, "pt")] = new(
+            "Analisamos sua denúncia no RecompAchievements",
+            "Obrigado pela denúncia. A moderação analisou o caso e tomou providências."),
+
+        [(AccountEmailKind.ReportDismissed, "en")] = new(
+            "We reviewed your RecompAchievements report",
+            "Thanks for your report. A moderator reviewed it and found no violation of our community rules."),
+        [(AccountEmailKind.ReportDismissed, "es")] = new(
+            "Revisamos tu reporte en RecompAchievements",
+            "Gracias por tu reporte. Un moderador lo revisó y no encontró ningún incumplimiento de nuestras normas de la comunidad."),
+        [(AccountEmailKind.ReportDismissed, "pt")] = new(
+            "Analisamos sua denúncia no RecompAchievements",
+            "Obrigado pela denúncia. A moderação analisou o caso e não encontrou violação das nossas regras da comunidade."),
     };
 
-    /** Builds one email. Link is the full action URL (for kinds with a button); Platform fills "{1}"
-     *  in the platform notice. Every inserted value is HTML-encoded.
+    /** Builds one email. Link is the full action URL (for kinds with a button); Detail fills "{1}"
+     *  (a platform name or a moderator's reason) and Until fills "{2}". Every inserted value is
+     *  HTML-encoded.
     **/
     public static EmailMessage Build(
         AccountEmailKind kind,
@@ -113,13 +178,14 @@ internal static class AccountEmails
         string username,
         string locale,
         Uri? link = null,
-        string? platform = null)
+        string? detail = null,
+        DateTimeOffset? until = null)
     {
         var language = Commons.ContainsKey(locale) ? locale : "en";
         var common = Commons[language];
         var copy = Copies[(kind, language)];
 
-        string Fill(string value) => string.Format(CultureInfo.InvariantCulture, value, username, platform ?? string.Empty);
+        string Fill(string value) => string.Format(CultureInfo.InvariantCulture, value, username, detail ?? string.Empty, until?.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) ?? string.Empty);
 
         var greeting = Fill(common.Greeting);
         var subject = Fill(copy.Subject);

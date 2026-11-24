@@ -29,6 +29,13 @@ export type AuthError =
   | "platform_linked_elsewhere"
   | "platform_already_connected"
   | "last_sign_in_method"
+  | "account_muted"
+  | "photo_not_allowed_yet"
+  | "photo_invalid"
+  | "photo_rights_required"
+  | "photos_unavailable"
+  | "cannot_report_self"
+  | "moderation_forbidden"
   | "flow"
   | "not_signed_in"
   | "challenge"
@@ -48,6 +55,13 @@ const apiCodes: readonly AuthError[] = [
   "platform_linked_elsewhere",
   "platform_already_connected",
   "last_sign_in_method",
+  "account_muted",
+  "photo_not_allowed_yet",
+  "photo_invalid",
+  "photo_rights_required",
+  "photos_unavailable",
+  "cannot_report_self",
+  "moderation_forbidden",
   "not_signed_in",
 ];
 

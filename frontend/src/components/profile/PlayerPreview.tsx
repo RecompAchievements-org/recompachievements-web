@@ -3,8 +3,13 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { createPortal } from "react-dom";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { useFloatingPanel } from "@/components/ui/useFloatingPanel";
+import type { PlayerAvatar } from "@/lib/api/accounts";
+import type { RarityTier } from "@/lib/api/games";
+import { BadgeIcon } from "./BadgeIcon";
 import { ProfilePhoto } from "./ProfilePhoto";
+import type { BadgeKind } from "./sampleBadges";
 
 const hoverOpenDelayMs = 200;
 
@@ -12,6 +17,9 @@ export interface PlayerPreviewData {
   username: string;
   memberSince: string;
   lastActive: string;
+  avatar: PlayerAvatar | null;
+  // Up to three featured badges.
+  badges: { id: string; kind: BadgeKind; rarity: RarityTier; name: string; rarityLabel: string }[];
 }
 
 export interface PlayerPreviewLabels {
@@ -21,6 +29,8 @@ export interface PlayerPreviewLabels {
   unavailable: string;
   memberSince: string;
   lastActivity: string;
+  badges: string;
+  sample: string;
 }
 
 /** A player's photo that links to their profile and previews it. The preview opens on mouse hover
@@ -29,12 +39,14 @@ export interface PlayerPreviewLabels {
 **/
 export function PlayerPreview({
   username,
+  avatar,
   href,
   labels,
   load,
   className,
 }: {
   username: string;
+  avatar: PlayerAvatar | null;
   href: string;
   labels: PlayerPreviewLabels;
   load: (username: string) => Promise<PlayerPreviewData | null>;
@@ -84,7 +96,7 @@ export function PlayerPreview({
         onBlur={() => setOpen(false)}
         className={className}
       >
-        <ProfilePhoto className="block size-full rounded-lg" />
+        <ProfilePhoto avatar={avatar} className="block size-full rounded-lg" />
       </Link>
       {open &&
         createPortal(
@@ -98,9 +110,28 @@ export function PlayerPreview({
             className="fixed top-0 left-0 z-50 flex w-64 max-w-[calc(100vw-1rem)] flex-col gap-3 rounded-xl border border-border-strong bg-surface-raised p-4 text-left shadow-lg"
           >
             <div className="flex items-center gap-3">
-              <ProfilePhoto className="size-12 rounded-lg border border-border" />
+              <ProfilePhoto avatar={avatar} className="size-12 rounded-lg border border-border" />
               <p className="min-w-0 font-display font-semibold wrap-anywhere text-foreground">{username}</p>
             </div>
+            {preview !== "failed" && (preview === null || preview.badges.length > 0) && (
+              <section className="flex flex-col gap-1.5 border-y border-border py-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-xs font-semibold text-muted">{labels.badges}</h3>
+                  <span className="text-[0.6875rem] text-subtle">{labels.sample}</span>
+                </div>
+                <ul className="flex flex-col gap-1">
+                  {preview === null
+                    ? [0, 1, 2].map((row) => <Skeleton key={row} className="h-7 w-full rounded-md" />)
+                    : preview.badges.map((badge) => (
+                        <li key={badge.id} className="flex h-7 items-center gap-2">
+                          <BadgeIcon kind={badge.kind} rarity={badge.rarity} className="h-6 w-auto" />
+                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{badge.name}</span>
+                          <span className="shrink-0 text-xs text-subtle">{badge.rarityLabel}</span>
+                        </li>
+                      ))}
+                </ul>
+              </section>
+            )}
             {preview === null || preview === "failed" ? (
               <p className="flex min-h-11 items-center text-sm text-muted">{preview === "failed" ? labels.unavailable : labels.loading}</p>
             ) : (

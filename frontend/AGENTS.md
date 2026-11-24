@@ -80,9 +80,16 @@ React 19, TypeScript (strict), Tailwind CSS v4 (CSS-first config in `src/app/glo
 - `/account/[username]` is public: it renders only `getPublicPlayer` data and never passes the
   `/me` account to its UI. Anything private belongs in `/account/settings`. A new page directly
   under `/account` must also be added to the API's reserved usernames.
+- Profile photos render through `ProfilePhoto` with `unoptimized`, so removed images keep no copy in
+  the image cache. Uploads go through the Settings Server Action; the API is what validates them.
+- `/moderation` pages call `requireStaff()` inside `<Suspense>` and are `noindex`. That guard only
+  hides the page; every permission is enforced by the API. New comment sections offer `ReportButton`
+  once their comments are saved.
 - Comment UI is shared through `components/comments/CommentThread.tsx` and always renders plain
   text. Every comment section, including future ones, uses it, so each comment shows its author
-  column (`CommentAuthor`: photo with profile preview, username, join date). Wall reads and writes are per visitor (`lib/api/walls.ts`) and never cached.
+  column (`CommentAuthor`: photo with profile preview, username, join date). A muted viewer gets
+  `blockedNotice` instead of the composer in every section; saved comments must also be refused by
+  the API. Wall reads and writes are per visitor (`lib/api/walls.ts`) and never cached.
 
 ### Internationalization
 
@@ -149,11 +156,14 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   earned (Mastered and Beaten counters with a list; medals, achievements, and subsets each
   show a short "none earned" legend when empty), completion, and last game played on the left
   (`ProfileSampleSections`, labeled sample data); `ProfileCard` on the right (first on phones) with
-  the username on top, placeholder photo, points, Elo, ranking (empty until scoring exists), last
-  active day, member since, and the progress and settings buttons at the bottom; the comment wall
+  the username on top, photo, points, Elo, ranking (empty until scoring exists), last
+  active day, member since, and the progress, settings, and report buttons at the bottom; the comment wall
   below at full width. `noindex`; other casings redirect to the real username
-- `/account/settings` — private: email (add and confirm one when missing), connected platforms,
+- `/account/settings` — private: profile photo (upload, replace, remove), email (add and confirm one when missing), connected platforms,
   password (worded as "change" or "set" depending on whether one exists), sign out
+- `/rules` — public community rules; keep them in step with moderation behavior and the content policy
+- `/moderation` — staff report queue; `/moderation/reports/[id]`, `/moderation/users/[username]`, and
+  `/moderation/log` review a report, an account, and the audit log
 - `/account/messages` — placeholder for messages between players; nothing is sent or stored
 - `/progress/[username]` — public completion progress; only real, active players (`notFound()`
   otherwise). Sample data, labeled on screen and `noindex`, until real unlocks exist
@@ -201,7 +211,7 @@ src/
 │   ├── layout/     # site chrome (SiteHeader, SiteFooter, Logo, LocaleSwitcher, SocialLinks)
 │   ├── seo/        # JsonLd for schema.org structured data
 │   ├── ui/         # generic primitives (Button, Card, Badge, ExternalLink, Skeleton, HumanCheck)
-│   └── <feature>/  # feature components (alpha/, auth/, game/, profile/)
+│   └── <feature>/  # feature components (alpha/, auth/, comments/, game/, moderation/, profile/)
 ├── lib/
 │   ├── api/        # data access layer: server-only calls to the .NET API and their response types
 │   ├── auth/       # session.ts (account cookies, current account); forms.ts (form rules, error codes)
@@ -239,6 +249,8 @@ src/
 - Global base styles in `globals.css` already handle reduced motion (`prefers-reduced-motion`),
   sticky-header scroll padding, `touch-action: manipulation`, balanced heading wrap, and the pointer
   cursor on enabled buttons (Tailwind v4 dropped it); don't re-implement them per component.
+- Discord and GitHub buttons show the platform's official mark through `PlatformIcon` (simple-icons,
+  CC0). Disconnecting a platform uses a red button and a confirmation dialog (`DisconnectButton`).
 - Language choices show a country flag (`LocaleFlag`: United States, Spain, Brazil) next to the
   language name. Flags and the footer's official GitHub, Reddit, and YouTube marks (`SocialLinks`,
   from simple-icons, CC0) are fixed artwork, so they keep their own colors instead of theme tokens.
@@ -248,9 +260,11 @@ src/
   clip it, and its button name carries the same details for screen readers.
 - `PlayerPreview` is a player’s photo that links to their profile. Its preview opens on mouse hover,
   keyboard focus, or the first tap on touch screens (a second tap follows the link), and loads public
-  player data only when opened, once per player in each comment section. It and `BadgeDetails` share `ui/useFloatingPanel`.
+  player data only when opened, once per player in each comment section. It also lists up to three
+  featured badges (sample data, labeled on screen, until real badges exist). It and `BadgeDetails` share `ui/useFloatingPanel`.
 - The signed-in header menu (`AccountMenu`) opens on mouse hover (a click goes to the profile), on
-  the first tap on touch screens (a second tap goes to the profile), and on keyboard focus.
+  the first tap on touch screens (a second tap goes to the profile), and on keyboard focus. Each entry
+  has a `MenuIcon`; for staff, Moderation sits in its own separated section.
 - Anything that moves on its own (the featured slider) has a pause button, pauses on hover and
   keyboard focus, and doesn't move at all when the visitor prefers reduced motion (`globals.css`
   shortens every animation then, so never drive timing from an animation in that mode).

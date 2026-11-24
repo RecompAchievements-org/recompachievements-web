@@ -19,7 +19,8 @@
       "profile": "Profile",
       "progress": "Completion Progress",
       "messages": "Messages",
-      "settings": "Settings"
+      "settings": "Settings",
+      "moderation": "Moderation"
     }
   },
   "localeSwitcher": {
@@ -37,7 +38,8 @@
     "contentPolicy": "Content policy",
     "tagline": "Achievements for recomps and native PC ports, tracked by the community.",
     "social": "Follow us",
-    "socialLink": "{siteName} on {network}"
+    "socialLink": "{siteName} on {network}",
+    "rules": "Community rules"
   },
   "home": {
     "metaTitle": "Achievements for Native Recomps",
@@ -119,6 +121,7 @@
     "justNow": "Just now",
     "notSaved": "Not saved",
     "count": "{count} / {max}",
+    "muted": "Your account is muted, so you can’t post comments right now.",
     "author": {
       "joined": "Joined {date}",
       "open": "Open {username}’s profile",
@@ -126,7 +129,9 @@
       "loading": "Loading…",
       "unavailable": "We couldn’t load this profile.",
       "memberSince": "Member Since",
-      "lastActivity": "Last Activity"
+      "lastActivity": "Last Activity",
+      "badges": "Featured Badges",
+      "sample": "Sample Data"
     }
   },
   "artCredits": {
@@ -236,6 +241,10 @@
         "body": "Comments you post on a player’s wall are public and stored until you delete them, the wall’s owner deletes them, your account is deleted, or we remove them."
       },
       {
+        "title": "Profile Photos and Moderation",
+        "body": "If you upload a profile photo, it’s public. We store only a resized copy without its metadata, such as location, and we record when you confirmed you may use it. Your photo is deleted when you remove or replace it, when moderators remove it, or when your account is disabled. If you report content, we keep your report and share it only with moderators. We also keep a record of moderation decisions; text kept as evidence is erased after 90 days, except where the law requires us to keep it, such as serious illegal content."
+      },
+      {
         "title": "Why",
         "body": "To run the alpha and your account: confirm your email, sign you in, keep your account secure, send account emails you ask for (confirmation and password links) or that protect you (a password change or a newly connected platform), and, later, track your achievements. We don’t sell or share your data, and we don’t send marketing emails."
       },
@@ -288,6 +297,10 @@
         "body": "Players are responsible for the comments they post on profile walls. A comment’s author and the wall’s owner can delete it. To report abusive or infringing comments, write to {email}."
       },
       {
+        "title": "Player Photos",
+        "body": "Profile photos are uploaded by players, who confirm they may use them. We can’t review every image in advance. To report one, use the Report button or write to {email}."
+      },
+      {
         "title": "Removal Requests",
         "body": "If you hold rights to something shown on this site and want it removed, email {email} with a link to the page and what you’d like removed. We review every request and remove content within 5 business days when the request is valid."
       }
@@ -334,7 +347,14 @@
       "not_signed_in": "Your session ended. Please sign in again.",
       "challenge": "We couldn’t verify you’re human. Please try again.",
       "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
-      "unavailable": "Something went wrong on our side. Please try again in a few minutes."
+      "unavailable": "Something went wrong on our side. Please try again in a few minutes.",
+      "account_muted": "Your account is muted, so you can’t do this right now.",
+      "photo_not_allowed_yet": "Your account is too new to upload a photo. Please try again later.",
+      "photo_invalid": "Use a static JPEG, PNG, or WebP image.",
+      "photo_rights_required": "Confirm that you may use this image.",
+      "photos_unavailable": "Photo uploads aren’t available right now.",
+      "cannot_report_self": "You can’t report your own content.",
+      "moderation_forbidden": "You can’t take this action on this account."
     },
     "signIn": {
       "metaTitle": "Sign In",
@@ -436,6 +456,11 @@
       "notConnected": "Not connected",
       "connect": "Connect",
       "disconnect": "Disconnect",
+      "disconnecting": "Disconnecting…",
+      "disconnectTitle": "Disconnect {platform}?",
+      "disconnectBody": "You won’t be able to sign in with {platform} until you connect it again.",
+      "disconnectConfirm": "Disconnect {platform}",
+      "disconnectCancel": "Cancel",
       "signOut": "Sign Out",
       "signingOut": "Signing out…"
     },
@@ -469,6 +494,25 @@
       "loading": "Loading messages…",
       "comingSoonTitle": "Coming Soon",
       "comingSoonBody": "You’ll be able to send messages to other players here."
+    },
+    "photo": {
+      "heading": "Profile Photo",
+      "intro": "Shown publicly on your profile and comments.",
+      "chooseLabel": "Choose a Photo",
+      "replaceLabel": "Replace Your Photo",
+        "noFile": "No file chosen",
+      "hint": "JPEG, PNG, or WebP. It’s cropped to a square.",
+      "rightsBefore": "I own this image or have the right to use it, and it follows the",
+      "rulesLink": "community rules",
+      "rightsAfter": ".",
+      "save": "Save Photo",
+      "saving": "Saving…",
+      "saved": "Your photo was updated.",
+      "remove": "Remove Photo",
+      "previewAlt": "Preview of your new photo",
+      "currentAlt": "Your profile photo",
+      "muted": "Your account is muted, so you can’t change your photo right now.",
+      "needsEmail": "Add and confirm an email to upload a photo."
     }
   },
   "progress": {
@@ -588,7 +632,195 @@
       "loadMore": "Load More",
       "loadingMore": "Loading…",
       "invalid": "Write a comment using visible text, up to 1,000 characters.",
-      "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes."
+      "unavailable": "We couldn’t load these comments right now. Please try again in a few minutes.",
+      "reportLabel": "Report comment by {username}"
     }
+  },
+  "moderation": {
+    "metaTitle": "Moderation",
+    "title": "Moderation",
+    "nav": "Moderation sections",
+    "queue": "Reports",
+    "log": "Audit Log",
+    "statusNav": "Filter reports by status",
+    "findUser": "Find a username",
+    "find": "Find",
+    "loading": "Loading moderation tools…",
+    "unavailable": "We couldn’t load this right now. Please try again in a few minutes.",
+    "noReports": "No reports here.",
+    "noActions": "No actions recorded.",
+    "review": "Review",
+    "older": "Older",
+    "deletedAccount": "Deleted account",
+    "reportedBy": "{target}, reported by {reporter}",
+    "until": "Until {date}",
+    "userTitle": "Account Review",
+    "reportTitle": "Report Review",
+    "disabled": "Disabled",
+    "muted": "Muted",
+    "joined": "Joined",
+    "lastActive": "Last active",
+    "openReports": "Open reports",
+    "mutedUntil": "Muted until",
+    "history": "Moderation History",
+    "actionsHeading": "Actions",
+    "photoOf": "Profile photo of {username}",
+    "viewAccount": "View Account",
+    "reporterDetails": "Reporter’s Details",
+    "reportedText": "Reported Text",
+    "reportedPhoto": "Reported Photo",
+    "targetGone": "The reported content no longer exists.",
+    "resolution": "Resolution",
+    "statuses": {
+      "open": "Open",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "targets": {
+      "profile": "Profile",
+      "photo": "Photo",
+      "wall_comment": "Comment"
+    },
+    "reasons": {
+      "sexual": "Sexual content or nudity",
+      "violence": "Violence or gore",
+      "hate": "Hate or discrimination",
+      "harassment": "Harassment or threats",
+      "copyright": "Copyright",
+      "personal_info": "Personal information",
+      "spam": "Spam",
+      "other": "Something else"
+    },
+    "logActions": {
+      "remove_photo": "Photo removed",
+      "remove_comment": "Comment removed",
+      "mute": "Muted",
+      "unmute": "Unmuted",
+      "disable": "Disabled",
+      "enable": "Enabled",
+      "change_role": "Role changed",
+      "resolve_report": "Report resolved",
+      "dismiss_report": "Report dismissed",
+      "legal_hold": "Legal hold"
+    },
+    "report": {
+      "button": "Report",
+      "title": "Report Content",
+      "intro": "Moderators review every report. The person you report isn’t told who sent it.",
+      "what": "What are you reporting?",
+      "targets": {
+        "profile": "This profile",
+        "photo": "This profile photo",
+        "wall_comment": "This comment"
+      },
+      "reason": "Reason",
+      "details": "Details (optional)",
+      "send": "Send Report",
+      "sending": "Sending…",
+      "cancel": "Cancel",
+      "close": "Close",
+      "sent": "Thanks. Your report was sent to the moderators."
+    },
+    "actions": {
+      "notAllowed": "You can’t take actions on this account.",
+      "duration": "Duration",
+      "days": "{count} days",
+      "newRole": "New role",
+      "roles": {
+        "player": "Player",
+        "moderator": "Moderator",
+        "admin": "Admin"
+      },
+      "reason": "Reason",
+      "reasonShared": "This reason is emailed to the player.",
+      "working": "Working…",
+      "done": "Done.",
+      "cacheWarning": "Done, but the image may stay cached for a while. Tell an admin.",
+      "noEvidence": "Unpublished, but no evidence copy was kept. Tell the owner now.",
+      "ops": {
+        "resolve": {
+          "title": "Resolve Report",
+          "body": "Close this report as handled and tell the reporter action was taken.",
+          "submit": "Resolve"
+        },
+        "dismiss": {
+          "title": "Dismiss Report",
+          "body": "Close this report with no violation found.",
+          "submit": "Dismiss"
+        },
+        "remove_comment": {
+          "title": "Remove Comment",
+          "body": "Delete this comment and email its author the reason.",
+          "submit": "Remove Comment"
+        },
+        "remove_photo": {
+          "title": "Remove Photo",
+          "body": "Delete this photo everywhere and email the player the reason.",
+          "submit": "Remove Photo"
+        },
+        "mute": {
+          "title": "Mute Account",
+          "body": "Blocks comments and photo changes. The player can still earn achievements.",
+          "submit": "Mute"
+        },
+        "unmute": {
+          "title": "End Mute",
+          "body": "Let this player post and change their photo again.",
+          "submit": "End Mute"
+        },
+        "disable": {
+          "title": "Disable Account",
+          "body": "Signs the player out, hides the profile, and removes the photo.",
+          "submit": "Disable"
+        },
+        "enable": {
+          "title": "Enable Account",
+          "body": "Let this player sign in again.",
+          "submit": "Enable"
+        },
+        "role": {
+          "title": "Change Role",
+          "body": "Set this account’s staff role.",
+          "submit": "Change Role"
+        },
+        "legal_hold": {
+          "title": "Legal Hold",
+          "body": "Only for serious illegal content: unpublishes the image, disables the account, and keeps a private copy for legal reporting. The player isn’t emailed.",
+          "submit": "Apply Legal Hold"
+        }
+      }
+    }
+  },
+  "rules": {
+    "metaTitle": "Community Rules",
+    "metaDescription": "What you can post on RecompAchievements, how copyright complaints work, and what happens when rules are broken.",
+    "title": "Community Rules",
+    "intro": "These rules apply to everything players post on RecompAchievements, including usernames, profile photos, and comments.",
+    "sections": [
+      {
+        "title": "Not Allowed",
+        "body": "No nudity or sexual content, graphic violence or gore, hate or discrimination, harassment or threats, other people’s private information, spam, or anything illegal. Content that sexualizes minors is never allowed; we remove it, disable the account, and report it to the authorities."
+      },
+      {
+        "title": "Profile Photos",
+        "body": "By uploading a photo, you confirm that you own it or have the right to use it, and that it follows these rules. Photos are public as soon as you save them. You can replace or remove yours at any time in your account settings."
+      },
+      {
+        "title": "Copyright",
+        "body": "Only post what you’re allowed to use. We can’t review every image in advance, so rights holders can ask us to remove content by emailing {email} with a link to it, what they own, and how to contact them. We remove content within 5 business days when a request is valid. Accounts that repeatedly infringe are disabled."
+      },
+      {
+        "title": "Reporting",
+        "body": "If you’re signed in, use the Report button on a profile, photo, or comment. You can also write to {email}. Moderators review reports, and we don’t tell the reported player who sent them."
+      },
+      {
+        "title": "What Moderators Can Do",
+        "body": "Moderators can remove content, mute an account (it can’t post or change its photo, but it can still earn achievements), or disable it. We tell you the reason by email, unless the law or the safety of others prevents it."
+      },
+      {
+        "title": "Appeals",
+        "body": "If you think a decision was wrong, write to {email} with your username and why. A person will review it."
+      }
+    ]
   }
 }

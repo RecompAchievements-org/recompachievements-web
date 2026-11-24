@@ -50,7 +50,7 @@ export function apiPost<T>(path: string, body: unknown, visitor: VisitorContext 
 
 // A request made for one visitor (their IP and session); its result is never cached.
 export async function apiSend<T>(
-  method: "GET" | "POST" | "DELETE",
+  method: "GET" | "POST" | "PUT" | "DELETE",
   path: string,
   body: unknown,
   visitor: VisitorContext = {},
@@ -71,6 +71,26 @@ export async function apiSend<T>(
     signal: AbortSignal.timeout(timeoutMs),
   });
 
+  return toResult<T>(response);
+}
+
+// Sends a file's bytes for one visitor; used only for profile photos.
+export async function apiUpload<T>(path: string, content: ArrayBuffer, visitor: VisitorContext = {}): Promise<ApiResult<T>> {
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "Content-Type": "application/octet-stream",
+    "X-Internal-Key": requireEnv("API_INTERNAL_KEY"),
+  };
+  if (visitor.clientIp) headers["X-Client-IP"] = visitor.clientIp;
+  if (visitor.session) headers.Authorization = `Bearer ${visitor.session}`;
+
+  const response = await fetch(new URL(path, requireEnv("API_BASE_URL")), {
+    method: "PUT",
+    headers,
+    body: content,
+    cache: "no-store",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
   return toResult<T>(response);
 }
 

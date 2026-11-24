@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense, type ReactNode } from "react";
 import { FormMessage, SubmitButton } from "@/components/auth/FormParts";
+import { PlatformIcon } from "@/components/auth/PlatformIcon";
 import { platformNames } from "@/components/auth/platformNames";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
@@ -13,9 +14,11 @@ import { getPlatforms, platforms, type Platform } from "@/lib/api/accounts";
 import { isAuthError } from "@/lib/auth/forms";
 import { getCurrentAccount, getEmailOffer } from "@/lib/auth/session";
 import { startPlatform } from "../../auth/actions";
-import { disconnectAction, dismissEmailOffer, signOutAction } from "./actions";
+import { dismissEmailOffer, signOutAction } from "./actions";
+import { DisconnectButton } from "./DisconnectButton";
 import { AddEmailForm } from "./EmailForms";
 import { PasswordLinkForm } from "./PasswordLinkForm";
+import { PhotoForm } from "./PhotoForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { auth } = await getMessages();
@@ -69,6 +72,20 @@ async function SettingsPanel({ searchParams }: Pick<PageProps<"/[lang]/account/s
         </div>
       </Section>
 
+      <Section title={auth.photo.heading} intro={auth.photo.intro}>
+        {account.canCollectAchievements ? (
+          <PhotoForm
+            avatar={account.avatar}
+            muted={account.isMuted}
+            messages={auth.photo}
+            errors={auth.errors}
+            rulesHref={localizePath(locale, "/rules")}
+          />
+        ) : (
+          <p className="text-sm text-subtle">{auth.photo.needsEmail}</p>
+        )}
+      </Section>
+
       <Section title={copy.emailHeading}>
         {account.canCollectAchievements ? (
           <div className="flex flex-col gap-1">
@@ -107,24 +124,30 @@ async function SettingsPanel({ searchParams }: Pick<PageProps<"/[lang]/account/s
             {shown.map((platform) => (
               <li key={platform} className="flex flex-col gap-3 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-semibold" translate="no">
+                  <span className="inline-flex items-center gap-2 font-semibold" translate="no">
+                    <PlatformIcon platform={platform} />
                     {platformNames[platform]}
                   </span>
                   <Badge tone={connected[platform] ? "success" : "neutral"}>
                     {connected[platform] ? copy.connected : copy.notConnected}
                   </Badge>
                 </div>
-                <form action={connected[platform] ? disconnectAction : startPlatform}>
-                  <input type="hidden" name="platform" value={platform} />
-                  <input type="hidden" name="mode" value="connect" />
-                  <input type="hidden" name="locale" value={locale} />
-                  <SubmitButton
-                    variant="secondary"
-                    label={connected[platform] ? copy.disconnect : copy.connect}
-                    pendingLabel={connected[platform] ? copy.disconnect : copy.connect}
-                    className="w-full sm:w-auto"
-                  />
-                </form>
+                {connected[platform] ? (
+                  <DisconnectButton platform={platform} locale={locale} messages={copy} />
+                ) : (
+                  <form action={startPlatform}>
+                    <input type="hidden" name="platform" value={platform} />
+                    <input type="hidden" name="mode" value="connect" />
+                    <input type="hidden" name="locale" value={locale} />
+                    <SubmitButton
+                      variant="secondary"
+                      icon={<PlatformIcon platform={platform} />}
+                      label={copy.connect}
+                      pendingLabel={copy.connect}
+                      className="w-full sm:w-auto"
+                    />
+                  </form>
+                )}
               </li>
             ))}
           </ul>
@@ -169,7 +192,7 @@ function Section({ title, intro, children }: { title: string; intro?: string; ch
 function SettingsSkeleton({ label }: { label: string }) {
   return (
     <div role="status" aria-label={label} className="flex flex-col gap-6">
-      {[1, 2, 3, 2].map((lines, index) => (
+      {[1, 3, 2, 3, 2].map((lines, index) => (
         <Card key={index} className="flex flex-col gap-4 p-5 sm:p-6">
           <SkeletonText widths={["w-32"]} className="font-display text-xl" />
           <SkeletonText widths={Array.from({ length: lines }, (_, line) => (line === lines - 1 ? "w-1/2" : "w-full"))} />

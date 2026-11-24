@@ -5,6 +5,7 @@ using Npgsql;
 using RecompAchievements.Api.Data;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Infrastructure;
+using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Features.Accounts;
 
@@ -282,6 +283,8 @@ internal static class AccountEndpoints
         HttpContext context,
         AppDbContext db,
         Sessions sessions,
+        IMediaStore media,
+        TimeProvider time,
         CancellationToken cancellationToken)
     {
         if (await sessions.ResolveAsync(context, cancellationToken) is not { } session)
@@ -307,7 +310,11 @@ internal static class AccountEndpoints
             isAlphaTester,
             user.Locale,
             user.CreatedAt,
-            user.LastActivityAt));
+            user.LastActivityAt,
+            user.Role,
+            user.IsMutedAt(time.GetUtcNow()),
+            user.MutedUntil,
+            AvatarImages.Urls(media, user.AvatarKey)));
     }
 
     // Sends a set-password link only to a confirmed email; the answer is the same either way.

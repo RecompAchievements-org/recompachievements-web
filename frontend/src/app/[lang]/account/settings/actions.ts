@@ -1,8 +1,9 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { isLocale, localizePath, type Locale } from "@/i18n/config";
-import { addEmail, disconnectPlatform, forgotPassword, isPlatform, signOut } from "@/lib/api/accounts";
+import { addEmail, deletePhoto, disconnectPlatform, forgotPassword, isPlatform, signOut, uploadPhoto } from "@/lib/api/accounts";
 import { checkEmail, errorFrom, type AuthError, type FieldError } from "@/lib/auth/forms";
 import { clearEmailOffer, clearSession, getCurrentAccount, visitor } from "@/lib/auth/session";
 
@@ -53,6 +54,39 @@ export async function sendPasswordLink(_previous: PasswordLinkState, formData: F
     console.error("Sending a password link failed", error);
     return { status: "error", error: "unavailable" };
   }
+}
+
+const maxPhotoBytes = 1_000_000;
+
+// The API decodes and re-creates the image and decides whether this account may upload.
+export async function uploadPhotoAction(formData: FormData): Promise<AuthError | null> {
+  const photo = formData.get("photo");
+  if (!(photo instanceof File) || photo.size === 0 || photo.size > maxPhotoBytes) return "photo_invalid";
+  if (formData.get("rights") !== "true") return "photo_rights_required";
+
+  try {
+    const result = await uploadPhoto(await photo.arrayBuffer(), await visitor());
+    if (!result.ok) return errorFrom(result);
+  } catch (error) {
+    console.error("Uploading a profile photo failed", error);
+    return "unavailable";
+  }
+
+  refresh();
+  return null;
+}
+
+export async function deletePhotoAction(): Promise<AuthError | null> {
+  try {
+    const result = await deletePhoto(await visitor());
+    if (!result.ok) return errorFrom(result);
+  } catch (error) {
+    console.error("Deleting a profile photo failed", error);
+    return "unavailable";
+  }
+
+  refresh();
+  return null;
 }
 
 export async function disconnectAction(formData: FormData): Promise<void> {

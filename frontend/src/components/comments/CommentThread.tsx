@@ -23,6 +23,7 @@ export function CommentThread({
   heading,
   intro,
   composer,
+  blockedNotice,
   comments,
   empty,
   footer,
@@ -32,6 +33,8 @@ export function CommentThread({
   heading: string;
   intro: string;
   composer?: ReactNode;
+  // Replaces the composer when this visitor can't post, such as a muted player.
+  blockedNotice?: string | null;
   comments: ThreadComment[];
   empty: string;
   footer?: ReactNode;
@@ -50,7 +53,13 @@ export function CommentThread({
         <p className="text-muted">{intro}</p>
       </div>
 
-      {composer}
+      {blockedNotice ? (
+        <p role="status" className="rounded-2xl border border-gold/40 bg-surface p-5 text-sm text-gold">
+          {blockedNotice}
+        </p>
+      ) : (
+        composer
+      )}
 
       <ul aria-live="polite" className="flex flex-col gap-3">
         {comments.length === 0 ? (

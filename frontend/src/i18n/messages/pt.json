@@ -19,7 +19,8 @@
       "profile": "Perfil",
       "progress": "Progresso de conclusão",
       "messages": "Mensagens",
-      "settings": "Configurações"
+      "settings": "Configurações",
+      "moderation": "Moderação"
     }
   },
   "localeSwitcher": {
@@ -37,7 +38,8 @@
     "contentPolicy": "Política de conteúdo",
     "tagline": "Conquistas para recomps e ports nativos para PC, registradas pela comunidade.",
     "social": "Siga a gente",
-    "socialLink": "{siteName} no {network}"
+    "socialLink": "{siteName} no {network}",
+    "rules": "Regras da comunidade"
   },
   "home": {
     "metaTitle": "Conquistas para recomps nativos",
@@ -119,6 +121,7 @@
     "justNow": "Agora mesmo",
     "notSaved": "Não salvo",
     "count": "{count} / {max}",
+    "muted": "Sua conta está silenciada, então você não pode publicar comentários agora.",
     "author": {
       "joined": "Entrou em {date}",
       "open": "Abrir o perfil de {username}",
@@ -126,7 +129,9 @@
       "loading": "Carregando…",
       "unavailable": "Não foi possível carregar este perfil.",
       "memberSince": "Membro desde",
-      "lastActivity": "Última atividade"
+      "lastActivity": "Última atividade",
+      "badges": "Insígnias em destaque",
+      "sample": "Dados de exemplo"
     }
   },
   "artCredits": {
@@ -236,6 +241,10 @@
         "body": "Os comentários que você publica no mural de um jogador são públicos e ficam guardados até você excluí-los, o dono do mural excluí-los, sua conta ser apagada ou nós os removermos."
       },
       {
+        "title": "Fotos de perfil e moderação",
+        "body": "Se você enviar uma foto de perfil, ela será pública. Guardamos apenas uma cópia redimensionada sem metadados, como localização, e registramos quando você confirmou que pode usá-la. Sua foto é excluída quando você a remove ou troca, quando a moderação a remove ou quando sua conta é desativada. Se você denunciar um conteúdo, guardamos sua denúncia e a compartilhamos apenas com a moderação. Também mantemos um registro das decisões de moderação; o texto guardado como evidência é apagado após 90 dias, exceto quando a lei exige sua guarda, como em casos de conteúdo ilegal grave."
+      },
+      {
         "title": "Para quê",
         "body": "Para organizar o alfa e manter sua conta: confirmar seu e-mail, fazer sua entrada, manter sua conta segura, enviar os e-mails de conta que você pedir (links de confirmação e de senha) ou que protegem você (uma troca de senha ou uma plataforma recém-conectada) e, mais adiante, registrar suas conquistas. Não vendemos nem compartilhamos seus dados e não enviamos e-mails de marketing."
       },
@@ -288,6 +297,10 @@
         "body": "Cada jogador é responsável pelos comentários que publica nos murais de perfil. O autor e o dono do mural podem excluí-los. Para denunciar comentários abusivos ou que infrinjam direitos, escreva para {email}."
       },
       {
+        "title": "Fotos de jogadores",
+        "body": "As fotos de perfil são enviadas pelos jogadores, que confirmam que podem usá-las. Não conseguimos analisar cada imagem com antecedência. Para denunciar uma, use o botão Denunciar ou escreva para {email}."
+      },
+      {
         "title": "Pedidos de remoção",
         "body": "Se você tem direitos sobre algo exibido neste site e quer que seja removido, escreva para {email} com o link da página e o que deseja remover. Analisamos cada pedido e removemos o conteúdo em até 5 dias úteis quando o pedido é válido."
       }
@@ -334,7 +347,14 @@
       "not_signed_in": "Sua sessão terminou. Entre de novo.",
       "challenge": "Não conseguimos verificar que você é uma pessoa. Tente de novo.",
       "rateLimited": "Tentativas demais. Espere alguns minutos e tente de novo.",
-      "unavailable": "Algo deu errado do nosso lado. Tente de novo em alguns minutos."
+      "unavailable": "Algo deu errado do nosso lado. Tente de novo em alguns minutos.",
+      "account_muted": "Sua conta está silenciada, então você não pode fazer isso agora.",
+      "photo_not_allowed_yet": "Sua conta é muito nova para enviar uma foto. Tente novamente mais tarde.",
+      "photo_invalid": "Use uma imagem estática JPEG, PNG ou WebP.",
+      "photo_rights_required": "Confirme que você pode usar esta imagem.",
+      "photos_unavailable": "O envio de fotos não está disponível agora.",
+      "cannot_report_self": "Você não pode denunciar seu próprio conteúdo.",
+      "moderation_forbidden": "Você não pode realizar esta ação nesta conta."
     },
     "signIn": {
       "metaTitle": "Entrar",
@@ -436,6 +456,11 @@
       "notConnected": "Não conectada",
       "connect": "Conectar",
       "disconnect": "Desconectar",
+      "disconnecting": "Desconectando…",
+      "disconnectTitle": "Desconectar {platform}?",
+      "disconnectBody": "Você não poderá entrar com {platform} até conectá-lo novamente.",
+      "disconnectConfirm": "Desconectar {platform}",
+      "disconnectCancel": "Cancelar",
       "signOut": "Sair",
       "signingOut": "Saindo…"
     },
@@ -469,6 +494,25 @@
       "loading": "Carregando mensagens…",
       "comingSoonTitle": "Em breve",
       "comingSoonBody": "Aqui você poderá enviar mensagens para outros jogadores."
+    },
+    "photo": {
+      "heading": "Foto de perfil",
+      "intro": "Aparece publicamente no seu perfil e nos seus comentários.",
+      "chooseLabel": "Escolha uma foto",
+      "replaceLabel": "Troque sua foto",
+        "noFile": "Nenhum arquivo selecionado",
+      "hint": "JPEG, PNG ou WebP. Ela é recortada em formato quadrado.",
+      "rightsBefore": "Sou titular desta imagem ou tenho o direito de usá-la, e ela segue as",
+      "rulesLink": "regras da comunidade",
+      "rightsAfter": ".",
+      "save": "Salvar foto",
+      "saving": "Salvando…",
+      "saved": "Sua foto foi atualizada.",
+      "remove": "Remover foto",
+      "previewAlt": "Prévia da sua nova foto",
+      "currentAlt": "Sua foto de perfil",
+      "muted": "Sua conta está silenciada, então você não pode trocar sua foto agora.",
+      "needsEmail": "Adicione e confirme um e-mail para enviar uma foto."
     }
   },
   "progress": {
@@ -588,7 +632,195 @@
       "loadMore": "Carregar mais",
       "loadingMore": "Carregando…",
       "invalid": "Escreva um comentário com texto visível, de até 1.000 caracteres.",
-      "unavailable": "Não conseguimos carregar estes comentários. Tente de novo em alguns minutos."
+      "unavailable": "Não conseguimos carregar estes comentários. Tente de novo em alguns minutos.",
+      "reportLabel": "Denunciar comentário de {username}"
     }
+  },
+  "moderation": {
+    "metaTitle": "Moderação",
+    "title": "Moderação",
+    "nav": "Seções de moderação",
+    "queue": "Denúncias",
+    "log": "Registro de auditoria",
+    "statusNav": "Filtrar denúncias por status",
+    "findUser": "Buscar um usuário",
+    "find": "Buscar",
+    "loading": "Carregando ferramentas de moderação…",
+    "unavailable": "Não foi possível carregar isto. Tente novamente em alguns minutos.",
+    "noReports": "Nenhuma denúncia aqui.",
+    "noActions": "Nenhuma ação registrada.",
+    "review": "Analisar",
+    "older": "Anteriores",
+    "deletedAccount": "Conta excluída",
+    "reportedBy": "{target}, denunciado por {reporter}",
+    "until": "Até {date}",
+    "userTitle": "Análise da conta",
+    "reportTitle": "Análise da denúncia",
+    "disabled": "Desativada",
+    "muted": "Silenciada",
+    "joined": "Cadastro",
+    "lastActive": "Última atividade",
+    "openReports": "Denúncias abertas",
+    "mutedUntil": "Silenciada até",
+    "history": "Histórico de moderação",
+    "actionsHeading": "Ações",
+    "photoOf": "Foto de perfil de {username}",
+    "viewAccount": "Ver conta",
+    "reporterDetails": "Detalhes da denúncia",
+    "reportedText": "Texto denunciado",
+    "reportedPhoto": "Foto denunciada",
+    "targetGone": "O conteúdo denunciado não existe mais.",
+    "resolution": "Resolução",
+    "statuses": {
+      "open": "Aberta",
+      "resolved": "Resolvida",
+      "dismissed": "Descartada"
+    },
+    "targets": {
+      "profile": "Perfil",
+      "photo": "Foto",
+      "wall_comment": "Comentário"
+    },
+    "reasons": {
+      "sexual": "Conteúdo sexual ou nudez",
+      "violence": "Violência ou gore",
+      "hate": "Ódio ou discriminação",
+      "harassment": "Assédio ou ameaças",
+      "copyright": "Direitos autorais",
+      "personal_info": "Informações pessoais",
+      "spam": "Spam",
+      "other": "Outro motivo"
+    },
+    "logActions": {
+      "remove_photo": "Foto removida",
+      "remove_comment": "Comentário removido",
+      "mute": "Silenciada",
+      "unmute": "Silêncio encerrado",
+      "disable": "Desativada",
+      "enable": "Ativada",
+      "change_role": "Função alterada",
+      "resolve_report": "Denúncia resolvida",
+      "dismiss_report": "Denúncia descartada",
+      "legal_hold": "Retenção legal"
+    },
+    "report": {
+      "button": "Denunciar",
+      "title": "Denunciar conteúdo",
+      "intro": "A moderação analisa cada denúncia. Não informamos à pessoa denunciada quem a enviou.",
+      "what": "O que você quer denunciar?",
+      "targets": {
+        "profile": "Este perfil",
+        "photo": "Esta foto de perfil",
+        "wall_comment": "Este comentário"
+      },
+      "reason": "Motivo",
+      "details": "Detalhes (opcional)",
+      "send": "Enviar denúncia",
+      "sending": "Enviando…",
+      "cancel": "Cancelar",
+      "close": "Fechar",
+      "sent": "Obrigado. Sua denúncia foi enviada à moderação."
+    },
+    "actions": {
+      "notAllowed": "Você não pode realizar ações nesta conta.",
+      "duration": "Duração",
+      "days": "{count} dias",
+      "newRole": "Nova função",
+      "roles": {
+        "player": "Jogador",
+        "moderator": "Moderação",
+        "admin": "Administração"
+      },
+      "reason": "Motivo",
+      "reasonShared": "Este motivo é enviado por e-mail à pessoa.",
+      "working": "Processando…",
+      "done": "Concluído.",
+      "cacheWarning": "Concluído, mas a imagem pode continuar em cache por um tempo. Avise a administração.",
+      "noEvidence": "Removido, mas nenhuma cópia de evidência foi guardada. Avise o responsável agora.",
+      "ops": {
+        "resolve": {
+          "title": "Resolver denúncia",
+          "body": "Encerra esta denúncia como atendida e avisa que houve providências.",
+          "submit": "Resolver"
+        },
+        "dismiss": {
+          "title": "Descartar denúncia",
+          "body": "Encerra esta denúncia sem violação encontrada.",
+          "submit": "Descartar"
+        },
+        "remove_comment": {
+          "title": "Remover comentário",
+          "body": "Exclui este comentário e envia o motivo ao autor.",
+          "submit": "Remover comentário"
+        },
+        "remove_photo": {
+          "title": "Remover foto",
+          "body": "Exclui esta foto de todo o site e envia o motivo à pessoa.",
+          "submit": "Remover foto"
+        },
+        "mute": {
+          "title": "Silenciar conta",
+          "body": "Bloqueia comentários e trocas de foto. Ainda é possível ganhar conquistas.",
+          "submit": "Silenciar"
+        },
+        "unmute": {
+          "title": "Encerrar silêncio",
+          "body": "Permite voltar a publicar e trocar a foto.",
+          "submit": "Encerrar silêncio"
+        },
+        "disable": {
+          "title": "Desativar conta",
+          "body": "Encerra a sessão, oculta o perfil e remove a foto.",
+          "submit": "Desativar"
+        },
+        "enable": {
+          "title": "Ativar conta",
+          "body": "Permite entrar novamente.",
+          "submit": "Ativar"
+        },
+        "role": {
+          "title": "Alterar função",
+          "body": "Define a função desta conta na equipe.",
+          "submit": "Alterar função"
+        },
+        "legal_hold": {
+          "title": "Retenção legal",
+          "body": "Somente para conteúdo ilegal grave: remove a imagem, desativa a conta e guarda uma cópia privada para a comunicação legal. A pessoa não recebe e-mail.",
+          "submit": "Aplicar retenção legal"
+        }
+      }
+    }
+  },
+  "rules": {
+    "metaTitle": "Regras da comunidade",
+    "metaDescription": "O que você pode publicar no RecompAchievements, como funcionam as reclamações de direitos autorais e o que acontece quando as regras são violadas.",
+    "title": "Regras da comunidade",
+    "intro": "Estas regras valem para tudo o que é publicado no RecompAchievements, incluindo nomes de usuário, fotos de perfil e comentários.",
+    "sections": [
+      {
+        "title": "O que não é permitido",
+        "body": "Nudez ou conteúdo sexual, violência gráfica ou gore, ódio ou discriminação, assédio ou ameaças, informações privadas de outras pessoas, spam ou qualquer conteúdo ilegal. Conteúdo que sexualize menores nunca é permitido: nós o removemos, desativamos a conta e denunciamos às autoridades."
+      },
+      {
+        "title": "Fotos de perfil",
+        "body": "Ao enviar uma foto, você confirma que é titular dela ou tem o direito de usá-la e que ela segue estas regras. As fotos ficam públicas assim que são salvas. Você pode trocar ou remover a sua a qualquer momento nas configurações da conta."
+      },
+      {
+        "title": "Direitos autorais",
+        "body": "Publique apenas o que você tem permissão para usar. Não conseguimos analisar cada imagem com antecedência, então quem detém os direitos pode pedir a remoção escrevendo para {email} com o link do conteúdo, o que lhe pertence e como entrar em contato. Removemos o conteúdo em até 5 dias úteis quando o pedido é válido. Contas que violam direitos repetidamente são desativadas."
+      },
+      {
+        "title": "Denúncias",
+        "body": "Se você estiver conectado, use o botão Denunciar em um perfil, foto ou comentário. Você também pode escrever para {email}. A moderação analisa as denúncias, e não informamos à pessoa denunciada quem as enviou."
+      },
+      {
+        "title": "O que a moderação pode fazer",
+        "body": "Ela pode remover conteúdo, silenciar uma conta (que não pode publicar nem trocar a foto, mas ainda pode ganhar conquistas) ou desativá-la. Informamos o motivo por e-mail, a menos que a lei ou a segurança de outras pessoas impeça."
+      },
+      {
+        "title": "Recursos",
+        "body": "Se você acha que uma decisão foi errada, escreva para {email} com seu nome de usuário e o motivo. Uma pessoa vai analisar."
+      }
+    ]
   }
 }

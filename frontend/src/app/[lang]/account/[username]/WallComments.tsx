@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useState, useTransition } from "react";
 import type { CommentAuthorLabels } from "@/components/comments/CommentAuthor";
 import { CommentComposer, CommentThread } from "@/components/comments/CommentThread";
+import { ReportButton, type ReportLabels } from "@/components/moderation/ReportButton";
 import { localizePath, type Locale } from "@/i18n/config";
 import { interpolate } from "@/i18n/format";
 import type { Messages } from "@/i18n/server";
@@ -20,12 +21,16 @@ interface WallCommentsProps {
   messages: Messages["profile"]["wall"];
   errors: Messages["auth"]["errors"];
   authorLabels: CommentAuthorLabels;
+  viewerUsername: string | null;
+  // Set while the signed-in viewer is muted; the API refuses their posts too.
+  mutedNotice: string | null;
+  reportLabels: ReportLabels;
 }
 
 /** A player's wall. The first page comes from the server and refreshes after each post or delete;
  *  older pages are added here with Load More.
 **/
-export function WallComments({ username, locale, first, access, messages, errors, authorLabels }: WallCommentsProps) {
+export function WallComments({ username, locale, first, access, messages, errors, authorLabels, viewerUsername, mutedNotice, reportLabels }: WallCommentsProps) {
   const [draft, setDraft] = useState("");
   const [older, setOlder] = useState<WallComment[]>([]);
   const [cursor, setCursor] = useState<string | null | undefined>(undefined);
@@ -120,12 +125,26 @@ export function WallComments({ username, locale, first, access, messages, errors
       locale={locale}
       authorLabels={authorLabels}
       composer={composer}
+      blockedNotice={mutedNotice}
       comments={comments.map((comment) => ({
         id: comment.id,
-        author: { username: comment.authorUsername, joined: comment.authorJoined },
+        author: { username: comment.authorUsername, joined: comment.authorJoined, avatar: comment.authorAvatar },
         date: comment.date,
         body: comment.body,
-        actions: !comment.canDelete ? undefined : confirming === comment.id ? (
+        actions: (
+          <>
+            {viewerUsername && viewerUsername !== comment.authorUsername && (
+              <ReportButton
+                username={comment.authorUsername}
+                targets={["wall_comment"]}
+                commentId={comment.id}
+                labels={reportLabels}
+                errors={errors}
+                accessibleLabel={interpolate(messages.reportLabel, { username: comment.authorUsername })}
+                className={`${actionButton} text-muted hover:bg-surface-raised hover:text-foreground`}
+              />
+            )}
+            {!comment.canDelete ? null : confirming === comment.id ? (
           <>
             <button type="button" disabled={busy} onClick={() => remove(comment.id)} className={`${actionButton} text-danger hover:bg-surface-raised`}>
               {busy ? messages.deleting : messages.confirmDelete}
@@ -143,6 +162,8 @@ export function WallComments({ username, locale, first, access, messages, errors
           >
             {messages.delete}
           </button>
+            )}
+          </>
         ),
       }))}
       footer={

@@ -35,9 +35,15 @@ internal sealed partial class AccountLinks(
         IssueAsync(user, UserTokenPurpose.SetPassword, null, SetPasswordLifetime, kind, "/reset-password", cancellationToken);
 
     // A notice without a link (password changed, platform connected), sent only to a confirmed email.
-    public Task SendNoticeAsync(User user, AccountEmailKind kind, string? platform, CancellationToken cancellationToken) =>
+    public Task SendNoticeAsync(User user, AccountEmailKind kind, string? detail, CancellationToken cancellationToken) =>
         user.CanCollectAchievements
-            ? TrySendAsync(AccountEmails.Build(kind, user.Email!, user.Username, user.Locale, platform: platform), user.Id, cancellationToken)
+            ? TrySendAsync(AccountEmails.Build(kind, user.Email!, user.Username, user.Locale, detail: detail), user.Id, cancellationToken)
+            : Task.CompletedTask;
+
+    // A moderation notice, also sent to a disabled account so its owner learns why and can appeal.
+    public Task SendModerationNoticeAsync(User user, AccountEmailKind kind, string? reason, DateTimeOffset? until, CancellationToken cancellationToken) =>
+        user is { Email: not null, EmailConfirmed: true }
+            ? TrySendAsync(AccountEmails.Build(kind, user.Email, user.Username, user.Locale, detail: reason, until: until), user.Id, cancellationToken)
             : Task.CompletedTask;
 
     private async Task IssueAsync(
@@ -122,7 +128,7 @@ internal static class AccountText
     [
         "admin", "administrator", "root", "system", "staff", "support", "moderator", "mod",
         "official", "security", "contact", "help", "recompachievements", "recomp", "api", "null",
-        "settings", "messages", "notifications", "edit", "new",
+        "settings", "messages", "notifications", "edit", "new", "moderation", "rules",
     ];
 
     public static bool IsReserved(string normalizedUsername) => ReservedUsernames.Contains(normalizedUsername);

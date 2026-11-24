@@ -33,7 +33,7 @@ export async function ProfileCard({ player, actions }: { player: PublicPlayer; a
     <Card aria-label={copy.label} role="region" className={layoutClasses}>
       <h1 className={usernameClasses}>{player.username}</h1>
       <div className={photoFrameClasses}>
-        <ProfilePhoto label={copy.photoAlt} className="block aspect-square w-full rounded-lg" />
+        <ProfilePhoto avatar={player.avatar} variant="large" label={copy.photoAlt} className="block aspect-square h-auto w-full rounded-lg" />
         {/** The row overlaps the photo's bottom edge, so badges stand out without covering a face. **/}
         <ul aria-label={profile.badges.displayed} className="relative -mt-[11.5%] flex justify-center gap-[3%]">
           {photoSampleBadges.map((badge) => (

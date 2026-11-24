@@ -2,7 +2,9 @@ using System.Text.Json.Serialization;
 using RecompAchievements.Api.Features.Accounts;
 using RecompAchievements.Api.Features.AlphaSignups;
 using RecompAchievements.Api.Features.Games;
+using RecompAchievements.Api.Features.Moderation;
 using RecompAchievements.Api.Features.Walls;
+using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Infrastructure;
 
@@ -34,6 +36,17 @@ namespace RecompAchievements.Api.Infrastructure;
 [JsonSerializable(typeof(CreateWallCommentRequest))]
 [JsonSerializable(typeof(WallCommentResponse))]
 [JsonSerializable(typeof(WallPageResponse))]
+[JsonSerializable(typeof(PlayerAvatarResponse))]
+[JsonSerializable(typeof(CreateReportRequest))]
+[JsonSerializable(typeof(ModerationReasonRequest))]
+[JsonSerializable(typeof(MuteRequest))]
+[JsonSerializable(typeof(ChangeRoleRequest))]
+[JsonSerializable(typeof(ReportPageResponse))]
+[JsonSerializable(typeof(ReportDetailResponse))]
+[JsonSerializable(typeof(ModerationActionPageResponse))]
+[JsonSerializable(typeof(ModerationUserResponse))]
+[JsonSerializable(typeof(ModerationResultResponse))]
+[JsonSerializable(typeof(MediaPurgeRequest))]
 internal sealed partial class AppJsonContext : JsonSerializerContext;
 
 internal static class Json

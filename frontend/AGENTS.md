@@ -158,7 +158,7 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
 - `/account/[username]` — public profile: a compact badges card (one to six featured with the
   total earned; two rows of three on phones, one row of six from tablets up; up to three also
   overlap the photo's bottom edge), medal counters with
-  featured games (icon, name, platform; up to three in the large Platinum square, one each in the
+  featured games (icon, name, platform; up to four in the tall Platinum card, listed from the top, one each in the
   Gold and Silver rows beside it; original medal icon, never official
   trophy icons), last achievements earned, subsets
   earned (Mastered and Beaten counters with a list; medals, achievements, and subsets each

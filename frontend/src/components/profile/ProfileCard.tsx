@@ -38,10 +38,12 @@ export async function ProfileCard({ player, actions }: { player: PublicPlayer; a
           <ProfilePhoto avatar={player.avatar} variant="large" label={copy.photoAlt} className="block aspect-square h-auto w-full rounded-lg" />
           {player.role && <StaffRibbon role={player.role} />}
         </div>
-        {/** The row overlaps the photo's bottom edge, so badges stand out without covering a face. **/}
-        <ul aria-label={profile.badges.displayed} className="relative -mt-[11.5%] flex justify-center gap-[3%]">
+        {/** The row overlaps the photo's bottom edge by half a badge, so badges stand out without covering a
+         *  face. They match the Badges card size on smaller screens and are a little larger on desktop.
+        **/}
+        <ul aria-label={profile.badges.displayed} className="relative -mt-[22px] flex justify-center gap-1 lg:-mt-[27px] lg:gap-1.5">
           {photoSampleBadges.map((badge) => (
-            <li key={badge.id} className="w-[19%]">
+            <li key={badge.id} className="w-9 lg:w-11">
               <BadgeDetails details={badgeDetailsData(badge, player, locale, messages)} className="block w-full rounded-md">
                 <BadgeIcon kind={badge.kind} rarity={badge.rarity} className="block h-auto w-full drop-shadow-[0_3px_3px_rgb(0_0_0/0.6)]" />
               </BadgeDetails>
@@ -89,7 +91,7 @@ export function ProfileCardSkeleton() {
       <SkeletonText widths={["w-48"]} className={usernameClasses} />
       <div className={photoFrameClasses}>
         <Skeleton className="aspect-square w-full rounded-lg" />
-        <div aria-hidden="true" className="pb-[11.5%]" />
+        <div aria-hidden="true" className="pb-[22px] lg:pb-[26px]" />
       </div>
       <div className="flex flex-col divide-y divide-border self-center">
         {["w-10", "w-10", "w-20", "w-24", "w-24"].map((width, index) => (

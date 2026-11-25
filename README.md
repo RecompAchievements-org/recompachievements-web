@@ -55,6 +55,11 @@ What that means for design decisions:
   allows that; Apache-2.0 alone would not).
 - bbport has online co-op, so co-op achievements and sessions with other players are first-class
   cases, not edge cases.
+- Players switch achievements on from the launcher (opt-in), and the game plays the same without
+  them.
+- Players often play offline (on the Steam Deck, for example), so the SDK queues unlocks on disk
+  and sends them later: unlocks from an interrupted online session can stay hardcore, and unlocks
+  from a fully offline session sync as softcore.
 
 ## Ecosystem
 
@@ -109,8 +114,8 @@ a published notice.
 
 Achievements belong to **sets** (a core set per game plus DLC, mod, randomizer, and challenge
 subsets). Each has developer-set **points** (1–10) and a fixed **rarity tier**; only **hardcore**
-unlocks (verified build, no assists, allowlisted mods) count toward the **global score**, which adds
-a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
+unlocks (a session started online, verified build, no assists, allowlisted mods) count toward the
+**global score**, which adds a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
 Gold, and Platinum** medals; subsets award **Beaten** and **Mastered**. Medals can be upgraded but
 never downgraded by gameplay, even when playing later with in-game hacks. If achievements weren't
 legitimately earned (forged unlocks, or earned with a hidden hack), a moderator can remove them,

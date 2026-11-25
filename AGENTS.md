@@ -430,8 +430,9 @@ fixing a desktop-only layout for phones usually means rebuilding it.
   sets until the developer portal exists.
 - **Achievement** — belongs to a set; `api_key_name` (e.g. `BOSS_GASCOIGNE`) is the identifier the
   SDK sends. Has developer-set **points** (1–10) and a fixed **rarity tier** (Common → Legendary).
-- **Hardcore / softcore** — an unlock is hardcore only when its session has had a verified build,
-  no assist toggles, and allowlisted mods; only hardcore unlocks count toward the ranking.
+- **Hardcore / softcore** — an unlock is hardcore only when its session started online and has had
+  a verified build, no assist toggles, and allowlisted mods; only hardcore unlocks count toward the
+  ranking. Unlocks from a session played fully offline sync later as softcore.
 - **Account** — a player (`users` table) identified by up to three unique identities: email,
   Discord ID, GitHub ID. It can collect achievements only while **enabled** and with a **confirmed
   email**; accounts created through Discord or GitHub without a verified email must add and confirm

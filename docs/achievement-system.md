@@ -98,7 +98,8 @@ above, including the rarity caps). The portal replaces it.
 A **session** covers one player playing one game, from launch until the game closes. It records the
 game's state: the build, the toggles, and the active mods, updated whenever the game reports a
 change. Each **unlock** is judged hardcore or softcore from that state at the moment it happens. An
-unlock is **hardcore** only if all of these have held since the session started:
+unlock is **hardcore** only if the session **started online** (see
+[Offline play and outages](#offline-play-and-outages)) and all of these have held since it started:
 
 1. **Verified build:** the executable's SHA-256 hash is one of the game's official builds registered
    by its developer (per platform: Windows, Linux, macOS).
@@ -117,6 +118,23 @@ Unlocks earned **before** the change stay hardcore.
 
 An achievement unlocked in softcore can be **upgraded** by unlocking it again in hardcore.
 Upgrades are never retroactive: using no assists later doesn't convert past unlocks.
+
+### Offline play and outages
+
+Achievements are opt-in for players (a recomp offers them as a setting, such as a launcher toggle),
+and a game plays the same without them. When they're on, no unlock is lost to a missing connection:
+
+- **Interrupted online session:** if the connection drops or the platform is briefly unavailable
+  after a session started online, the SDK keeps each signed unlock on disk and sends it once the
+  connection is back. The server judges it from the session's state as usual, so it can still be
+  hardcore.
+- **Fully offline session:** a game started without a connection records its session and unlocks
+  locally and syncs them later. These unlocks are **softcore**: the platform can't verify the build,
+  toggles, or mods of a session it never saw start. They still show on the profile and count toward
+  completion, and can be **upgraded** by unlocking them again in an online hardcore session.
+
+Queued unlocks keep the time they were earned and are accepted within limits set by the server;
+one unlock per player and achievement still applies.
 
 ## Scoring
 
@@ -316,7 +334,7 @@ the rest, and fields marked *later*, arrive with their features.
 | `game_builds` | `game_id`, `platform`, `sha256`, `label` (verified builds) |
 | `game_toggles` | `game_id`, `key`, `classification` (`allowed` / `assist`) |
 | `mod_allowlist` | `game_id`, `mod_id`, `version` |
-| `game_sessions` | `user_id`, `game_id`, `build_hash`, `state` (JSON snapshot of toggles and active mods), `downgraded_at`, `started_at`, `last_heartbeat_at` |
+| `game_sessions` | `user_id`, `game_id`, `build_hash`, `state` (JSON snapshot of toggles and active mods), `offline` (played without a connection and synced later; its unlocks are softcore), `downgraded_at`, `started_at`, `last_heartbeat_at` |
 | `user_unlocks` | `user_id`, `achievement_id`, `softcore_unlocked_at`, `hardcore_unlocked_at`, `session_id`, `build_hash`; unique on `(user_id, achievement_id)` |
 | `unlock_removals` | `user_id`, `achievement_id`, `softcore_unlocked_at`, `hardcore_unlocked_at`, `session_id`, `build_hash`, `points_removed`, `moderator_id`, `reason`, `removed_at`; append-only record of each unlock a moderator removed |
 | `sdk_request_nonces` | `nonce` (primary key), `received_at`; signed requests already accepted, recorded in the same transaction as their effect so none can be replayed; old rows are cleaned up |
@@ -337,7 +355,8 @@ which also has online co-op.
 |---|---|
 | Start session | Sends the build hash, toggle states, and active mods; returns the game's achievements and the player's unlocks. Only enabled accounts with a confirmed email can collect achievements |
 | Report assist / mod change | Updates the session's state; later unlocks in the run are judged against it |
-| Unlock | Signed unlock of one achievement; the server judges it hardcore or softcore from the session's state |
+| Unlock | Signed unlock of one achievement; the server judges it hardcore or softcore from the session's state. Unlocks that can't be sent are queued on disk and retried (see [Offline play and outages](#offline-play-and-outages)) |
+| Sync offline session | Sends a session played without a connection, with its state and unlocks, once online; its unlocks are softcore |
 | Presence heartbeat | Presence key and values; keeps the session alive |
 
 ## Initial values

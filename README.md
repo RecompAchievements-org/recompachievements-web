@@ -2,7 +2,7 @@
 
 **Community-driven achievement tracking for native static recompilations.**
 
-🌐 **[recompachievements.org](https://recompachievements.org/)** · 🐙 [GitHub organization](https://github.com/RecompAchievements-org) · 💬 [Reddit](https://www.reddit.com/user/RecompAchievements/) · ▶️ [YouTube](https://www.youtube.com/@RecompAchievements)
+🌐 **[recompachievements.org](https://recompachievements.org/)** · 🐙 [GitHub organization](https://github.com/RecompAchievements-org) · 🎮 [Discord](https://discord.gg/8pYJtzvN5j) · 💬 [Reddit](https://www.reddit.com/user/RecompAchievements/) · ▶️ [YouTube](https://www.youtube.com/@RecompAchievements)
 
 RecompAchievements brings RetroAchievements-style progression, leaderboards, and social profiles to
 native PC ports built via **static recompilation** — such as N64, GameCube, PS2, PS3, and PS4
@@ -55,6 +55,11 @@ What that means for design decisions:
   allows that; Apache-2.0 alone would not).
 - bbport has online co-op, so co-op achievements and sessions with other players are first-class
   cases, not edge cases.
+- Players switch achievements on from the launcher (opt-in), and the game plays the same without
+  them.
+- Players often play offline (on the Steam Deck, for example), so the SDK queues unlocks on disk
+  and sends them later: unlocks from an interrupted online session can stay hardcore, and unlocks
+  from a fully offline session sync as softcore.
 
 ## Ecosystem
 
@@ -109,8 +114,8 @@ a published notice.
 
 Achievements belong to **sets** (a core set per game plus DLC, mod, randomizer, and challenge
 subsets). Each has developer-set **points** (1–10) and a fixed **rarity tier**; only **hardcore**
-unlocks (verified build, no assists, allowlisted mods) count toward the **global score**, which adds
-a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
+unlocks (a session started online, verified build, no assists, allowlisted mods) count toward the
+**global score**, which adds a nightly-recalculated **Elo bonus** for achievements few players have. Core sets award **Silver,
 Gold, and Platinum** medals; subsets award **Beaten** and **Mastered**. Medals can be upgraded but
 never downgraded by gameplay, even when playing later with in-game hacks. If achievements weren't
 legitimately earned (forged unlocks, or earned with a hidden hack), a moderator can remove them,
@@ -310,6 +315,7 @@ reviewed and committed by a human maintainer, and only people are credited as co
 - **Security vulnerabilities:** please **do not** open a public issue — see
   [`SECURITY.md`](SECURITY.md).
 - **Bugs and feature requests:** [GitHub Issues](https://github.com/RecompAchievements-org/recompachievements-web/issues)
+- **Community chat:** [our Discord server](https://discord.gg/8pYJtzvN5j)
 - **News and announcements:** [u/RecompAchievements on Reddit](https://www.reddit.com/user/RecompAchievements/)
   and [@RecompAchievements on YouTube](https://www.youtube.com/@RecompAchievements)
 

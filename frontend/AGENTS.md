@@ -268,7 +268,7 @@ src/
 - Discord and GitHub buttons show the platform's official mark through `PlatformIcon` (simple-icons,
   CC0). Disconnecting a platform uses a red button and a confirmation dialog (`DisconnectButton`).
 - Language choices show a country flag (`LocaleFlag`: United States, Spain, Brazil) next to the
-  language name. Flags and the footer's official GitHub, Reddit, and YouTube marks (`SocialLinks`,
+  language name. Flags and the footer's official GitHub, Discord, Reddit, and YouTube marks (`SocialLinks`,
   from simple-icons, CC0) are fixed artwork, so they keep their own colors instead of theme tokens.
 - Interactive menus close on Escape and outside click, and Escape returns focus to the toggle.
 - `BadgeDetails` shows a badge's name, kind, rarity, description, and unlock date on mouse hover,

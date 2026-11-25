@@ -129,8 +129,8 @@ src/
 
 The home page also includes schema.org structured data (`JsonLd` component): a `WebSite` block, so
 search engines show **RecompAchievements** as the site name, and an `Organization` block with the
-logo (`apple-icon.png`), the public contact address, and the official GitHub, Reddit, and YouTube
-profiles (`siteConfig.social`), so the project isn't confused with similarly named ones. Add new
+logo (`apple-icon.png`), the public contact address, and the official GitHub, Discord, Reddit, and
+YouTube profiles (`siteConfig.social`), so the project isn't confused with similarly named ones. Add new
 official profiles to `siteConfig.social` and they appear in both the footer and this block.
 
 **Regenerating the icons** after a logo change: render `icon.svg` at 512 px with a transparent

@@ -14,6 +14,11 @@ const networks: { key: keyof typeof siteConfig.social; name: string; icon: React
     icon: <PlatformMark platform="github" />,
   },
   {
+    key: "discord",
+    name: "Discord",
+    icon: <PlatformMark platform="discord" />,
+  },
+  {
     key: "reddit",
     name: "Reddit",
     icon: (

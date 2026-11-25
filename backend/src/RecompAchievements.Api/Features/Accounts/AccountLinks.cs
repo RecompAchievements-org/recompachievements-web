@@ -131,15 +131,25 @@ internal static class AccountText
     public static string NormalizeUsername(string username) => username.Trim().ToLowerInvariant();
 #pragma warning restore CA1308
 
-    // Names that could pass for the project or its staff, or that are pages under /account.
+    /** Names nobody can register: ones that could pass for the project or its staff, pages under
+     *  /account, and the site's own sections. Fragments block every name that contains them.
+    **/
     private static readonly HashSet<string> ReservedUsernames =
     [
-        "admin", "administrator", "root", "system", "staff", "support", "moderator", "mod",
-        "official", "security", "contact", "help", "recompachievements", "recomp", "api", "null",
+        "admin", "admins", "administrator", "root", "system", "staff", "support", "moderator", "moderators",
+        "mod", "mods", "owner", "team", "official", "security", "contact", "help", "recompachievements",
+        "recomp", "api", "null", "undefined", "anonymous", "deleted", "unknown", "everyone", "here",
         "settings", "messages", "notifications", "edit", "new", "moderation", "rules",
+        "account", "accounts", "profile", "progress", "forum", "news", "games", "game", "dev",
+        "developer", "developers", "privacy", "terms", "welcome", "signin", "sign-in", "signup",
+        "sign-up", "login", "logout", "discord", "github",
     ];
 
-    public static bool IsReserved(string normalizedUsername) => ReservedUsernames.Contains(normalizedUsername);
+    private static readonly string[] ReservedFragments = ["recompachievements", "moderator", "administrator"];
+
+    public static bool IsReserved(string normalizedUsername) =>
+        ReservedUsernames.Contains(normalizedUsername)
+        || ReservedFragments.Any(fragment => normalizedUsername.Contains(fragment, StringComparison.Ordinal));
 
     /** A username suggestion from a platform name: allowed characters only, 3–24 long. The welcome
      *  step checks availability; this is only a starting value.
@@ -168,6 +178,8 @@ internal static class AccountProblems
         Create(StatusCodes.Status401Unauthorized, "invalid_credentials", "Email or password is incorrect");
 
     public static ProblemHttpResult UsernameTaken() => Create(StatusCodes.Status409Conflict, "username_taken", "Username is taken");
+
+    public static ProblemHttpResult UsernameReserved() => Create(StatusCodes.Status409Conflict, "username_reserved", "Username is reserved");
 
     public static ProblemHttpResult EmailInUse() =>
         Create(StatusCodes.Status409Conflict, "email_in_use", "That email is used by another account");

@@ -281,6 +281,10 @@ src/
   player data only when opened, once per player in each comment section. It also lists up to three
   featured badges (sample data until real badges exist; by the owner's choice the card has no
   label, and the profile page carries the sample-data notice). It and `BadgeDetails` share `ui/useFloatingPanel`.
+- Below `lg`, the header's main links (Games, Forum, GitHub) move into `SiteMenu`, a menu button that
+  opens on tap or click and closes on Escape, an outside press, or choosing a link. The release
+  badge is always visible: beside the logo from `lg`, and in a strip below the header row before
+  that (the sticky header's `scroll-padding-top` in `globals.css` covers both heights).
 - The signed-in header menu (`AccountMenu`) opens on mouse hover (a click goes to the profile), on
   the first tap on touch screens (a second tap goes to the profile), and on keyboard focus. Each entry
   has a `MenuIcon`; for staff, Moderation sits in its own separated section.

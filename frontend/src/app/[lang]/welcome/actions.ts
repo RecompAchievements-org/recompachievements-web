@@ -9,7 +9,7 @@ import { getClientIp } from "@/lib/clientIp";
 
 export type WelcomeState =
   | { status: "idle" }
-  | { status: "error"; error: AuthError; username: string; fieldError: FieldError | "username_taken" | null };
+  | { status: "error"; error: AuthError; username: string; fieldError: FieldError | "username_taken" | "username_reserved" | null };
 
 /** Creates the account for the pending Discord/GitHub sign-up with the chosen username. The pending
  *  sign-up is read from its HttpOnly cookie, never from the form, so it can't be swapped.
@@ -30,7 +30,7 @@ export async function createPlatformAccount(_previous: WelcomeState, formData: F
     if (!result.ok) {
       const error = errorFrom(result);
       if (error === "signup_expired" || error === "platform_linked_elsewhere") await clearPendingSignup();
-      return { status: "error", error, username, fieldError: error === "username_taken" ? "username_taken" : null };
+      return { status: "error", error, username, fieldError: error === "username_taken" || error === "username_reserved" ? error : null };
     }
     await setSession(result.data.token);
     await clearPendingSignup();

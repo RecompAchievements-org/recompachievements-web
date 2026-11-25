@@ -90,7 +90,7 @@ export const resetPassword = (token: string, password: string, visitor: VisitorC
   apiSend<Accepted>("POST", `${base}/reset-password`, { token, password }, visitor);
 
 export const isUsernameAvailable = (username: string, visitor: VisitorContext) =>
-  apiSend<{ available: boolean }>("GET", `${base}/usernames/available?username=${encodeURIComponent(username)}`, undefined, visitor);
+  apiSend<{ available: boolean; reserved: boolean }>("GET", `${base}/usernames/available?username=${encodeURIComponent(username)}`, undefined, visitor);
 
 export const addEmail = (email: string, locale: Locale, visitor: VisitorContext) =>
   apiSend<Accepted>("POST", `${base}/email/add`, { email, locale }, visitor);

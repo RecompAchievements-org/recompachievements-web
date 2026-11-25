@@ -182,7 +182,7 @@ infringers are disabled. The public rules are at `/rules`.
 
 | Route | Page |
 |---|---|
-| `/` | Home: alpha call to action, featured recomps slider, games, and Latest News at the bottom (the news category's pinned and five most recent posts). From desktop widths, the header shows a release badge beside the logo that opens the current release announcement |
+| `/` | Home: alpha call to action, featured recomps slider, games, and Latest News at the bottom (the news category's pinned and five most recent posts). The header always shows a release badge that opens the current release announcement: beside the logo on desktops, and in a strip below the header on narrower screens, where Games, Forum, and GitHub move into a menu button |
 | `/sign-up`, `/sign-in` | Create an account or sign in: email and password, Discord, or GitHub |
 | `/confirm-email` | Confirms an account email with the emailed link |
 | `/forgot-password`, `/reset-password` | Set or reset a password through an emailed link |

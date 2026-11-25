@@ -74,7 +74,7 @@ export function SubmitButton({
   label: string;
   pendingLabel: string;
   ready?: boolean;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "danger";
   icon?: ReactNode;
   // Sent with the form when this button submits it (for forms with several actions).
   name?: string;
@@ -92,7 +92,9 @@ export function SubmitButton({
         "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-2 text-center font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
         variant === "primary"
           ? "bg-accent text-on-accent hover:bg-accent-strong disabled:hover:bg-accent"
-          : "border border-border-strong bg-surface-raised text-foreground hover:border-accent",
+          : variant === "danger"
+            ? "bg-danger text-on-accent hover:opacity-85 disabled:hover:opacity-60"
+            : "border border-border-strong bg-surface-raised text-foreground hover:border-accent",
         className,
       )}
     >
@@ -101,7 +103,7 @@ export function SubmitButton({
           aria-hidden="true"
           className={cx(
             "size-4 shrink-0 animate-spin rounded-full border-2 border-t-transparent",
-            variant === "primary" ? "border-on-accent" : "border-foreground",
+            variant === "secondary" ? "border-foreground" : "border-on-accent",
           )}
         />
       )}

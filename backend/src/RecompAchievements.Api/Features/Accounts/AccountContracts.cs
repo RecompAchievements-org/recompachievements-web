@@ -47,7 +47,8 @@ public sealed record StatusResponse(string Status);
 
 public sealed record SessionResponse(string Token, DateTimeOffset ExpiresAt);
 
-public sealed record UsernameAvailabilityResponse(bool Available);
+// Reserved: the name can never be registered (not just taken by someone right now).
+public sealed record UsernameAvailabilityResponse(bool Available, bool Reserved);
 
 public sealed record ProvidersResponse(string[] Providers);
 

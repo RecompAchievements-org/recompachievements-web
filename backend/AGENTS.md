@@ -127,7 +127,8 @@ are security rules; keep every one when changing the code:
 - **Public player data** comes only from `PlayerEndpoints` (`PublicPlayerResponse`,
   `PublicByUsername`). Never add an email, platform ID, alpha status, exact activity time, or other
   private field; disabled accounts and unconfirmed registrations stay `404`.
-- **Reserved usernames** include every page directly under `/account` (`AccountText`): when adding
+- **Reserved usernames** (`AccountText.IsReserved`, answered as `username_reserved`, never as
+  taken) include every page directly under `/account` and the site's own sections: when adding
   such a page, reserve its name in the same change.
 - **Comments** (`Features/Comments/`): walls and game pages share one `comments` table (exactly one
   of `wall_user_id` or `game_id`, enforced by a check) and the rules in `CommentThreads`: anyone

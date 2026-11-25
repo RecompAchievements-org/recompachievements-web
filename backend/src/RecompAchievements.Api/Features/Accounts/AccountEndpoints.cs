@@ -77,9 +77,12 @@ internal static class AccountEndpoints
          *  whether or not the email has an account. An unconfirmed registration of the same email
          *  may reuse its own username.
         **/
-        var usernameTaken = AccountText.IsReserved(normalizedUsername)
-            || await db.Users.AnyAsync(u => u.NormalizedUsername == normalizedUsername && (existing == null || u.Id != existing.Id), cancellationToken);
-        if (usernameTaken)
+        if (AccountText.IsReserved(normalizedUsername))
+        {
+            return AccountProblems.UsernameReserved();
+        }
+
+        if (await db.Users.AnyAsync(u => u.NormalizedUsername == normalizedUsername && (existing == null || u.Id != existing.Id), cancellationToken))
         {
             return AccountProblems.UsernameTaken();
         }
@@ -381,13 +384,17 @@ internal static class AccountEndpoints
         var valid = username is not null && System.Text.RegularExpressions.Regex.IsMatch(username, AccountRules.UsernamePattern);
         if (!valid)
         {
-            return TypedResults.Ok(new UsernameAvailabilityResponse(false));
+            return TypedResults.Ok(new UsernameAvailabilityResponse(false, false));
         }
 
         var normalized = AccountText.NormalizeUsername(username!);
-        var available = !AccountText.IsReserved(normalized)
-            && !await db.Users.AnyAsync(u => u.NormalizedUsername == normalized, cancellationToken);
-        return TypedResults.Ok(new UsernameAvailabilityResponse(available));
+        if (AccountText.IsReserved(normalized))
+        {
+            return TypedResults.Ok(new UsernameAvailabilityResponse(false, true));
+        }
+
+        var available = !await db.Users.AnyAsync(u => u.NormalizedUsername == normalized, cancellationToken);
+        return TypedResults.Ok(new UsernameAvailabilityResponse(available, false));
     }
 
     /** Adds an email to a signed-in account that has none confirmed (e.g. created through Discord or

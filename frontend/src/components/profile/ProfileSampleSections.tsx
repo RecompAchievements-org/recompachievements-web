@@ -67,7 +67,7 @@ export async function ProfileSampleSections({ username }: { username: string }) 
             const hasMedal = featured.length > 0;
             const tierColor = hasMedal ? medalClasses[tier] : "text-muted";
                         return (
-              <li key={tier} className={`flex min-w-0 flex-col rounded-xl border border-border bg-surface px-3 pt-3 ${isPlatinum ? "aspect-square sm:row-span-2" : ""}`}>
+              <li key={tier} className={`flex min-w-0 flex-col rounded-xl border border-border bg-surface px-3 pt-3 ${isPlatinum ? "sm:row-span-2" : ""}`}>
                 <div className="flex items-center gap-3 pb-3">
                   <MedalIcon className={`size-10 shrink-0 ${medalClasses[tier]} ${hasMedal ? "" : "opacity-35"}`} />
                   <h3 className={`min-w-0 flex-1 font-display font-semibold text-lg ${tierColor}`}>
@@ -80,8 +80,8 @@ export async function ProfileSampleSections({ username }: { username: string }) 
                     <span className="text-xs leading-4 text-subtle">{profile.medalTotal}</span>
                   </p>
                 </div>
-                {/** Evenly spaced, so the gaps above, between, and below the games match. **/}
-                <div className="flex min-h-15 flex-1 flex-col justify-evenly border-t border-border">
+                {/** Platinum lists its games from the top with even gaps; Gold and Silver center their one game. **/}
+                <div className={`flex min-h-15 flex-1 flex-col border-t border-border ${isPlatinum ? "gap-2.5 py-3" : "justify-center py-2"}`}>
                   {hasMedal ? (
                     featured.map((game) => (
                       <MedalGame key={game.slug} game={game} href={localizePath(locale, `/games/${game.slug}`)} large={isPlatinum} />
@@ -258,7 +258,7 @@ export function ProfileSampleSectionsSkeleton() {
       <Skeleton className="h-24 w-full rounded-xl" />
       <SkeletonText widths={["w-44"]} className="font-display text-2xl" />
       <div className={medalGridClasses}>
-        <Skeleton className="aspect-square rounded-xl sm:row-span-2" />
+        <Skeleton className="min-h-[17.5rem] rounded-xl sm:row-span-2 sm:min-h-[18.25rem]" />
         <Skeleton className="min-h-[7.875rem] rounded-xl" />
         <Skeleton className="min-h-[7.875rem] rounded-xl" />
       </div>

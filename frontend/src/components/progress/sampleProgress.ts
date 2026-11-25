@@ -40,7 +40,10 @@ export const medalTiers = ["platinum", "gold", "silver"] as const;
 export type MedalTier = (typeof medalTiers)[number];
 
 // How many games each medal card can feature; players will choose them once medals are real.
-const maxFeaturedGames: Record<MedalTier, number> = { platinum: 3, gold: 1, silver: 1 };
+const maxFeaturedGames: Record<MedalTier, number> = { platinum: 4, gold: 1, silver: 1 };
+
+// Sample totals larger than the featured games, to show that a card lists only some of them.
+const sampleTotals: Partial<Record<MedalTier, number>> = { platinum: 7 };
 
 export interface SampleMedal {
   tier: MedalTier;
@@ -49,8 +52,8 @@ export interface SampleMedal {
   total: number;
 }
 
-/** Sample medals: a game counts once, at its highest tier. Platinum holds more games than it can
- *  feature, to show that the total can be higher, and Silver stays empty to show that state.
+/** Sample medals: a game counts once, at its highest tier. Platinum features four games out of a
+ *  larger total, to show that the total can be higher, and Silver stays empty to show that state.
 **/
 export function sampleMedals(games: GameSummary[], rows: SampleGameProgress[]): SampleMedal[] {
   const others = games.filter((game) => game.achievementCount > 0 && !rows.some((row) => row.game.slug === game.slug));
@@ -62,7 +65,7 @@ export function sampleMedals(games: GameSummary[], rows: SampleGameProgress[]): 
   return medalTiers.map((tier) => ({
     tier,
     featured: earned[tier].slice(0, maxFeaturedGames[tier]),
-    total: earned[tier].length,
+    total: Math.max(earned[tier].length, sampleTotals[tier] ?? 0),
   }));
 }
 

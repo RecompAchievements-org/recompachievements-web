@@ -44,7 +44,7 @@ export default async function HomePage() {
         url: `${siteConfig.url}/`,
         logo: `${siteConfig.url}/apple-icon.png`,
         email: siteConfig.contactEmail,
-        sameAs: [siteConfig.social.github, siteConfig.social.reddit, siteConfig.social.youtube],
+        sameAs: Object.values(siteConfig.social),
       },
       {
         "@type": "WebSite",

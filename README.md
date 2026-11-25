@@ -2,7 +2,7 @@
 
 **Community-driven achievement tracking for native static recompilations.**
 
-🌐 **[recompachievements.org](https://recompachievements.org/)** · 🐙 [GitHub organization](https://github.com/RecompAchievements-org) · 💬 [Reddit](https://www.reddit.com/user/RecompAchievements/) · ▶️ [YouTube](https://www.youtube.com/@RecompAchievements)
+🌐 **[recompachievements.org](https://recompachievements.org/)** · 🐙 [GitHub organization](https://github.com/RecompAchievements-org) · 🎮 [Discord](https://discord.gg/8pYJtzvN5j) · 💬 [Reddit](https://www.reddit.com/user/RecompAchievements/) · ▶️ [YouTube](https://www.youtube.com/@RecompAchievements)
 
 RecompAchievements brings RetroAchievements-style progression, leaderboards, and social profiles to
 native PC ports built via **static recompilation** — such as N64, GameCube, PS2, PS3, and PS4
@@ -315,6 +315,7 @@ reviewed and committed by a human maintainer, and only people are credited as co
 - **Security vulnerabilities:** please **do not** open a public issue — see
   [`SECURITY.md`](SECURITY.md).
 - **Bugs and feature requests:** [GitHub Issues](https://github.com/RecompAchievements-org/recompachievements-web/issues)
+- **Community chat:** [our Discord server](https://discord.gg/8pYJtzvN5j)
 - **News and announcements:** [u/RecompAchievements on Reddit](https://www.reddit.com/user/RecompAchievements/)
   and [@RecompAchievements on YouTube](https://www.youtube.com/@RecompAchievements)
 

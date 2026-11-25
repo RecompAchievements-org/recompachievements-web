@@ -448,8 +448,8 @@ fixing a desktop-only layout for phones usually means rebuilding it.
   page; the same posting, mute, report, and moderation rules apply everywhere.
 - **Mute** — until `muted_until`, an account can't post comments or change its photo, but can still
   earn achievements. It ends on its own; the indefinite block is disabling the account.
-- **Profile** — a player's public page at `/account/<username>`; shows only public fields, never
-  an email or sign-in details. **Wall** — the plain-text comments on a profile.
+- **Profile** — a player's public page at `/account/<username>`; shows only public fields (and a
+  moderator or admin role for staff, never a player's role), never an email or sign-in details. **Wall** — the plain-text comments on a profile.
 - **Unlock** — a user earning an achievement, in softcore and/or hardcore (a softcore unlock can be
   upgraded); records `build_hash` (SHA-256 of the executable).
 - **Session** — one player playing one game, started by the SDK; records the build, toggles, and

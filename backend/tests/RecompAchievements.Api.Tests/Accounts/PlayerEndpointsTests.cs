@@ -22,10 +22,30 @@ public sealed class PlayerEndpointsTests(ApiFactory factory) : IClassFixture<Api
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var json = await response.Content.ReadFromJsonAsync<JsonElement>(Ct);
-        Assert.Equal(["avatar", "createdAt", "lastActiveOn", "username"], json.EnumerateObject().Select(p => p.Name).Order(StringComparer.Ordinal));
+        Assert.Equal(["avatar", "createdAt", "lastActiveOn", "role", "username"], json.EnumerateObject().Select(p => p.Name).Order(StringComparer.Ordinal));
+        // A player's role is never shown.
+        Assert.Equal(JsonValueKind.Null, json.GetProperty("role").ValueKind);
         Assert.Equal(username, json.GetProperty("username").GetString());
         // A date, with no time of day.
         Assert.Matches(@"^\d{4}-\d{2}-\d{2}$", json.GetProperty("lastActiveOn").GetString()!);
+    }
+
+    [Theory]
+    [InlineData("moderator")]
+    [InlineData("admin")]
+    public async Task Staff_accounts_show_their_role(string role)
+    {
+        using var client = factory.CreateWebsiteClient();
+        var email = NewEmail();
+        var username = NewUsername();
+        await CreateConfirmedAccount(factory, client, email, username);
+        await WithDb(factory, db => db.Users.Where(u => u.Email == email)
+            .ExecuteUpdateAsync(set => set.SetProperty(u => u.Role, role), Ct));
+
+        using var response = await Get(client, username);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>(Ct);
+
+        Assert.Equal(role, json.GetProperty("role").GetString());
     }
 
     [Theory]

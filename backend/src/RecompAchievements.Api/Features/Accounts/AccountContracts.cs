@@ -68,7 +68,8 @@ public sealed record OAuthSignInResponse(
 public sealed record ConnectResponse(string Provider, string? EmailOffer);
 
 // What anyone can see about a player; never add private fields.
-public sealed record PublicPlayerResponse(string Username, DateTimeOffset CreatedAt, DateOnly LastActiveOn, PlayerAvatarResponse? Avatar);
+// Role is "moderator" or "admin" for staff and null for players, so a player's role is never shown.
+public sealed record PublicPlayerResponse(string Username, DateTimeOffset CreatedAt, DateOnly LastActiveOn, PlayerAvatarResponse? Avatar, string? Role);
 
 public sealed record MeResponse(
     Guid Id,

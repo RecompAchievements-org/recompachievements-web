@@ -41,11 +41,15 @@ export interface Account {
 }
 
 // What anyone can see about a player. lastActiveOn is a date (YYYY-MM-DD) with no time.
+// The roles shown publicly; players have none, so their role is never revealed.
+export type StaffRole = "moderator" | "admin";
+
 export interface PublicPlayer {
   username: string;
   createdAt: string;
   lastActiveOn: string;
   avatar: PlayerAvatar | null;
+  role: StaffRole | null;
 }
 
 export interface OAuthStart {

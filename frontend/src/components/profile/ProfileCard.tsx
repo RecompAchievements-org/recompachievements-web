@@ -43,7 +43,7 @@ export async function ProfileCard({ player, actions }: { player: PublicPlayer; a
           {photoSampleBadges.map((badge) => (
             <li key={badge.id} className="w-[19%]">
               <BadgeDetails details={badgeDetailsData(badge, player, locale, messages)} className="block w-full rounded-md">
-                <BadgeIcon kind={badge.kind} rarity={badge.rarity} className="block h-auto w-full" />
+                <BadgeIcon kind={badge.kind} rarity={badge.rarity} className="block h-auto w-full drop-shadow-[0_3px_3px_rgb(0_0_0/0.6)]" />
               </BadgeDetails>
             </li>
           ))}

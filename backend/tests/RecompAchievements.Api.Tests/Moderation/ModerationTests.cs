@@ -221,19 +221,22 @@ public sealed class ModerationTests(ApiFactory factory) : IClassFixture<ApiFacto
     }
 
     [Fact]
-    public async Task Roles_and_private_data_never_reach_public_or_staff_summaries()
+    public async Task Only_staff_roles_are_public_and_private_data_never_reaches_summaries()
     {
         var (staff, _, _) = await NewPlayer("admin");
         var (player, _, email) = await NewPlayer();
         var (_, moderator, _) = await NewPlayer("moderator");
         using var client = factory.CreateWebsiteClient();
 
-        var publicJson = await client.GetStringAsync($"/api/v1/users/{staff}", Ct);
+        var staffProfile = await client.GetFromJsonAsync<JsonElement>($"/api/v1/users/{staff}", Ct);
+        var playerJson = await client.GetStringAsync($"/api/v1/users/{player}", Ct);
         using var summary = await Send(client, HttpMethod.Get, $"{Mod}/users/{player}", moderator);
         var staffJson = await summary.Content.ReadAsStringAsync(Ct);
 
-        Assert.DoesNotContain("role", publicJson, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("admin", publicJson, StringComparison.OrdinalIgnoreCase);
+        // Staff are recognizable on their public profile; a player's role is never shown.
+        Assert.Equal("admin", staffProfile.GetProperty("role").GetString());
+        Assert.DoesNotContain("player", playerJson, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(email, playerJson, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain(email, staffJson, StringComparison.OrdinalIgnoreCase);
     }
 

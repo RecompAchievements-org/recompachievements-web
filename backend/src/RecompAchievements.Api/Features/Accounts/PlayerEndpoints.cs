@@ -6,9 +6,9 @@ using RecompAchievements.Api.Infrastructure.Media;
 
 namespace RecompAchievements.Api.Features.Accounts;
 
-/** Public information about a player, available to anyone. Never add an email, platform ID, alpha
- *  status, or exact activity time here. Disabled accounts and unconfirmed registrations don't
- *  exist publicly.
+/** Public information about a player, available to anyone, including a staff role (moderator or
+ *  admin) so official accounts are recognizable. Never add an email, platform ID, alpha status, or
+ *  exact activity time here. Disabled accounts and unconfirmed registrations don't exist publicly.
 **/
 internal static class PlayerEndpoints
 {
@@ -41,7 +41,7 @@ internal static class PlayerEndpoints
     {
         var player = await db.Users
             .PublicByUsername(username)
-            .Select(u => new { u.Username, u.CreatedAt, u.LastActivityAt, u.AvatarKey })
+            .Select(u => new { u.Username, u.CreatedAt, u.LastActivityAt, u.AvatarKey, u.Role })
             .FirstOrDefaultAsync(cancellationToken);
 
         return player is null
@@ -50,6 +50,7 @@ internal static class PlayerEndpoints
                 player.Username,
                 player.CreatedAt,
                 DateOnly.FromDateTime(player.LastActivityAt.UtcDateTime),
-                AvatarImages.Urls(media, player.AvatarKey)));
+                AvatarImages.Urls(media, player.AvatarKey),
+                player.Role == UserRoles.Player ? null : player.Role));
     }
 }

@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { commentPageHref } from "@/components/comments/CommentPagination";
 import { ModerationControls } from "@/components/moderation/ModerationControls";
 import { formatModerationDate, ModerationShell, ModerationSkeleton, statusTone } from "@/components/moderation/ModerationShell";
-import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
+import { featuredPhotoClasses, ProfilePhoto } from "@/components/profile/ProfilePhoto";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { localizePath } from "@/i18n/config";
@@ -97,7 +97,7 @@ async function ReportPanel({ params }: Pick<Props, "params">) {
           {report.targetType === "photo" && user?.avatar && targetStillExists && (
             <div className="flex flex-col gap-2">
               <h2 className="text-sm font-semibold">{copy.reportedPhoto}</h2>
-              <ProfilePhoto avatar={user.avatar} variant="large" label={copy.photoOf.replace("{username}", user.username)} className="size-40 rounded-lg" />
+              <ProfilePhoto avatar={user.avatar} variant="large" label={copy.photoOf.replace("{username}", user.username)} className={featuredPhotoClasses} />
             </div>
           )}
           {!targetStillExists && <p className="text-sm text-gold">{copy.targetGone}</p>}

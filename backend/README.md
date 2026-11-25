@@ -139,7 +139,7 @@ next to the ProblemDetails fields.
 
 | Route | Purpose |
 |---|---|
-| `POST /register` | Email + password account; emails a confirmation link. Always `202` (the owner of an already registered email gets an email instead), `409 username_taken`. Rate limited |
+| `POST /register` | Email + password account; emails a confirmation link. Always `202` (the owner of an already registered email gets an email instead), `409 username_taken`, `409 username_reserved`. Rate limited |
 | `POST /confirm-email` | Confirms an email with the emailed token (after registering or `email/add`): `200`, `404` unknown or used, `410` expired (links last 24 hours), `409 email_in_use` |
 | `POST /resend-confirmation` | Sends the confirmation link again for an unconfirmed registration. Always `202` |
 | `POST /sign-in` | Email and password; returns `{ token, expiresAt }`. Every failure is the same `401 invalid_credentials` (unknown email, wrong password, no password set, unconfirmed email). Rate limited |
@@ -147,12 +147,12 @@ next to the ProblemDetails fields.
 | `GET /me` | The signed-in account: username, email and whether it's confirmed, password set, connected platforms, `canCollectAchievements`, `isAlphaTester`, `createdAt`, `lastActivityAt`, `role`, `isMuted`, `mutedUntil`, and `avatar` |
 | `POST /forgot-password` | Emails a single-use link (1 hour) to set or reset the password, only to a confirmed email. Always `202`. This is also how platform-created accounts set their first password |
 | `POST /reset-password` | Sets the password with that link; signs out every session and sends a notice. `404`, `410` |
-| `GET /usernames/available?username=` | Whether a username can be chosen |
+| `GET /usernames/available?username=` | Whether a username can be chosen (`available`), and whether it's `reserved` (never available, as opposed to taken by someone) |
 | `POST /email/add` | Signed in, no confirmed email yet: emails a confirmation link for this address. `409 email_in_use`, `409 email_already_set` |
 | `GET /providers` | Platforms configured for sign-in (`discord`, `github`) |
 | `POST /oauth/{provider}/start` | The platform's authorize URL, `state`, and PKCE `codeVerifier` (the website keeps the last two) |
 | `POST /oauth/{provider}/complete` | Exchanges the code: `403 account_disabled` if the platform ID's account is disabled; `signed-in` with a session when it has an account, else `pending` with a short-lived signed `pendingToken`, the email the new account will use (or `null`), and a suggested username |
-| `POST /oauth/complete-signup` | Creates the pending account with the chosen username; returns a session. `409 username_taken`, `400 signup_expired` |
+| `POST /oauth/complete-signup` | Creates the pending account with the chosen username; returns a session. `409 username_taken`, `409 username_reserved`, `400 signup_expired` |
 | `POST /oauth/{provider}/connect` | Signed in: connects the platform if its ID isn't on another account (`409 platform_linked_elsewhere`); returns an `emailOffer` (the platform's verified email) only for accounts without a confirmed email |
 | `DELETE /connections/{provider}` | Signed in: disconnects a platform, only if a confirmed email with a password or the other platform remains (`409 last_sign_in_method`) |
 | `PUT /photo?rightsConfirmed=true` | Uploads or replaces the player's photo (raw image body). Needs a confirmed email, an established account, no active mute, and the rights confirmation. Accepts static JPEG, PNG, or WebP and stores new square WebP files. `400 photo_invalid`, `400 photo_rights_required`, `403 account_muted`, `403 photo_not_allowed_yet`, `503 photos_unavailable`. Rate limited |

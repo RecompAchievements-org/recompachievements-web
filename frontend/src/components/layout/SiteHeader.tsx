@@ -10,10 +10,11 @@ import { LocaleFlag } from "./LocaleFlag";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
 import { ReleaseBadge } from "./ReleaseBadge";
+import { SiteMenu } from "./SiteMenu";
 
 export async function SiteHeader() {
   const locale = await getLocale();
-  const { header, localeSwitcher } = await getMessages();
+  const { header, localeSwitcher, common } = await getMessages();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
@@ -24,18 +25,19 @@ export async function SiteHeader() {
             aria-label={interpolate(header.homeLabel, { siteName: siteConfig.name })}
             className="min-w-0 rounded-md"
           >
-            <Logo compact />
+            <Logo />
           </Link>
-          <ReleaseBadge href={localizePath(locale, siteConfig.releasePost)} label={header.release} />
+          <ReleaseBadge href={localizePath(locale, siteConfig.releasePost)} label={header.release} className="hidden lg:inline-flex" />
         </div>
 
-        <div className="flex shrink-0 items-center sm:gap-1">
-          <nav aria-label={header.mainNav}>
+        <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+          {/** Wide screens show the main links in the row; narrower ones open them from SiteMenu. **/}
+          <nav aria-label={header.mainNav} className="hidden lg:block">
             <ul className="flex items-center gap-1 text-sm font-medium">
               <li>
                 <Link
                   href={localizePath(locale, "/games")}
-                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                  className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"
                 >
                   {header.games}
                 </Link>
@@ -43,13 +45,12 @@ export async function SiteHeader() {
               <li>
                 <Link
                   href={localizePath(locale, "/forum")}
-                  className="rounded-md px-1.5 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground sm:px-3"
+                  className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"
                 >
                   {header.forum}
                 </Link>
               </li>
-              {/** Shown only on wide screens to keep the header on one line; the footer links to GitHub too. **/}
-              <li className="hidden lg:block">
+              <li>
                 <ExternalLink
                   href={siteConfig.repoUrl}
                   className="rounded-md px-3 py-2 whitespace-nowrap text-muted transition-colors hover:text-foreground"
@@ -79,7 +80,23 @@ export async function SiteHeader() {
               menuLabel={localeSwitcher.label}
             />
           </Suspense>
+          <div className="lg:hidden">
+            <SiteMenu
+              label={header.menu}
+              games={header.games}
+              forum={header.forum}
+              github={header.github}
+              gamesHref={localizePath(locale, "/games")}
+              forumHref={localizePath(locale, "/forum")}
+              githubHref={siteConfig.repoUrl}
+              newTabLabel={common.opensInNewTab}
+            />
+          </div>
         </div>
+      </div>
+      {/** The release badge is always shown; where the row has no room for it, it gets its own strip. **/}
+      <div className="flex justify-center border-t border-border px-4 py-1.5 lg:hidden">
+        <ReleaseBadge href={localizePath(locale, siteConfig.releasePost)} label={header.release} className="inline-flex" />
       </div>
     </header>
   );

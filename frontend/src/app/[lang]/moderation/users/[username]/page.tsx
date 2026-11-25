@@ -5,7 +5,8 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { ModerationControls } from "@/components/moderation/ModerationControls";
 import { formatModerationDate, LogList, ModerationShell, ModerationSkeleton } from "@/components/moderation/ModerationShell";
-import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
+import { featuredPhotoClasses, ProfilePhoto } from "@/components/profile/ProfilePhoto";
+import { cx } from "@/lib/cx";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { localizePath } from "@/i18n/config";
@@ -52,7 +53,7 @@ async function UserPanel({ params }: Pick<Props, "params">) {
       <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
         <div className="flex min-w-0 flex-col gap-6">
           <Card className="flex flex-col gap-4 p-5 sm:flex-row">
-            <ProfilePhoto avatar={user.avatar} variant="large" label={copy.photoOf.replace("{username}", user.username)} className="size-28 self-center rounded-lg sm:self-start" />
+            <ProfilePhoto avatar={user.avatar} variant="large" label={copy.photoOf.replace("{username}", user.username)} className={cx(featuredPhotoClasses, "self-center sm:self-start")} />
             <div className="flex min-w-0 flex-1 flex-col gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <Link href={localizePath(locale, `/account/${user.username}`)} className="font-display text-xl font-semibold wrap-anywhere hover:text-accent">

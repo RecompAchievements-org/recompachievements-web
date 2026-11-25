@@ -39,7 +39,7 @@ export function WelcomeForm({ locale, suggestedUsername, signInHref, messages }:
     <form key={JSON.stringify(state)} action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="locale" value={locale} />
       <FormMessage message={state.status === "error" && !fieldError ? errors[state.error] : null} />
-      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken }} defaultValue={state.status === "error" ? state.username : suggestedUsername} serverError={fieldError ? errors[fieldError] : null} />
+      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken, reserved: errors.username_reserved }} defaultValue={state.status === "error" ? state.username : suggestedUsername} serverError={fieldError ? errors[fieldError] : null} />
       <SubmitButton label={copy.submit} pendingLabel={copy.submitting} className="w-full sm:w-auto sm:self-start" />
     </form>
   );

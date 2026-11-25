@@ -103,6 +103,7 @@ export interface UsernameLabels {
   checking: string;
   available: string;
   taken: string;
+  reserved: string;
 }
 
 /** A username field that checks the format as it's typed and, once it's valid, asks whether the
@@ -148,6 +149,8 @@ export function UsernameField({
       ? { tone: "success", text: labels.available }
       : availability === "taken"
         ? { tone: "danger", text: labels.taken }
+        : availability === "reserved"
+          ? { tone: "danger", text: labels.reserved }
         : availability === "checking"
           ? { tone: "muted", text: labels.checking }
           : { tone: null };
@@ -171,7 +174,7 @@ export function UsernameField({
           setEdited(true);
         }}
         onBlur={() => setLeft(true)}
-        aria-invalid={showFormatProblem || availability === "taken" || Boolean(shownServerError)}
+        aria-invalid={showFormatProblem || availability === "taken" || availability === "reserved" || Boolean(shownServerError)}
         aria-describedby={cx("username-hint", "username-status", shownServerError && "username-error")}
         className={inputClasses}
       />

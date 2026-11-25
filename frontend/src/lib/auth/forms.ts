@@ -18,6 +18,7 @@ export type FieldError = "required" | "email" | "usernameFormat" | "passwordLeng
 export type AuthError =
   | "invalid"
   | "username_taken"
+  | "username_reserved"
   | "invalid_credentials"
   | "email_in_use"
   | "email_already_set"
@@ -44,6 +45,7 @@ export type AuthError =
 
 const apiCodes: readonly AuthError[] = [
   "username_taken",
+  "username_reserved",
   "invalid_credentials",
   "email_in_use",
   "email_already_set",

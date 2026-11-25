@@ -11,7 +11,7 @@ type SignUpField = "email" | "username" | "password" | "confirmPassword";
 export type SignUpState =
   | { status: "idle" }
   | { status: "sent"; email: string }
-  | { status: "error"; error: AuthError; values: { email: string; username: string }; fieldErrors: Partial<Record<SignUpField, FieldError | "username_taken">> };
+  | { status: "error"; error: AuthError; values: { email: string; username: string }; fieldErrors: Partial<Record<SignUpField, FieldError | "username_taken" | "username_reserved">> };
 
 /** Creates an email + password account. The API answers the same way whether or not the email
  *  already has an account (its owner gets an email instead), so the success screen never says more
@@ -46,7 +46,7 @@ export async function signUp(_previous: SignUpState, formData: FormData): Promis
     const result = await register({ email, password, username, locale: rawLocale }, { clientIp });
     if (result.ok) return { status: "sent", email };
     const error = errorFrom(result);
-    if (error === "username_taken") return { status: "error", error, values, fieldErrors: { username: "username_taken" } };
+    if (error === "username_taken" || error === "username_reserved") return { status: "error", error, values, fieldErrors: { username: error } };
     return { status: "error", error, values, fieldErrors };
   } catch (error) {
     console.error("Sign-up failed", error);

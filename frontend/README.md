@@ -87,7 +87,8 @@ src/
 │   │                         # ConsolePill, repoLinks, AchievementRow, PreviewNotice,
 │   │                         # GameCommentsSection (saved comments, per visitor)
 │   ├── layout/               # SiteHeader, SiteFooter, Logo, LocaleSwitcher, LocaleFlag, SocialLinks, AccountLink,
-│   │                         # AccountMenu (client), MenuIcon, EmailRequiredBanner, ReleaseBadge
+│   │                         # AccountMenu (client), SiteMenu (client), MenuIcon, EmailRequiredBanner,
+│   │                         # ReleaseBadge
 │   ├── comments/             # CommentThread, CommentAuthor, SavedComments (client), CommentsSkeleton,
 │   │                         # actions.ts: every comment section
 │   ├── forum/                # Markdown (safe subset renderer), PostEditor (client), ForumParts,

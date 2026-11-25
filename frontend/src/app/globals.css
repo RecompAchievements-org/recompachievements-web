@@ -77,8 +77,12 @@
 @layer base {
   :root {
     color-scheme: dark;
-    /* Keep focused elements and anchor targets clear of the sticky header (h-16). */
-    scroll-padding-top: 4rem;
+    /* Keep focused elements and anchor targets clear of the sticky header (its row plus the release strip). */
+    scroll-padding-top: 6.5rem;
+
+    @media (width >= 64rem) {
+      scroll-padding-top: 4rem;
+    }
     /* Remove the double-tap zoom delay on touch screens; pinch zoom still works. */
     touch-action: manipulation;
   }

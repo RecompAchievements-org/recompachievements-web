@@ -34,7 +34,7 @@ export function StaffRibbon({ role }: { role: StaffRole }) {
       <span aria-hidden="true" className={cx("pointer-events-none absolute inset-0 rounded-lg border-t-2", edgeColors[role])} />
       <p
         className={cx(
-          "absolute top-0 left-1/2 -translate-x-1/2 rounded-b-md px-1 pt-px pb-0.5 font-display text-[0.6875rem] leading-none font-bold tracking-[0.02em] whitespace-nowrap text-on-accent uppercase shadow-md lg:px-2 lg:pb-1 lg:text-xs lg:tracking-[0.08em]",
+          "absolute top-0 left-1/2 -translate-x-1/2 rounded-b-md px-1 pt-px pb-0.5 font-display text-[0.6875rem] leading-none font-bold tracking-[0.02em] whitespace-nowrap text-on-accent uppercase shadow-[inset_0_-2px_0_rgb(0_0_0/0.28),0_3px_6px_-1px_rgb(0_0_0/0.65)] lg:px-2 lg:pb-1 lg:text-xs lg:tracking-[0.08em]",
           ribbonColors[role],
         )}
       >

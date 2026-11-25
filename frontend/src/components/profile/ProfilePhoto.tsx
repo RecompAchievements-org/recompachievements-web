@@ -4,6 +4,11 @@ import { cx } from "@/lib/cx";
 
 const pixelSizes = { small: 96, large: 512 } as const;
 
+/** The standard size of a player's main photo (Settings, staff account and report reviews): wide on
+ *  phones, where it sits above the details, and a fixed square once it sits beside them.
+**/
+export const featuredPhotoClasses = "aspect-square h-auto w-full max-w-64 shrink-0 rounded-lg sm:size-40 sm:max-w-none";
+
 /** A player's square profile photo, or an original placeholder when they have none. Photos skip the
  *  image optimizer, so a removed photo leaves no copy behind. Without a label it's decorative.
 **/

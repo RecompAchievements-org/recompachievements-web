@@ -47,7 +47,7 @@ export function SignUpForm({ locale, challengeSiteKey, agreement, messages }: Si
 
       <EmailField labels={{ label: fields.email, placeholder: fields.emailPlaceholder, valid: fields.emailValid, invalid: errors.email }} defaultValue={values?.email} serverError={errorFor("email")} />
 
-      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken }} defaultValue={values?.username} serverError={errorFor("username")} />
+      <UsernameField labels={{ label: fields.username, hint: fields.usernameHint, invalid: errors.usernameFormat, checking: fields.usernameChecking, available: fields.usernameAvailable, taken: errors.username_taken, reserved: errors.username_reserved }} defaultValue={values?.username} serverError={errorFor("username")} />
 
       <NewPasswordFields
         labels={{ password: fields.password, confirm: fields.confirmPassword, hint: fields.passwordHint, match: fields.passwordsMatch, mismatch: errors.passwordMismatch }}

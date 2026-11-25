@@ -55,9 +55,7 @@ export function ReportButton({
     <>
       <button type="button" onClick={open} aria-label={accessibleLabel} className={className}>
         <span className="inline-flex items-center gap-1.5">
-          <svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="size-4 shrink-0">
-            <path d="M4.5 18V3M4.5 4h10l-2.5 3.5 2.5 3.5h-10" />
-          </svg>
+          <ReportFlag className="size-4" />
           {labels.button}
         </span>
       </button>
@@ -66,7 +64,8 @@ export function ReportButton({
         aria-labelledby={`${baseId}-title`}
         className="m-auto w-[calc(100vw-2rem)] max-w-md rounded-xl border border-border-strong bg-surface p-5 text-foreground backdrop:bg-background/75"
       >
-        <h2 id={`${baseId}-title`} className="font-display text-xl font-semibold">
+        <h2 id={`${baseId}-title`} className="flex items-center gap-2 font-display text-xl font-semibold">
+          <ReportFlag className="size-5 text-danger" />
           {labels.title}
         </h2>
         <p className="mt-1 text-sm text-muted">{labels.intro}</p>
@@ -159,11 +158,20 @@ function ReportForm({
       </div>
       {state.status === "error" && <FormMessage message={errors[state.error] ?? errors.unavailable} />}
       <div className="flex flex-col gap-3 sm:flex-row-reverse">
-        <SubmitButton label={labels.send} pendingLabel={labels.sending} className="flex-1" />
+        <SubmitButton label={labels.send} pendingLabel={labels.sending} variant="danger" className="flex-1" />
         <button type="button" onClick={onClose} className={cx(secondary, "flex-1")}>
           {labels.cancel}
         </button>
       </div>
     </form>
+  );
+}
+
+// The report flag, shared by the button and the dialog title; decorative, the text names the action.
+function ReportFlag({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className={cx("shrink-0", className)}>
+      <path d="M4.5 18V3M4.5 4h10l-2.5 3.5 2.5 3.5h-10" />
+    </svg>
   );
 }

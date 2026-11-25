@@ -106,7 +106,7 @@ export function AccountMenu({ username, avatar, profileHref, buttonLabel, menuLa
         onFocus={onLinkFocus}
         className="flex h-9 items-center gap-2 rounded-md px-1.5 text-sm font-medium whitespace-nowrap text-foreground transition-colors hover:bg-surface-raised sm:px-2"
       >
-        <ProfilePhoto avatar={avatar} className="size-5 rounded sm:size-6" />
+        <ProfilePhoto avatar={avatar} className="size-7 rounded-md" />
         <span className="hidden max-w-32 truncate md:inline">{username}</span>
         <svg viewBox="0 0 12 12" aria-hidden="true" className={cx("hidden size-3 text-muted md:block", open && "rotate-180")}>
           <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />

@@ -148,7 +148,7 @@ export function SavedComments({
                 labels={reportLabels}
                 errors={errors}
                 accessibleLabel={interpolate(messages.reportLabel, { username: comment.authorUsername })}
-                className={`${actionButton} text-muted hover:bg-surface-raised hover:text-foreground`}
+                className={`${actionButton} text-muted hover:bg-surface-raised hover:text-danger`}
               />
             )}
             {!comment.canDelete ? null : confirming === comment.id ? (

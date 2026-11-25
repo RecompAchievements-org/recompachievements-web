@@ -115,8 +115,12 @@ internal static partial class OAuthEndpoints
         }
 
         var normalizedUsername = AccountText.NormalizeUsername(request.Username);
-        if (AccountText.IsReserved(normalizedUsername)
-            || await db.Users.AnyAsync(u => u.NormalizedUsername == normalizedUsername, cancellationToken))
+        if (AccountText.IsReserved(normalizedUsername))
+        {
+            return AccountProblems.UsernameReserved();
+        }
+
+        if (await db.Users.AnyAsync(u => u.NormalizedUsername == normalizedUsername, cancellationToken))
         {
             return AccountProblems.UsernameTaken();
         }

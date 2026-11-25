@@ -12,7 +12,7 @@ import { StaffRibbon } from "./StaffRole";
 import { photoSampleBadges } from "./sampleBadges";
 
 const layoutClasses = "grid gap-5 p-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:p-6 lg:grid-cols-1";
-const photoFrameClasses = "mx-auto w-32 sm:w-full";
+const photoFrameClasses = "mx-auto w-full max-w-64 sm:max-w-none";
 const usernameClasses = "col-span-full min-w-0 font-display text-3xl font-bold tracking-tight wrap-anywhere";
 const actionsClasses = "col-span-full flex flex-col gap-3 sm:flex-row lg:flex-col";
 const dateOptions = { dateStyle: "medium", timeZone: "UTC" } as const;

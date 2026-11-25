@@ -46,8 +46,10 @@ export function ModerationControls({
     ...(target.reportOpen ? (["resolve", "dismiss"] as const) : []),
     ...(target.commentId ? (["remove_comment"] as const) : []),
     ...(target.username && target.hasPhoto ? (["remove_photo"] as const) : []),
-    ...(target.username ? ([target.isMuted ? "unmute" : "mute", target.isEnabled ? "disable" : "enable"] as const) : []),
+    ...(target.username ? ([target.isMuted ? "unmute" : "mute"] as const) : []),
     ...(target.username && isAdmin ? (["role"] as const) : []),
+    // The severe actions (shown in red) come last.
+    ...(target.username ? ([target.isEnabled ? "disable" : "enable"] as const) : []),
     ...(target.username && target.hasPhoto && isAdmin ? (["legal_hold"] as const) : []),
   ];
 

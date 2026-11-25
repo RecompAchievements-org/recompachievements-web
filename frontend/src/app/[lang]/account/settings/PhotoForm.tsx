@@ -2,7 +2,8 @@
 
 import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { FormMessage } from "@/components/auth/FormParts";
-import { ProfilePhoto } from "@/components/profile/ProfilePhoto";
+import { featuredPhotoClasses, ProfilePhoto } from "@/components/profile/ProfilePhoto";
+import { cx } from "@/lib/cx";
 import type { Messages } from "@/i18n/server";
 import type { PlayerAvatar } from "@/lib/api/accounts";
 import type { AuthError } from "@/lib/auth/forms";
@@ -117,9 +118,9 @@ export function PhotoForm({
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element -- A local preview of the chosen file.
-          <img src={preview} alt={messages.previewAlt} className="size-28 shrink-0 rounded-lg object-cover" />
+          <img src={preview} alt={messages.previewAlt} className={cx(featuredPhotoClasses, "object-cover")} />
         ) : (
-          <ProfilePhoto avatar={avatar} variant="large" label={messages.currentAlt} className="size-28 rounded-lg" />
+          <ProfilePhoto avatar={avatar} variant="large" label={messages.currentAlt} className={featuredPhotoClasses} />
         )}
         <div className="flex w-full min-w-0 flex-col gap-3">
           {muted ? (

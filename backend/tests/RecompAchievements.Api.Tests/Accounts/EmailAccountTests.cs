@@ -147,14 +147,35 @@ public sealed class EmailAccountTests(ApiFactory factory) : IClassFixture<ApiFac
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    [Fact]
-    public async Task Reserved_username_is_never_available()
+    [Theory]
+    [InlineData("Admin")]
+    [InlineData("forum")]
+    [InlineData("RA_Moderator")]
+    [InlineData("RecompAchievementsFan")]
+    public async Task Reserved_username_is_never_available(string username)
     {
         using var client = factory.CreateWebsiteClient();
 
-        var available = await client.GetFromJsonAsync<JsonElement>("/api/v1/auth/usernames/available?username=Admin", Ct);
+        var available = await client.GetFromJsonAsync<JsonElement>($"/api/v1/auth/usernames/available?username={username}", Ct);
+        using var registered = await Register(client, NewEmail(), username);
 
         Assert.False(available.GetProperty("available").GetBoolean());
+        Assert.True(available.GetProperty("reserved").GetBoolean());
+        Assert.Equal(HttpStatusCode.Conflict, registered.StatusCode);
+        Assert.Equal("username_reserved", await ProblemCode(registered));
+    }
+
+    [Fact]
+    public async Task Taken_username_is_unavailable_but_not_reserved()
+    {
+        using var client = factory.CreateWebsiteClient();
+        var username = NewUsername();
+        await CreateConfirmedAccount(factory, client, NewEmail(), username);
+
+        var available = await client.GetFromJsonAsync<JsonElement>($"/api/v1/auth/usernames/available?username={username}", Ct);
+
+        Assert.False(available.GetProperty("available").GetBoolean());
+        Assert.False(available.GetProperty("reserved").GetBoolean());
     }
 
     [Fact]

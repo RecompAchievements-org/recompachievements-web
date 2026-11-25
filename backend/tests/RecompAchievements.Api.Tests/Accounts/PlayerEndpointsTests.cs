@@ -70,7 +70,7 @@ public sealed class PlayerEndpointsTests(ApiFactory factory) : IClassFixture<Api
         using var response = await Register(client, NewEmail(), username);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        Assert.Equal("username_taken", await ProblemCode(response));
+        Assert.Equal("username_reserved", await ProblemCode(response));
     }
 
     [Fact]

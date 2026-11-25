@@ -148,9 +148,7 @@
       "loading": "Loading…",
       "unavailable": "We couldn’t load this profile.",
       "memberSince": "Member Since",
-      "lastActivity": "Last Activity",
-      "badges": "Featured Badges",
-      "sample": "Sample Data"
+      "lastActivity": "Last Activity"
     }
   },
   "artCredits": {
@@ -190,7 +188,7 @@
     "sections": [
       {
         "title": "What We Collect",
-        "body": "Earlier alpha sign-up list (now closed): your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
+        "body": "Earlier alpha sign-up list (now closed): your email address, nickname, the platforms you play on, the recomps you mention, the site language you used, and when you agreed to this notice and confirmed your email. Account: your username, email address (once you confirm it), a securely hashed password if you set one, the site language, and, if you sign in with Discord or GitHub, that platform’s account ID (and its email, only when the platform says it’s verified and you use it for your account). We also record when your account was created and last changed, when you were last active, and whether it’s enabled. Your public profile shows your username, when you joined, the day you were last active (never the time), your role if you’re a moderator or admin, and comments on your wall; your achievement progress will be public too. Your email and connected platforms are never shown. We don’t store your IP address."
       },
       {
         "title": "Comments",

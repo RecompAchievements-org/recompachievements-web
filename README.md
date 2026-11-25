@@ -151,8 +151,8 @@ Discord or GitHub; the other methods can be connected later from Settings.
   username and a 7-day link to set a password. Emails that already have an account are skipped.
 - Every player has a **public profile** at `/account/<username>` with a comment **wall**. Anyone
   can read it; accounts with a confirmed email can post; a comment's author or the wall's owner can
-  delete it. Profiles show only the username, join date, last active day, and score fields, and
-  stay out of search engines for now. Email and sign-in details live in private Settings.
+  delete it. Profiles show only the username, join date, last active day, score fields, and a
+  **Moderator** or **Admin** role for staff accounts, and stay out of search engines for now. Email and sign-in details live in private Settings.
 - An account can be **disabled** without deleting it: it can't sign in or use its sessions or
   emailed links, and its email and platform IDs stay reserved.
 - Established accounts with a confirmed email can upload a **profile photo**, confirming they may

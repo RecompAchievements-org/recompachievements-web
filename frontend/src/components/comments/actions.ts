@@ -26,6 +26,7 @@ export async function loadPlayerPreview(username: string, locale: string): Promi
       memberSince: format(result.data.createdAt),
       lastActive: format(result.data.lastActiveOn),
       avatar: result.data.avatar,
+      role: result.data.role,
       // Sample data, labeled in the preview, until players can choose real featured badges.
       badges: photoSampleBadges.map((badge) => {
         const { kind, rarity, name, rarityLabel } = badgeDetailsData(badge, result.data, locale, messages);

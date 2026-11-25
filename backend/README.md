@@ -170,7 +170,7 @@ disabled accounts, and unconfirmed registrations). Names of pages under `/accoun
 
 | Route | Purpose |
 |---|---|
-| `GET /` | Public information only: `username`, `createdAt`, `lastActiveOn` (a UTC date, never a time), and `avatar` (`small` and `large` URLs, or `null`) |
+| `GET /` | Public information only: `username`, `createdAt`, `lastActiveOn` (a UTC date, never a time), `avatar` (`small` and `large` URLs, or `null`), and `role` (`moderator` or `admin` for staff, `null` for players) |
 | `GET /wall?page=<n>` | One numbered page of comments (default `1`), newest first, with each author’s username, join date, and photo, `canDelete` for the signed-in viewer, and `page`, `pageSize`, `total`, and `totalPages`; an invalid page is `400`, and a page past the end is empty. Comments by disabled accounts are hidden |
 | `POST /wall` | Signed in with a confirmed email (`403 email_required`) and not muted (`403 account_muted`): posts plain text, up to 1000 characters. Rate limited |
 | `DELETE /wall/{id}` | The comment's author or the wall's owner (`204`); anyone else gets `404`. Rate limited |

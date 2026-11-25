@@ -8,6 +8,7 @@ import { BadgeDetails } from "./BadgeDetails";
 import { badgeDetailsData } from "./badgeDetailsData";
 import { BadgeIcon } from "./BadgeIcon";
 import { ProfilePhoto } from "./ProfilePhoto";
+import { StaffRibbon } from "./StaffRole";
 import { photoSampleBadges } from "./sampleBadges";
 
 const layoutClasses = "grid gap-5 p-5 sm:grid-cols-[10rem_minmax(0,1fr)] sm:p-6 lg:grid-cols-1";
@@ -33,7 +34,10 @@ export async function ProfileCard({ player, actions }: { player: PublicPlayer; a
     <Card aria-label={copy.label} role="region" className={layoutClasses}>
       <h1 className={usernameClasses}>{player.username}</h1>
       <div className={photoFrameClasses}>
-        <ProfilePhoto avatar={player.avatar} variant="large" label={copy.photoAlt} className="block aspect-square h-auto w-full rounded-lg" />
+        <div className="relative">
+          <ProfilePhoto avatar={player.avatar} variant="large" label={copy.photoAlt} className="block aspect-square h-auto w-full rounded-lg" />
+          {player.role && <StaffRibbon role={player.role} />}
+        </div>
         {/** The row overlaps the photo's bottom edge, so badges stand out without covering a face. **/}
         <ul aria-label={profile.badges.displayed} className="relative -mt-[11.5%] flex justify-center gap-[3%]">
           {photoSampleBadges.map((badge) => (

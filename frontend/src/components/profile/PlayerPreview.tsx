@@ -5,10 +5,11 @@ import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { createPortal } from "react-dom";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useFloatingPanel } from "@/components/ui/useFloatingPanel";
-import type { PlayerAvatar } from "@/lib/api/accounts";
+import type { PlayerAvatar, StaffRole } from "@/lib/api/accounts";
 import type { RarityTier } from "@/lib/api/games";
 import { BadgeIcon } from "./BadgeIcon";
 import { ProfilePhoto } from "./ProfilePhoto";
+import { StaffTag } from "./StaffRole";
 import type { BadgeKind } from "./sampleBadges";
 
 const hoverOpenDelayMs = 200;
@@ -18,6 +19,8 @@ export interface PlayerPreviewData {
   memberSince: string;
   lastActive: string;
   avatar: PlayerAvatar | null;
+  // A staff role; null for players.
+  role: StaffRole | null;
   // Up to three featured badges.
   badges: { id: string; kind: BadgeKind; rarity: RarityTier; name: string; rarityLabel: string }[];
 }
@@ -29,8 +32,6 @@ export interface PlayerPreviewLabels {
   unavailable: string;
   memberSince: string;
   lastActivity: string;
-  badges: string;
-  sample: string;
 }
 
 /** A player's photo that links to their profile and previews it. The preview opens on mouse hover
@@ -111,14 +112,13 @@ export function PlayerPreview({
           >
             <div className="flex items-center gap-3">
               <ProfilePhoto avatar={avatar} className="size-12 rounded-lg border border-border" />
-              <p className="min-w-0 font-display font-semibold wrap-anywhere text-foreground">{username}</p>
+              <div className="flex min-w-0 flex-col gap-1">
+                <p className="font-display font-semibold wrap-anywhere text-foreground">{username}</p>
+                {preview && preview !== "failed" && preview.role && <StaffTag role={preview.role} />}
+              </div>
             </div>
             {preview !== "failed" && (preview === null || preview.badges.length > 0) && (
-              <section className="flex flex-col gap-1.5 border-y border-border py-2.5">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-xs font-semibold text-muted">{labels.badges}</h3>
-                  <span className="text-[0.6875rem] text-subtle">{labels.sample}</span>
-                </div>
+              <section className="border-y border-border py-2.5">
                 <ul className="flex flex-col gap-1">
                   {preview === null
                     ? [0, 1, 2].map((row) => <Skeleton key={row} className="h-7 w-full rounded-md" />)

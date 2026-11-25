@@ -164,7 +164,9 @@ Paths below are unprefixed (English); each also exists under `/es` and `/pt`. Pa
   earned (Mastered and Beaten counters with a list; medals, achievements, and subsets each
   show a short "none earned" legend when empty), completion, and last game played on the left
   (`ProfileSampleSections`, labeled sample data); `ProfileCard` on the right (first on phones) with
-  the username on top, photo, points, Elo, ranking (empty until scoring exists), last
+  the username on top, photo (staff accounts get a small `StaffRibbon` tab hanging from the middle of its top edge,
+  with a thin line along that edge in the same color: Admin in purple, Moderator in gold, named the
+  same in every language; the comment preview card shows the same role as a `StaffTag`), points, Elo, ranking (empty until scoring exists), last
   active day, member since, and the progress, settings, and report buttons at the bottom; the comment wall
   below at full width. `noindex`; other casings redirect to the real username
 - `/account/settings` — private: profile information (username, account type, member since, last
@@ -277,7 +279,8 @@ src/
 - `PlayerPreview` is a player’s photo that links to their profile. Its preview opens on mouse hover,
   keyboard focus, or the first tap on touch screens (a second tap follows the link), and loads public
   player data only when opened, once per player in each comment section. It also lists up to three
-  featured badges (sample data, labeled on screen, until real badges exist). It and `BadgeDetails` share `ui/useFloatingPanel`.
+  featured badges (sample data until real badges exist; by the owner's choice the card has no
+  label, and the profile page carries the sample-data notice). It and `BadgeDetails` share `ui/useFloatingPanel`.
 - The signed-in header menu (`AccountMenu`) opens on mouse hover (a click goes to the profile), on
   the first tap on touch screens (a second tap goes to the profile), and on keyboard focus. Each entry
   has a `MenuIcon`; for staff, Moderation sits in its own separated section.

@@ -148,9 +148,7 @@
       "loading": "Carregando…",
       "unavailable": "Não foi possível carregar este perfil.",
       "memberSince": "Membro desde",
-      "lastActivity": "Última atividade",
-      "badges": "Insígnias em destaque",
-      "sample": "Dados de exemplo"
+      "lastActivity": "Última atividade"
     }
   },
   "artCredits": {
@@ -190,7 +188,7 @@
     "sections": [
       {
         "title": "O que coletamos",
-        "body": "Lista anterior de inscrições do alfa (já encerrada): seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário) e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
+        "body": "Lista anterior de inscrições do alfa (já encerrada): seu e-mail, apelido, as plataformas em que você joga, os recomps que mencionar, o idioma do site que usou e quando aceitou este aviso e confirmou seu e-mail. Conta: seu nome de usuário, seu e-mail (depois que você o confirma), uma senha protegida por hash seguro se você definir uma, o idioma do site e, se você entrar com Discord ou GitHub, o ID da sua conta nessa plataforma (e o e-mail dela, só quando a plataforma informa que está verificado e você o usa na sua conta). Também registramos quando sua conta foi criada e alterada pela última vez, sua última atividade e se ela está ativada. Seu perfil público mostra seu nome de usuário, quando você entrou, o dia da sua última atividade (nunca o horário), sua função se você for moderador ou administrador e os comentários do seu mural; seu progresso de conquistas também será público. Seu e-mail e suas plataformas conectadas nunca são mostrados. Não guardamos seu endereço IP."
       },
       {
         "title": "Comentários",
